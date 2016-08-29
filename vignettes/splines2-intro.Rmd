@@ -33,6 +33,15 @@ matplot(x, ibsOut$ibsMat, type = "l", ylab = "Integral of B-spline bases")
 abline(v = knots, lty = 2, col = "gray")
 ```
 
+```{r intBs2, fig.width=7, fig.height=4}
+ibsOut <- ibs(x, knots = knots, degree = 2, intercept = FALSE)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
+matplot(x, ibsOut$bsMat, type = "l", ylab = "B-spline bases")
+abline(v = knots, lty = 2, col = "gray")
+matplot(x, ibsOut$ibsMat, type = "l", ylab = "Integral of B-spline bases")
+abline(v = knots, lty = 2, col = "gray")
+```
+
 ## Example of M-splines
 
 Example from @ramsay1988monotone.
