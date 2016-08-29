@@ -19,11 +19,11 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     bsOut1 <- splines::bs(x = x, knots = knots, degree = ord,
                          intercept = FALSE, Boundary.knots = bKnots)
     numer1 <- diff(aKnots, lag = ord)
-    numer2 <- apply(bsOut1, 1, function(a) rev(cumsum(rev(a))))
     if (! intercept) {
         bsOut1 <- bsOut1[, - 1L, drop = FALSE]
         numer1 <- numer1[- 1L]
     }
+    numer2 <- apply(bsOut1, 1, function(a) rev(cumsum(rev(a))))
     ibsOut <- t(numer1 * numer2) / ord
 
     ## return
