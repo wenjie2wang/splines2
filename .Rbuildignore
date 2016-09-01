@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^Makefile$
+^README.md$
+^NEWS.md$
+^COPYRIGHT$
