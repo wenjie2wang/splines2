@@ -25,7 +25,7 @@
 ##' These are methods for the generic function \code{predict} for objects
 ##' inheriting from class \code{\link{ibs}}, \code{\link{mSpline}}, or
 ##' \code{\link{iSpline}}. If \code{newx} is not given, the function returns
-##' original object.
+##' the input object.
 ##'
 ##' @name predict
 ##' @param object Objects of class \code{\link{ibs}}, \code{\link{mSpline}}, or
@@ -72,7 +72,6 @@ predict.ibs <- function(object, newx, ...) {
                                "intercept")])
     do.call("ibs", a)
 }
-
 
 
 ##' @rdname predict
