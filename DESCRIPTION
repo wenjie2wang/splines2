@@ -11,13 +11,12 @@ Authors@R: c(
 Description: A complementary package on splines providing functions
     constructing M-spline, I-spline, and integral of B-spline basis.
 Imports:
-    splines
-    stats
+    splines,
+    stats,
     utils
 Depends:
     R (>= 3.2.3)
 License: GPL (>= 3)
-VignetteBuilder: knitr
 URL: https://github.com/wenjie2wang/splines2
 BugReports: https://github.com/wenjie2wang/splines2/issues
 RoxygenNote: 5.0.1
