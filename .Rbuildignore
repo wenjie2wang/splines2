@@ -2,6 +2,8 @@
 ^\.Rproj\.user$
 ^test$
 ^Makefile$
+^COPYRIGHT$
+
 ^README.md$
 ^NEWS.md$
-^COPYRIGHT$
+^inst$
