@@ -32,22 +32,38 @@
 ##' (default the range of the non-\code{NA} data).  If both \code{knots} and
 ##' \code{Boundary.knots} are supplied, the basis parameters do not depend on
 ##' \code{x}. Data can extend beyond \code{Boundary.knots}.
+##' @param ... Optional arguments for future usage.
 ##'
-##' @return A \code{ibs} class object that includes the origin B-spline and its
-##' integral basis matrix. The dimension of each matrix is \code{length(x)} by
+##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
+##' Attributes that correspond to the arguments specified are returned
+##' for usage for \code{\link{predict.ibs}}. The corresponding B-spline
+##' basis matrix is also returned in attribute named \code{bsMat}.
 ##'
 ##' @references
-##'
-##'
+##' De Boor, C., De Boor, C., Math{\'e}maticien, E. U., De Boor, C., & De Boor,
+##' C. (1978). \emph{A practical guide to splines} (Vol. 27, p. 325).
+##' New York: Springer-Verlag.
 ##'
 ##' @examples
+##' x <- seq(0, 1, 0.01)
+##' knots <- c(0.2, 0.4, 0.7, 0.9)
+##' ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 ##'
+##' ## extract original B-spline basis matrix
+##' bsMat <- attr(ibsMat, "bsMat")
 ##'
+##' ## plot B-spline bases with their corresponding integrals
+##' library(graphics)
+##' par(mfrow = c(1, 2))
+##' matplot(x, bsMat, type = "l", ylab = "B-spline bases")
+##' abline(v = knots, lty = 2, col = "gray")
+##' matplot(x, ibsMat, type = "l", ylab = "Integral of B-spline bases")
+##' abline(v = knots, lty = 2, col = "gray")
 ##'
 ##' @seealso
-##' \code{\link{ms}} for constructing M-spline basis;
-##' \code{\link{ims}} for constructing I-spine basis.
+##' \code{\link{mSpline}} for M-spline basis;
+##' \code{\link{iSpline}} for I-spine basis.
 ##'
 ##' @importFrom splines bs
 ##' @export
@@ -78,8 +94,8 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     numer2 <- apply(bsOut1, 1, function(a) rev(cumsum(rev(a))))
     ibsOut <- t(numer1 * numer2) / ord
 
-    ## return
-    out <- list(bsMat = bsOut, ibsMat = ibsOut)
-    class(out) <- "ibs"
-    out
+    ## output
+    attributes(ibsOut) <- c(attributes(bsOut), list(bsMat = bsOut))
+    class(ibsOut) <- c("ibs", "basis", "matrix")
+    ibsOut
 }

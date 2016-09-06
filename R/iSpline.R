@@ -1,10 +1,65 @@
-### I-spline bases
-ims <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-               Boundary.knots = range(x), ...) {
+##' I-Spline Basis for Polynomial Splines
+##'
+##' This function generates the I-spline (integral of M-spline) basis matrix
+##' for a polynomial spline.
+##'
+##' It is an implementation of the close form I-spline basis based
+##' on recursion relation.  Internally, it calls \code{\link{mSpline}} and
+##' generates a basis matrix for representing the family of piecewise
+##' polynomials and their corresponding integrals with the specified interior
+##' knots and degree, evaluated at the values of \code{x}.
+##'
+##' @param x The predictor variable.  Missing values are allowed.
+##' @param df Degrees of freedom.  One can specify \code{df} rather than
+##' \code{knots}, then the function chooses "df - degree"
+##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
+##' (which will ignore missing values).  The default, \code{NULL}, corresponds
+##' to _no_ inner knots, i.e., "degree - intercept".
+##' @param knots The _internal_ breakpoints that define the spline.  The
+##' default is \code{NULL}, which results in a basis for ordinary
+##' polynomial regression.  Typical values are the mean or median
+##' for one knot, quantiles for more knots.  See also
+##' \code{Boundary.knots}.
+##' @param degree Degree of the piecewise polynomial. The default value is 3
+##' for cubic splines.
+##' @param intercept If \code{TRUE}, an intercept is included in the basis;
+##' default is \code{FALSE}.
+##' @param Boundary.knots boundary points at which to anchor the I-spline basis
+##' (default the range of the non-\code{NA} data).  If both \code{knots} and
+##' \code{Boundary.knots} are supplied, the basis parameters do not depend on
+##' \code{x}. Data can extend beyond \code{Boundary.knots}.
+##' @param ... Optional arguments for future usage.
+##'
+##' @return A matrix of dimension \code{length(x)} by
+##' \code{df = degree + length(knots)} (plus on if intercept is included).
+##' Attributes that correspond to the arguments specified are returned
+##' for usage for \code{\link{predict.iSpline}}. The corresponding M-spline
+##' basis matrix is also returned in attribute named \code{msMat}.
+##'
+##' @references
+##' Ramsay, J. O. (1988). Monotone regression splines in action.
+##' _Statistical science_, 425-441.
+##'
+##' @examples
+##' x <- seq(0, 1, by = .01)
+##' knots <- c(0.3, 0.5, 0.6)
+##' iMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' matplot(x, iMat, type = "l", ylab = "I-spline bases")
+##' abline(v = knots, lty = 2, col = "gray")
+##'
+##' @seealso
+##' \code{\link{predict.iSpline}} for evaluation at given values;
+##' \code{\link{mSpline}} for constructing M-spine basis;
+##' \code{\link{ibs}} for constructing integral of B-spline basis.
+##' @importFrom stats stepfun
+##' @importFrom utils tail
+##' @export
+iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+                   Boundary.knots = range(x), ...) {
 
     ## M-spline bases for inputs
-    msOut <- ms(x = x, df = df, knots = knots, degree = degree,
-               intercept = intercept, Boundary.knots = Boundary.knots)
+    msOut <- mSpline(x = x, df = df, knots = knots, degree = degree,
+                    intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(msOut, "degree")
@@ -16,10 +71,10 @@ ims <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     aKnots <- sort(c(rep(bKnots, ord + 1), knots))
 
     ## generate M-spline bases with (degree + 1)
-    msOut1 <- ms(x = x, knots = knots, degree = ord,
-                intercept = FALSE, Boundary.knots = bKnots)
+    msOut1 <- mSpline(x = x, knots = knots, degree = ord,
+                     intercept = FALSE, Boundary.knots = bKnots)
 
-    foo <- stepfun(x = knots, y = seq(ord, length(knots) + ord))
+    foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
     j <- as.integer(foo(x))
 
     ## calculate I-spline bases at each x
@@ -30,13 +85,15 @@ ims <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         j <- b[1L]
         a <- b[- 1L]
         idx <- seq_along(a)
-        a[tail(idx, - j)] <- 0
+        a[utils::tail(idx, - j)] <- 0
         a[seq_len(j)] <- rev(cumsum(rev(a[seq_len(j)])))
         a[idx < j - ord] <- 1
         a
     }))
     if (! intercept) imsOut <- imsOut[, - 1L, drop = FALSE]
 
-    ## return
-    list(msMat = msOut, imsMat = imsOut)
+    ## output
+    attributes(imsOut) <- c(attributes(msOut), list(msMat = msOut))
+    class(imsOut) <- c("iSpline", "basis", "matrix")
+    imsOut
 }

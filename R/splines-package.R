@@ -25,5 +25,4 @@
 ##'
 ##' @docType package
 ##' @name splines2
-##' @useDynLib splines2
 NULL
