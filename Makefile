@@ -1,12 +1,9 @@
 pkg = splines2
 cprt = COPYRIGHT
 
-preview:
-	Rscript -e "rmarkdown::render('vignettes/splines2-intro.Rmd')"
-
 Rpkg: Rd build
 	make check
-#	make INSTALL
+	make INSTALL
 
 Rd:
 	Rscript -e "library(methods); roxygen2::roxygenise();"
@@ -19,6 +16,9 @@ check: $(pkg)_*.tar.gz
 
 INSTALL: $(pkg)_*.tar.gz
 	R CMD INSTALL --build $(pkg)_*.tar.gz
+
+preview:
+	Rscript -e "rmarkdown::render('vignettes/splines2-intro.Rmd')"
 
 ## update copyright year in HEADER, R script and date in DESCRIPTION
 updateHeader:
