@@ -16,6 +16,8 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ################################################################################
+
+
 ##' Integral of B-Spline Basis for Polynomial Splines
 ##'
 ##' This function generates the integral of B-spline basis matrix

@@ -16,6 +16,8 @@
 ##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ################################################################################
+
+
 ##' M-Spline Basis for Polynomial Splines
 ##'
 ##' This function generates the M-spline basis matrix for a polynomial spline.
