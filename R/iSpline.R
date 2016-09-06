@@ -29,7 +29,8 @@
 ##' polynomials and their corresponding integrals with the specified interior
 ##' knots and degree, evaluated at the values of \code{x}.
 ##'
-##' @param x The predictor variable.  Missing values are allowed.
+##' @param x The predictor variable.  Missing values are allowed but ignored for
+##' output.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
 ##' \code{knots}, then the function chooses "df - degree"
 ##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
@@ -45,7 +46,7 @@
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
 ##' Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the I-spline basis.
-##' By default, they are the range of the non-\code{NA} data).  If both
+##' By default, they are the range of the non-\code{NA} data.  If both
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.

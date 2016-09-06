@@ -33,7 +33,8 @@
 ##' \code{\link[splines]{bs}} uses a "pivot" inside the respective boundary
 ##' knot which is important for derivative evaluation.
 ##'
-##' @param x The predictor variable.  Missing values are allowed.
+##' @param x The predictor variable.  Missing values are allowed but ignored for
+##' output.
 ##' @param df Degrees of freedom of the B-spline basis to be integrated.
 ##' One can specify \code{df} rather than \code{knots}, then the function
 ##' chooses "df - degree" (minus one if there is an intercept) knots at
