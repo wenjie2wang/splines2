@@ -43,11 +43,11 @@
 ##' @param degree Degree of the piecewise polynomial. The default value is 3
 ##' for cubic splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##' default is \code{FALSE}.
-##' @param Boundary.knots Boundary points at which to anchor the I-spline basis
-##' (default the range of the non-\code{NA} data).  If both \code{knots} and
-##' \code{Boundary.knots} are supplied, the basis parameters do not depend on
-##' \code{x}. Data can extend beyond \code{Boundary.knots}.
+##' Default is \code{FALSE}.
+##' @param Boundary.knots Boundary points at which to anchor the I-spline basis.
+##' By default, they are the range of the non-\code{NA} data).  If both
+##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
+##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
