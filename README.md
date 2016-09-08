@@ -6,7 +6,7 @@ functions constructing M-spline, I-spline, and integral of B-spline basis.
 
 ## Development
 
-The latest version of package is (will be) under development in branch 'dev'.
+The latest version of package is under development in branch 'dev'.
 
 
 ## Installation of Stable Version

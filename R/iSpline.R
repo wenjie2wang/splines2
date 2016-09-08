@@ -90,7 +90,9 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## generate M-spline basis with (degree + 1)
     msOut1 <- mSpline(x = x, knots = knots, degree = ord,
                      intercept = FALSE, Boundary.knots = bKnots)
+    df <- length(knots) + ord
 
+    ## function determining j from x
     foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
     j <- as.integer(foo(x))
 
@@ -98,10 +100,9 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
     msMat <- rep(numer1, each = length(x)) * msOut1 / (ord + 1)
     msAugMat <- cbind(j, msMat)
-    imsOut <- t(apply(msAugMat, 1, function(b) {
+    imsOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
         j <- b[1L]
         a <- b[- 1L]
-        idx <- seq_along(a)
         a[utils::tail(idx, - j)] <- 0
         a[seq_len(j)] <- rev(cumsum(rev(a[seq_len(j)])))
         a[idx < j - ord] <- 1
