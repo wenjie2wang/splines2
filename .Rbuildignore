@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^test$
+^dev$
 ^Makefile$
 ^COPYRIGHT$
 

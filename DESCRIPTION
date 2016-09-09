@@ -1,7 +1,7 @@
 Package: splines2
 Title: Regression Spline Functions and Classes Too
-Version: 0.1.0
-Date: 2016-09-05
+Version: 0.1.0.9000
+Date: 2016-09-08
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wenjie.2.wang@uconn.edu",
@@ -12,8 +12,7 @@ Description: A complementary package on splines providing functions
     constructing M-spline, I-spline, and integral of B-spline basis.
 Imports:
     splines,
-    stats,
-    utils
+    stats
 Depends:
     R (>= 3.2.3)
 License: GPL (>= 3)
