@@ -103,7 +103,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         j <- b[1L]
         a <- b[- 1L]
         js <- seq_len(j)
-        a[- js)] <- 0
+        a[- js] <- 0
         a[js] <- rev(cumsum(rev(a[js])))
         a[idx < j - ord] <- 1            # <=> a[idx < j - degree] <- 1
         a

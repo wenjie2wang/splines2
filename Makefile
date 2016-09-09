@@ -8,7 +8,7 @@ Rpkg: Rd build
 Rd:
 	Rscript -e "library(methods); roxygen2::roxygenise();"
 
-build:
+build: Rd
 	R CMD build ../$(pkg)
 
 check: $(pkg)_*.tar.gz
