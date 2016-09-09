@@ -69,7 +69,6 @@
 ##' \code{\link{mSpline}} for M-spine basis;
 ##' \code{\link{ibs}} for integral of B-spline basis.
 ##' @importFrom stats stepfun
-##' @importFrom utils tail
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                    Boundary.knots = range(x), ...) {
@@ -103,9 +102,10 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     imsOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
         j <- b[1L]
         a <- b[- 1L]
-        a[utils::tail(idx, - j)] <- 0
-        a[seq_len(j)] <- rev(cumsum(rev(a[seq_len(j)])))
-        a[idx < j - ord] <- 1
+        js <- seq_len(j)
+        a[- js)] <- 0
+        a[js] <- rev(cumsum(rev(a[js])))
+        a[idx < j - ord] <- 1            # <=> a[idx < j - degree] <- 1
         a
     }))
     if (! intercept) imsOut <- imsOut[, - 1L, drop = FALSE]
