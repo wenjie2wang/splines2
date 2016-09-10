@@ -94,3 +94,14 @@ predict.iSpline <- function(object, newx, ...) {
                                "intercept")])
     do.call("iSpline", a)
 }
+
+
+##' @rdname predict
+##' @export
+predict.cSpline <- function(object, newx, ...) {
+    if (missing(newx)) return(object)
+    a <- c(list(x = newx),
+          attributes(object)[c("degree", "knots", "Boundary.knots",
+                               "intercept")])
+    do.call("cSpline", a)
+}
