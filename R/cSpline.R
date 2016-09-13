@@ -28,9 +28,8 @@
 ##' generates a basis matrix for representing the family of piecewise
 ##' polynomials and their corresponding integrals with the specified interior
 ##' knots and degree, evaluated at the values of \code{x}.
-##'
-##' @param x The predictor variable.  Missing values are allowed but ignored for
-##' output.
+##' @param x The predictor variable.  Missing values are allowed and will be
+##' returned but ignored in computation.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
 ##' \code{knots}, then the function chooses "df - degree"
 ##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
