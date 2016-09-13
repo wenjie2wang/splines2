@@ -65,6 +65,17 @@ NULL
 
 ##' @rdname predict
 ##' @export
+predict.bSpline <- function(object, newx, ...) {
+    if (missing(newx)) return(object)
+    a <- c(list(x = newx),
+          attributes(object)[c("degree", "knots", "Boundary.knots",
+                               "intercept")])
+    do.call("bSpline", a)
+}
+
+
+##' @rdname predict
+##' @export
 predict.ibs <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),

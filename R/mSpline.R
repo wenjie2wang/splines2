@@ -68,14 +68,13 @@
 ##' @seealso
 ##' \code{\link{predict.mSpline}} for evaluation at given (new) values;
 ##' \code{\link{iSpline}} for I-spline basis.
-##' @importFrom splines bs
 ##' @export
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                    Boundary.knots = range(x), ...) {
 
     ## B-spline basis for inputs
-    bsOut <- splines::bs(x = x, df = df, knots = knots, degree = degree,
-                        intercept = intercept, Boundary.knots = Boundary.knots)
+    bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
+                    intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(bsOut, "degree")
