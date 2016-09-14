@@ -65,11 +65,11 @@ NULL
 
 ##' @rdname predict
 ##' @export
-predict.bSpline <- function(object, newx, ...) {
+predict.bSpline2 <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),
-          attributes(object)[c("degree", "knots", "Boundary.knots",
-                               "intercept")])
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept")])
     do.call("bSpline", a)
 }
 
@@ -79,8 +79,8 @@ predict.bSpline <- function(object, newx, ...) {
 predict.ibs <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),
-          attributes(object)[c("degree", "knots", "Boundary.knots",
-                               "intercept")])
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept")])
     do.call("ibs", a)
 }
 
@@ -90,8 +90,8 @@ predict.ibs <- function(object, newx, ...) {
 predict.mSpline <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),
-          attributes(object)[c("degree", "knots", "Boundary.knots",
-                               "intercept")])
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept")])
     do.call("mSpline", a)
 }
 
@@ -101,8 +101,8 @@ predict.mSpline <- function(object, newx, ...) {
 predict.iSpline <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),
-          attributes(object)[c("degree", "knots", "Boundary.knots",
-                               "intercept")])
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept")])
     do.call("iSpline", a)
 }
 
@@ -112,7 +112,7 @@ predict.iSpline <- function(object, newx, ...) {
 predict.cSpline <- function(object, newx, ...) {
     if (missing(newx)) return(object)
     a <- c(list(x = newx),
-          attributes(object)[c("degree", "knots", "Boundary.knots",
-                               "intercept")])
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept")])
     do.call("cSpline", a)
 }

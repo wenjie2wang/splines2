@@ -61,14 +61,15 @@
 ##' matplot(x, bMat, type = "l", ylab = "B-spline basis with degree zero")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
-##' \code{\link{predict.bSpline}} for evaluation at given (new) values;
+##' \code{\link{predict.bSpline2}} for evaluation at given (new) values;
+##' \code{\link{ibs}} for integral of B-spline basis;
 ##' \code{\link{mSpline}} for M-spline basis;
 ##' \code{\link{iSpline}} for I-spline basis.
 ##' @importFrom splines bs
 ##' @importFrom stats stepfun quantile
 ##' @export
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                   Boundary.knots = range(x), ...) {
+                    Boundary.knots = range(x), ...) {
 
     ## check and reformat 'degree'
     if ((degree <- as.integer(degree)) < 0)
@@ -77,8 +78,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## call splines::bs for non-zero degree
     if (degree > 0L) {
         out <- splines::bs(x = x, df = df, knots = knots, degree = degree,
-                          intercept = intercept,
-                          Boundary.knots = Boundary.knots)
+                           intercept = intercept,
+                           Boundary.knots = Boundary.knots)
         return(out)
     }
 
@@ -102,11 +103,11 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     if (! intercept)
         bsMat <- bsMat[, - 1L, drop = FALSE]
     a <- list(degree = degree,
-             knots = if (is.null(knots)) numeric(0L) else knots,
-             Boundary.knots = Boundary.knots,
-             intercept = intercept)
+              knots = if (is.null(knots)) numeric(0L) else knots,
+              Boundary.knots = Boundary.knots,
+              intercept = intercept)
     attributes(bsMat) <- c(attributes(bsMat), a)
-    class(bsMat) <- c("bSpline", "basis", "matrix")
+    class(bsMat) <- c("bSpline2", "basis", "matrix")
     bsMat
 }
 
@@ -121,7 +122,7 @@ pieceConst <- function (x, df, knots) {
     if (ind > 1) {
         tknots <- df + 1L
         quans <- seq.int(from = 0, to = 1,
-                        length.out = tknots)[-c(1L, tknots)]
+                         length.out = tknots)[-c(1L, tknots)]
         knots <- as.numeric(stats::quantile(x, quans))
     }
     ## return
