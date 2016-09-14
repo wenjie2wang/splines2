@@ -70,11 +70,11 @@
 ##' \code{\link{iSpline}} for I-spline basis.
 ##' @export
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                   Boundary.knots = range(x), ...) {
+                    Boundary.knots = range(x), ...) {
 
     ## B-spline basis for inputs
     bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
-                    intercept = intercept, Boundary.knots = Boundary.knots)
+                     intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(bsOut, "degree")

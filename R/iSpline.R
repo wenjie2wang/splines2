@@ -71,11 +71,11 @@
 ##' @importFrom stats stepfun
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                   Boundary.knots = range(x), ...) {
+                    Boundary.knots = range(x), ...) {
 
     ## M-spline basis for inputs
     msOut <- mSpline(x = x, df = df, knots = knots, degree = degree,
-                    intercept = intercept, Boundary.knots = Boundary.knots)
+                     intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(msOut, "degree")
@@ -88,7 +88,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## generate M-spline basis with (degree + 1)
     msOut1 <- mSpline(x = x, knots = knots, degree = ord,
-                     intercept = FALSE, Boundary.knots = bKnots)
+                      intercept = FALSE, Boundary.knots = bKnots)
     df <- length(knots) + ord
 
     ## function determining j from x

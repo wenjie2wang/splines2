@@ -74,11 +74,11 @@
 ##' @importFrom stats stepfun
 ##' @export
 cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                   Boundary.knots = range(x), rescale = TRUE, ...) {
+                    Boundary.knots = range(x), rescale = TRUE, ...) {
 
     ## I-spline basis for inputs
     imsOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
-                     intercept = intercept, Boundary.knots = Boundary.knots)
+                      intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(imsOut, "degree")
@@ -95,7 +95,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## generate I-spline basis with (degree + 1)
     augX <- c(x, bKnots[2])
     imsOut1 <- iSpline(x = augX, knots = knots, degree = ord,
-                      intercept = FALSE, Boundary.knots = bKnots)
+                       intercept = FALSE, Boundary.knots = bKnots)
 
     ## function determining j from x
     foo <- stats::stepfun(x = knots, y = seq(ord, df))
@@ -104,7 +104,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## calculate C-spline basis at each internal knot t_j
     numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
     imsOutKnots <- iSpline(knots, knots = knots, degree = ord,
-                          intercept = FALSE, Boundary.knots = bKnots)
+                           intercept = FALSE, Boundary.knots = bKnots)
     matKnots <- rep(numer1, each = nKnots) * imsOutKnots / (ord + 1)
     augMatKnots <- cbind(seq_len(nKnots) + ord, matKnots)
     diffKnots <- diff(knots)
@@ -154,8 +154,8 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## output
     attr(imsOut, "msMat") <- NULL
     attributes(csOut) <- c(attributes(imsOut),
-                          list(imsMat = imsOut, msMat = msMat,
-                               rescale = rescale))
+                           list(imsMat = imsOut, msMat = msMat,
+                                rescale = rescale))
     class(csOut) <- c("cSpline", "basis", "matrix")
     csOut
 }

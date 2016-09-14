@@ -80,16 +80,16 @@
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' par(mfrow = c(1, 1))
 ##' @seealso
+##' \code{\link{bSpline}} for B-spline basis;
 ##' \code{\link{mSpline}} for M-spline basis;
 ##' \code{\link{iSpline}} for I-spine basis.
-##' @importFrom splines bs
 ##' @export
 ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-               Boundary.knots = range(x), ...) {
+                Boundary.knots = range(x), ...) {
 
     ## B-spline basis for inputs
-    bsOut <- splines::bs(x = x, df = df, knots = knots, degree = degree,
-                        intercept = intercept, Boundary.knots = Boundary.knots)
+    bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
+                     intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(bsOut, "degree")
@@ -101,8 +101,8 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     aKnots <- sort(c(rep(bKnots, ord), knots))
 
     ## generate B-spline basis with (degree + 1)
-    bsOut1 <- splines::bs(x = x, knots = knots, degree = ord,
-                         intercept = FALSE, Boundary.knots = bKnots)
+    bsOut1 <- bSpline(x = x, knots = knots, degree = ord,
+                      intercept = FALSE, Boundary.knots = bKnots)
     numer1 <- diff(aKnots, lag = ord)
     if (! intercept) {
         bsOut1 <- bsOut1[, - 1L, drop = FALSE]
