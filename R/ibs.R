@@ -22,7 +22,7 @@
 ##'
 ##' This function generates the integral of B-spline basis matrix
 ##' for a polynomial spline. The arguments are exactly the same with function
-##' \code{\link[splines]{bs}} in package \code{\link{splines}}.
+##' \code{\link[splines]{bs}} in package \code{splines}.
 ##'
 ##' It is an implementation of the close form integral of B-spline basis based
 ##' on recursion relation.  Internally, it calls \code{\link{bSpline}} and
@@ -30,6 +30,8 @@
 ##' polynomials and their corresponding integrals with the specified interior
 ##' knots and degree, evaluated at the values of \code{x}.
 ##'
+##' @usage ibs(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##'         Boundary.knots = range(x), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom of the B-spline basis to be integrated.

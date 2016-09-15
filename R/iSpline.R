@@ -30,6 +30,8 @@
 ##' corresponding integrals with the specified interior knots and degree,
 ##' evaluated at the values of \code{x}.
 ##'
+##' @usage iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##'         Boundary.knots = range(x), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than

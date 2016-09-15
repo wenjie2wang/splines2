@@ -20,9 +20,10 @@
 
 ##' splines2: Regression Spline Functions and Classes Too
 ##'
-##' A complementary package on splines providing functions constructing B-spline
-##' (allowing zero degree), integral of B-spline basis, M-spline, I-spline, and
-##' C-spline basis.
+##' A complementary package on splines providing functions constructing
+##' B-spline, monotone spline (M-spline) and its integral (I-spline), convex
+##' spline (C-spline), and integral of B-spline basis.  Piecewise constant basis
+##' is allowed for B-spline and M-spline basis.
 ##'
 ##' @docType package
 ##' @name splines2
