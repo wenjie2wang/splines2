@@ -1,3 +1,5 @@
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/splines2)](http://cran.r-project.org/package=splines2)
+
 # splines2
 
 The R package **splines2** is a complementary package on splines providing
@@ -14,8 +16,7 @@ The latest version of package is under development at
 
 ## Installation of Stable Version
 
-You can install the stable version from
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/splines2)](http://cran.r-project.org/package=splines2)
+You can install the stable version from [CRAN](https://cran.r-project.org/package=splines2).
 
 ```r
 install.packages("splines2", dependencies = TRUE)
@@ -35,7 +36,7 @@ library(splines2)
 ?iSpline
 ```
 
-[package help manual](https://cran.rstudio.com/web/packages/splines2/splines2.pdf)
+[package help manual](https://cran.r-project.org/web/packages/splines2/splines2.pdf)
 is also available for details and demonstration.
 
 

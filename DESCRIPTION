@@ -8,8 +8,8 @@ Authors@R: c(
            role = c("aut", "cre")),
     person(given = "Jun", family = "Yan", role = "ctb")
     )
-Description: A complementary package on splines providing
-    functions constructing B-spline, monotone spline (M-spline) and its integral
+Description: A complementary package on splines providing functions
+    constructing B-spline, monotone spline (M-spline) and its integral
     (I-spline), convex spline (C-spline), and integral of B-spline basis.
     Piecewise constant basis is allowed for B-spline and M-spline basis.
 Imports:
