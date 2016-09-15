@@ -20,16 +20,17 @@
 
 ##' C-Spline Basis for Polynomial Splines
 ##'
-##' This function generates the C-spline (integral of I-spline) basis matrix
-##' for a polynomial spline.
+##' This function generates the convex regression spline (called C-spline) basis
+##' matrix by integrating I-spline basis for a polynomial spline.
 ##'
-##' It is an implementation of the close form C-spline basis based
-##' on recursion relation.  Internally, it calls \code{\link{iSpline}} and
-##' generates a basis matrix for representing the family of piecewise
-##' polynomials and their corresponding integrals with the specified interior
-##' knots and degree, evaluated at the values of \code{x}.
+##' It is an implementation of the close form C-spline basis derived from
+##' the recursion formula of I-spline and M-spline.  Internally, it calls
+##' \code{\link{iSpline}} and generates a basis matrix for representing the
+##' family of piecewise polynomials and their corresponding integrals with the
+##' specified interior knots and degree, evaluated at the values of \code{x}.
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned but ignored in computation.
+##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
 ##' \code{knots}, then the function chooses "df - degree"
 ##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
@@ -40,26 +41,29 @@
 ##' polynomial regression.  Typical values are the mean or median
 ##' for one knot, quantiles for more knots.  See also
 ##' \code{Boundary.knots}.
-##' @param degree Degree of the piecewise polynomial. The default value is 3
-##' for cubic splines.
+##' @param degree Non-negative integer degree of the piecewise polynomial. The
+##' default value is 3 for cubic splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
 ##' Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the C-spline basis.
 ##' By default, they are the range of the non-\code{NA} data.  If both
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
-##' @param rescale Logical value (\code{TRUE} by default) indicating whether the
+##' @param rescale Logical value (\code{TRUE} by default) indicating whether
 ##' rescaling on C-spline basis is required. If TRUE, C-spline basis is rescaled
 ##' to have unit height at right boundary knot; the corresponding I-spline and
-##' M-spline basis matrices are also rescaled to the same extent.
+##' M-spline basis matrices shipped in attributes are also rescaled to the same
+##' extent.
 ##' @param ... Optional arguments for future usage.
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
-##' for usage for \code{\link{predict.iSpline}}. The corresponding M-spline
-##' basis matrix is also returned in attribute named \code{msMat}.
+##' for usage for \code{\link{predict.cSpline}}. The corresponding M-spline and
+##' I-spline basis matrices are also returned in attribute named \code{msMat}
+##' and \code{imsMat} respectively.
 ##' @references
-##' FIXME
+##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
+##' \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
 ##' @examples
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
@@ -68,8 +72,9 @@
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
-##' \code{\link{iSpline}} for I-spine basis;
-##' \code{\link{mSpline}} for M-spine basis;
+##' \code{\link{iSpline}} for I-spline basis;
+##' \code{\link{mSpline}} for M-spline basis;
+##' \code{\link{bSpline}} for B-spline basis;
 ##' \code{\link{ibs}} for integral of B-spline basis.
 ##' @importFrom stats stepfun
 ##' @export

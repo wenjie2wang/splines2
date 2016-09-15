@@ -20,16 +20,19 @@
 
 ##' Evaluate a Spline Basis
 ##'
-##' Evaluate a predefined spline basis at given values.
+##' This function evaluates a predefined spline basis at (new) given values.
 ##'
 ##' These are methods for the generic function \code{predict} for objects
-##' inheriting from class \code{\link{ibs}}, \code{\link{mSpline}}, or
-##' \code{\link{iSpline}}. If \code{newx} is not given, the function returns
-##' the input object.
+##' inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
+##' \code{iSpline}, or \code{cSpline}.  If \code{newx} is not given, the
+##' function returns the input object.  For object returned by function
+##' \code{\link{cSpline}}, the \code{mSpline} and \code{iSpline} objects shipped
+##' in attributes should not be evaluated by this function if \code{rescale} is
+##' \code{TRUE}.  See \code{\link{cSpline}} for details.
 ##'
 ##' @name predict
-##' @param object Objects of class \code{\link{ibs}}, \code{\link{mSpline}}, or
-##' \code{\link{iSpline}} having attributes describing \code{knots},
+##' @param object Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
+##' \code{iSpline}, or \code{cSpline} having attributes describing \code{knots},
 ##' \code{degree}, etc.
 ##' @param newx The \code{x} values at which evaluations are required.
 ##' @param ... Optional argument for future usage.
@@ -41,6 +44,10 @@
 ##' x <- seq(0, 1, 0.2)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' newX <- seq(0.1, 0.9, 0.2)
+##'
+##' ## for B-spline
+##' bsMat <- bSpline(x, knots = knots, degree = 2)
+##' predict(bsMat, newX)
 ##'
 ##' ## for integral of B-spline
 ##' ibsMat <- ibs(x, knots = knots, degree = 2)
@@ -54,11 +61,15 @@
 ##' imsMat <- iSpline(x, knots = knots, degree = 2)
 ##' predict(imsMat, newX)
 ##'
+##' ## for C-spline
+##' csMat <- cSpline(x, knots = knots, degree = 2)
+##' predict(csMat, newX)
 ##' @seealso
+##' \code{\link{bSpline}} for B-spline basis;
 ##' \code{\link{ibs}} for integral of B-spline basis;
 ##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{iSpline}} for I-spline basis.
-##'
+##' \code{\link{iSpline}} for I-spline basis;
+##' \code{\link{cSpline}} for C-spline basis.
 ##' @importFrom stats predict
 NULL
 

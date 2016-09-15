@@ -28,9 +28,11 @@
 ##' zero, it internally calls \code{\link[splines]{bs}} and generates a basis
 ##' matrix for representing the family of piecewise polynomials with the
 ##' specified interior knots and degree, evaluated at the values of \code{x}.
+##' The function has the same arguments with \code{\link[splines]{bs}} for ease
+##' usage.
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned but ignored in computation.
+##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
 ##' \code{knots}, then the function chooses "df - degree"
 ##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
@@ -41,8 +43,10 @@
 ##' polynomial regression.  Typical values are the mean or median
 ##' for one knot, quantiles for more knots.  See also
 ##' \code{Boundary.knots}.
-##' @param degree Degree of the piecewise polynomial. The default value is 3
-##' for cubic splines.
+##' @param degree Non-negative integer degree of the piecewise polynomial. The
+##' default value is 3 for cubic splines. Zero degree is allowed for this
+##' function, which is the only difference compared with
+##' \code{\link[splines]{bs}} in package \code{splines}.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
 ##' Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the B-spline basis.
@@ -53,20 +57,22 @@
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus one if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
-##' for usage for \code{\link{predict.mSpline}}.
+##' for usage for \code{\link{predict.bSpline2}}.
 ##' @examples
-##' x <- seq(0, 1, by = .01)
+##' library(graphics)
+##' x <- seq(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' bMat <- mSpline(x, knots = knots, degree = 0, intercept = TRUE)
+##' bMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
 ##' matplot(x, bMat, type = "l", ylab = "B-spline basis with degree zero")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.bSpline2}} for evaluation at given (new) values;
 ##' \code{\link{ibs}} for integral of B-spline basis;
 ##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{iSpline}} for I-spline basis.
+##' \code{\link{iSpline}} for I-spline basis;
+##' \code{\link{cSpline}} for C-spline basis.
 ##' @importFrom splines bs
-##' @importFrom stats stepfun quantile
+##' @importFrom stats stepfun
 ##' @export
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                     Boundary.knots = range(x), ...) {
@@ -113,6 +119,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
 
 ### internal function ==========================================================
+##' @importFrom stats quantile
 pieceConst <- function (x, df, knots) {
     ind <- (is.null(df) + 1) * is.null(knots) + 1
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
@@ -122,9 +129,8 @@ pieceConst <- function (x, df, knots) {
     if (ind > 1) {
         tknots <- df + 1L
         quans <- seq.int(from = 0, to = 1,
-                         length.out = tknots)[-c(1L, tknots)]
+                         length.out = tknots)[- c(1L, tknots)]
         knots <- as.numeric(stats::quantile(x, quans))
     }
-    ## return
     list(df = df, knots = knots)
 }

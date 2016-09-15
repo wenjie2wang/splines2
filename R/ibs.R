@@ -25,16 +25,13 @@
 ##' \code{\link[splines]{bs}} in package \code{\link{splines}}.
 ##'
 ##' It is an implementation of the close form integral of B-spline basis based
-##' on recursion relation.  Internally, it calls \code{\link[splines]{bs}} and
+##' on recursion relation.  Internally, it calls \code{\link{bSpline}} and
 ##' generates a basis matrix for representing the family of piecewise
 ##' polynomials and their corresponding integrals with the specified interior
 ##' knots and degree, evaluated at the values of \code{x}.
-##' When "Boundary.knots" are set inside \code{range(x)},
-##' \code{\link[splines]{bs}} uses a "pivot" inside the respective boundary
-##' knot which is important for derivative evaluation.
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned but ignored in computation.
+##' returned as they were.
 ##' @param df Degrees of freedom of the B-spline basis to be integrated.
 ##' One can specify \code{df} rather than \code{knots}, then the function
 ##' chooses "df - degree" (minus one if there is an intercept) knots at
@@ -45,8 +42,8 @@
 ##' integrated.  The default is \code{NULL}, which results in a basis for
 ##' ordinary polynomial regression.  Typical values are the mean or median
 ##' for one knot, quantiles for more knots.  See also \code{Boundary.knots}.
-##' @param degree Degree of the piecewise polynomial to be integrated.
-##' The default value is 3 for cubic splines.
+##' @param degree Non-negative integer degree of the piecewise polynomial to be
+##' integrated. The default value is 3 for the integral of cubic B-splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
 ##' Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the B-spline basis
@@ -68,7 +65,7 @@
 ##' knots <- c(0.2, 0.4, 0.7, 0.9)
 ##' ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 ##'
-##' ## extract original B-spline basis matrix
+##' ## extract original B-spline basis matrix from 'ibs' object
 ##' bsMat <- attr(ibsMat, "bsMat")
 ##'
 ##' ## plot B-spline basis with their corresponding integrals
@@ -82,7 +79,8 @@
 ##' @seealso
 ##' \code{\link{bSpline}} for B-spline basis;
 ##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{iSpline}} for I-spine basis.
+##' \code{\link{iSpline}} for I-spline basis.
+##' \code{\link{cSpline}} for C-spline basis.
 ##' @export
 ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                 Boundary.knots = range(x), ...) {
