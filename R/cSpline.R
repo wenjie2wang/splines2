@@ -62,16 +62,19 @@
 ##' Attributes that correspond to the arguments specified are returned
 ##' for usage for \code{\link{predict.cSpline}}. The corresponding M-spline and
 ##' I-spline basis matrices are also returned in attribute named \code{msMat}
-##' and \code{imsMat} respectively.
+##' and \code{isMat} respectively.
 ##' @references
 ##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 ##' \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
 ##' @examples
+##' library(graphics)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##' matplot(x, cMat, type = "l", ylab = "C-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
+##' matplot(x, attr(cMat, "isMat"), type = "l", ylab = "rescaled I-spline basis")
+##' matplot(x, attr(cMat, "msMat"), type = "l", ylab = "rescaled M-spline basis")
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
 ##' \code{\link{iSpline}} for I-spline basis;
@@ -84,13 +87,13 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                     Boundary.knots = range(x), rescale = TRUE, ...) {
 
     ## I-spline basis for inputs
-    imsOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
+    isOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
                       intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
-    degree <- attr(imsOut, "degree")
-    knots <- attr(imsOut, "knots")
-    bKnots <- attr(imsOut, "Boundary.knots")
+    degree <- attr(isOut, "degree")
+    knots <- attr(isOut, "knots")
+    bKnots <- attr(isOut, "Boundary.knots")
     ord <- 1L + degree
     nKnots <- length(knots)
     df <- nKnots + ord
@@ -101,7 +104,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## generate I-spline basis with (degree + 1)
     augX <- c(x, bKnots[2])
-    imsOut1 <- iSpline(x = augX, knots = knots, degree = ord,
+    isOut1 <- iSpline(x = augX, knots = knots, degree = ord,
                        intercept = FALSE, Boundary.knots = bKnots)
 
     ## function determining j from x
@@ -110,9 +113,9 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## calculate C-spline basis at each internal knot t_j
     numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
-    imsOutKnots <- iSpline(knots, knots = knots, degree = ord,
+    isOutKnots <- iSpline(knots, knots = knots, degree = ord,
                            intercept = FALSE, Boundary.knots = bKnots)
-    matKnots <- rep(numer1, each = nKnots) * imsOutKnots / (ord + 1)
+    matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
     augMatKnots <- cbind(seq_len(nKnots) + ord, matKnots)
     diffKnots <- diff(knots)
     csKnots <- t(apply(augMatKnots, 1, function(b, idx = seq_len(df)) {
@@ -131,7 +134,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     csKnots[idxMat] <- do.call("c", linList)
 
     ## calculate C-spline basis at each x
-    matX <- rep(numer1, each = nX + 1) * imsOut1 / (ord + 1)
+    matX <- rep(numer1, each = nX + 1) * isOut1 / (ord + 1)
     augMatX <- cbind(j, augX, matX)
     csOut <- t(apply(augMatX, 1, function(b, idx = seq_len(df)) {
         j <- b[1L]
@@ -149,19 +152,19 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     csOut <- csOut[- (nX + 1), ]
 
     ## mSpline basis matrix
-    msMat <- attr(imsOut, "msMat")
+    msMat <- attr(isOut, "msMat")
     ## rescale C-spline, I-spline, and M-spline basis
     if (rescale) {
         vec <- rep(1 / scl, each = nX)
         csOut <- vec * csOut
-        imsOut <- vec * imsOut
+        isOut <- vec * isOut
         msMat <- vec * msMat
     }
 
     ## output
-    attr(imsOut, "msMat") <- NULL
-    attributes(csOut) <- c(attributes(imsOut),
-                           list(imsMat = imsOut, msMat = msMat,
+    attr(isOut, "msMat") <- NULL
+    attributes(csOut) <- c(attributes(isOut),
+                           list(isMat = isOut, msMat = msMat,
                                 rescale = rescale))
     class(csOut) <- c("cSpline", "basis", "matrix")
     csOut

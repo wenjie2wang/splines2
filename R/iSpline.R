@@ -106,7 +106,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
                       intercept = FALSE, Boundary.knots = bKnots)
     df <- length(knots) + ord
     bsAugMat <- cbind(j, bsOut1)
-    imsOut <- t(apply(bsAugMat, 1, function(b, idx = seq_len(df)) {
+    isOut <- t(apply(bsAugMat, 1, function(b, idx = seq_len(df)) {
         j <- b[1L]
         a <- b[- 1L]
         js <- seq_len(j)
@@ -125,7 +125,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
     ## msMat <- rep(numer1, each = length(x)) * msOut1 / (ord + 1)
     ## msAugMat <- cbind(j, msMat)
-    ## imsOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
+    ## isOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
     ##     j <- b[1L]
     ##     a <- b[- 1L]
     ##     js <- seq_len(j)
@@ -136,10 +136,10 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## }))
 
     ## intercept
-    if (! intercept) imsOut <- imsOut[, - 1L, drop = FALSE]
+    if (! intercept) isOut <- isOut[, - 1L, drop = FALSE]
 
     ## output
-    attributes(imsOut) <- c(attributes(msOut), list(msMat = msOut))
-    class(imsOut) <- c("iSpline", "basis", "matrix")
-    imsOut
+    attributes(isOut) <- c(attributes(msOut), list(msMat = msOut))
+    class(isOut) <- c("iSpline", "basis", "matrix")
+    isOut
 }

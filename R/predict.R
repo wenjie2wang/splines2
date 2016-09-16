@@ -58,8 +58,8 @@
 ##' predict(msMat, newX)
 ##'
 ##' ## for I-spline
-##' imsMat <- iSpline(x, knots = knots, degree = 2)
-##' predict(imsMat, newX)
+##' isMat <- iSpline(x, knots = knots, degree = 2)
+##' predict(isMat, newX)
 ##'
 ##' ## for C-spline
 ##' csMat <- cSpline(x, knots = knots, degree = 2)
