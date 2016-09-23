@@ -38,9 +38,9 @@ function [predict](#predict) for objects produced by **splines2** are
 demonstrated for the evaluation of the same spline basis at new values.
 
 
-## `mSpline` for M-splines {#mSpline}
+## M-splines using `mSpline`{#mSpline}
 
-M-splines [@ramsay1988monotone] can be considered as a standardized version of
+M-splines [@ramsay1988monotone] can be considered as a normalized version of
 B-splines with unit integral within boundary knots.  An example given by
 @ramsay1988monotone was a quadratic M-splines with three internal knots placed
 at 0.3, 0.5, and 0.6. The boundary knots by default are the range of the data
@@ -59,25 +59,61 @@ abline(v = knots, lty = 2, col = "gray") # internal knots
 ```
 
 
-## `iSpline` for I-splines {#iSpline}
+## I-splines using `iSpline` {#iSpline}
 
-I-splines are simply the integral of M-splines.  The example given by
-@ramsay1988monotone was the I-splines corresponding to that quadratic M-splines
-with three internal knots placed at 0.3, 0.5, and 0.6. Note that the degree of
-I-splines is defined by the associated M-splines instead of their polynomial
-degree.
+I-splines [@ramsay1988monotone] are simply the integral of M-splines and thus
+monotonically non-decreasing with unit maximum value. A monotonically
+non-decreasing (non-increasing) function can be fitted by a linear combination
+of I-spline bases with non-negative (non-positive) coefficients, plus a constant
+function (where the coefficient of the constant function is unconstrained).
+
+The example given by @ramsay1988monotone was the I-splines corresponding to that
+quadratic M-splines with three internal knots placed at 0.3, 0.5, and 0.6. Note
+that the degree of I-splines is defined by the associated M-splines instead of
+their polynomial degree.
 
 
 ```{r iSpline, fig.width=7, fig.height=4}
 isOut <- iSpline(x, knots = knots, degree = 2, intercept = TRUE) # I-splines
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, isOut, type = "l", ylab = "I-splines of degree two")
-abline(v = knots, lty = 2, col = "gray") # internal knots
+abline(h = 1, v = knots, lty = 2, col = "gray") # internal knots
+```
+
+In additional, the corresponding M-spline basis matrix is shipped in the
+attribute named `msMat` in the object returned by function `iSpline`. In other
+words, if we need both M-spline bases and their integral splines in model
+fitting, extra function call on `mSpline` can be avoided conveniently.
+
+```{r msMat}
+all.equal(msOut, attr(isOut, "msMat")) # 'msMat' attribute for M-splines
+```
+
+
+## C-splines using `cSpline` {#cSpline}
+
+Convex splines [@meyer2008inference] called C-splines can be considered as a
+scaled version of the integral of I-splines with unit maximum value.
+@meyer2008inference applied C-splines to shape-restricted regression
+analysis. The monotone property of I-spines ensures the convexity of
+C-splines. A convex regression function can be estimated using linear
+combinations of the C-spline bases with non-negative coefficients, plus an
+unrestricted linear combination of the constant function and the identity
+function $g(x) = x$. If the underlying regression function is both increasing
+and convex, the coefficient on the identity function is restricted to be
+nonnegative as well.
+
+
+```{r cSpline, fig.width=7, fig.height=4}
+cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
+matplot(x, cMat, type = "l", ylab = "C-spline basis")
+abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
 <!-- FIXME -->
 
-## Examples of Integral B-splines
+## Integral B-splines using `ibs` {#ibs}
 
 Formula from @de1978practical.
 
