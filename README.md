@@ -1,18 +1,17 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/splines2)](http://cran.r-project.org/package=splines2)
-[![Build Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=master)](https://travis-ci.org/wenjie2wang/splines2)
-
-
 # splines2
 
-The R package **splines2** is a complementary package on splines providing
-functions constructing B-spline, monotone spline (M-spline) and its integral
-(I-spline), convex spline (C-spline), and integral of B-spline basis. Piecewise
-constant basis is allowed for B-spline and M-spline basis.
+The R package **splines2** is now a complementary package on splines providing
+functions constructing B-splines, monotone splines (M-splines) and its integral
+(I-splines), convex splines (C-splines), and integral of B-splines. Piecewise
+constant basis of degree zero is allowed for B-spline and M-spline basis.
 
 
 ## Installation of CRAN Version
 
-You can install the stable version from [CRAN](https://cran.r-project.org/package=splines2).
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/splines2)](http://cran.r-project.org/package=splines2)
+[![Build Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=master)](https://travis-ci.org/wenjie2wang/splines2)
+
+You can install the released version from [CRAN](https://cran.r-project.org/package=splines2).
 
 ```R
 install.packages("splines2", dependencies = TRUE)
@@ -21,13 +20,12 @@ install.packages("splines2", dependencies = TRUE)
 
 ## Development
 
-The latest version of package is under development at
-[GitHub](https://github.com/wenjie2wang/splines2) in branch 'dev'.
-
 [![Build Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=dev)](https://travis-ci.org/wenjie2wang/splines2)
 
-You may install the latest version under development with the help of *devtools*
-if it passed the building check by Travis CI.
+The latest version of package is under development
+at [GitHub](https://github.com/wenjie2wang/splines2) in branch 'dev'.  You may
+consider installing the latest version with the help of *devtools* if it is able
+to pass the building check by Travis CI.
 
 ```R
 if (! require(devtools)) install.packages("devtools", dependencies = TRUE)

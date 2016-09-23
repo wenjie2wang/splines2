@@ -1,11 +1,10 @@
 pkg = splines2
 cprt = COPYRIGHT
 
-Rpkg: Rd build
+Rpkg: build
 	make check
-	make INSTALL
 
-Rd:
+Rd: R/
 	Rscript -e "library(methods); roxygen2::roxygenise();"
 
 build: Rd
@@ -14,7 +13,7 @@ build: Rd
 check: $(pkg)_*.tar.gz
 	R CMD check --as-cran $(pkg)_*.tar.gz
 
-INSTALL: $(pkg)_*.tar.gz
+INSTALL: build
 	R CMD INSTALL --build $(pkg)_*.tar.gz
 
 preview:
@@ -37,4 +36,4 @@ updateHeader:
 	sed -i "s/Date: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/Date: $$dt/" DESCRIPTION;
 
 clean:
-	rm -rf *~ */*~ */*.Rd *.Rhistroy NAMESPACE *.tar.gz *.Rcheck/ .\#*
+	rm -rf *~ */*~ *.Rhistroy *.tar.gz *.Rcheck/ .\#*
