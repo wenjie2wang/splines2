@@ -16,7 +16,8 @@ Imports:
     splines,
     stats
 Suggests:
-    knitr
+    knitr,
+    rmarkdown
 Depends:
     R (>= 3.2.3)
 VignetteBuilder: knitr
