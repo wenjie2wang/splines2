@@ -1,0 +1,8 @@
+language: R
+cache: packages
+sudo: false
+r:
+  - devel
+
+r_github_packages:
+  - wenjie2wang/splines2
