@@ -15,12 +15,11 @@ output: rmarkdown::html_vignette
 The package **splines2** is now designed to be a complementary package on
 splines.  It provides functions constructing a variety of spline bases that are
 not available from the package **splines** shipped with **R**.  Most functions
-in **splines2** have a very similar user interface with the function `bs` in
-package **splines**. Currently, **splines2** provides function constructing
-B-splines, monotone splines (M-splines) and its integral (I-splines), convex
-splines (C-splines), and integral of B-splines.  Compared with package
-**splines**, piecewise constant basis is allowed for B-spline and M-spline basis
-in **splines2**.
+have a very similar user interface with the function `bs` in package
+**splines**. Currently, **splines2** provides function constructing B-splines,
+monotone splines (M-splines) and its integral (I-splines), convex splines
+(C-splines), and integral of B-splines.  Compared with package **splines**,
+**splines2** allows piecewise constant basis for B-splines and M-splines.
 
 
 In this vignette, we introduce the basic usage of the functions provided by
@@ -31,11 +30,10 @@ returned are available in the package manual.
 An outline of the remainder of the vignette is as follows: We first introduce
 the functions constructing the monotone splines ([M-splines](#mSpline)), its
 integral ([I-splines](#iSpline)), and convex splines ([C-splines](#cSpline)).
-After then, the examples for [integral of B-splines](#ibs) are provided, which
-include one toy example for integral of degree zero or piecewise constant
-B-spline.  Last but not the least, handy methods of S3 generic
-function [predict](#predict) for objects produced by **splines2** are
-demonstrated for the evaluation of the same spline basis at new values.
+After then, toy examples for [integral of B-splines](#ibs) and piecewise
+constant [B-splines](#bSpline) are given.  Last but not the least, handy methods
+of S3 generic function [predict](#predict) for objects produced by **splines2**
+are demonstrated for the evaluation of the same spline basis at new values.
 
 
 ## M-splines using `mSpline`{#mSpline}
@@ -47,15 +45,15 @@ at 0.3, 0.5, and 0.6. The boundary knots by default are the range of the data
 `x`. So in this example, they are 0 and 1.
 
 
-```{r mSpline, fig.width=7, fig.height=4}
+```{r mSpline, fig.width=7, fig.height=4, fig.cap = "Quadratic M-splines with three internal knots."}
 library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
 msOut <- mSpline(x, knots = knots, degree = 2, intercept = TRUE) # M-splines
 library(graphics) # attach graphics just in case for plots
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
-matplot(x, msOut, type = "l", ylab = "Quadratic M-splines")
-abline(v = knots, lty = 2, col = "gray") # internal knots
+matplot(x, msOut, type = "l", ylab = "y")
+abline(v = knots, lty = 2, col = "gray") # mark internal knots
 ```
 
 
@@ -73,11 +71,11 @@ that the degree of I-splines is defined by the associated M-splines instead of
 their polynomial degree.
 
 
-```{r iSpline, fig.width=7, fig.height=4}
+```{r iSpline, fig.width=7, fig.height=4, fig.cap = "I-splines of degree two with three internal knots."}
 isOut <- iSpline(x, knots = knots, degree = 2, intercept = TRUE) # I-splines
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
-matplot(x, isOut, type = "l", ylab = "I-splines of degree two")
-abline(h = 1, v = knots, lty = 2, col = "gray") # internal knots
+matplot(x, isOut, type = "l", ylab = "y")
+abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
 In additional, the corresponding M-spline basis matrix is shipped in the
@@ -92,41 +90,59 @@ all.equal(msOut, attr(isOut, "msMat")) # 'msMat' attribute for M-splines
 
 ## C-splines using `cSpline` {#cSpline}
 
-Convex splines [@meyer2008inference] called C-splines can be considered as a
-scaled version of the integral of I-splines with unit maximum value.
-@meyer2008inference applied C-splines to shape-restricted regression
-analysis. The monotone property of I-spines ensures the convexity of
-C-splines. A convex regression function can be estimated using linear
-combinations of the C-spline bases with non-negative coefficients, plus an
-unrestricted linear combination of the constant function and the identity
-function $g(x) = x$. If the underlying regression function is both increasing
-and convex, the coefficient on the identity function is restricted to be
-nonnegative as well.
+Convex splines [@meyer2008inference] called C-splines are a scaled version of
+I-splines' integral with unit maximum value.  @meyer2008inference applied
+C-splines to shape-restricted regression analysis. The monotone property of
+I-spines ensures the convexity of C-splines. A convex regression function can be
+estimated using linear combinations of the C-spline bases with non-negative
+coefficients, plus an unrestricted linear combination of the constant function
+and the identity function $g(x) = x$. If the underlying regression function is
+both increasing and convex, the coefficient on the identity function is
+restricted to be nonnegative as well.
 
 
-```{r cSpline, fig.width=7, fig.height=4}
-cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+Function `cSpline` provides argument `scale` specifying whether scaling on
+C-spline bases is required.  If `TRUE` by default, each C-spline basis is scaled
+to have unit height at right boundary knot. The corresponding I-spline and
+M-spline basis shipped in attributes are also scaled to the same extent and can
+be used as the first and second derivatives of the C-spline basis,
+respectively. If `FALSE`, the actual integral of I-spline basis will be
+returned.  The original I-splines integrated and the corresponding M-splines are
+available in attributes named `isMat` and `msOut`, respectively.
+
+
+```{r cSpline-scaled, fig.width=7, fig.height=4, fig.cap = "C-splines of degree two with three internal knots."}
+csOut1 <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
-matplot(x, cMat, type = "l", ylab = "C-spline basis")
+matplot(x, csOut1, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
-<!-- FIXME -->
 
 ## Integral B-splines using `ibs` {#ibs}
 
-Formula from @de1978practical.
+An recursive formula of B-spline integral given by @de1978practical is
+implemented with the help of function `bs` in package **splines**.
+One toy examples are given as follows:
 
-```{r intBs1, fig.width=7, fig.height=4}
+```{r ibs, fig.width=7, fig.height=4, fig.cap="Integral of piecewise linear B-splines."}
 knots <- c(0.2, 0.4, 0.7, 0.9)
 ibsOut <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
-matplot(x, ibsOut, type = "l", ylab = "Integral of B-spline bases")
-abline(v = knots, lty = 2, col = "gray")
-matplot(x, attr(ibsOut, "bsMat"), type = "l",
-        ylab = "B-spline bases")
+matplot(x, ibsOut, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
 ```
+
+```{r bs, fig.width=7, fig.height=4, fig.cap="Piecewise linear B-splines and their integrals."}
+matplot(x, attr(ibsOut, "bsMat"), type = "l", ylab = "y")
+abline(v = knots, lty = 2, col = "gray")
+```
+
+## B-splines using `bSpline` {#bSpline}
+
+
+## predict
+
 
 
 ## Reference

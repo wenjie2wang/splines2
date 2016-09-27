@@ -30,7 +30,7 @@
 ##' specified interior knots and degree, evaluated at the values of \code{x}.
 ##'
 ##' @usage cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), rescale = TRUE, ...)
+##'         Boundary.knots = range(x), scale = TRUE, ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
@@ -51,10 +51,10 @@
 ##' By default, they are the range of the non-\code{NA} data.  If both
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
-##' @param rescale Logical value (\code{TRUE} by default) indicating whether
-##' rescaling on C-spline basis is required. If TRUE, C-spline basis is rescaled
+##' @param scale Logical value (\code{TRUE} by default) indicating whether
+##' scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
 ##' to have unit height at right boundary knot; the corresponding I-spline and
-##' M-spline basis matrices shipped in attributes are also rescaled to the same
+##' M-spline basis matrices shipped in attributes are also scaled to the same
 ##' extent.
 ##' @param ... Optional arguments for future usage.
 ##' @return A matrix of dimension \code{length(x)} by
@@ -73,8 +73,8 @@
 ##' cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##' matplot(x, cMat, type = "l", ylab = "C-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
-##' matplot(x, attr(cMat, "isMat"), type = "l", ylab = "rescaled I-spline basis")
-##' matplot(x, attr(cMat, "msMat"), type = "l", ylab = "rescaled M-spline basis")
+##' matplot(x, attr(cMat, "isMat"), type = "l", ylab = "scaled I-spline basis")
+##' matplot(x, attr(cMat, "msMat"), type = "l", ylab = "scaled M-spline basis")
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
 ##' \code{\link{iSpline}} for I-spline basis;
@@ -84,7 +84,7 @@
 ##' @importFrom stats stepfun
 ##' @export
 cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), rescale = TRUE, ...) {
+                    Boundary.knots = range(x), scale = TRUE, ...) {
 
     ## I-spline basis for inputs
     isOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
@@ -153,8 +153,8 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## mSpline basis matrix
     msMat <- attr(isOut, "msMat")
-    ## rescale C-spline, I-spline, and M-spline basis
-    if (rescale) {
+    ## scale C-spline, I-spline, and M-spline basis
+    if (scale) {
         vec <- rep(1 / scl, each = nX)
         csOut <- vec * csOut
         isOut <- vec * isOut
@@ -165,7 +165,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     attr(isOut, "msMat") <- NULL
     attributes(csOut) <- c(attributes(isOut),
                            list(isMat = isOut, msMat = msMat,
-                                rescale = rescale))
+                                scale = scale))
     class(csOut) <- c("cSpline", "basis", "matrix")
     csOut
 }

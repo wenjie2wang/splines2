@@ -5,7 +5,7 @@
 \title{C-Spline Basis for Polynomial Splines}
 \usage{
 cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-        Boundary.knots = range(x), rescale = TRUE, ...)
+        Boundary.knots = range(x), scale = TRUE, ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
@@ -34,10 +34,10 @@ By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
 
-\item{rescale}{Logical value (\code{TRUE} by default) indicating whether
-rescaling on C-spline basis is required. If TRUE, C-spline basis is rescaled
+\item{scale}{Logical value (\code{TRUE} by default) indicating whether
+scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
 to have unit height at right boundary knot; the corresponding I-spline and
-M-spline basis matrices shipped in attributes are also rescaled to the same
+M-spline basis matrices shipped in attributes are also scaled to the same
 extent.}
 
 \item{...}{Optional arguments for future usage.}
@@ -68,8 +68,8 @@ knots <- c(0.3, 0.5, 0.6)
 cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 matplot(x, cMat, type = "l", ylab = "C-spline basis")
 abline(v = knots, lty = 2, col = "gray")
-matplot(x, attr(cMat, "isMat"), type = "l", ylab = "rescaled I-spline basis")
-matplot(x, attr(cMat, "msMat"), type = "l", ylab = "rescaled M-spline basis")
+matplot(x, attr(cMat, "isMat"), type = "l", ylab = "scaled I-spline basis")
+matplot(x, attr(cMat, "msMat"), type = "l", ylab = "scaled M-spline basis")
 }
 \references{
 Meyer, M. C. (2008). Inference using shape-restricted regression splines.
