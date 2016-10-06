@@ -30,10 +30,11 @@ returned are available in the package manual.
 An outline of the remainder of the vignette is as follows: We first introduce
 the functions constructing the monotone splines ([M-splines](#mSpline)), its
 integral ([I-splines](#iSpline)), and convex splines ([C-splines](#cSpline)).
-After then, toy examples for [integral of B-splines](#ibs) and piecewise
-constant [B-splines](#bSpline) are given.  Last but not the least, handy methods
-of S3 generic function [predict](#predict) for objects produced by **splines2**
-are demonstrated for the evaluation of the same spline basis at new values.
+After then, toy examples for [integral of B-splines](#ibs)
+and [B-splines](#bSpline) allowing piecewise constant are given.  Last but not
+the least, handy methods of S3 generic function [predict](#predict) for objects
+produced by **splines2** are demonstrated for the evaluation of the same spline
+basis at new values.
 
 
 ## M-splines using `mSpline`{#mSpline}
@@ -49,7 +50,7 @@ at 0.3, 0.5, and 0.6. The boundary knots by default are the range of the data
 library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
-msOut <- mSpline(x, knots = knots, degree = 2, intercept = TRUE) # M-splines
+msOut <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 library(graphics) # attach graphics just in case for plots
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, msOut, type = "l", ylab = "y")
@@ -72,7 +73,7 @@ their own polynomial degree.
 
 
 ```{r iSpline, fig.width=7, fig.height=4, fig.cap = "I-splines of degree two with three internal knots."}
-isOut <- iSpline(x, knots = knots, degree = 2, intercept = TRUE) # I-splines
+isOut <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, isOut, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
@@ -137,8 +138,8 @@ abline(v = knots, h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
 
 Function `bSpline` provides B-spline bases and allows `degree = 0` for piecewise
 constant bases, which is one simple but handy extension to function `bs` in
-package **splines** (for positive `degree`, `bSpline` internally call `bs` to do
-the hard work). Step function or piecewise constant bases are often used in
+package **splines**. (For positive `degree`, `bSpline` internally call `bs` to
+do the hard work.) Step function or piecewise constant bases are often used in
 practice for a reasonable approximation without any assumption on the form of
 target function. One simple example of B-splines and M-splines of degree zero is
 given as follows:
@@ -157,6 +158,20 @@ abline(v = knots, lty = 2, col = "gray")
 
 ## Evaluation on New Values by `predict` {#predict}
 
+The methods for **splines2** objects dispatched by generic function `predict`
+are useful if we want to evaluate the spline object at possibly new $x$
+values. For instance, if we need evaluate the value of I-splines object in
+previous example at 0.275, 0.525, and 0.8, respectively, all we need is
+
+```{r predict}
+predict(isOut, c(0.275, 0.525, 0.8))
+```
+
+Technically speaking, the methods take all information needed, such as `knots`,
+`degree`, `intercept`, etc., from attributes of the original **splines2**
+objects and call the corresponding function automatically for those new $x$
+values. Therefore, the `predict` methods will be not applicable if those
+attributes are somehow lost after certain operation.
 
 
 
