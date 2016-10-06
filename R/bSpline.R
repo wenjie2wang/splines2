@@ -64,8 +64,8 @@
 ##' library(graphics)
 ##' x <- seq(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' bMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
-##' matplot(x, bMat, type = "l", ylab = "B-spline basis with degree zero")
+##' bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
+##' matplot(x, bsMat, type = "l", ylab = "B-spline basis with degree zero")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.bSpline2}} for evaluation at given (new) values;
@@ -88,12 +88,14 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         out <- splines::bs(x = x, df = df, knots = knots, degree = degree,
                            intercept = intercept,
                            Boundary.knots = Boundary.knots)
+        class(out) <- c("bSpline2", "basis", "matrix")
         return(out)
     }
 
     ## else degree is zero
     inputs <- pieceConst(x = x, df = df, knots = knots)
     knots <- inputs$knots
+    ## potentially, df is a bad name since df is also a function in stats
     df <- inputs$df
 
     ## check whether any of x is outside of the boundary knots
@@ -108,8 +110,15 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         foo <- stats::stepfun(augKnots[i: (i + 1)], c(0L, 1L, 0L))
         foo(x)
     })
+
+    ## include intercept or not
     if (! intercept)
         bsMat <- bsMat[, - 1L, drop = FALSE]
+
+    ## add colnames for consistency with bs returns
+    colnames(bsMat) <- as.character(seq_len(df  - as.integer(! intercept)))
+
+    ## on attributes
     a <- list(degree = degree,
               knots = if (is.null(knots)) numeric(0L) else knots,
               Boundary.knots = Boundary.knots,
