@@ -160,7 +160,7 @@ abline(v = knots, lty = 2, col = "gray")
 
 The methods for **splines2** objects dispatched by generic function `predict`
 are useful if we want to evaluate the spline object at possibly new $x$
-values. For instance, if we need evaluate the value of I-splines object in
+values. For instance, if we want to evaluate the value of I-splines object in
 previous example at 0.275, 0.525, and 0.8, respectively, all we need is
 
 ```{r predict}
@@ -170,7 +170,7 @@ predict(isOut, c(0.275, 0.525, 0.8))
 Technically speaking, the methods take all information needed, such as `knots`,
 `degree`, `intercept`, etc., from attributes of the original **splines2**
 objects and call the corresponding function automatically for those new $x$
-values. Therefore, the `predict` methods will be not applicable if those
+values. Therefore, the `predict` methods will not be applicable if those
 attributes are somehow lost after certain operation.
 
 
