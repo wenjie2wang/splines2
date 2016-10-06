@@ -61,8 +61,8 @@ usage.
 library(graphics)
 x <- seq(0, 1, by = 0.01)
 knots <- c(0.3, 0.5, 0.6)
-bMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
-matplot(x, bMat, type = "l", ylab = "B-spline basis with degree zero")
+bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
+matplot(x, bsMat, type = "l", ylab = "B-spline basis with degree zero")
 abline(v = knots, lty = 2, col = "gray")
 }
 \seealso{

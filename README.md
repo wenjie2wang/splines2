@@ -33,31 +33,23 @@ devtools::install_git("git://github.com/wenjie2wang/splines2.git", branch = "dev
 ```
 
 
-## Basic Usage
+## Get Started
 
-```R
-help(pacakge = "splines2")
-library(splines2)
-## for integral of B-spline basis
-?ibs
-## for M-spline basis
-?mSpline
-## for I-spline basis
-?iSpline
-```
+- [Package vignettes](http://wenjie-stat.me/splines2/)
+  provides a quick demonstration for the basic usage of main functions.
 
-[package help manual](https://cran.r-project.org/web/packages/splines2/splines2.pdf)
-is also available for details and demonstration.
+- [Package help manual](https://cran.r-project.org/web/packages/splines2/splines2.pdf)
+  is also available for more technical details.
 
 
 ## License
 
-The R package splines2 is free software: You can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by the Free
-Software Foundation, either version 3 of the License, or any later version (at
-your option).  See
+The R package **splines2** is free software: You can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version
+(at your option).  See
 the [GNU General Public License](http://www.gnu.org/licenses/) for details.
 
-The R package splines2 is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY without even the implied warranty of MERCHANTABILITY or
+The R package **splines2** is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.
