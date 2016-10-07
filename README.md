@@ -11,7 +11,7 @@ constant basis of degree zero is allowed for B-spline and M-spline basis.
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/splines2)](http://cran.r-project.org/package=splines2)
 [![Build Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=master)](https://travis-ci.org/wenjie2wang/splines2)
 
-You can install the released version from [CRAN](https://cran.r-project.org/package=splines2).
+You can install the released version from [CRAN](https://CRAN.R-project.org/package=splines2).
 
 ```R
 install.packages("splines2", dependencies = TRUE)
@@ -38,7 +38,7 @@ devtools::install_git("git://github.com/wenjie2wang/splines2.git", branch = "dev
 - [Package vignettes](http://wenjie-stat.me/splines2/)
   provides a quick demonstration for the basic usage of main functions.
 
-- [Package help manual](https://cran.r-project.org/web/packages/splines2/splines2.pdf)
+- [Package help manual](https://CRAN.R-project.org/web/packages/splines2/splines2.pdf)
   is also available for more technical details.
 
 

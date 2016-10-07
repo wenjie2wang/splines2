@@ -1,3 +1,10 @@
+# splines2 v0.2.1
+
+## Minor changes
+
+* Updated all CRAN URL to a canonical form suggested.
+
+
 # splines2 v0.2.0
 
 ## New features
@@ -13,7 +20,6 @@
   by `bSpline` and `cSpline`, respectively.
 
 * Added `print` methods for all **splines2** objects developed so far.
-
 
 ## Major changes
 
