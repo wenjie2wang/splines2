@@ -8,7 +8,7 @@ Rd: R/
 	Rscript -e "library(methods); roxygen2::roxygenise();"
 
 build: Rd
-	R CMD build ../$(pkg)
+	R CMD build --compact-vignettes ../$(pkg)
 
 check: $(pkg)_*.tar.gz
 	R CMD check --as-cran $(pkg)_*.tar.gz
