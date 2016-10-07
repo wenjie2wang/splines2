@@ -24,8 +24,8 @@ install.packages("splines2", dependencies = TRUE)
 
 The latest version of package is under development
 at [GitHub](https://github.com/wenjie2wang/splines2) in branch 'dev'.  You may
-consider installing the latest version with the help of *devtools* if it is able
-to pass the building check by Travis CI.
+consider installing the latest version with the help of **devtools** if it is
+able to pass the building check by Travis CI.
 
 ```R
 if (! require(devtools)) install.packages("devtools", dependencies = TRUE)

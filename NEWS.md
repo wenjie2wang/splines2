@@ -1,18 +1,11 @@
 # splines2 v0.2.1
 
-## Minor changes
-
-* Updated all CRAN URL to a canonical form suggested.
-
-
-# splines2 v0.2.0
-
 ## New features
 
 * Added function `bSpline` generating B-spline basis allowing zero degree or
   piecewise constant basis based on function `bs` in package **splines**.
 
-* M-splines of degree zero are allowed by introduction of function `bSpline`.
+* Introduced function `bSpline` to allow M-splines of degree zero.
 
 * Added function `cSpline` constructing convex spline (C-spline) basis.
 
@@ -23,8 +16,12 @@
 
 ## Major changes
 
-* Improved the function `iSpline` that constructs I-spline basis directly from
+* Improved the function `iSpline` to construct I-spline basis directly from
   B-spline basis instead of M-spline basis.
+
+## Minor changes
+
+* Updated all CRAN URL to a canonical form suggested.
 
 
 # splines2 v0.1.0
