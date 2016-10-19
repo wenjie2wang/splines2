@@ -29,7 +29,8 @@
 ##' family of piecewise polynomials and their corresponding integrals with the
 ##' specified interior knots and degree, evaluated at the values of \code{x}.
 ##'
-##' @usage cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' @usage
+##' cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ##'         Boundary.knots = range(x), scale = TRUE, ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
@@ -88,7 +89,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## I-spline basis for inputs
     isOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
-                      intercept = intercept, Boundary.knots = Boundary.knots)
+                     intercept = intercept, Boundary.knots = Boundary.knots)
 
     ## update input
     degree <- attr(isOut, "degree")
@@ -97,6 +98,11 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ord <- 1L + degree
     nKnots <- length(knots)
     df <- nKnots + ord
+
+    ## take care of possible NA's in `x` for the following calculation
+    nax <- is.na(x)
+    if ((nas <- any(nax)))
+        x <- x[! nax]
     nX <- length(x)
 
     ## define knot sequence
@@ -105,7 +111,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## generate I-spline basis with (degree + 1)
     augX <- c(x, bKnots[2])
     isOut1 <- iSpline(x = augX, knots = knots, degree = ord,
-                       intercept = FALSE, Boundary.knots = bKnots)
+                      intercept = FALSE, Boundary.knots = bKnots)
 
     ## function determining j from x
     foo <- stats::stepfun(x = knots, y = seq(ord, df))
@@ -114,7 +120,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## calculate C-spline basis at each internal knot t_j
     numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
     isOutKnots <- iSpline(knots, knots = knots, degree = ord,
-                           intercept = FALSE, Boundary.knots = bKnots)
+                          intercept = FALSE, Boundary.knots = bKnots)
     matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
     augMatKnots <- cbind(seq_len(nKnots) + ord, matKnots)
     diffKnots <- diff(knots)
@@ -153,9 +159,17 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## mSpline basis matrix
     msMat <- attr(isOut, "msMat")
+
+    ## keep NA's as is for csOut
+    if (nas) {
+        nmat <- matrix(NA, length(nax), ncol(csOut))
+        nmat[! nax, ] <- csOut
+        csOut <- nmat
+    }
+
     ## scale C-spline, I-spline, and M-spline basis
     if (scale) {
-        vec <- rep(1 / scl, each = nX)
+        vec <- rep(1 / scl, each = length(nax))
         csOut <- vec * csOut
         isOut <- vec * isOut
         msMat <- vec * msMat
