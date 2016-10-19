@@ -30,7 +30,8 @@
 ##' family of piecewise polynomials with the specified interior knots and
 ##' degree, evaluated at the values of \code{x}.
 ##'
-##' @usage mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' @usage
+##' mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ##'         Boundary.knots = range(x), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
