@@ -88,7 +88,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     nax <- is.na(x)
     if (all(nax))
         stop("'x' cannot be all NA's!")
-    if (missing(Boundary.knots) | any(is.na(Boundary.knots)))
+    if (missing(Boundary.knots) || is.null(Boundary.knots) ||
+        any(is.na(Boundary.knots)))
         Boundary.knots <- range(x[! nax])
 
     ## call splines::bs for non-zero degree
@@ -157,6 +158,10 @@ pieceConst <- function (x, df, knots) {
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
     ## ind == 3: both df and knots are NULL; one-piece constant, df <- 1
     df <- switch(ind, length(knots) + 1L, as.integer(df), 1L)
+    if (df < 1L) {
+        df <- 1L
+        warning("'df' specified was too small; used 1 instead.")
+    }
     if (ind > 1) {
         tknots <- df + 1L
         quans <- seq.int(from = 0, to = 1,
