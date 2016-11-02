@@ -1,3 +1,23 @@
+################################################################################
+##
+##   R package splines2 by Wenjie Wang and Jun Yan
+##   Copyright (C) 2016
+##
+##   This file is part of the R package splines2.
+##
+##   The R package splines2 is free software: You can redistribute it and/or
+##   modify it under the terms of the GNU General Public License as published
+##   by the Free Software Foundation, either version 3 of the License, or
+##   any later version (at your option). See the GNU General Public License
+##   at <http://www.gnu.org/licenses/> for details.
+##
+##   The R package splines2 is distributed in the hope that it will be useful,
+##   but WITHOUT ANY WARRANTY without even the implied warranty of
+##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##
+################################################################################
+
+
 #' Bernstein Polynomial Basis
 #'
 #' Generate the Bernstein spline basis matrix given a degree of freedom
@@ -10,10 +30,10 @@
 #' TODO: Attributes of derivatives, integral, etc.
 #' @references
 #' https://people.sc.fsu.edu/~jburkardt/c_src/bernstein_polynomial/bernstein_polynomial.html
-#' 
+#'
 #' @examples
 #'
-#' 
+#'
 bernsteinSpline <- function(x, df, ...) {
     ## z <- (x - Boundary.knots[1]) / diff(Boundary.knots)
     stopifnot(all(x >= 0 & x <= 1))
@@ -22,12 +42,12 @@ bernsteinSpline <- function(x, df, ...) {
     idx <- 0:n
     zmat <- sapply(idx, function(i) choose(n, i) *  z^i * (1 - z)^(n - i) * df)
     xmat <- zmat # * diff(Boundary.knots) + Boundary.knots[1]
-    ## TODO: set attributes for derivatives 
+    ## TODO: set attributes for derivatives
     class(xmat) <- c("bernsteinSpline", "basis", "matrix")
     xmat
 }
 
-## Derivatives 
+## Derivatives
 evalA <- function(z, Btahat) {
   df <- length(Btahat)
   xbasis <- bernsteinSpline(z, df)
