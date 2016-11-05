@@ -28,14 +28,13 @@ The latest version of package is under development at [GitHub][7] in branch
 **devtools** if it is able to pass the building check by Travis CI.
 
 ```R
-if (! require(devtools)) install.packages("devtools", dependencies = TRUE)
-devtools::install_git("git://github.com/wenjie2wang/splines2.git", branch = "dev")
+devtools::install_github("wenjie2wang/splines2", ref = "dev")
 ```
 
 
 ## Get Started
 
-- [Package vignettes][8]
+- [Package vignette][8]
   provides a quick demonstration for the basic usage of main functions.
 
 - [Package help manual][9] is also available for more technical details.
