@@ -53,7 +53,7 @@ FITNESS FOR A PARTICULAR PURPOSE.
 
 [1]: http://www.r-pkg.org/badges/version/splines2
 [2]: http://cranlogs.r-pkg.org/badges/splines2
-[3]: http://CRAN.R-project.org/package=splines2
+[3]: https://CRAN.R-project.org/package=splines2
 [4]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=master
 [5]: https://travis-ci.org/wenjie2wang/splines2
 [6]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=dev
