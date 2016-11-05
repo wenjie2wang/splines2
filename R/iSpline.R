@@ -30,7 +30,8 @@
 ##' corresponding integrals with the specified interior knots and degree,
 ##' evaluated at the values of \code{x}.
 ##'
-##' @usage iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' @usage
+##' iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ##'         Boundary.knots = range(x), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
@@ -96,11 +97,16 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## define knot sequence
     aKnots <- sort(c(rep(bKnots, ord + 1), knots))
 
+    ## take care of possible NA's in `x` for the following calculation
+    nax <- is.na(x)
+    if ((nas <- any(nax)))
+        x <- x[! nax]
+
     ## function determining j from x
     foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
     j <- as.integer(foo(x))
 
-    ## calculate I-spline basis at each x
+    ## calculate I-spline basis at non-NA x's
     ## directly based on B-spline
     bsOut1 <- bSpline(x = x, knots = knots, degree = ord,
                       intercept = FALSE, Boundary.knots = bKnots)
@@ -137,6 +143,13 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## intercept
     if (! intercept) isOut <- isOut[, - 1L, drop = FALSE]
+
+    ## keep NA's as is
+    if (nas) {
+        nmat <- matrix(NA, length(nax), ncol(isOut))
+        nmat[! nax, ] <- isOut
+        isOut <- nmat
+    }
 
     ## output
     attributes(isOut) <- c(attributes(msOut), list(msMat = msOut))

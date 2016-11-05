@@ -5,7 +5,7 @@
 \title{Integral of B-Spline Basis for Polynomial Splines}
 \usage{
 ibs(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-        Boundary.knots = range(x), ...)
+    Boundary.knots = range(x), ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be

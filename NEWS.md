@@ -1,3 +1,10 @@
+# splines2 v0.2.2
+
+## Bug fixes
+
+* Fixed the NA's handling in all the functions constructing spline bases.
+
+
 # splines2 v0.2.1
 
 ## New features

@@ -31,7 +31,8 @@
 ##' The function has the same arguments with \code{\link[splines]{bs}} for ease
 ##' usage.
 ##'
-##' @usage bSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' @usage
+##' bSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ##'         Boundary.knots = range(x), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
@@ -83,6 +84,14 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
 
+    ## take care of possible NA's in `x` for `Boundary.knots`
+    nax <- is.na(x)
+    if (all(nax))
+        stop("'x' cannot be all NA's!")
+    if (missing(Boundary.knots) || is.null(Boundary.knots) ||
+        any(is.na(Boundary.knots)))
+        Boundary.knots <- range(x[! nax])
+
     ## call splines::bs for non-zero degree
     if (degree > 0L) {
         out <- splines::bs(x = x, df = df, knots = knots, degree = degree,
@@ -93,6 +102,11 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     }
 
     ## else degree is zero
+    ## remove NA's in x
+    if ((nas <- any(nax)))
+        x <- x[! nax]
+
+    ## prepare inputs for piecewise constant bases
     inputs <- pieceConst(x = x, df = df, knots = knots)
     knots <- inputs$knots
     ## potentially, df is a bad name since df is also a function in stats
@@ -114,6 +128,13 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## include intercept or not
     if (! intercept)
         bsMat <- bsMat[, - 1L, drop = FALSE]
+
+    ## keep NA's as is
+    if (nas) {
+        nmat <- matrix(NA, length(nax), ncol(bsMat))
+        nmat[! nax, ] <- bsMat
+        bsMat <- nmat
+    }
 
     ## add colnames for consistency with bs returns
     colnames(bsMat) <- as.character(seq_len(df  - as.integer(! intercept)))
@@ -137,6 +158,10 @@ pieceConst <- function (x, df, knots) {
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
     ## ind == 3: both df and knots are NULL; one-piece constant, df <- 1
     df <- switch(ind, length(knots) + 1L, as.integer(df), 1L)
+    if (df < 1L) {
+        df <- 1L
+        warning("'df' specified was too small; used 1 instead.")
+    }
     if (ind > 1) {
         tknots <- df + 1L
         quans <- seq.int(from = 0, to = 1,
