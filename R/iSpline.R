@@ -103,8 +103,12 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         x <- x[! nax]
 
     ## function determining j from x
-    foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
-    j <- as.integer(foo(x))
+    j <- if (length(knots)) {
+             foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
+             as.integer(foo(x))
+         } else {
+             rep.int(1L, length(x))
+         }
 
     ## calculate I-spline basis at non-NA x's
     ## directly based on B-spline
