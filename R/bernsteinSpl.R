@@ -18,22 +18,23 @@
 ################################################################################
 
 
-#' Bernstein Polynomial Basis
-#'
-#' Generate the Bernstein spline basis matrix given a degree of freedom
-#'
-#' @param x The predictor variable. Missing values are allowed.
-#' @param df Degrees of freedom.
-#' ## @param Boundary.knots Boundary points at wich to anchor the Bernstein basis.
-#' @param ... Optional arguments for future usage.
-#' @return A matrix of dimension \code{length(x)} by \code{df}.
-#' TODO: Attributes of derivatives, integral, etc.
-#' @references
-#' https://people.sc.fsu.edu/~jburkardt/c_src/bernstein_polynomial/bernstein_polynomial.html
-#'
-#' @examples
-#'
-#'
+##' Bernstein Polynomial Basis
+##'
+##' Generate the Bernstein spline basis matrix given a degree of freedom
+##'
+##' @param x The predictor variable. Missing values are allowed.
+##' @param df Degrees of freedom.
+##' ## @param Boundary.knots Boundary points at wich to anchor the Bernstein
+##' #basis.
+##' @param ... Optional arguments for future usage.
+##' @return A matrix of dimension \code{length(x)} by \code{df}.
+##' TODO: Attributes of derivatives, integral, etc.
+##' @references
+##' \url{https://people.sc.fsu.edu/~jburkardt/c_src/bernstein_polynomial/bernstein_polynomial.html}
+##'
+##' @examples
+##' ## examples
+##'
 bernsteinSpline <- function(x, df, ...) {
     ## z <- (x - Boundary.knots[1]) / diff(Boundary.knots)
     stopifnot(all(x >= 0 & x <= 1))
