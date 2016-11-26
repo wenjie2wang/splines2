@@ -1,3 +1,10 @@
+# splines2 v0.2.2.9000
+
+## Bug fixes
+
+* Fixed one-piece constant basis for M-splines.
+
+
 # splines2 v0.2.2
 
 ## Bug fixes
