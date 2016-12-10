@@ -10,10 +10,8 @@
 ^\.travis\.yml$
 ^\.git$
 ^Makefile$
+^revdep$
 ^test$
-^simulation$
-^manuscript$
-^reference$
 ^COPYRIGHT$
 ^LICENSE$
 ^TODO\.org$
