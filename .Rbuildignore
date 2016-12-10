@@ -11,9 +11,6 @@
 ^\.git$
 ^Makefile$
 ^test$
-^simulation$
-^manuscript$
-^reference$
 ^COPYRIGHT$
 ^LICENSE$
 ^TODO\.org$

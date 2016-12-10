@@ -1,4 +1,4 @@
-# CHANGES IN splines2 VERSION 0.2.2.9000
+# CHANGES IN splines2 VERSION 0.2.3
 
 ## BUG FIXES
 
