@@ -1,13 +1,20 @@
-# splines2 v0.2.2
+# CHANGES IN splines2 VERSION 0.2.3
 
-## Bug fixes
+## BUG FIXES
+
+* Fixed one-piece constant basis for M-splines.
+
+
+# CHANGES IN splines2 VERSION 0.2.2
+
+## BUG FIXES
 
 * Fixed the NA's handling in all the functions constructing spline bases.
 
 
-# splines2 v0.2.1
+# CHANGES IN splines2 VERSION 0.2.1
 
-## New features
+## NEW FEATURES
 
 * Added function `bSpline` generating B-spline basis allowing zero degree or
   piecewise constant basis based on function `bs` in package **splines**.
@@ -21,19 +28,19 @@
 
 * Added `print` methods for all **splines2** objects developed so far.
 
-## Major changes
+## MAJOR CHANGES
 
 * Improved the function `iSpline` to construct I-spline basis directly from
   B-spline basis instead of M-spline basis.
 
-## Minor changes
+## MINOR CHANGES
 
 * Updated all CRAN URL to a canonical form suggested.
 
 
-# splines2 v0.1.0
+# CHANGES IN splines2 VERSION 0.1.0
 
-## New features
+## NEW FEATURES
 
 * The first version of **splines2** providing functions constructing M-spline,
   I-spline, and integral of B-spline basis.

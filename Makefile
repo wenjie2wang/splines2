@@ -1,26 +1,28 @@
 objects := $(wildcard R/*.R) DESCRIPTION
-man := $(wildcard man/*.Rd) NAMESPACE
+# man := $(wildcard man/*.Rd) NAMESPACE
 dir := $(shell pwd)
 version := $(shell grep "Version" DESCRIPTION | sed "s/Version: //")
 pkg := $(shell grep "Package" DESCRIPTION | sed "s/Package: //")
 tar := $(pkg)_$(version).tar.gz
 checkLog := $(pkg).Rcheck/00check.log
+
 rmd := vignettes/$(pkg)-intro.Rmd
 vignettes := vignettes/$(pkg)-intro.html
 cprt := COPYRIGHT
 
-.PHONY: all
-all: $(tar)
-
-$(tar): $(objects)
-	Rscript -e "library(methods); devtools::document();";
-	R CMD build $(dir)
 
 .PHONY: check
 check: $(checkLog)
 
+.PHONY: build
+all: $(tar)
+
 .PHONY: preview
 preview: $(vignettes)
+
+$(tar): $(objects)
+	Rscript -e "library(methods); devtools::document();";
+	R CMD build $(dir)
 
 $(checkLog): $(tar)
 	R CMD check --as-cran $(tar)
@@ -28,9 +30,9 @@ $(checkLog): $(tar)
 $(vignettes): $(rmd)
 	Rscript -e "rmarkdown::render('$(rmd)')"
 
-.PHONY: INSTALL
-INSTALL: $(tar)
-	R CMD INSTALL --build $(tar)
+.PHONY: install
+install: $(tar)
+	R CMD INSTALL $(tar)
 
 ## update copyright year in HEADER, R script and date in DESCRIPTION
 .PHONY: updateHeader

@@ -15,7 +15,7 @@ constant basis of degree zero is allowed for B-spline and M-spline basis.
 You can install the released version from [CRAN][3].
 
 ```R
-install.packages("splines2", dependencies = TRUE)
+install.packages("splines2")
 ```
 
 
@@ -24,11 +24,19 @@ install.packages("splines2", dependencies = TRUE)
 [![Build Status][6]][5]
 
 The latest version of package is under development at [GitHub][7] in branch
-'dev'.  You may consider installing the latest version with the help of
-**devtools** if it is able to pass the building check by Travis CI.
+'dev'.  If it is able to pass the building check by Travis CI, you may consider
+installing it with the help of **devtools** by
 
 ```R
 devtools::install_github("wenjie2wang/splines2", ref = "dev")
+```
+
+or cloning this reposotory to local and install by makefile as follows:
+
+```
+git clone https://github.com/wenjie2wang/splines2.git
+cd splines2
+make install
 ```
 
 
