@@ -1,3 +1,10 @@
+# CHANGES IN splines2 VERSION 0.2.3.9000
+
+## BUG FIXES
+
+* Fixed the generation of splines basis without any internal knot.
+
+
 # CHANGES IN splines2 VERSION 0.2.3
 
 ## BUG FIXES
