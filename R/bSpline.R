@@ -114,25 +114,35 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## check whether any of x is outside of the boundary knots
     Boundary.knots <- sort(Boundary.knots)
-    if (any(x < Boundary.knots[1] | x > Boundary.knots[2]))
+    if (any(x < Boundary.knots[1L] | x > Boundary.knots[2L]))
         warning(paste("some 'x' values beyond boundary knots",
                       "may cause ill-conditioned bases"))
 
     ## piecewise constant basis
     augKnots <- c(Boundary.knots[1], knots, Boundary.knots[2])
     bsMat <- sapply(seq_len(df), function (i) {
-        foo <- stats::stepfun(augKnots[i: (i + 1)], c(0L, 1L, 0L))
+        foo <- stats::stepfun(augKnots[i: (i + 1L)], c(0L, 1L, 0L))
         foo(x)
     })
 
+    ## make sure bsMat is a matrix
+    if (! is.matrix(bsMat))
+        bsMat <- matrix(bsMat, nrow = length(x))
+
     ## include intercept or not
-    if (! intercept)
-        bsMat <- bsMat[, - 1L, drop = FALSE]
+    if (! intercept) {
+        if (length(knots)) {
+            bsMat <- bsMat[, - 1L, drop = FALSE]
+        } else {
+            stop(paste("'intercept' has to be 'TRUE'",
+                       "for one-piece const basis."))
+        }
+    }
 
     ## keep NA's as is
     if (nas) {
         nmat <- matrix(NA, length(nax), ncol(bsMat))
-        nmat[! nax, ] <- bsMat
+        nmat[! nax, , drop = FALSE] <- bsMat
         bsMat <- nmat
     }
 
@@ -153,7 +163,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ### internal function ==========================================================
 ##' @importFrom stats quantile
 pieceConst <- function (x, df, knots) {
-    ind <- (is.null(df) + 1) * is.null(knots) + 1
+    ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
     ## ind == 3: both df and knots are NULL; one-piece constant, df <- 1

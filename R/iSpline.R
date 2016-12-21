@@ -93,9 +93,11 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     knots <- attr(msOut, "knots")
     bKnots <- attr(msOut, "Boundary.knots")
     ord <- 1L + degree
+    nKnots <- length(knots)
+    df <- nKnots + ord
 
     ## define knot sequence
-    aKnots <- sort(c(rep(bKnots, ord + 1), knots))
+    aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
 
     ## take care of possible NA's in `x` for the following calculation
     nax <- is.na(x)
@@ -103,28 +105,27 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         x <- x[! nax]
 
     ## function determining j from x
-    j <- if (length(knots)) {
-             foo <- stats::stepfun(x = knots, y = seq(ord, length(knots) + ord))
+    j <- if (nKnots) {
+             foo <- stats::stepfun(x = knots, y = seq(ord, df))
              as.integer(foo(x))
          } else {
-             rep.int(1L, length(x))
+             rep.int(ord, length(x))
          }
 
     ## calculate I-spline basis at non-NA x's
     ## directly based on B-spline
     bsOut1 <- bSpline(x = x, knots = knots, degree = ord,
                       intercept = FALSE, Boundary.knots = bKnots)
-    df <- length(knots) + ord
-    bsAugMat <- cbind(j, bsOut1)
-    isOut <- t(apply(bsAugMat, 1, function(b, idx = seq_len(df)) {
-        j <- b[1L]
-        a <- b[- 1L]
-        js <- seq_len(j)
+
+    isOut <- lapply(seq_along(j), function(i, idx) {
+        a <- bsOut1[i, ]
+        js <- seq_len(j[i])
         a[- js] <- 0
         a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j - ord] <- 1            # <=> a[idx < j - degree] <- 1
+        a[idx < j[i] - ord] <- 1        # <=> a[idx < j[i] - degree] <- 1
         a
-    }))
+    }, idx = seq_len(df))
+    isOut <- do.call(rbind, isOut)
 
     ## Or based on M-spline
     ## generate M-spline basis with (degree + 1)
@@ -146,7 +147,8 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## }))
 
     ## intercept
-    if (! intercept) isOut <- isOut[, - 1L, drop = FALSE]
+    if (! intercept)
+        isOut <- isOut[, - 1L, drop = FALSE]
 
     ## keep NA's as is
     if (nas) {

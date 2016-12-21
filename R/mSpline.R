@@ -95,7 +95,8 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## transformation from B-splines to M-splines
     denom <- diff(aKnots, lag = ord)
     transCoef <- ifelse(abs(denom) < .Machine$double.eps, 0, ord / denom)
-    if (! intercept) transCoef <- transCoef[- 1L]
+    if (! intercept)
+        transCoef <- transCoef[- 1L]
     msOut <- rep(transCoef, each = length(x)) * bsOut
     class(msOut) <- c("mSpline", "basis", "matrix")
     msOut

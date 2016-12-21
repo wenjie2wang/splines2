@@ -106,56 +106,69 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     nX <- length(x)
 
     ## define knot sequence
-    aKnots <- sort(c(rep(bKnots, ord + 1), knots))
+    aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
 
     ## generate I-spline basis with (degree + 1)
-    augX <- c(x, bKnots[2])
+    augX <- c(x, bKnots[2L])
     isOut1 <- iSpline(x = augX, knots = knots, degree = ord,
                       intercept = FALSE, Boundary.knots = bKnots)
 
     ## function determining j from x
-    foo <- stats::stepfun(x = knots, y = seq(ord, df))
-    j <- as.integer(foo(augX))
+    j <- if (length(knots)) {
+             foo <- stats::stepfun(x = knots, y = seq(ord, df))
+             as.integer(foo(augX))
+         } else {
+             rep.int(ord, nX + 1L)
+         }
 
-    ## calculate C-spline basis at each internal knot t_j
-    numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
-    isOutKnots <- iSpline(knots, knots = knots, degree = ord,
-                          intercept = FALSE, Boundary.knots = bKnots)
-    matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
-    augMatKnots <- cbind(seq_len(nKnots) + ord, matKnots)
-    diffKnots <- diff(knots)
-    csKnots <- t(apply(augMatKnots, 1, function(b, idx = seq_len(df)) {
-        j <- b[1L]
-        a <- b[- 1L]
-        js <- seq_len(j)
-        a[- js] <- 0
-        a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j - ord] <- diffKnots[j - ord - 1]
-        a
-    }))
-    idxMat <- lower.tri(csKnots, diag = TRUE)
-    linList <- lapply(seq_len(nKnots), function (ind) {
-        cumsum(csKnots[idxMat[, ind], ind])
-    })
-    csKnots[idxMat] <- do.call("c", linList)
+    numer1 <- diff(aKnots, lag = ord + 1L)[- 1L]
+    ## if there is at least one internal knot
+    if (nKnots) {
+        ## calculate C-spline basis at each internal knot t_j
+        isOutKnots <- iSpline(knots, knots = knots, degree = ord,
+                              intercept = FALSE, Boundary.knots = bKnots)
+        matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
+        augKnots <- seq_len(nKnots) + ord
+        diffKnots <- diff(knots)
+        csKnots <- lapply(seq_len(nKnots), function(i, idx) {
+            ji <- augKnots[i]
+            a <- matKnots[i, ]
+            js <- seq_len(ji)
+            a[- js] <- 0
+            a[js] <- rev(cumsum(rev(a[js])))
+            a[idx < ji - ord] <- diffKnots[ji - ord - 1L]
+            a
+        }, idx = seq_len(df))
+        csKnots <- do.call(rbind, csKnots)
+
+        idxMat <- lower.tri(csKnots, diag = TRUE)
+        linList <- lapply(seq_len(nKnots), function(ind) {
+            cumsum(csKnots[idxMat[, ind], ind])
+        })
+        csKnots[idxMat] <- do.call(c, linList)
+    } else {
+        csKnots <- matrix(0, 1L, df)
+    }
 
     ## calculate C-spline basis at each x
     matX <- rep(numer1, each = nX + 1) * isOut1 / (ord + 1)
-    augMatX <- cbind(j, augX, matX)
-    csOut <- t(apply(augMatX, 1, function(b, idx = seq_len(df)) {
-        j <- b[1L]
-        xx <- b[2L]
-        a <- b[- seq_len(2)]
-        js <- seq_len(j)
+    csOut <- lapply(seq_len(nX + 1L), function(i, idx) {
+        ji <- j[i]
+        xx <- augX[i]
+        a <- matX[i, ]
+        js <- seq_len(ji)
         a[- js] <- 0
         a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j - ord] <- xx - knots[j - ord] +
-            csKnots[j - ord, idx < j - ord]
+        a[idx < ji - ord] <- xx - knots[ji - ord] +
+            csKnots[ji - ord, idx < ji - ord]
         a
-    }))
-    if (! intercept) csOut <- csOut[, - 1L, drop = FALSE]
-    scl <- csOut[nX + 1, ]
-    csOut <- csOut[- (nX + 1), ]
+    }, idx = seq_len(df))
+    csOut <- do.call(rbind, csOut)
+
+    if (! intercept)
+        csOut <- csOut[, - 1L, drop = FALSE]
+    scl <- csOut[nX + 1L, ]
+    csOut <- csOut[- (nX + 1L), ]
 
     ## mSpline basis matrix
     msMat <- attr(isOut, "msMat")
