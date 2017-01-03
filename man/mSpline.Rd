@@ -5,7 +5,7 @@
 \title{M-Spline Basis for Polynomial Splines}
 \usage{
 mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-        Boundary.knots = range(x), ...)
+        Boundary.knots = range(x, na.rm = TRUE), ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
@@ -60,8 +60,8 @@ degree, evaluated at the values of \code{x}.
 library(graphics)
 x <- seq(0, 1, by = .01)
 knots <- c(0.3, 0.5, 0.6)
-mMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-matplot(x, mMat, type = "l", ylab = "M-spline basis")
+msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+matplot(x, msMat, type = "l", ylab = "M-spline basis")
 abline(v = knots, lty = 2, col = "gray")
 }
 \references{
