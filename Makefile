@@ -35,10 +35,10 @@ install: $(tar)
 	R CMD INSTALL $(tar)
 
 ## update copyright year in HEADER, R script and date in DESCRIPTION
-.PHONY: updateHeader
-updateHeader: $(cprt)
+.PHONY: updateDate
+updateDate: $(cprt)
 	yr=$$(date +"%Y");\
-	sed -i "s/Copyright (C) 2016-[0-9]\{4\}/Copyright (C) 2016-$$yr/" $(cprt);\
+	sed -i "s/Copyright (C) 2016[-]*[0-9]*/Copyright (C) 2016-$$yr/" $(cprt);\
 # add HEADER file if there is no header
 	for Rfile in R/*.R; do \
 	if ! grep -e 'Copyright (C)' $$Rfile ;\
@@ -46,10 +46,10 @@ updateHeader: $(cprt)
 	mv tmp $$Rfile;\
 	fi;\
 	yr=$$(date +"%Y");\
-	sed -i "s/Copyright (C) 2016-[0-9]*/Copyright (C) 2016-$$yr/" $$Rfile;\
+	sed -i "s/Copyright (C) 2016[-]*[0-9]*/Copyright (C) 2016-$$yr/" $$Rfile;\
 	done;\
 	dt=$$(date +"%Y-%m-%d");\
-	sed -i "s/Date: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}/Date: $$dt/" DESCRIPTION;
+	sed -i "s/Date: [0-9]\{4\}-[0-9]\{1,2\}-[0-9]\{1,2\}/Date: $$dt/" DESCRIPTION;
 
 .PHONY: clean
 clean:
