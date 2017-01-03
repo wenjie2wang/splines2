@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -31,7 +31,8 @@
 ##'
 ##' @usage
 ##' cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), scale = TRUE, ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
@@ -58,6 +59,7 @@
 ##' M-spline basis matrices shipped in attributes are also scaled to the same
 ##' extent.
 ##' @param ... Optional arguments for future usage.
+##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
@@ -71,11 +73,13 @@
 ##' library(graphics)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##' matplot(x, cMat, type = "l", ylab = "C-spline basis")
+##' csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' matplot(x, csMat, type = "l", ylab = "C-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
-##' matplot(x, attr(cMat, "isMat"), type = "l", ylab = "scaled I-spline basis")
-##' matplot(x, attr(cMat, "msMat"), type = "l", ylab = "scaled M-spline basis")
+##' isMat <- deriv(csMat)
+##' msMat <- deriv(csMat, derivs = 2L)
+##' matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
+##' matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
 ##' \code{\link{iSpline}} for I-spline basis;
@@ -85,8 +89,8 @@
 ##' @importFrom stats stepfun
 ##' @export
 cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), scale = TRUE, ...) {
-
+                    Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
+{
     ## I-spline basis for inputs
     isOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
                      intercept = intercept, Boundary.knots = Boundary.knots)

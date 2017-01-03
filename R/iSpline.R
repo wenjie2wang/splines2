@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -32,7 +32,8 @@
 ##'
 ##' @usage
 ##' iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), ...)
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
@@ -57,6 +58,7 @@
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.
+##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
@@ -70,8 +72,8 @@
 ##' library(graphics)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' iMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##' matplot(x, iMat, type = "l", ylab = "I-spline basis")
+##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' matplot(x, isMat, type = "l", ylab = "I-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.iSpline}} for evaluation at given (new) values;
@@ -82,8 +84,8 @@
 ##' @importFrom stats stepfun
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), ...) {
-
+                    Boundary.knots = range(x, na.rm = TRUE), ...)
+{
     ## M-spline basis for inputs
     msOut <- mSpline(x = x, df = df, knots = knots, degree = degree,
                      intercept = intercept, Boundary.knots = Boundary.knots)
@@ -158,7 +160,8 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     }
 
     ## output
-    attributes(isOut) <- c(attributes(msOut), list(msMat = msOut))
+    attributes(isOut) <- c(attributes(msOut),
+                           list(msMat = msOut))
     class(isOut) <- c("iSpline", "basis", "matrix")
     isOut
 }

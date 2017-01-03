@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -32,7 +32,8 @@
 ##'
 ##' @usage
 ##' mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), ...)
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
@@ -55,6 +56,7 @@
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.
+##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus one if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
@@ -67,8 +69,8 @@
 ##' library(graphics)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' mMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##' matplot(x, mMat, type = "l", ylab = "M-spline basis")
+##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' matplot(x, msMat, type = "l", ylab = "M-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.mSpline}} for evaluation at given (new) values;
@@ -77,8 +79,8 @@
 ##' \code{\link{cSpline}} for C-spline basis.
 ##' @export
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), ...) {
-
+                    Boundary.knots = range(x, na.rm = TRUE), ...)
+{
     ## B-spline basis for inputs
     bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
                      intercept = intercept, Boundary.knots = Boundary.knots)

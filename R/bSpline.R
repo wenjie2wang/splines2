@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -33,7 +33,7 @@
 ##'
 ##' @usage
 ##' bSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), ...)
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
@@ -78,8 +78,8 @@
 ##' @importFrom stats stepfun
 ##' @export
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), ...) {
-
+                    Boundary.knots = range(x, na.rm = TRUE), ...)
+{
     ## check and reformat 'degree'
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
@@ -88,55 +88,56 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     nax <- is.na(x)
     if (all(nax))
         stop("'x' cannot be all NA's!")
-    if (missing(Boundary.knots) || is.null(Boundary.knots) ||
-        any(is.na(Boundary.knots)))
-        Boundary.knots <- range(x[! nax])
+    ## if (missing(Boundary.knots) || is.null(Boundary.knots) ||
+    ##     any(is.na(Boundary.knots)))
+    ##     Boundary.knots <- range(x[! nax])
 
     ## call splines::bs for non-zero degree
     if (degree > 0L) {
         out <- splines::bs(x = x, df = df, knots = knots, degree = degree,
                            intercept = intercept,
                            Boundary.knots = Boundary.knots)
+        attr(out, "x") <- x
         class(out) <- c("bSpline2", "basis", "matrix")
         return(out)
     }
 
     ## else degree is zero
+    xx <- x
     ## remove NA's in x
-    if ((nas <- any(nax)))
-        x <- x[! nax]
+    if (nas <- any(nax))
+        xx <- x[! nax]
 
     ## prepare inputs for piecewise constant bases
-    inputs <- pieceConst(x = x, df = df, knots = knots)
+    inputs <- pieceConst(x = xx, df = df, knots = knots)
     knots <- inputs$knots
     ## potentially, df is a bad name since df is also a function in stats
     df <- inputs$df
 
     ## check whether any of x is outside of the boundary knots
     Boundary.knots <- sort(Boundary.knots)
-    if (any(x < Boundary.knots[1L] | x > Boundary.knots[2L]))
-        warning(paste("some 'x' values beyond boundary knots",
-                      "may cause ill-conditioned bases"))
+    if (any(xx < Boundary.knots[1L] | xx > Boundary.knots[2L]))
+        warning(paste("Some 'x' values beyond boundary knots",
+                      "may cause ill-conditioned bases."))
 
     ## piecewise constant basis
-    augKnots <- c(Boundary.knots[1], knots, Boundary.knots[2])
+    augKnots <- c(Boundary.knots[1L], knots, Boundary.knots[2L])
     bsMat <- sapply(seq_len(df), function (i) {
         foo <- stats::stepfun(augKnots[i: (i + 1L)], c(0L, 1L, 0L))
-        foo(x)
+        foo(xx)
     })
 
     ## make sure bsMat is a matrix
     if (! is.matrix(bsMat))
-        bsMat <- matrix(bsMat, nrow = length(x))
+        bsMat <- matrix(bsMat, nrow = length(xx))
 
     ## include intercept or not
     if (! intercept) {
-        if (length(knots)) {
+        if (length(knots))
             bsMat <- bsMat[, - 1L, drop = FALSE]
-        } else {
+        else
             stop(paste("'intercept' has to be 'TRUE'",
                        "for one-piece const basis."))
-        }
     }
 
     ## keep NA's as is
@@ -150,11 +151,11 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     colnames(bsMat) <- as.character(seq_len(df  - as.integer(! intercept)))
 
     ## on attributes
-    a <- list(degree = degree,
-              knots = if (is.null(knots)) numeric(0L) else knots,
-              Boundary.knots = Boundary.knots,
-              intercept = intercept)
-    attributes(bsMat) <- c(attributes(bsMat), a)
+    tmp <- list(degree = degree,
+                knots = if (is.null(knots)) numeric(0L) else knots,
+                Boundary.knots = Boundary.knots,
+                intercept = intercept, x = x)
+    attributes(bsMat) <- c(attributes(bsMat), tmp)
     class(bsMat) <- c("bSpline2", "basis", "matrix")
     bsMat
 }
@@ -162,7 +163,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
 ### internal function ==========================================================
 ##' @importFrom stats quantile
-pieceConst <- function (x, df, knots) {
+pieceConst <- function (x, df, knots)
+{
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df

@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -32,7 +32,8 @@
 ##'
 ##' @usage
 ##' ibs(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'     Boundary.knots = range(x), ...)
+##'     Boundary.knots = range(x, na.rm = TRUE), ...)
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
 ##' @param df Degrees of freedom of the B-spline basis to be integrated.
@@ -55,6 +56,7 @@
 ##' parameters do not depend on \code{x}. Data can extend beyond
 ##' \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.
+##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
@@ -68,8 +70,12 @@
 ##' knots <- c(0.2, 0.4, 0.7, 0.9)
 ##' ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 ##'
-##' ## extract original B-spline basis matrix from 'ibs' object
-##' bsMat <- attr(ibsMat, "bsMat")
+##' ## obtain the B-spline bases integrated by function bSpline
+##' bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
+##' ## or by function deriv (recommended) that directly extracts the existing
+##' ## result from the attribute of ibsMat and thus is more efficient.
+##' bsMat <- deriv(ibsMat)
+##' all.equal(bsMat0, bsMat)                # equivalent
 ##'
 ##' ## plot B-spline basis with their corresponding integrals
 ##' library(graphics)
@@ -86,8 +92,8 @@
 ##' \code{\link{cSpline}} for C-spline basis.
 ##' @export
 ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                Boundary.knots = range(x), ...) {
-
+                Boundary.knots = range(x, na.rm = TRUE), ...)
+{
     ## B-spline basis for inputs
     bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
                      intercept = intercept, Boundary.knots = Boundary.knots)
@@ -113,7 +119,8 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ibsOut <- t(numer1 * numer2) / ord
 
     ## output
-    attributes(ibsOut) <- c(attributes(bsOut), list(bsMat = bsOut))
+    attributes(ibsOut) <- c(attributes(bsOut),
+                            list(bsMat = bsOut, x = x))
     class(ibsOut) <- c("ibs", "basis", "matrix")
     ibsOut
 }
