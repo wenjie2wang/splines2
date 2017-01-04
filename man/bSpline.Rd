@@ -4,7 +4,7 @@
 \alias{bSpline}
 \title{B-Spline Basis for Polynomial Splines}
 \usage{
-bSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+bSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         Boundary.knots = range(x, na.rm = TRUE), ...)
 }
 \arguments{
@@ -42,20 +42,20 @@ do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
 A matrix of dimension \code{length(x)} by
 \code{df = degree + length(knots)} (plus one if intercept is included).
 Attributes that correspond to the arguments specified are returned
-for usage for \code{\link{predict.bSpline2}}.
+for usage of other functions in this package.
 }
 \description{
 This function generates the B-spline basis matrix for a polynomial spline.
 }
 \details{
 It is an augmented function of \code{\link[splines]{bs}} in package
-\code{splines} for B-spline basis that allows piecewise constant spline
-basis with zero degree. When the argument \code{degree} is greater than
-zero, it internally calls \code{\link[splines]{bs}} and generates a basis
-matrix for representing the family of piecewise polynomials with the
-specified interior knots and degree, evaluated at the values of \code{x}.
-The function has the same arguments with \code{\link[splines]{bs}} for ease
-usage.
+\code{splines} for B-spline basis that allows piecewise constant (close
+on the left, open on the right) spline basis with zero degree. When the
+argument \code{degree} is greater than zero, it internally calls
+\code{\link[splines]{bs}} and generates a basis matrix for representing
+the family of piecewise polynomials with the specified interior knots and
+degree, evaluated at the values of \code{x}.  The function has the same
+arguments with \code{\link[splines]{bs}} for ease usage.
 }
 \examples{
 library(splines2)

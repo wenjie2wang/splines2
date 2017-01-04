@@ -4,7 +4,7 @@
 \alias{mSpline}
 \title{M-Spline Basis for Polynomial Splines}
 \usage{
-mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         Boundary.knots = range(x, na.rm = TRUE), ...)
 }
 \arguments{

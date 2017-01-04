@@ -4,7 +4,7 @@
 \alias{iSpline}
 \title{I-Spline Basis for Polynomial Splines}
 \usage{
-iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         Boundary.knots = range(x, na.rm = TRUE), ...)
 }
 \arguments{

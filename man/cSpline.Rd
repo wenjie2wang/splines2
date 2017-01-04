@@ -4,7 +4,7 @@
 \alias{cSpline}
 \title{C-Spline Basis for Polynomial Splines}
 \usage{
-cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 }
 \arguments{

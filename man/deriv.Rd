@@ -19,8 +19,8 @@
 \arguments{
 \item{expr}{\code{spline2} objects generated from this package.}
 
-\item{derivs}{A positive integer specifying the number of
-derivatives. By default, the}
+\item{derivs}{A positive integer specifying the order of
+derivatives. By default, it is \code{1L} for the first derivative.}
 
 \item{...}{Other arguments for further usage.}
 }
@@ -31,9 +31,12 @@ Attributes that correspond to the arguments specified are returned
 for usage for other function in this package.
 }
 \description{
-\code{deriv} method that obtains derivative of given number of spline
-bases.  The function is designed for \code{splines2} objects generated
-from this package.
+\code{deriv} method that obtains derivative of given order of spline
+bases. The function is designed for objects generated from this package.
+The function extracts necessary information about the input spline basis
+matrix from its attributes. So the function will not work if some
+attribute is not availbale. For internal knots, the derivative is defined
+to be the left derivative.
 }
 \examples{
 library(splines2)
@@ -42,7 +45,7 @@ knots <- c(0.3, 0.5, 0.6)               # set up knots
 ## integal of B-splines
 ibsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
 ## the corresponding B-splines integrated
-bsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
+bsMat <- bSpline(x, knots = knots, degree = 3L, intercept = TRUE)
 ## the first derivative should equal bsMat
 d1Mat <- deriv(ibsMat)
 all.equal(bsMat, d1Mat, check.attributes = FALSE)
@@ -50,6 +53,10 @@ all.equal(bsMat, d1Mat, check.attributes = FALSE)
 dbsMat <- deriv(bsMat)
 d2Mat <- deriv(ibsMat, derivs = 2L)
 all.equal(dbsMat, d2Mat, check.attributes = FALSE)
+}
+\references{
+De Boor, Carl. (1978). \emph{A practical guide to splines}.
+Vol. 27. New York: Springer-Verlag.
 }
 \seealso{
 \code{\link{bSpline}} for B-splines;
