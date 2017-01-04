@@ -31,7 +31,7 @@
 ##' evaluated at the values of \code{x}.
 ##'
 ##' @usage
-##' iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 ##'         Boundary.knots = range(x, na.rm = TRUE), ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
@@ -85,7 +85,7 @@
 ##' \code{\link{ibs}} for integral of B-spline basis.
 ##' @importFrom stats stepfun
 ##' @export
-iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
                     Boundary.knots = range(x, na.rm = TRUE), ...)
 {
     ## M-spline basis for inputs
@@ -164,6 +164,6 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## output
     attributes(isOut) <- c(attributes(msOut),
                            list(msMat = msOut))
-    class(isOut) <- c("iSpline", "basis", "matrix")
+    class(isOut) <- c("matrix", "iSpline")
     isOut
 }

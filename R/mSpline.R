@@ -31,7 +31,7 @@
 ##' degree, evaluated at the values of \code{x}.
 ##'
 ##' @usage
-##' mSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 ##'         Boundary.knots = range(x, na.rm = TRUE), ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
@@ -80,7 +80,7 @@
 ##' \code{\link{iSpline}} for I-spline basis;
 ##' \code{\link{cSpline}} for C-spline basis.
 ##' @export
-mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+mSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
                     Boundary.knots = range(x, na.rm = TRUE), ...)
 {
     ## B-spline basis for inputs
@@ -102,6 +102,6 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     if (! intercept)
         transCoef <- transCoef[- 1L]
     msOut <- rep(transCoef, each = length(x)) * bsOut
-    class(msOut) <- c("mSpline", "basis", "matrix")
+    class(msOut) <- c("matrix", "mSpline")
     msOut
 }

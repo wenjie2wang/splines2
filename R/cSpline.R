@@ -30,7 +30,7 @@
 ##' specified interior knots and degree, evaluated at the values of \code{x}.
 ##'
 ##' @usage
-##' cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+##' cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 ##'         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
@@ -91,7 +91,7 @@
 ##' \code{\link{ibs}} for integral of B-spline basis.
 ##' @importFrom stats stepfun
 ##' @export
-cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
+cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
                     Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 {
     ## I-spline basis for inputs
@@ -200,6 +200,6 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     attributes(csOut) <- c(attributes(isOut),
                            list(isMat = isOut, msMat = msMat,
                                 scale = scale))
-    class(csOut) <- c("cSpline", "basis", "matrix")
+    class(csOut) <- c("matrix", "cSpline")
     csOut
 }

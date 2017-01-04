@@ -44,7 +44,7 @@ bernsteinSpline <- function(x, df, ...) {
     zmat <- sapply(idx, function(i) choose(n, i) *  z^i * (1 - z)^(n - i) * df)
     xmat <- zmat # * diff(Boundary.knots) + Boundary.knots[1]
     ## TODO: set attributes for derivatives
-    class(xmat) <- c("bernsteinSpline", "basis", "matrix")
+    class(xmat) <- c("matrix", "bernsteinSpline")
     xmat
 }
 

@@ -60,8 +60,7 @@
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
-##' for usage for \code{\link{predict.ibs}}. The corresponding B-spline
-##' basis matrix is also returned in attribute named \code{bsMat}.
+##' for usage of other functions in this package.
 ##' @references
 ##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
 ##' Vol. 27. New York: Springer-Verlag.
@@ -122,6 +121,6 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## output
     attributes(ibsOut) <- c(attributes(bsOut),
                             list(bsMat = bsOut, x = x))
-    class(ibsOut) <- c("ibs", "basis", "matrix")
+    class(ibsOut) <- c("matrix", "ibs")
     ibsOut
 }
