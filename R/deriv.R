@@ -20,21 +20,27 @@
 
 ##' Derivative of Splines
 ##'
-##' \code{deriv} method that obtains derivative of given number of spline
-##' bases.  The function is designed for \code{splines2} objects generated
-##' from this package.
+##' \code{deriv} method that obtains derivative of given order of spline
+##' bases. The function is designed for objects generated from this package.
+##' The function extracts necessary information about the input spline basis
+##' matrix from its attributes. So the function will not work if some
+##' attribute is not availbale. For internal knots, the derivative is defined
+##' to be the left derivative.
 ##'
 ##' @name deriv
 ##'
 ##' @param expr \code{spline2} objects generated from this package.
-##' @param derivs A positive integer specifying the number of
-##' derivatives. By default, the
+##' @param derivs A positive integer specifying the order of
+##' derivatives. By default, it is \code{1L} for the first derivative.
 ##' @param ... Other arguments for further usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus one if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
 ##' for usage for other function in this package.
+##' @references
+##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
+##' Vol. 27. New York: Springer-Verlag.
 ##' @examples
 ##' library(splines2)
 ##' x <- c(seq(0, 1, 0.1), NA)
@@ -42,7 +48,7 @@
 ##' ## integal of B-splines
 ##' ibsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
 ##' ## the corresponding B-splines integrated
-##' bsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
+##' bsMat <- bSpline(x, knots = knots, degree = 3L, intercept = TRUE)
 ##' ## the first derivative should equal bsMat
 ##' d1Mat <- deriv(ibsMat)
 ##' all.equal(bsMat, d1Mat, check.attributes = FALSE)
@@ -73,7 +79,7 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
     if (derivs == 1L) {
         out <- attr(expr, "bsMat")
         attr(out, "derivs") <- derivs
-        class(out) <- c("deriv", "basis", "matrix")
+        class(out) <- c("matrix", "ibs", "deriv")
         return(out)
     }
 
@@ -103,7 +109,7 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
         if (nas)
             expr[nax, ] <- NA
         attr(expr, "derivs") <- derivs
-        class(expr) <- c("deriv", "basis", "matrix")
+        class(expr) <- c("matrix", "iSpline", "deriv")
         return(expr)
     }
 
@@ -133,7 +139,7 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
         if (nas)
             expr[nax, ] <- NA
         attr(expr, "derivs") <- derivs
-        class(expr) <- c("deriv", "basis", "matrix")
+        class(expr) <- c("matrix", "cSpline", "deriv")
         return(expr)
     }
 
@@ -174,7 +180,7 @@ deriv.bSpline2 <- function(expr, derivs = 1L, ...)
         if (nas)
             expr[nax, ] <- NA
         attr(expr, "derivs") <- derivs
-        class(expr) <- c("deriv", "basis", "matrix")
+        class(expr) <- c("matrix", "bSpline2", "deriv")
         return(expr)
     }
 
@@ -197,7 +203,7 @@ deriv.bSpline2 <- function(expr, derivs = 1L, ...)
 
     ## on attributes
     attributes(dMat) <- c(attributes(expr), list(derivs = derivs))
-    class(dMat) <- c("deriv", "basis", "matrix")
+    class(dMat) <- c("matrix", "bSpline2", "deriv")
 
     ## return
     dMat
