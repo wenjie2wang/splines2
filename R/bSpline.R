@@ -62,10 +62,12 @@
 ##' Attributes that correspond to the arguments specified are returned
 ##' for usage for \code{\link{predict.bSpline2}}.
 ##' @examples
-##' library(graphics)
+##' library(splines2)
 ##' x <- seq(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
+##'
+##' library(graphics)
 ##' matplot(x, bsMat, type = "l", ylab = "B-spline basis with degree zero")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
@@ -143,12 +145,12 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     ## keep NA's as is
     if (nas) {
         nmat <- matrix(NA, length(nax), ncol(bsMat))
-        nmat[! nax, , drop = FALSE] <- bsMat
+        nmat[! nax, ] <- bsMat
         bsMat <- nmat
     }
 
     ## add colnames for consistency with bs returns
-    colnames(bsMat) <- as.character(seq_len(df  - as.integer(! intercept)))
+    colnames(bsMat) <- as.character(seq_len(df - as.integer(! intercept)))
 
     ## on attributes
     tmp <- list(degree = degree,
@@ -165,6 +167,10 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 ##' @importFrom stats quantile
 pieceConst <- function (x, df, knots)
 {
+    if (any(is.na(knots)))
+        stop("'knots' cannot contain any NA.")
+    if (! is.null(knots))
+        knots <- sort(knots)
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df

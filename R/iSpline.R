@@ -69,10 +69,12 @@
 ##' \emph{Statistical science}, 3(4), 425--441.
 ##' @examples
 ##' ## Example given in the reference paper by Ramsay (1988)
-##' library(graphics)
+##' library(splines2)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##'
+##' library(graphics)
 ##' matplot(x, isMat, type = "l", ylab = "I-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
@@ -103,7 +105,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 
     ## take care of possible NA's in `x` for the following calculation
     nax <- is.na(x)
-    if ((nas <- any(nax)))
+    if (nas <- any(nax))
         x <- x[! nax]
 
     ## function determining j from x

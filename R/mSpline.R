@@ -66,10 +66,12 @@
 ##' \emph{Statistical science}, 3(4), 425--441.
 ##' @examples
 ##' ## Example given in the reference paper by Ramsay (1988)
-##' library(graphics)
+##' library(splines2)
 ##' x <- seq(0, 1, by = .01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##'
+##' library(graphics)
 ##' matplot(x, msMat, type = "l", ylab = "M-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso

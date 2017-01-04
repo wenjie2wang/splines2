@@ -28,7 +28,7 @@
 ##' \code{iSpline}, or \code{cSpline}, etc.
 ##' @param ... Optional argument for future usage.
 ##'
-##' @return The object inputted.
+##' @return NULL.
 NULL
 
 
@@ -36,7 +36,7 @@ NULL
 ##' @export
 print.bSpline2 <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(x)
+    invisible(NULL)
 }
 
 
@@ -44,7 +44,7 @@ print.bSpline2 <- function(x, ...) {
 ##' @export
 print.ibs <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(x)
+    invisible(NULL)
 }
 
 
@@ -52,14 +52,14 @@ print.ibs <- function(x, ...) {
 ##' @export
 print.mSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(x)
+    invisible(NULL)
 }
 
 ##' @rdname print
 ##' @export
 print.iSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(x)
+    invisible(NULL)
 }
 
 
@@ -67,7 +67,15 @@ print.iSpline <- function(x, ...) {
 ##' @export
 print.cSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(x)
+    invisible(NULL)
+}
+
+
+##' @rdname print
+##' @export
+print.deriv <- function(x, ...) {
+    print.default(tidyAttr(x, ...))
+    invisible(NULL)
 }
 
 

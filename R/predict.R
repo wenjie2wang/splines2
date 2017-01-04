@@ -41,6 +41,7 @@
 ##' the new values of \code{x}.
 ##'
 ##' @examples
+##' library(splines2)
 ##' x <- seq(0, 1, 0.2)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' newX <- seq(0.1, 0.9, 0.2)
@@ -76,8 +77,10 @@ NULL
 
 ##' @rdname predict
 ##' @export
-predict.bSpline2 <- function(object, newx, ...) {
-    if (missing(newx)) return(object)
+predict.bSpline2 <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
@@ -87,8 +90,10 @@ predict.bSpline2 <- function(object, newx, ...) {
 
 ##' @rdname predict
 ##' @export
-predict.ibs <- function(object, newx, ...) {
-    if (missing(newx)) return(object)
+predict.ibs <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
@@ -98,8 +103,10 @@ predict.ibs <- function(object, newx, ...) {
 
 ##' @rdname predict
 ##' @export
-predict.mSpline <- function(object, newx, ...) {
-    if (missing(newx)) return(object)
+predict.mSpline <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
@@ -109,8 +116,10 @@ predict.mSpline <- function(object, newx, ...) {
 
 ##' @rdname predict
 ##' @export
-predict.iSpline <- function(object, newx, ...) {
-    if (missing(newx)) return(object)
+predict.iSpline <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
@@ -120,8 +129,10 @@ predict.iSpline <- function(object, newx, ...) {
 
 ##' @rdname predict
 ##' @export
-predict.cSpline <- function(object, newx, ...) {
-    if (missing(newx)) return(object)
+predict.cSpline <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])

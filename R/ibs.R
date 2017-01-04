@@ -66,6 +66,7 @@
 ##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
 ##' Vol. 27. New York: Springer-Verlag.
 ##' @examples
+##' library(splines2)
 ##' x <- seq(0, 1, 0.01)
 ##' knots <- c(0.2, 0.4, 0.7, 0.9)
 ##' ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
