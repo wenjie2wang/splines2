@@ -57,6 +57,7 @@ polynomials and their corresponding integrals with the specified interior
 knots and degree, evaluated at the values of \code{x}.
 }
 \examples{
+library(splines2)
 x <- seq(0, 1, 0.01)
 knots <- c(0.2, 0.4, 0.7, 0.9)
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)

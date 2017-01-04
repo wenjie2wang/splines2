@@ -58,10 +58,12 @@ The function has the same arguments with \code{\link[splines]{bs}} for ease
 usage.
 }
 \examples{
-library(graphics)
+library(splines2)
 x <- seq(0, 1, by = 0.01)
 knots <- c(0.3, 0.5, 0.6)
 bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
+
+library(graphics)
 matplot(x, bsMat, type = "l", ylab = "B-spline basis with degree zero")
 abline(v = knots, lty = 2, col = "gray")
 }

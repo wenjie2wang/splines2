@@ -4,6 +4,7 @@
 \alias{print}
 \alias{print.bSpline2}
 \alias{print.cSpline}
+\alias{print.deriv}
 \alias{print.iSpline}
 \alias{print.ibs}
 \alias{print.mSpline}
@@ -18,6 +19,8 @@
 \method{print}{iSpline}(x, ...)
 
 \method{print}{cSpline}(x, ...)
+
+\method{print}{deriv}(x, ...)
 }
 \arguments{
 \item{x}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
@@ -26,7 +29,7 @@
 \item{...}{Optional argument for future usage.}
 }
 \value{
-The object inputted.
+NULL.
 }
 \description{
 This function simply prints out the spline basis matrix without unnecessary

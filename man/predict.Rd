@@ -45,6 +45,7 @@ in attributes should not be evaluated by this function if \code{rescale} is
 \code{TRUE}.  See \code{\link{cSpline}} for details.
 }
 \examples{
+library(splines2)
 x <- seq(0, 1, 0.2)
 knots <- c(0.3, 0.5, 0.6)
 newX <- seq(0.1, 0.9, 0.2)

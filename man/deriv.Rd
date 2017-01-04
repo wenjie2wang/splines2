@@ -19,12 +19,43 @@
 \arguments{
 \item{expr}{\code{spline2} objects generated from this package.}
 
-\item{derivs}{A positive integer indicating the number of
-derivatives.}
+\item{derivs}{A positive integer specifying the number of
+derivatives. By default, the}
 
 \item{...}{Other arguments for further usage.}
 }
+\value{
+A matrix of dimension \code{length(x)} by
+\code{df = degree + length(knots)} (plus one if intercept is included).
+Attributes that correspond to the arguments specified are returned
+for usage for other function in this package.
+}
 \description{
-Obtain derivative of spline bases.
+\code{deriv} method that obtains derivative of given number of spline
+bases.  The function is designed for \code{splines2} objects generated
+from this package.
+}
+\examples{
+library(splines2)
+x <- c(seq(0, 1, 0.1), NA)
+knots <- c(0.3, 0.5, 0.6)               # set up knots
+## integal of B-splines
+ibsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
+## the corresponding B-splines integrated
+bsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
+## the first derivative should equal bsMat
+d1Mat <- deriv(ibsMat)
+all.equal(bsMat, d1Mat, check.attributes = FALSE)
+## the second derivative shoud equal the first derivative of bsMat
+dbsMat <- deriv(bsMat)
+d2Mat <- deriv(ibsMat, derivs = 2L)
+all.equal(dbsMat, d2Mat, check.attributes = FALSE)
+}
+\seealso{
+\code{\link{bSpline}} for B-splines;
+\code{\link{ibs}} for integral of B-spline basis;
+\code{\link{mSpline}} for M-spline basis;
+\code{\link{iSpline}} for I-spline basis;
+\code{\link{cSpline}} for C-spline basis.
 }
 

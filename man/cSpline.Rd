@@ -62,10 +62,12 @@ family of piecewise polynomials and their corresponding integrals with the
 specified interior knots and degree, evaluated at the values of \code{x}.
 }
 \examples{
-library(graphics)
+library(splines2)
 x <- seq(0, 1, by = .01)
 knots <- c(0.3, 0.5, 0.6)
 csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+
+library(graphics)
 matplot(x, csMat, type = "l", ylab = "C-spline basis")
 abline(v = knots, lty = 2, col = "gray")
 isMat <- deriv(csMat)
@@ -82,6 +84,7 @@ Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 \code{\link{iSpline}} for I-spline basis;
 \code{\link{mSpline}} for M-spline basis;
 \code{\link{bSpline}} for B-spline basis;
+\code{\link{deriv}} for derivative of splines;
 \code{\link{ibs}} for integral of B-spline basis.
 }
 
