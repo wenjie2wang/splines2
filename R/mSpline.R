@@ -32,7 +32,7 @@
 ##'
 ##' @usage
 ##' mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-##'         Boundary.knots = range(x, na.rm = TRUE), ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
@@ -55,6 +55,8 @@
 ##' By default, they are the range of the non-\code{NA} data.  If both
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
+##' @param derivs A non-negative integer specifying the order of derivatives
+##' of M-splines.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by

@@ -5,7 +5,7 @@
 \title{M-Spline Basis for Polynomial Splines}
 \usage{
 mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-        Boundary.knots = range(x, na.rm = TRUE), ...)
+        Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
@@ -34,6 +34,9 @@ Default is \code{FALSE}.}
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
+
+\item{derivs}{A non-negative integer specifying the order of derivatives
+of M-splines.}
 
 \item{...}{Optional arguments for future usage.}
 }
