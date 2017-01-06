@@ -117,10 +117,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     }
 
     ## else degree is zero
-    xx <- x
     ## remove NA's in x
-    if (nas <- any(nax))
-        xx <- x[! nax]
+    xx <- if (nas <- any(nax)) x[! nax] else x
 
     ## prepare inputs for piecewise constant bases
     inputs <- pieceConst(x = xx, df = df, knots = knots)
@@ -161,7 +159,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         bsMat <- nmat
     }
 
-    ## add colnames for consistency with bs returns
+    ## add dimnames for consistency with bs returns
+    row.names(bsMat) <- names(x)
     colnames(bsMat) <- as.character(seq_len(df - as.integer(! intercept)))
 
     ## on attributes
@@ -181,8 +180,6 @@ pieceConst <- function (x, df, knots)
 {
     if (any(is.na(knots)))
         stop("'knots' cannot contain any NA.")
-    if (! is.null(knots))
-        knots <- sort(knots)
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
