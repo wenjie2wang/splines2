@@ -32,7 +32,7 @@
 ##'
 ##' @usage
 ##' iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-##'         Boundary.knots = range(x, na.rm = TRUE), ...)
+##'         Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##' returned as they were.
@@ -57,6 +57,8 @@
 ##' By default, they are the range of the non-\code{NA} data.  If both
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
+##' @param derivs A non-negative integer specifying the order of derivatives
+##' of I-splines.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
@@ -86,11 +88,19 @@
 ##' @importFrom stats stepfun
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-                    Boundary.knots = range(x, na.rm = TRUE), ...)
+                    Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 {
-    ## M-spline basis for inputs
-    msOut <- mSpline(x = x, df = df, knots = knots, degree = degree,
-                     intercept = intercept, Boundary.knots = Boundary.knots)
+    ## check order of derivative
+    if (! missing(derivs)) {
+        derivs <- as.integer(derivs)
+        if (derivs < 0L)
+            stop("'derivs' has to be a non-negative integer.")
+    }
+
+    ## M-spline basis for outputs in attributes
+    msOut <- mSpline(x = x, df = df, knots = knots,
+                     degree = degree, intercept = intercept,
+                     Boundary.knots = Boundary.knots, derivs = 0L, ...)
 
     ## update input
     degree <- attr(msOut, "degree")
@@ -100,70 +110,81 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     nKnots <- length(knots)
     df <- nKnots + ord
 
-    ## define knot sequence
-    aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
+    ## default, for derivs == 0L, return I-splines
+    if (! derivs) {
+        ## define knot sequence
+        aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
 
-    ## take care of possible NA's in `x` for the following calculation
-    nax <- is.na(x)
-    if (nas <- any(nax))
-        x <- x[! nax]
+        ## take care of possible NA's in `x` for the following calculation
+        nax <- is.na(x)
+        if (nas <- any(nax))
+            x <- x[! nax]
 
-    ## function determining j from x
-    j <- if (nKnots) {
-             foo <- stats::stepfun(x = knots, y = seq(ord, df))
-             as.integer(foo(x))
-         } else {
-             rep.int(ord, length(x))
-         }
+        ## function determining j from x
+        j <- if (nKnots) {
+                 foo <- stats::stepfun(x = knots, y = seq(ord, df))
+                 as.integer(foo(x))
+             } else {
+                 rep.int(ord, length(x))
+             }
 
-    ## calculate I-spline basis at non-NA x's
-    ## directly based on B-spline
-    bsOut1 <- bSpline(x = x, knots = knots, degree = ord,
-                      intercept = FALSE, Boundary.knots = bKnots)
+        ## calculate I-spline basis at non-NA x's
+        ## directly based on B-spline
+        bsOut1 <- bSpline(x = x, knots = knots, degree = ord,
+                          intercept = FALSE, Boundary.knots = bKnots)
 
-    isOut <- lapply(seq_along(j), function(i, idx) {
-        a <- bsOut1[i, ]
-        js <- seq_len(j[i])
-        a[- js] <- 0
-        a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j[i] - ord] <- 1        # <=> a[idx < j[i] - degree] <- 1
-        a
-    }, idx = seq_len(df))
-    isOut <- do.call(rbind, isOut)
+        isOut <- lapply(seq_along(j), function(i, idx) {
+            a <- bsOut1[i, ]
+            js <- seq_len(j[i])
+            a[- js] <- 0
+            a[js] <- rev(cumsum(rev(a[js])))
+            a[idx < j[i] - ord] <- 1        # <=> a[idx < j[i] - degree] <- 1
+            a
+        }, idx = seq_len(df))
+        isOut <- do.call(rbind, isOut)
 
-    ## Or based on M-spline
-    ## generate M-spline basis with (degree + 1)
+        ## Or based on M-spline
+        ## generate M-spline basis with (degree + 1)
 
-    ## msOut1 <- mSpline(x = x, knots = knots, degree = ord,
-    ##                   intercept = FALSE, Boundary.knots = bKnots)
-    ## df <- length(knots) + ord
-    ## numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
-    ## msMat <- rep(numer1, each = length(x)) * msOut1 / (ord + 1)
-    ## msAugMat <- cbind(j, msMat)
-    ## isOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
-    ##     j <- b[1L]
-    ##     a <- b[- 1L]
-    ##     js <- seq_len(j)
-    ##     a[- js] <- 0
-    ##     a[js] <- rev(cumsum(rev(a[js])))
-    ##     a[idx < j - ord] <- 1            # <=> a[idx < j - degree] <- 1
-    ##     a
-    ## }))
+        ## msOut1 <- mSpline(x = x, knots = knots, degree = ord,
+        ##                   intercept = FALSE, Boundary.knots = bKnots)
+        ## df <- length(knots) + ord
+        ## numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
+        ## msMat <- rep(numer1, each = length(x)) * msOut1 / (ord + 1)
+        ## msAugMat <- cbind(j, msMat)
+        ## isOut <- t(apply(msAugMat, 1, function(b, idx = seq_len(df)) {
+        ##     j <- b[1L]
+        ##     a <- b[- 1L]
+        ##     js <- seq_len(j)
+        ##     a[- js] <- 0
+        ##     a[js] <- rev(cumsum(rev(a[js])))
+        ##     a[idx < j - ord] <- 1            # <=> a[idx < j - degree] <- 1
+        ##     a
+        ## }))
 
-    ## intercept
-    if (! intercept)
-        isOut <- isOut[, - 1L, drop = FALSE]
+        ## intercept
+        if (! intercept)
+            isOut <- isOut[, - 1L, drop = FALSE]
 
-    ## keep NA's as is
-    if (nas) {
-        nmat <- matrix(NA, length(nax), ncol(isOut))
-        nmat[! nax, ] <- isOut
-        isOut <- nmat
+        ## keep NA's as is
+        if (nas) {
+            nmat <- matrix(NA, length(nax), ncol(isOut))
+            nmat[! nax, ] <- isOut
+            isOut <- nmat
+
+        }
+
+    } else {
+        ## for derivatives >= 1L
+        isOut <- mSpline(x = x, df = df, knots = knots,
+                         degree = degree, intercept = intercept,
+                         Boundary.knots = Boundary.knots,
+                         derivs = derivs - 1L, ...)
     }
 
     ## output
     attributes(isOut) <- c(attributes(msOut),
-                           list(msMat = msOut))
+                           list(derivs = derivs, msMat = msOut))
     class(isOut) <- c("matrix", "iSpline")
     isOut
 }
