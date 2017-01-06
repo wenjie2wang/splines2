@@ -44,7 +44,7 @@
 ##' @examples
 ##' library(splines2)
 ##' x <- c(seq(0, 1, 0.1), NA)
-##' knots <- c(0.3, 0.5, 0.6)               # set up knots
+##' knots <- c(0.3, 0.5, 0.6)
 ##' ## integal of B-splines
 ##' ibsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
 ##' ## the corresponding B-splines integrated
@@ -83,10 +83,21 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
         return(out)
     }
 
-    ## otherwise
-    newx <- attr(expr, "x")
-    bsMat <- predict.bSpline2(expr, newx = newx)
-    deriv.bSpline2(bsMat, derivs = derivs - 1L, ...)
+    ## for higher order of derivative
+    x <- attr(expr, "x")
+    degree <- attr(expr, "degree")
+    knots <- attr(expr, "knots")
+    intercept <- attr(expr, "intercept")
+    Boundary.knots <- attr(expr, "Boundary.knots")
+
+    ## call function dbs
+    dMat <- dbs(x = x, derivs = derivs - 1L, knots = knots, degree = degree,
+                intercept = intercept, Boundary.knots = Boundary.knots, ...)
+
+    ## prepare for output
+    attr(dMat, "derivs") <- derivs
+    class(dMat) <- c("matrix", "ibs", "deriv")
+    dMat
 }
 
 
@@ -156,102 +167,18 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.bSpline2 <- function(expr, derivs = 1L, ...)
 {
-    derivs <- as.integer(derivs)
-    if (derivs < 1L)
-        stop("'derivs' has to be a positive integer.")
-
     ## extract splines information from attributes
+    x <- attr(expr, "x")
     degree <- attr(expr, "degree")
     knots <- attr(expr, "knots")
     intercept <- attr(expr, "intercept")
-    df <- degree + length(knots) + as.integer(intercept)
-    x <- attr(expr, "x")
+    Boundary.knots <- attr(expr, "Boundary.knots")
 
-    ## take care of possible NA's in `x`
-    xx <- x
-    nax <- is.na(x)
-    ## remove NA's in x
-    if (nas <- any(nax))
-        xx <- x[! nax]
+    ## call function dbs
+    dMat <- dbs(x = x, derivs = derivs, knots = knots, degree = degree,
+                intercept = intercept, Boundary.knots = Boundary.knots, ...)
 
-    ## for derivs > degree
-    if (derivs > degree) {
-        expr[, ] <- 0
-        if (nas)
-            expr[nax, ] <- NA
-        attr(expr, "derivs") <- derivs
-        class(expr) <- c("matrix", "bSpline2", "deriv")
-        return(expr)
-    }
-
-    ## remove possible NA's
-    dMat <- expr
-    attr(dMat, "x") <- xx
-
-    ## call internal function derivBs
-    dMat <- derivBs(dMat, derivs = derivs, ...)
-
-    ## keep NA's as is
-    if (nas) {
-        nmat <- matrix(NA, length(nax), ncol(dMat))
-        nmat[! nax, ] <- dMat
-        dMat <- nmat
-    }
-
-    ## add colnames for consistency with returns from splines::bs
-    colnames(dMat) <- as.character(seq_len(df))
-
-    ## on attributes
-    attributes(dMat) <- c(attributes(expr), list(derivs = derivs))
+    ## prepare for output
     class(dMat) <- c("matrix", "bSpline2", "deriv")
-
-    ## return
-    dMat
-}
-
-
-### internal function ==========================================================
-## function computing the derivative of B-spline bases
-derivBs <- function(bsMat, derivs = 1L, ...)
-{
-    ## function for internally usage only
-    ## checking procedure is omitted for performance
-
-    ## extract splines information from attributes
-    degree <- attr(bsMat, "degree")
-    knots <- attr(bsMat, "knots")
-    intercept <- attr(bsMat, "intercept")
-    bKnots <- attr(bsMat, "Boundary.knots")
-
-    ## original degree of freedom from definition
-    df0 <- degree + length(knots) + 1L
-
-    ## linear bases
-    x <- attr(bsMat, "x")
-    dMat <- bSpline(x, knots = knots, degree = degree - derivs,
-                    intercept = TRUE, Boundary.knots = bKnots)
-
-    ## derivative matrix
-    for (iter in seq_len(derivs)) {
-        ## define knot sequence according to the bases being differentiated
-        ord <- degree - derivs + iter + 1L
-        aKnots <- sort(c(rep(bKnots, ord), knots))
-        denom1 <- diff(aKnots, lag = ord - 1L)
-        facVec <- ifelse(denom1 > 0, (ord - 1L) / denom1, 0)
-        dMat0 <- cbind(0, dMat, 0)
-        dMat <- sapply(seq_len(df0 - derivs + iter), function(a)
-        {
-            idx <- a : (a + 1L)
-            tmpMat <- dMat0[, idx, drop = FALSE]
-            facVec[idx[1L]] * tmpMat[, 1L, drop = FALSE] -
-                facVec[idx[2L]] * tmpMat[, 2L, drop = FALSE]
-        })
-    }
-
-    ## take care of intercept
-    if (! intercept)
-        dMat <- dMat[, - 1L, drop = FALSE]
-
-    ## return
     dMat
 }
