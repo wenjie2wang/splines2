@@ -84,11 +84,12 @@
 ##' \code{\link{mSpline}} for M-spline basis;
 ##' \code{\link{iSpline}} for I-spline basis.
 ##' \code{\link{cSpline}} for C-spline basis.
+##' @importFrom stats quantile
 ##' @export
 dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
                 intercept = FALSE, Boundary.knots = range(x, na.rm = TRUE), ...)
 {
-    ## test order of derivative
+    ## check order of derivative
     derivs <- as.integer(derivs)
     if (derivs < 1L)
         stop("'derivs' has to be a positive integer.")
@@ -97,21 +98,59 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
 
-    ## original degree of freedom from definition
-    df0 <- degree + length(knots) + 1L
-    df <- df0 - as.integer(! intercept)
+    ## sort and remove possible NA's in internal knots if exist
+    if (length(knots)) {
+        knots <- sort(knots)
+        tmp <- is.na(knots)
+        if (any(tmp)) {
+            omit <- seq_along(knots)[tmp]
+            knots <- knots[- omit]
+        }
+    }
 
     ## take care of possible NA's in `x`
     nax <- is.na(x)
     if (all(nax))
         stop("'x' cannot be all NA's!")
     nas <- any(nax)
+    ## remove NA's
+    xx <- if (nas) x[! nax] else x
+
+    ## check Boundary.knots specified by users
+    outside <- FALSE
+    if (! missing(Boundary.knots)) {
+        Boundary.knots <- sort(Boundary.knots[seq_len(2)])
+        outside <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])
+    }
+
+    ## determine knots from df if missing
+    inter <- as.integer(intercept)
+    if (! is.null(df)) {
+        df0 <- length(knots) + degree + inter
+        if (tmp <- (df < df0))
+            warning(gettextf("'df' was too small; have used %d",
+                             df0), domain = NA)
+
+        df <- ifelse(tmp, df0, df)
+        nKnots <- df - degree - inter
+        if (is.null(knots) && nKnots > 0) {
+            quans <- seq.int(from = 0, to = 1,
+                             length.out = nKnots + 2L)[- c(1L, nKnots + 2L)]
+            knots <- stats::quantile(xx[! outside], quans)
+        }
+    }
+    ## update degree of freedom from inputs
+    df0 <- length(knots) + degree + 1L
+    df <- df0 - 1L + inter
 
     ## attribute knots for output
     knotsAttr <- if (is.null(knots)) numeric(0L) else knots
 
     ## for derivs > degree
     if (derivs > degree) {
+        ## df == 0, i.e., no basis returned
+        if (! df)
+            warning("Degree of freedom is zero.")
         dMat <- matrix(0, nrow = length(x), ncol = df)
         if (nas)
             dMat[nax, ] <- NA
@@ -121,23 +160,13 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
                     intercept = intercept,
                     x = x, derivs = derivs)
         attributes(dMat) <- c(attributes(dMat), tmp)
-        class(dMat) <- c("matrix", "bSpline2", "deriv")
+        class(dMat) <- c("matrix", "dbs")
         return(dMat)
     }
 
-    ## take care of possible NA's in `x`
-    nax <- is.na(x)
-    xx <- x
-    ## remove NA's in x
-    if (nas <- any(nax))
-        xx <- x[! nax]
-
-    ## check Boundary.knots specified by users
-    if (! missing(Boundary.knots))
-        Boundary.knots <- sort(Boundary.knots[seq_len(2)])
-
+    ## B-spline bases
     dMat <- bSpline(xx, knots = knots, degree = degree - derivs,
-                    intercept = TRUE, Boundary.knots = Boundary.knots)
+                    intercept = TRUE, Boundary.knots = Boundary.knots, ...)
 
     ## derivative matrix
     for (iter in seq_len(derivs)) {
@@ -145,8 +174,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
         ord <- degree - derivs + iter + 1L
         aKnots <- sort(c(rep(Boundary.knots, ord), knots))
         denom <- diff(aKnots, lag = ord - 1L)
-        facVec <- ifelse(abs(denom) < .Machine$double.eps,
-                         0, (ord - 1L) / denom)
+        facVec <- ifelse(denom > 0, (ord - 1L) / denom, 0)
         dMat0 <- cbind(0, dMat, 0)
         dMat <- sapply(seq_len(df0 - derivs + iter), function(a)
         {
@@ -163,12 +191,13 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
 
     ## keep NA's as is
     if (nas) {
-        nmat <- matrix(NA, length(nax), ncol(dMat))
+        nmat <- matrix(NA, length(nax), df)
         nmat[! nax, ] <- dMat
         dMat <- nmat
     }
 
-    ## add colnames for consistency with returns from splines::bs
+    ## add dimnames for consistency with returns from splines::bs
+    row.names(dMat) <- names(x)
     colnames(dMat) <- as.character(seq_len(df))
 
     ## on attributes
