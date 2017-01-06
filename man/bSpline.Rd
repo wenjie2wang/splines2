@@ -15,7 +15,8 @@ returned as they were.}
 \code{knots}, then the function chooses "df - degree"
 (minus one if there is an intercept) knots at suitable quantiles of \code{x}
 (which will ignore missing values).  The default, \code{NULL}, corresponds
-to no inner knots, i.e., "degree - intercept".}
+to no inner knots, i.e., "degree - intercept". If \code{knots} was
+specified, \code{df} specified will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The
 default is \code{NULL}, which results in a basis for ordinary

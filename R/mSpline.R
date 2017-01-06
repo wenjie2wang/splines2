@@ -90,20 +90,21 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
                     Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 {
     ## check order of derivative
-    derivs <- as.integer(derivs)
-    if (derivs < 0L)
-        stop("'derivs' has to be a non-negative integer.")
+    if (! missing(derivs)) {
+        derivs <- as.integer(derivs)
+        if (derivs < 0L)
+            stop("'derivs' has to be a non-negative integer.")
+    }
 
-    if (! derivs) {
-        ## B-spline basis for inputs
-        bsOut <- bSpline(x = x, df = df, knots = knots,
-                         degree = degree, intercept = intercept,
-                         Boundary.knots = Boundary.knots, ...)
-    } else {
-        bsOut <- dbs(x = x, derivs = derivs, df = df, knots = knots,
+    bsOut <- if (derivs) {
+                 dbs(x = x, derivs = derivs, df = df, knots = knots,
                      degree = degree, intercept = intercept,
                      Boundary.knots = Boundary.knots, ...)
-    }
+             } else {
+                 bSpline(x = x, df = df, knots = knots,
+                         degree = degree, intercept = intercept,
+                         Boundary.knots = Boundary.knots, ...)
+             }
 
     ## update input
     ord <- attr(bsOut, "degree") + 1L

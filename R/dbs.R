@@ -117,7 +117,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
     xx <- if (nas) x[! nax] else x
 
     ## check Boundary.knots specified by users
-    outside <- FALSE
+    outside <- rep(FALSE, length(xx))
     if (! missing(Boundary.knots)) {
         Boundary.knots <- sort(Boundary.knots[seq_len(2)])
         outside <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])

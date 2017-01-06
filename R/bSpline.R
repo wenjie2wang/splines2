@@ -41,7 +41,8 @@
 ##' \code{knots}, then the function chooses "df - degree"
 ##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
 ##' (which will ignore missing values).  The default, \code{NULL}, corresponds
-##' to no inner knots, i.e., "degree - intercept".
+##' to no inner knots, i.e., "degree - intercept". If \code{knots} was
+##' specified, \code{df} specified will be ignored.
 ##' @param knots The internal breakpoints that define the spline.  The
 ##' default is \code{NULL}, which results in a basis for ordinary
 ##' polynomial regression.  Typical values are the mean or median
@@ -90,12 +91,12 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
     ## sort and remove possible NA's in internal knots if exist
     if (length(knots)) {
-        knots <- sort(knots)
         tmp <- is.na(knots)
         if (any(tmp)) {
             omit <- seq_along(knots)[tmp]
             knots <- knots[- omit]
         }
+        knots <- sort.int(knots)
     }
 
     ## take care of possible NA's in `x` for `Boundary.knots`
@@ -107,9 +108,9 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     ##     Boundary.knots <- range(x[! nax])
 
     ## call splines::bs for non-zero degree
-    if (degree > 0L) {
-        out <- splines::bs(x = x, df = df, knots = knots, degree = degree,
-                           intercept = intercept,
+    if (degree) {
+        out <- splines::bs(x = x, df = df, knots = knots,
+                           degree = degree, intercept = intercept,
                            Boundary.knots = Boundary.knots)
         attr(out, "x") <- x
         class(out) <- c("matrix", "bSpline2")
@@ -120,17 +121,21 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     ## remove NA's in x
     xx <- if (nas <- any(nax)) x[! nax] else x
 
+    ## check whether any of x is outside of the boundary knots
+    outside <- rep(FALSE, length(xx))
+    if (! missing(Boundary.knots)) {
+        Boundary.knots <- sort(Boundary.knots[seq_len(2)])
+        outside <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])
+    }
+    if (any(outside))
+        warning(paste("Some 'x' values beyond boundary knots",
+                      "may cause ill-conditioned bases."))
+
     ## prepare inputs for piecewise constant bases
-    inputs <- pieceConst(x = xx, df = df, knots = knots)
+    inputs <- pieceConst(x = xx[! outside], df = df, knots = knots)
     knots <- inputs$knots
     ## potentially, df is a bad name since df is also a function in stats
     df <- inputs$df
-
-    ## check whether any of x is outside of the boundary knots
-    Boundary.knots <- sort(Boundary.knots)
-    if (any(xx < Boundary.knots[1L] | xx > Boundary.knots[2L]))
-        warning(paste("Some 'x' values beyond boundary knots",
-                      "may cause ill-conditioned bases."))
 
     ## piecewise constant basis
     augKnots <- c(Boundary.knots[1L], knots, Boundary.knots[2L])
@@ -178,22 +183,20 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 ##' @importFrom stats quantile
 pieceConst <- function (x, df, knots)
 {
-    if (any(is.na(knots)))
-        stop("'knots' cannot contain any NA.")
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
     ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
     ## ind == 3: both df and knots are NULL; one-piece constant, df <- 1
-    df <- switch(ind, length(knots) + 1L, as.integer(df), 1L)
-    if (df < 1L) {
-        df <- 1L
-        warning("'df' specified was too small; used 1 instead.")
-    }
-    if (ind > 1) {
-        tknots <- df + 1L
+    df0 <- switch(ind, length(knots) + 1L, as.integer(df), 1L)
+    if (ind > 1L) {
+        tknots <- df0 + 1L
         quans <- seq.int(from = 0, to = 1,
                          length.out = tknots)[- c(1L, tknots)]
         knots <- as.numeric(stats::quantile(x, quans))
+    } else {
+        if (! is.null(df) && df != df0)
+            warning(sprintf(paste("'df' specified was not appropriate.",
+                                  "Used %d instead."), df0))
     }
-    list(df = df, knots = knots)
+    list(df = df0, knots = knots)
 }
