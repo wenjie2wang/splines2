@@ -15,7 +15,7 @@ cprt := COPYRIGHT
 check: $(checkLog)
 
 .PHONY: build
-all: $(tar)
+build: $(tar)
 
 .PHONY: preview
 preview: $(vignettes)
