@@ -58,13 +58,17 @@ degree, evaluated at the values of \code{x}.
 \examples{
 ## Example given in the reference paper by Ramsay (1988)
 library(splines2)
-x <- seq(0, 1, by = .01)
+x <- seq(0, 1, by = 0.01)
 knots <- c(0.3, 0.5, 0.6)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 
 library(graphics)
 matplot(x, msMat, type = "l", ylab = "M-spline basis")
 abline(v = knots, lty = 2, col = "gray")
+
+## derivatives of M-splines
+dmsMat <- mSpline(x, knots = knots, degree = 4L, intercept = TRUE,
+                  derivs = 1L)
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.

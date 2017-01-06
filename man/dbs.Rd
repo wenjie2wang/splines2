@@ -71,7 +71,6 @@ bKnots <- attr(dMat, "Boundary.knots")
 aKnots <- c(rep(bKnots[1L], ord), knots, rep(bKnots[2L], ord))
 res <- splines::splineDesign(aKnots, x = x, derivs = 2L)
 all.equal(res, dMat, check.attributes = FALSE)
-
 }
 \references{
 De Boor, Carl. (1978). \emph{A practical guide to splines}.

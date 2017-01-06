@@ -6,15 +6,18 @@
 \alias{deriv.cSpline}
 \alias{deriv.iSpline}
 \alias{deriv.ibs}
+\alias{deriv.mSpline}
 \title{Derivative of Splines}
 \usage{
+\method{deriv}{bSpline2}(expr, derivs = 1L, ...)
+
 \method{deriv}{ibs}(expr, derivs = 1L, ...)
+
+\method{deriv}{mSpline}(expr, derivs = 1L, ...)
 
 \method{deriv}{iSpline}(expr, derivs = 1L, ...)
 
 \method{deriv}{cSpline}(expr, derivs = 1L, ...)
-
-\method{deriv}{bSpline2}(expr, derivs = 1L, ...)
 }
 \arguments{
 \item{expr}{\code{spline2} objects generated from this package.}
@@ -41,7 +44,7 @@ to be the left derivative.
 \examples{
 library(splines2)
 x <- c(seq(0, 1, 0.1), NA)
-knots <- c(0.3, 0.5, 0.6)               # set up knots
+knots <- c(0.3, 0.5, 0.6)
 ## integal of B-splines
 ibsMat <- ibs(x, knots = knots, degree = 3L, intercept = TRUE)
 ## the corresponding B-splines integrated
