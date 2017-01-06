@@ -68,6 +68,27 @@ NULL
 
 ##' @rdname deriv
 ##' @export
+deriv.bSpline2 <- function(expr, derivs = 1L, ...)
+{
+    ## extract splines information from attributes
+    x <- attr(expr, "x")
+    degree <- attr(expr, "degree")
+    knots <- attr(expr, "knots")
+    intercept <- attr(expr, "intercept")
+    Boundary.knots <- attr(expr, "Boundary.knots")
+
+    ## call function dbs
+    dMat <- dbs(x = x, derivs = derivs, knots = knots, degree = degree,
+                intercept = intercept, Boundary.knots = Boundary.knots, ...)
+
+    ## prepare for output
+    class(dMat) <- c("matrix", "bSpline2", "deriv")
+    dMat
+}
+
+
+##' @rdname deriv
+##' @export
 deriv.ibs <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
@@ -103,31 +124,47 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
+deriv.mSpline <- function(expr, derivs = 1L, ...)
+{
+    ## extract splines information from attributes
+    x <- attr(expr, "x")
+    degree <- attr(expr, "degree")
+    knots <- attr(expr, "knots")
+    intercept <- attr(expr, "intercept")
+    Boundary.knots <- attr(expr, "Boundary.knots")
+
+    ## call function dbs
+    dMat <- mSpline(x = x, knots = knots, degree = degree,
+                    intercept = intercept, Boundary.knots = Boundary.knots,
+                    derivs = derivs, ...)
+
+    ## prepare for output
+    class(dMat) <- c("matrix", "mSpline", "deriv")
+    dMat
+}
+
+
+
+##' @rdname deriv
+##' @export
 deriv.iSpline <- function(expr, derivs = 1L, ...)
 {
+    ## quick check on derivs
     derivs <- as.integer(derivs)
     if (derivs < 1L)
         stop("'derivs' has to be a positive integer.")
 
-    ## take care of possible NA's in `x`
-    x <- attr(expr, "x")
-    nax <- is.na(x)
-    nas <- any(nax)
+    ## extract existing result from attributes for the first derivative
+    dMat <- if (derivs == 1L)
+                attr(expr, "msMat")
+            else
+                ## for derivative of higher order
+                deriv.mSpline(expr = expr, derivs = derivs - 1L, ...)
 
-    degree <- attr(expr, "degree")
-    if (derivs > degree + 1L) {
-        expr[, ] <- 0
-        if (nas)
-            expr[nax, ] <- NA
-        attr(expr, "derivs") <- derivs
-        class(expr) <- c("matrix", "iSpline", "deriv")
-        return(expr)
-    }
-
-    if (derivs == 1L)
-        return(attr(expr, "msMat"))
-
-    stop("under development")
+    ## prepare for output
+    attr(dMat, "derivs") <- derivs
+    class(dMat) <- c("matrix", "iSpline", "deriv")
+    dMat
 }
 
 
@@ -139,46 +176,14 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     if (derivs < 1L)
         stop("'derivs' has to be a positive integer.")
 
-    ## take care of possible NA's in `x`
-    x <- attr(expr, "x")
-    nax <- is.na(x)
-    nas <- any(nax)
+    dMat <- if (derivs == 1L) {
+                attr(expr, "isMat")
+            } else if (derivs == 2L) {
+                attr(expr, "msMat")
+            } else
+                deriv.mSpline(expr = expr, derivs = derivs - 2L, ...)
 
-    degree <- attr(expr, "degree")
-    if (derivs > degree + 1L) {
-        expr[, ] <- 0
-        if (nas)
-            expr[nax, ] <- NA
-        attr(expr, "derivs") <- derivs
-        class(expr) <- c("matrix", "cSpline", "deriv")
-        return(expr)
-    }
-
-    if (derivs == 1L)
-        return(attr(expr, "isMat"))
-    if (derivs == 2L)
-        return(attr(expr, "msMat"))
-
-    stop("under development")
-}
-
-
-##' @rdname deriv
-##' @export
-deriv.bSpline2 <- function(expr, derivs = 1L, ...)
-{
-    ## extract splines information from attributes
-    x <- attr(expr, "x")
-    degree <- attr(expr, "degree")
-    knots <- attr(expr, "knots")
-    intercept <- attr(expr, "intercept")
-    Boundary.knots <- attr(expr, "Boundary.knots")
-
-    ## call function dbs
-    dMat <- dbs(x = x, derivs = derivs, knots = knots, degree = degree,
-                intercept = intercept, Boundary.knots = Boundary.knots, ...)
-
-    ## prepare for output
-    class(dMat) <- c("matrix", "bSpline2", "deriv")
+    attr(dMat, "derivs") <- derivs
+    class(dMat) <- c("matrix", "cSpline", "deriv")
     dMat
 }

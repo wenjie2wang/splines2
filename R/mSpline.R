@@ -67,13 +67,17 @@
 ##' @examples
 ##' ## Example given in the reference paper by Ramsay (1988)
 ##' library(splines2)
-##' x <- seq(0, 1, by = .01)
+##' x <- seq(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##'
 ##' library(graphics)
 ##' matplot(x, msMat, type = "l", ylab = "M-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
+##'
+##' ## derivatives of M-splines
+##' dmsMat <- mSpline(x, knots = knots, degree = 4L, intercept = TRUE,
+##'                   derivs = 1L)
 ##' @seealso
 ##' \code{\link{predict.mSpline}} for evaluation at given (new) values;
 ##' \code{\link{bSpline}} for B-spline basis;
@@ -81,27 +85,39 @@
 ##' \code{\link{cSpline}} for C-spline basis.
 ##' @export
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-                    Boundary.knots = range(x, na.rm = TRUE), ...)
+                    Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 {
-    ## B-spline basis for inputs
-    bsOut <- bSpline(x = x, df = df, knots = knots, degree = degree,
-                     intercept = intercept, Boundary.knots = Boundary.knots)
+    ## check order of derivative
+    derivs <- as.integer(derivs)
+    if (derivs < 0L)
+        stop("'derivs' has to be a non-negative integer.")
+
+    if (! derivs) {
+        ## B-spline basis for inputs
+        bsOut <- bSpline(x = x, df = df, knots = knots,
+                         degree = degree, intercept = intercept,
+                         Boundary.knots = Boundary.knots, ...)
+    } else {
+        bsOut <- dbs(x = x, derivs = derivs, df = df, knots = knots,
+                     degree = degree, intercept = intercept,
+                     Boundary.knots = Boundary.knots, ...)
+    }
 
     ## update input
-    degree <- attr(bsOut, "degree")
+    ord <- attr(bsOut, "degree") + 1L
     knots <- attr(bsOut, "knots")
     bKnots <- attr(bsOut, "Boundary.knots")
-    ord <- 1L + degree
 
     ## define knot sequence
     aKnots <- sort(c(rep(bKnots, ord), knots))
 
     ## transformation from B-splines to M-splines
     denom <- diff(aKnots, lag = ord)
-    transCoef <- ifelse(abs(denom) < .Machine$double.eps, 0, ord / denom)
+    transCoef <- ifelse(denom > 0, ord / denom, 0)
     if (! intercept)
         transCoef <- transCoef[- 1L]
     msOut <- rep(transCoef, each = length(x)) * bsOut
+    attr(msOut, "derivs") <- derivs
     class(msOut) <- c("matrix", "mSpline")
     msOut
 }
