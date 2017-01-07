@@ -24,12 +24,13 @@
 ##'
 ##' It is an augmented function of \code{\link[splines]{bs}} in package
 ##' \code{splines} for B-spline basis that allows piecewise constant (close
-##' on the left, open on the right) spline basis with zero degree. When the
-##' argument \code{degree} is greater than zero, it internally calls
-##' \code{\link[splines]{bs}} and generates a basis matrix for representing
-##' the family of piecewise polynomials with the specified interior knots and
-##' degree, evaluated at the values of \code{x}.  The function has the same
-##' arguments with \code{\link[splines]{bs}} for ease usage.
+##' on the left, open on the right expect for the right boundary knot) spline
+##' basis with zero degree. When the argument \code{degree} is greater than
+##' zero, it internally calls \code{\link[splines]{bs}} and generates a basis
+##' matrix for representing the family of piecewise polynomials with the
+##' specified interior knots and degree, evaluated at the values of \code{x}.
+##' The function has the same arguments with \code{\link[splines]{bs}} for
+##' ease usage.
 ##'
 ##' @usage
 ##' bSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
@@ -143,6 +144,10 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         foo <- stats::stepfun(augKnots[i: (i + 1L)], c(0L, 1L, 0L))
         foo(xx)
     })
+
+    ## close on the right boundary knot for the last constant piece
+    if (any(rightX <- xx == Boundary.knots[2L]))
+        bsMat[rightX, df] <- 1
 
     ## make sure bsMat is a matrix
     if (! is.matrix(bsMat))

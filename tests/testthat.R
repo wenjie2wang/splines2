@@ -1,5 +1,4 @@
 library(testthat)
-library(splines)
 library(splines2)
 
 
