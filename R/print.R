@@ -20,15 +20,15 @@
 
 ##' Print out spline basis matrix
 ##'
-##' This function simply prints out the spline basis matrix without unnecessary
-##' attributes and invisibly returns the object inputted.
+##' \code{Print} methods that simply print out the spline basis matrix without
+##' unnecessary attributes.
 ##'
 ##' @name print
 ##' @param x Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
 ##' \code{iSpline}, or \code{cSpline}, etc.
 ##' @param ... Optional argument for future usage.
 ##'
-##' @return NULL.
+##' @return Object input.
 NULL
 
 
@@ -36,7 +36,7 @@ NULL
 ##' @export
 print.bSpline2 <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
 }
 
 
@@ -44,7 +44,15 @@ print.bSpline2 <- function(x, ...) {
 ##' @export
 print.ibs <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
+}
+
+
+##' @rdname print
+##' @export
+print.dbs <- function(x, ...) {
+    print.default(tidyAttr(x, ...))
+    invisible(x)
 }
 
 
@@ -52,14 +60,14 @@ print.ibs <- function(x, ...) {
 ##' @export
 print.mSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
 }
 
 ##' @rdname print
 ##' @export
 print.iSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
 }
 
 
@@ -67,7 +75,7 @@ print.iSpline <- function(x, ...) {
 ##' @export
 print.cSpline <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
 }
 
 
@@ -75,7 +83,7 @@ print.cSpline <- function(x, ...) {
 ##' @export
 print.deriv <- function(x, ...) {
     print.default(tidyAttr(x, ...))
-    invisible(NULL)
+    invisible(x)
 }
 
 
