@@ -72,7 +72,7 @@
 ##' @examples
 ##' ## Example given in the reference paper by Ramsay (1988)
 ##' library(splines2)
-##' x <- seq(0, 1, by = .01)
+##' x <- seq.int(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##'
@@ -171,7 +171,6 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
             nmat <- matrix(NA, length(nax), ncol(isOut))
             nmat[! nax, ] <- isOut
             isOut <- nmat
-
         }
 
     } else {

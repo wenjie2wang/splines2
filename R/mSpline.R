@@ -18,10 +18,11 @@
 ################################################################################
 
 
-##' M-Spline Basis for Polynomial Splines
+##' M-Spline Basis and its Derivatives for Polynomial Splines
 ##'
-##' This function generates the monotone regression spline or simply called
-##' M-spline basis matrix for a polynomial spline.
+##' This function generates the monotone regression spline (or simply called
+##' M-spline) basis matrix for a polynomial spline or its derivatives of given
+##' order.
 ##'
 ##' It is an implementation of the close form M-spline basis based on
 ##' relationship between M-spline basis and B-spline basis.  In fact, M-spline
@@ -56,7 +57,7 @@
 ##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
 ##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
 ##' @param derivs A non-negative integer specifying the order of derivatives
-##' of M-splines.
+##' of M-splines. The default value is \code{0L} for M-spline bases.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
@@ -69,7 +70,7 @@
 ##' @examples
 ##' ## Example given in the reference paper by Ramsay (1988)
 ##' library(splines2)
-##' x <- seq(0, 1, by = 0.01)
+##' x <- seq.int(0, 1, 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##'
@@ -78,13 +79,17 @@
 ##' abline(v = knots, lty = 2, col = "gray")
 ##'
 ##' ## derivatives of M-splines
-##' dmsMat <- mSpline(x, knots = knots, degree = 4L, intercept = TRUE,
-##'                   derivs = 1L)
+##' dmsMat <- mSpline(x, knots = knots, degree = 2,
+##'                   intercept = TRUE, derivs = 1)
+##' ## or using the 'deriv' method
+##' dmsMat1 <- deriv(msMat)
+##' all.equal(dmsMat, dmsMat1, check.attributes = FALSE)
 ##' @seealso
 ##' \code{\link{predict.mSpline}} for evaluation at given (new) values;
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{iSpline}} for I-spline basis;
-##' \code{\link{cSpline}} for C-spline basis.
+##' \code{\link{deriv.mSpline}} for derivative method;
+##' \code{\link{bSpline}} for B-splines;
+##' \code{\link{iSpline}} for I-splines;
+##' \code{\link{cSpline}} for C-splines.
 ##' @export
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
                     Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
