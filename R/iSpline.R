@@ -79,12 +79,16 @@
 ##' library(graphics)
 ##' matplot(x, isMat, type = "l", ylab = "I-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
+##'
+##' ## derivative of I-splines is M-spline
+##' msMat1 <- iSpline(x, knots = knots, degree = 2, derivs = 1)
+##' msMat2 <- mSpline(x, knots = knots, degree = 2)
+##' all.equal(msMat1, msMat2)
 ##' @seealso
 ##' \code{\link{predict.iSpline}} for evaluation at given (new) values;
-##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{cSpline}} for C-spline basis;
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{ibs}} for integral of B-spline basis.
+##' \code{\link{deriv.iSpline}} for deriv method;
+##' \code{\link{mSpline}} for M-splines;
+##' \code{\link{cSpline}} for C-splines;
 ##' @importFrom stats stepfun
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
@@ -175,15 +179,15 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
     } else {
         ## for derivatives >= 1L
-        isOut <- mSpline(x = x, df = df, knots = knots,
-                         degree = degree, intercept = intercept,
-                         Boundary.knots = Boundary.knots,
-                         derivs = derivs - 1L, ...)
+        out <- mSpline(x = x, df = df, knots = knots,
+                       degree = degree, intercept = intercept,
+                       Boundary.knots = Boundary.knots,
+                       derivs = derivs - 1L, ...)
+        return(out)
     }
-
     ## output
-    attributes(isOut) <- c(attributes(msOut),
-                           list(derivs = derivs, msMat = msOut))
+    attr(msOut, "derivs") <- NULL
+    attributes(isOut) <- c(attributes(msOut), list(msMat = msOut))
     class(isOut) <- c("matrix", "iSpline")
     isOut
 }
