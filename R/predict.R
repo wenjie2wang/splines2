@@ -42,17 +42,21 @@
 ##'
 ##' @examples
 ##' library(splines2)
-##' x <- seq(0, 1, 0.2)
+##' x <- seq.int(0, 1, 0.2)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' newX <- seq(0.1, 0.9, 0.2)
+##' newX <- seq.int(0.1, 0.9, 0.2)
 ##'
-##' ## for B-spline
+##' ## for B-splines
 ##' bsMat <- bSpline(x, knots = knots, degree = 2)
 ##' predict(bsMat, newX)
 ##'
-##' ## for integral of B-spline
+##' ## for integral of B-splines
 ##' ibsMat <- ibs(x, knots = knots, degree = 2)
 ##' predict(ibsMat, newX)
+##'
+##' ## for derivative of B-splines
+##' dbsMat <- dbs(x, knots = knots, degree = 2)
+##' predict(dbsMat, newX)
 ##'
 ##' ## for M-spline
 ##' msMat <- mSpline(x, knots = knots, degree = 2)
@@ -66,11 +70,12 @@
 ##' csMat <- cSpline(x, knots = knots, degree = 2)
 ##' predict(csMat, newX)
 ##' @seealso
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{ibs}} for integral of B-spline basis;
-##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{iSpline}} for I-spline basis;
-##' \code{\link{cSpline}} for C-spline basis.
+##' \code{\link{bSpline}} for B-splines;
+##' \code{\link{ibs}} for integral of B-splines;
+##' \code{\link{dbs}} for derivative of B-splines;
+##' \code{\link{mSpline}} for M-splines;
+##' \code{\link{iSpline}} for I-splines;
+##' \code{\link{cSpline}} for C-splines.
 ##' @importFrom stats predict
 NULL
 
@@ -103,13 +108,26 @@ predict.ibs <- function(object, newx, ...)
 
 ##' @rdname predict
 ##' @export
+predict.dbs <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
+    a <- c(list(x = newx),
+           attributes(object)[c("degree", "knots", "Boundary.knots",
+                                "intercept", "derivs")])
+    do.call("dbs", a)
+}
+
+
+##' @rdname predict
+##' @export
 predict.mSpline <- function(object, newx, ...)
 {
     if (missing(newx))
         return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
-                                "intercept")])
+                                "intercept", "derivs")])
     do.call("mSpline", a)
 }
 
@@ -135,6 +153,6 @@ predict.cSpline <- function(object, newx, ...)
         return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
-                                "intercept")])
+                                "intercept", "scale")])
     do.call("cSpline", a)
 }
