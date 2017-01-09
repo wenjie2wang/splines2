@@ -62,33 +62,45 @@
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage for \code{\link{predict.cSpline}}. The corresponding M-spline and
-##' I-spline basis matrices are also returned in attribute named \code{msMat}
-##' and \code{isMat} respectively.
+##' The attributes that correspond to the arguments specified are returned
+##' for the usage of other functions in this package.
 ##' @references
 ##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 ##' \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
 ##' @examples
 ##' library(splines2)
-##' x <- seq(0, 1, by = .01)
+##' x <- seq.int(0, 1, 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
+##'
+##' ### when 'scale = TRUE' (default)
 ##' csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##'
 ##' library(graphics)
 ##' matplot(x, csMat, type = "l", ylab = "C-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' isMat <- deriv(csMat)
-##' msMat <- deriv(csMat, derivs = 2L)
+##' msMat <- deriv(csMat, derivs = 2)
 ##' matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
 ##' matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
+##'
+##' ### when 'scale = FALSE'
+##' csMat <- cSpline(x, knots = knots, degree = 2,
+##'                  intercept = TRUE, scale = FALSE)
+##' ## the corresponding I-splines and M-splines (with same arguments)
+##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' ## or using deriv methods (much more efficient)
+##' isMat1 <- deriv(csMat)
+##' msMat1 <- deriv(csMat, derivs = 2)
+##' ## equivalent
+##' all.equal(isMat, isMat1, check.attributes = FALSE)
+##' all.equal(msMat, msMat1, check.attributes = FALSE)
+##'
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
-##' \code{\link{iSpline}} for I-spline basis;
-##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{deriv}} for derivative of splines;
-##' \code{\link{ibs}} for integral of B-spline basis.
+##' \code{\link{deriv.cSpline}} for derivative of splines;
+##' \code{\link{iSpline}} for I-splines;
+##' \code{\link{mSpline}} for M-splines.
 ##' @importFrom stats stepfun
 ##' @export
 cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
@@ -174,7 +186,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
     if (! intercept)
         csOut <- csOut[, - 1L, drop = FALSE]
-    scl <- csOut[nX + 1L, ]
+    scl <- unname(csOut[nX + 1L, ])
     csOut <- csOut[- (nX + 1L), ]
 
     ## mSpline basis matrix
@@ -193,13 +205,16 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         csOut <- vec * csOut
         isOut <- vec * isOut
         msMat <- vec * msMat
+        attr(isOut, "scale") <- attr(msMat, "scale") <- scale
+        attr(isOut, "scales") <- attr(msMat, "scales") <- scl
     }
 
     ## output
     attr(isOut, "msMat") <- NULL
     attributes(csOut) <- c(attributes(isOut),
                            list(isMat = isOut, msMat = msMat,
-                                scale = scale))
+                                scale = scale, scales = scl))
+    attr(csOut, "derivs") <- NULL
     class(csOut) <- c("matrix", "cSpline")
     csOut
 }
