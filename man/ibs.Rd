@@ -57,16 +57,16 @@ knots and degree, evaluated at the values of \code{x}.
 }
 \examples{
 library(splines2)
-x <- seq(0, 1, 0.01)
+x <- seq.int(0, 1, 0.01)
 knots <- c(0.2, 0.4, 0.7, 0.9)
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 
-## obtain the B-spline bases integrated by function bSpline
+## the B-spline bases integrated by function bSpline (same arguments)
 bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
 ## or by function deriv (recommended) that directly extracts the existing
-## result from the attribute of ibsMat and thus is more efficient.
+## result from the attribute of ibsMat and thus is much more efficient.
 bsMat <- deriv(ibsMat)
-all.equal(bsMat0, bsMat)                # equivalent
+all.equal(bsMat0, bsMat, check.attributes = FALSE) # equivalent
 
 ## plot B-spline basis with their corresponding integrals
 library(graphics)
@@ -82,9 +82,9 @@ De Boor, Carl. (1978). \emph{A practical guide to splines}.
 Vol. 27. New York: Springer-Verlag.
 }
 \seealso{
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{iSpline}} for I-spline basis.
-\code{\link{cSpline}} for C-spline basis.
+\code{\link{predict.ibs}} for evaluation at given (new) values;
+\code{\link{deriv.ibs}} for derivative method.
+\code{\link{bSpline}} for B-splines;
+\code{\link{dbs}} for derivatives of B-splines;
 }
 

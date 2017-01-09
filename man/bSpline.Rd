@@ -61,19 +61,20 @@ ease usage.
 }
 \examples{
 library(splines2)
-x <- seq(0, 1, by = 0.01)
+x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
 
 library(graphics)
-matplot(x, bsMat, type = "l", ylab = "B-spline basis with degree zero")
+matplot(x, bsMat, type = "l", ylab = "Piecewise constant B-spline bases")
 abline(v = knots, lty = 2, col = "gray")
 }
 \seealso{
 \code{\link{predict.bSpline2}} for evaluation at given (new) values;
-\code{\link{ibs}} for integral of B-spline basis;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{iSpline}} for I-spline basis;
-\code{\link{cSpline}} for C-spline basis.
+\code{\link{dbs}}, \code{\link{deriv.bSpline2}} for derivative method;
+\code{\link{ibs}} for integral of B-splines;
+\code{\link{mSpline}} for M-splines;
+\code{\link{iSpline}} for I-splines;
+\code{\link{cSpline}} for C-splines.
 }
 

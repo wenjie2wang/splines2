@@ -64,7 +64,7 @@ evaluated at the values of \code{x}.
 \examples{
 ## Example given in the reference paper by Ramsay (1988)
 library(splines2)
-x <- seq(0, 1, by = .01)
+x <- seq.int(0, 1, by = 0.01)
 knots <- c(0.3, 0.5, 0.6)
 isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
 

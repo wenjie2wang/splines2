@@ -4,6 +4,7 @@
 \alias{print}
 \alias{print.bSpline2}
 \alias{print.cSpline}
+\alias{print.dbs}
 \alias{print.deriv}
 \alias{print.iSpline}
 \alias{print.ibs}
@@ -13,6 +14,8 @@
 \method{print}{bSpline2}(x, ...)
 
 \method{print}{ibs}(x, ...)
+
+\method{print}{dbs}(x, ...)
 
 \method{print}{mSpline}(x, ...)
 
@@ -29,10 +32,10 @@
 \item{...}{Optional argument for future usage.}
 }
 \value{
-NULL.
+Object input.
 }
 \description{
-This function simply prints out the spline basis matrix without unnecessary
-attributes and invisibly returns the object inputted.
+\code{Print} methods that simply print out the spline basis matrix without
+unnecessary attributes.
 }
 

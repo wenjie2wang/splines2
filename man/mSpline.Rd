@@ -2,7 +2,7 @@
 % Please edit documentation in R/mSpline.R
 \name{mSpline}
 \alias{mSpline}
-\title{M-Spline Basis for Polynomial Splines}
+\title{M-Spline Basis and its Derivatives for Polynomial Splines}
 \usage{
 mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
@@ -36,7 +36,7 @@ By default, they are the range of the non-\code{NA} data.  If both
 do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
 
 \item{derivs}{A non-negative integer specifying the order of derivatives
-of M-splines.}
+of M-splines. The default value is \code{0L} for M-spline bases.}
 
 \item{...}{Optional arguments for future usage.}
 }
@@ -47,8 +47,9 @@ Attributes that correspond to the arguments specified are returned
 for usage for \code{\link{predict.mSpline}}.
 }
 \description{
-This function generates the monotone regression spline or simply called
-M-spline basis matrix for a polynomial spline.
+This function generates the monotone regression spline (or simply called
+M-spline) basis matrix for a polynomial spline or its derivatives of given
+order.
 }
 \details{
 It is an implementation of the close form M-spline basis based on
@@ -61,7 +62,7 @@ degree, evaluated at the values of \code{x}.
 \examples{
 ## Example given in the reference paper by Ramsay (1988)
 library(splines2)
-x <- seq(0, 1, by = 0.01)
+x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 
@@ -70,8 +71,11 @@ matplot(x, msMat, type = "l", ylab = "M-spline basis")
 abline(v = knots, lty = 2, col = "gray")
 
 ## derivatives of M-splines
-dmsMat <- mSpline(x, knots = knots, degree = 4L, intercept = TRUE,
-                  derivs = 1L)
+dmsMat <- mSpline(x, knots = knots, degree = 2,
+                  intercept = TRUE, derivs = 1)
+## or using the 'deriv' method
+dmsMat1 <- deriv(msMat)
+all.equal(dmsMat, dmsMat1, check.attributes = FALSE)
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
@@ -79,8 +83,9 @@ Ramsay, J. O. (1988). Monotone regression splines in action.
 }
 \seealso{
 \code{\link{predict.mSpline}} for evaluation at given (new) values;
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{iSpline}} for I-spline basis;
-\code{\link{cSpline}} for C-spline basis.
+\code{\link{deriv.mSpline}} for derivative method;
+\code{\link{bSpline}} for B-splines;
+\code{\link{iSpline}} for I-splines;
+\code{\link{cSpline}} for C-splines.
 }
 
