@@ -25,7 +25,7 @@ test_that("test deriv methods for B-splines related", {
     expect_equivalent(d2bsMat, tmp <- deriv(tmp))
     ## forth derivative of ibs == d3bs
     expect_equivalent(d3bsMat, deriv(d2bsMat))
-    expect_equivalent(d3bsMat, deriv(d1bsMat, 2))
+    expect_equivalent(d3bsMat, deriv(dbsMat, 2))
     expect_equivalent(d3bsMat, deriv(bsMat, 3))
     expect_equivalent(d3bsMat, deriv(ibsMat, 4))
     expect_equivalent(d3bsMat, tmp <- deriv(tmp))
