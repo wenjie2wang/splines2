@@ -12,29 +12,32 @@ output: rmarkdown::html_vignette
 ---
 
 
-The package **splines2** is now designed to be a complementary package on
-splines.  It provides functions constructing a variety of spline bases that are
-not available from the package **splines** shipped with **R**.  Most functions
-have a very similar user interface with the function `bs` in package
+The package **splines2** is designed to be a complementary package on splines.
+It provides functions constructing a variety of spline bases that are not
+available from the package **splines** shipped with **R**.  Most functions have
+a very similar user interface with the function `bs` in package
 **splines**. Currently, **splines2** provides function constructing B-splines,
-monotone splines (M-splines) and its integral (I-splines), convex splines
-(C-splines), and integral of B-splines.  Compared with package **splines**,
-**splines2** allows piecewise constant basis for B-splines and M-splines.
+integral of B-splines, monotone splines (M-splines) and its integral
+(I-splines), convex splines (C-splines), and their derivatives.  Compared with
+package **splines**, **splines2** allows piecewise constant basis for B-splines
+and M-splines. Also, it provides a more user-friendly interface, more consistent
+handling on `NA`'s for derivatives.
 
 
 In this vignette, we introduce the basic usage of the functions provided by
-examples. The details of function syntax and attributes bundled with objects
-returned are available in the package manual.
+examples. The details of function syntax are available in the package manual and
+thus will be not discussed.
 
 
 An outline of the remainder of the vignette is as follows: We first introduce
 the functions constructing the monotone splines ([M-splines](#mSpline)), its
 integral ([I-splines](#iSpline)), and convex splines ([C-splines](#cSpline)).
-After then, toy examples for [integral of B-splines](#ibs)
-and [B-splines](#bSpline) allowing piecewise constant are given.  Last but not
-the least, handy methods of S3 generic function [predict](#predict) for objects
-produced by **splines2** are demonstrated for the evaluation of the same spline
-basis at new values.
+The `deriv` methods for derivatives is demonstrated at the same time.  After
+then, toy examples for [integral and derivative of B-splines](#ibs-dbs)
+and [B-splines](#bSpline), M-splines allowing piecewise constant are given.
+Last but not the least, handy methods of S3 generic function [predict](#predict)
+for objects produced by **splines2** are demonstrated for the evaluation of the
+same spline basis at new values.
 
 
 ## M-splines using `mSpline`{#mSpline}
@@ -51,12 +54,23 @@ library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
 msOut <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-library(graphics) # attach graphics just in case for plots
+library(graphics) # attach graphics (just in case) for plots
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, msOut, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray") # mark internal knots
 ```
 
+The derivative of given order of M-splines can be obtained by specifying a
+positive integer to argument `dervis` of `mSpline`. Also, for an existing
+`mSpline` object generated from function `mSpline`, the `deriv` method can be
+used conveniently.  For example, the first derivative of the M-splines given
+in last example can be obtained equivalently as follows:
+
+```{r mSpline-derivs}
+dmsOut1 <- mSpline(x, knots = knots, degree = 2, intercept = TRUE, derivs = 1)
+dmsOut2 <- deriv(msOut)
+stopifnot(all.equal(dmsOut1, dmsOut2, check.attributes = FALSE))
+```
 
 ## I-splines using `iSpline` {#iSpline}
 
@@ -79,15 +93,16 @@ matplot(x, isOut, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
-In additional, the corresponding M-spline basis matrix is shipped in the
-attribute named `msMat` in the object returned by function `iSpline`. In other
-words, if we need both M-spline bases and their integral splines in model
-fitting, extra function call on `mSpline` should be avoided.
+The corresponding M-spline basis matrix can be obtained easily by the `deriv`
+method, which internally exacts the attribute named `msMat` in the object
+returned by function `iSpline`. In other words, if we need both M-spline bases
+and their integral splines in model fitting, `iSpline` and its `deriv` method
+should be used, while an extra function call of `mSpline` should be avoided for
+a better performance.
 
 ```{r msMat}
-all.equal(msOut, attr(isOut, "msMat")) # 'msMat' attribute for M-splines
+stopifnot(all.equal(msOut, deriv(isOut)))
 ```
-
 
 ## C-splines using `cSpline` {#cSpline}
 
@@ -103,13 +118,12 @@ restricted to be nonnegative as well.
 
 
 Function `cSpline` provides argument `scale` specifying whether scaling on
-C-spline bases is required.  If `scale = TRUE` by default, each C-spline basis
-is scaled to have unit height at right boundary knot. The corresponding I-spline
-(M-spline) bases shipped in attributes `isMat` (`msMat`) are also scaled to the
-same extent and thus serve as the first (second) derivatives of the C-spline
-bases. If `scale = FALSE`, the actual integral of I-spline basis will be
-returned.  The original I-splines integrated and the corresponding M-splines are
-available in attributes named `isMat` and `msMat`, respectively.
+C-spline bases is required.  If `scale = TRUE` (by default), each C-spline basis
+is scaled to have unit height at right boundary knot. For its first (second)
+derivative, the `deriv` method can be used, which internally exacts the
+corresponding I-spline (M-spline) bases shipped in attributes `isMat` (`msMat`)
+scaled to the same extent. The derivatives of higher order can be obtained by
+specifying argument `derivs` in the `deriv` method.
 
 
 ```{r cSpline-scaled, fig.width=7, fig.height=4, fig.cap = "C-splines of degree two with three internal knots."}
@@ -119,30 +133,55 @@ matplot(x, csOut1, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
+If `scale = FALSE`, the actual integral of I-spline basis will be returned.
+Similarly, the corresponding `deriv` method is provided. For derivatives of
+order greater than one, the nested call of `deriv` is supported. However,
+argument `derivs` can be specified if possible for a better performance.  For
+example, the first and second derivatives can be obtained by the following
+equivalent approaches, respectively.
 
-## Integral B-splines using `ibs` {#ibs}
+```{r cSpline-not-scaled}
+csOut2 <- cSpline(x, knots = knots, degree = 2, intercept = TRUE, scale = FALSE)
+stopifnot(all.equal(isOut, deriv(csOut2), check.attributes = FALSE))
+stopifnot(all.equal(msOut, deriv(csOut2, 2), deriv(deriv(csOut2)),
+                    check.attributes = FALSE))
+```
 
-A close-form recursive formula of B-spline integral given by @de1978practical is
-implemented.  One toy example is given as follows:
+
+## Integral and derivative of B-splines using `ibs` and `dbs` {#ibs-dbs}
+
+A close-form recursive formulas of B-spline integral and derivative given by
+@de1978practical are implemented.  Two toy example are given as follows:
 
 ```{r ibs, fig.width=7, fig.height=4, fig.cap="Piecewise linear B-splines (left) and their integrals (right)."}
 ibsOut <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0), mfrow = c(1, 2))
-matplot(x, attr(ibsOut, "bsMat"), type = "l", ylab = "y")
+matplot(x, deriv(ibsOut), type = "l", ylab = "y")
 abline(v = knots, h = 1, lty = 2, col = "gray")
 matplot(x, ibsOut, type = "l", ylab = "y")
 abline(v = knots, h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
 ```
+
+```{r dbs, fig.width=7, fig.height=4, fig.cap="Cubic B-splines (left) and their first derivative (right)."}
+dbsOut <- dbs(x, knots = knots, intercept = TRUE)
+bsOut <- bSpline(x, knots = knots, intercept = TRUE)
+par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0), mfrow = c(1, 2))
+matplot(x, bsOut, type = "l", ylab = "y")
+abline(v = knots, lty = 2, col = "gray")
+matplot(x, dbsOut, type = "l", ylab = "y")
+abline(v = knots, lty = 2, col = "gray")
+```
+
 
 ## B-splines using `bSpline` {#bSpline}
 
 Function `bSpline` provides B-spline bases and allows `degree = 0` for piecewise
 constant bases, which is one simple but handy extension to function `bs` in
 package **splines**. (For positive `degree`, `bSpline` internally call `bs` to
-do the hard work.) Step function or piecewise constant bases are often used in
-practice for a reasonable approximation without any assumption on the form of
-target function. One simple example of B-splines and M-splines of degree zero is
-given as follows:
+do the hard work.) Step function or piecewise constant bases (close on the left
+and open on the right) are often used in practice for a reasonable approximation
+without any assumption on the form of target function. One simple example of
+B-splines and M-splines of degree zero is given as follows:
 
 
 ```{r bSpline, fig.width=7, fig.height=4, fig.cap="B-splines (left) and M-splines (right) of degree zero"}
