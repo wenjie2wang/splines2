@@ -71,6 +71,11 @@ isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
 library(graphics)
 matplot(x, isMat, type = "l", ylab = "I-spline basis")
 abline(v = knots, lty = 2, col = "gray")
+
+## derivative of I-splines is M-spline
+msMat1 <- iSpline(x, knots = knots, degree = 2, derivs = 1)
+msMat2 <- mSpline(x, knots = knots, degree = 2)
+all.equal(msMat1, msMat2)
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
@@ -78,9 +83,8 @@ Ramsay, J. O. (1988). Monotone regression splines in action.
 }
 \seealso{
 \code{\link{predict.iSpline}} for evaluation at given (new) values;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{cSpline}} for C-spline basis;
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{ibs}} for integral of B-spline basis.
+\code{\link{deriv.iSpline}} for deriv method;
+\code{\link{mSpline}} for M-splines;
+\code{\link{cSpline}} for C-splines;
 }
 
