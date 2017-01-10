@@ -29,9 +29,9 @@ test_that("without internal knots", {
 test_that("with two internal knots", {
     x <- seq.int(0, 4, 0.1)
     knots <- c(1, 3)
-    ind01 <- function(x) as.integer(x >= 0 & x < 1)
-    ind13 <- function(x) as.integer(x >= 1 & x < 3)
-    ind34 <- function(x) as.integer(x >= 3 & x <= 4)
+    ind01 <- function(x) as.numeric(x >= 0 & x < 1)
+    ind13 <- function(x) as.numeric(x >= 1 & x < 3)
+    ind34 <- function(x) as.numeric(x >= 3 & x <= 4)
     ## degree = 0
     b1 <- function(x) ind01(x) * x + ind13(x) + ind34(x)
     b2 <- function(x) ind13(x) * (x - 1) + 2 * ind34(x)

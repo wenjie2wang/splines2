@@ -10,7 +10,6 @@ test_that("check outputs", {
     msMat0c <- mSpline(x, knots = knots, degree = 1, intercept = TRUE)
     msMat0d <- mSpline(x, knots = knots, degree = 2)
     msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-
     expect_output(str(msMat0a), "matrix [1:14, 1]", fixed = TRUE)
     expect_equal(sum(is.na(msMat0b)), 12L) # keep NA's as is
     expect_output(str(msMat0b), "matrix [1:14, 1:4]", fixed = TRUE)
@@ -35,27 +34,22 @@ test_that("transformation of constant bases", {
     knots <- c(1, 3)
     m0_1 <- function(x) as.numeric(x < 1)
     m0_2 <- function(x) as.numeric(x >= 1 & x < 3) * 0.5
-    m0_3 <- function(x) as.numeric(x >= 3 & x <= 7) * 0.25
-    expRes <- cbind(m0_1(x), m0_2(x), m0_3(x))
-    msMat <- mSpline(x, knots = knots, degree = 0L, intercept = TRUE)
-    expect_equivalent(msMat, expRes)
+    m0_3 <- function(x) as.numeric(x >= 3 & x < 7) * 0.25
+    expect_equivalent(mSpline(x, knots = knots, degree = 0L, intercept = TRUE),
+                      cbind(m0_1(x), m0_2(x), m0_3(x)))
 })
 
 
 test_that("transformation of linear bases", {
     x <- seq.int(0, 3, 0.1)
     knots <- c(1, 2)
-    m0_1 <- function(x) as.numeric(x < 1) * (2 - 2 * x)
-    m0_2 <- function(x) {
-        as.numeric(x < 1) * x +
-            as.numeric(x >= 1 & x < 2) * (2 - x)
-    }
-    m0_3 <- function(x) {
-        as.numeric(x >= 1 & x < 2) * (x - 1) +
-            as.numeric(x >= 2 & x < 3) * (3 - x)
-    }
-    m0_4 <- function(x) as.numeric(x >= 2 & x <= 3) * (2 * x - 4)
-    expRes <- cbind(m0_1(x), m0_2(x), m0_3(x), m0_4(x))
-    msMat <- mSpline(x, knots = knots, degree = 1L, intercept = TRUE)
-    expect_equivalent(msMat, expRes)
+    ind01 <- function(x) as.numeric(x >= 0 & x < 1)
+    ind12 <- function(x) as.numeric(x >= 1 & x < 2)
+    ind23 <- function(x) as.numeric(x >= 2 & x <= 3)
+    m0_1 <- function(x) ind01(x) * (2 - 2 * x)
+    m0_2 <- function(x) ind01(x) * x + ind12(x) * (2 - x)
+    m0_3 <- function(x) ind12(x) * (x - 1) + ind23(x) * (3 - x)
+    m0_4 <- function(x) ind23(x) * (2 * x - 4)
+    expect_equivalent(mSpline(x, knots = knots, degree = 1L, intercept = TRUE),
+                      cbind(m0_1(x), m0_2(x), m0_3(x), m0_4(x)))
 })
