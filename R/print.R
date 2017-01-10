@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -18,17 +18,17 @@
 ################################################################################
 
 
-##' Print out spline basis matrix
+##' Print Out a Spline Basis Matrix
 ##'
-##' This function simply prints out the spline basis matrix without unnecessary
-##' attributes and invisibly returns the object inputted.
+##' \code{Print} methods that simply print out the spline basis matrix without
+##' unnecessary attributes.
 ##'
 ##' @name print
 ##' @param x Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
 ##' \code{iSpline}, or \code{cSpline}, etc.
 ##' @param ... Optional argument for future usage.
 ##'
-##' @return The object inputted.
+##' @return Object input.
 NULL
 
 
@@ -43,6 +43,14 @@ print.bSpline2 <- function(x, ...) {
 ##' @rdname print
 ##' @export
 print.ibs <- function(x, ...) {
+    print.default(tidyAttr(x, ...))
+    invisible(x)
+}
+
+
+##' @rdname print
+##' @export
+print.dbs <- function(x, ...) {
     print.default(tidyAttr(x, ...))
     invisible(x)
 }
@@ -66,6 +74,14 @@ print.iSpline <- function(x, ...) {
 ##' @rdname print
 ##' @export
 print.cSpline <- function(x, ...) {
+    print.default(tidyAttr(x, ...))
+    invisible(x)
+}
+
+
+##' @rdname print
+##' @export
+print.deriv <- function(x, ...) {
     print.default(tidyAttr(x, ...))
     invisible(x)
 }

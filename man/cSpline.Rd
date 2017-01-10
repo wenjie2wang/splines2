@@ -4,24 +4,23 @@
 \alias{cSpline}
 \title{C-Spline Basis for Polynomial Splines}
 \usage{
-cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-        Boundary.knots = range(x), scale = TRUE, ...)
+cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+        Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they were.}
 
 \item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree"
-(minus one if there is an intercept) knots at suitable quantiles of \code{x}
-(which will ignore missing values).  The default, \code{NULL}, corresponds
-to no inner knots, i.e., "degree - intercept".}
+\code{knots}, then the function chooses "df - degree" (minus one if
+there is an intercept) knots at suitable quantiles of \code{x} (which
+will ignore missing values).  The default, \code{NULL}, corresponds to
+no inner knots, i.e., "degree - intercept".}
 
-\item{knots}{The internal breakpoints that define the spline.  The
-default is \code{NULL}, which results in a basis for ordinary
-polynomial regression.  Typical values are the mean or median
-for one knot, quantiles for more knots.  See also
-\code{Boundary.knots}.}
+\item{knots}{The internal breakpoints that define the spline.  The default
+is \code{NULL}, which results in a basis for ordinary polynomial
+regression.  Typical values are the mean or median for one knot,
+quantiles for more knots.  See also \code{Boundary.knots}.}
 
 \item{degree}{Non-negative integer degree of the piecewise polynomial. The
 default value is 3 for cubic splines.}
@@ -31,24 +30,23 @@ Default is \code{FALSE}.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the C-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
-\code{knots} and \code{Boundary.knots} are supplied, the basis parameters
-do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
+\code{knots} and \code{Boundary.knots} are supplied, the basis
+parameters do not depend on \code{x}. Data can extend beyond
+\code{Boundary.knots}.}
 
 \item{scale}{Logical value (\code{TRUE} by default) indicating whether
 scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
-to have unit height at right boundary knot; the corresponding I-spline and
-M-spline basis matrices shipped in attributes are also scaled to the same
-extent.}
+to have unit height at right boundary knot; the corresponding I-spline
+and M-spline basis matrices shipped in attributes are also scaled to the
+same extent.}
 
 \item{...}{Optional arguments for future usage.}
 }
 \value{
 A matrix of dimension \code{length(x)} by
 \code{df = degree + length(knots)} (plus on if intercept is included).
-Attributes that correspond to the arguments specified are returned
-for usage for \code{\link{predict.cSpline}}. The corresponding M-spline and
-I-spline basis matrices are also returned in attribute named \code{msMat}
-and \code{isMat} respectively.
+The attributes that correspond to the arguments specified are returned
+for the usage of other functions in this package.
 }
 \description{
 This function generates the convex regression spline (called C-spline) basis
@@ -62,14 +60,33 @@ family of piecewise polynomials and their corresponding integrals with the
 specified interior knots and degree, evaluated at the values of \code{x}.
 }
 \examples{
-library(graphics)
-x <- seq(0, 1, by = .01)
+library(splines2)
+x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
-cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
-matplot(x, cMat, type = "l", ylab = "C-spline basis")
+
+### when 'scale = TRUE' (by default)
+csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+
+library(graphics)
+matplot(x, csMat, type = "l", ylab = "C-spline basis")
 abline(v = knots, lty = 2, col = "gray")
-matplot(x, attr(cMat, "isMat"), type = "l", ylab = "scaled I-spline basis")
-matplot(x, attr(cMat, "msMat"), type = "l", ylab = "scaled M-spline basis")
+isMat <- deriv(csMat)
+msMat <- deriv(csMat, derivs = 2)
+matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
+matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
+
+### when 'scale = FALSE'
+csMat <- cSpline(x, knots = knots, degree = 2,
+                 intercept = TRUE, scale = FALSE)
+## the corresponding I-splines and M-splines (with same arguments)
+isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+## or using deriv methods (much more efficient)
+isMat1 <- deriv(csMat)
+msMat1 <- deriv(csMat, derivs = 2)
+## equivalent
+stopifnot(all.equal(isMat, isMat1, check.attributes = FALSE))
+stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
 }
 \references{
 Meyer, M. C. (2008). Inference using shape-restricted regression splines.
@@ -77,9 +94,8 @@ Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 }
 \seealso{
 \code{\link{predict.cSpline}} for evaluation at given (new) values;
-\code{\link{iSpline}} for I-spline basis;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{ibs}} for integral of B-spline basis.
+\code{\link{deriv.cSpline}} for derivatives;
+\code{\link{iSpline}} for I-splines;
+\code{\link{mSpline}} for M-splines.
 }
 

@@ -6,9 +6,10 @@
 \alias{splines2-package}
 \title{splines2: Regression Spline Functions and Classes Too}
 \description{
-A complementary package on splines providing functions constructing
-B-spline, monotone spline (M-spline) and its integral (I-spline), convex
-spline (C-spline), and integral of B-spline basis.  Piecewise constant basis
-is allowed for B-spline and M-spline basis.
+A complementary package on splines providing functions
+constructing B-splines, integral of B-splines, monotone splines
+(M-splines) and its integral (I-splines), convex splines (C-splines),
+and their derivatives of given order. Piecewise constant basis is
+allowed for B-spline and M-spline basis.
 }
 

@@ -2,40 +2,43 @@
 % Please edit documentation in R/iSpline.R
 \name{iSpline}
 \alias{iSpline}
-\title{I-Spline Basis for Polynomial Splines}
+\title{I-Spline Basis for Polynomial Splines or its derivatives}
 \usage{
-iSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-        Boundary.knots = range(x), ...)
+iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+        Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they were.}
 
 \item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree"
-(minus one if there is an intercept) knots at suitable quantiles of \code{x}
-(which will ignore missing values).  The default, \code{NULL}, corresponds
-to no inner knots, i.e., "degree - intercept".}
+\code{knots}, then the function chooses "df - degree" (minus one if
+there is an intercept) knots at suitable quantiles of \code{x} (which
+will ignore missing values).  The default, \code{NULL}, corresponds to
+no inner knots, i.e., "degree - intercept".}
 
-\item{knots}{The internal breakpoints that define the spline.  The
-default is \code{NULL}, which results in a basis for ordinary
-polynomial regression.  Typical values are the mean or median
-for one knot, quantiles for more knots.  See also
-\code{Boundary.knots}.}
+\item{knots}{The internal breakpoints that define the spline.  The default
+is \code{NULL}, which results in a basis for ordinary polynomial
+regression.  Typical values are the mean or median for one knot,
+quantiles for more knots.  See also \code{Boundary.knots}.}
 
 \item{degree}{Non-negative integer degree of the piecewise polynomial. The
-default value is 3 for cubic splines. Note that the degree of I-spline is
-defined to be the degree of the associated M-spline instead of actual
-polynomial degree. In other words, I-spline basis of degree 2 is defined as
-the integral of associated M-spline basis of degree 2.}
+default value is 3 for cubic splines. Note that the degree of I-spline
+is defined to be the degree of the associated M-spline instead of actual
+polynomial degree. In other words, I-spline basis of degree 2 is defined
+as the integral of associated M-spline basis of degree 2.}
 
 \item{intercept}{If \code{TRUE}, an intercept is included in the basis;
 Default is \code{FALSE}.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the I-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
-\code{knots} and \code{Boundary.knots} are supplied, the basis parameters
-do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
+\code{knots} and \code{Boundary.knots} are supplied, the basis
+parameters do not depend on \code{x}. Data can extend beyond
+\code{Boundary.knots}.}
+
+\item{derivs}{A non-negative integer specifying the order of derivatives of
+I-splines.}
 
 \item{...}{Optional arguments for future usage.}
 }
@@ -43,12 +46,11 @@ do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.}
 A matrix of dimension \code{length(x)} by
 \code{df = degree + length(knots)} (plus on if intercept is included).
 Attributes that correspond to the arguments specified are returned
-for usage for \code{\link{predict.iSpline}}. The corresponding M-spline
-basis matrix is also returned in attribute named \code{msMat}.
+for usage of other functions in this package.
 }
 \description{
-This function generates the I-spline (integral of M-spline) basis matrix
-for a polynomial spline.
+This function generates the I-spline (integral of M-spline) basis matrix for
+a polynomial spline or its derivatives of given order..
 }
 \details{
 It is an implementation of the close form I-spline basis based on the
@@ -60,12 +62,19 @@ evaluated at the values of \code{x}.
 }
 \examples{
 ## Example given in the reference paper by Ramsay (1988)
-library(graphics)
-x <- seq(0, 1, by = .01)
+library(splines2)
+x <- seq.int(0, 1, by = 0.01)
 knots <- c(0.3, 0.5, 0.6)
-iMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
-matplot(x, iMat, type = "l", ylab = "I-spline basis")
+isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+
+library(graphics)
+matplot(x, isMat, type = "l", ylab = "I-spline basis")
 abline(v = knots, lty = 2, col = "gray")
+
+## the derivative of I-splines is M-spline
+msMat1 <- iSpline(x, knots = knots, degree = 2, derivs = 1)
+msMat2 <- mSpline(x, knots = knots, degree = 2)
+stopifnot(all.equal(msMat1, msMat2))
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
@@ -73,9 +82,8 @@ Ramsay, J. O. (1988). Monotone regression splines in action.
 }
 \seealso{
 \code{\link{predict.iSpline}} for evaluation at given (new) values;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{cSpline}} for C-spline basis;
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{ibs}} for integral of B-spline basis.
+\code{\link{deriv.iSpline}} for derivative method;
+\code{\link{mSpline}} for M-splines;
+\code{\link{cSpline}} for C-splines;
 }
 

@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016
+##   Copyright (C) 2016-2017
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -30,63 +30,81 @@
 ##' specified interior knots and degree, evaluated at the values of \code{x}.
 ##'
 ##' @usage
-##' cSpline(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-##'         Boundary.knots = range(x), scale = TRUE, ...)
+##' cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+##'         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
+##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned as they were.
+##'     returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
-##' \code{knots}, then the function chooses "df - degree"
-##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
-##' (which will ignore missing values).  The default, \code{NULL}, corresponds
-##' to no inner knots, i.e., "degree - intercept".
-##' @param knots The internal breakpoints that define the spline.  The
-##' default is \code{NULL}, which results in a basis for ordinary
-##' polynomial regression.  Typical values are the mean or median
-##' for one knot, quantiles for more knots.  See also
-##' \code{Boundary.knots}.
+##'     \code{knots}, then the function chooses "df - degree" (minus one if
+##'     there is an intercept) knots at suitable quantiles of \code{x} (which
+##'     will ignore missing values).  The default, \code{NULL}, corresponds to
+##'     no inner knots, i.e., "degree - intercept".
+##' @param knots The internal breakpoints that define the spline.  The default
+##'     is \code{NULL}, which results in a basis for ordinary polynomial
+##'     regression.  Typical values are the mean or median for one knot,
+##'     quantiles for more knots.  See also \code{Boundary.knots}.
 ##' @param degree Non-negative integer degree of the piecewise polynomial. The
-##' default value is 3 for cubic splines.
+##'     default value is 3 for cubic splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##' Default is \code{FALSE}.
+##'     Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the C-spline basis.
-##' By default, they are the range of the non-\code{NA} data.  If both
-##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
-##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
+##'     By default, they are the range of the non-\code{NA} data.  If both
+##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
+##'     parameters do not depend on \code{x}. Data can extend beyond
+##'     \code{Boundary.knots}.
 ##' @param scale Logical value (\code{TRUE} by default) indicating whether
-##' scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
-##' to have unit height at right boundary knot; the corresponding I-spline and
-##' M-spline basis matrices shipped in attributes are also scaled to the same
-##' extent.
+##'     scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
+##'     to have unit height at right boundary knot; the corresponding I-spline
+##'     and M-spline basis matrices shipped in attributes are also scaled to the
+##'     same extent.
 ##' @param ... Optional arguments for future usage.
+##'
 ##' @return A matrix of dimension \code{length(x)} by
 ##' \code{df = degree + length(knots)} (plus on if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage for \code{\link{predict.cSpline}}. The corresponding M-spline and
-##' I-spline basis matrices are also returned in attribute named \code{msMat}
-##' and \code{isMat} respectively.
+##' The attributes that correspond to the arguments specified are returned
+##' for the usage of other functions in this package.
 ##' @references
 ##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 ##' \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
 ##' @examples
-##' library(graphics)
-##' x <- seq(0, 1, by = .01)
+##' library(splines2)
+##' x <- seq.int(0, 1, 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' cMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##' matplot(x, cMat, type = "l", ylab = "C-spline basis")
+##'
+##' ### when 'scale = TRUE' (by default)
+##' csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##'
+##' library(graphics)
+##' matplot(x, csMat, type = "l", ylab = "C-spline basis")
 ##' abline(v = knots, lty = 2, col = "gray")
-##' matplot(x, attr(cMat, "isMat"), type = "l", ylab = "scaled I-spline basis")
-##' matplot(x, attr(cMat, "msMat"), type = "l", ylab = "scaled M-spline basis")
+##' isMat <- deriv(csMat)
+##' msMat <- deriv(csMat, derivs = 2)
+##' matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
+##' matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
+##'
+##' ### when 'scale = FALSE'
+##' csMat <- cSpline(x, knots = knots, degree = 2,
+##'                  intercept = TRUE, scale = FALSE)
+##' ## the corresponding I-splines and M-splines (with same arguments)
+##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' ## or using deriv methods (much more efficient)
+##' isMat1 <- deriv(csMat)
+##' msMat1 <- deriv(csMat, derivs = 2)
+##' ## equivalent
+##' stopifnot(all.equal(isMat, isMat1, check.attributes = FALSE))
+##' stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
-##' \code{\link{iSpline}} for I-spline basis;
-##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{ibs}} for integral of B-spline basis.
+##' \code{\link{deriv.cSpline}} for derivatives;
+##' \code{\link{iSpline}} for I-splines;
+##' \code{\link{mSpline}} for M-splines.
 ##' @importFrom stats stepfun
 ##' @export
-cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
-                    Boundary.knots = range(x), scale = TRUE, ...) {
-
+cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+                    Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
+{
     ## I-spline basis for inputs
     isOut <- iSpline(x = x, df = df, knots = knots, degree = degree,
                      intercept = intercept, Boundary.knots = Boundary.knots)
@@ -106,56 +124,69 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
     nX <- length(x)
 
     ## define knot sequence
-    aKnots <- sort(c(rep(bKnots, ord + 1), knots))
+    aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
 
     ## generate I-spline basis with (degree + 1)
-    augX <- c(x, bKnots[2])
+    augX <- c(x, bKnots[2L])
     isOut1 <- iSpline(x = augX, knots = knots, degree = ord,
                       intercept = FALSE, Boundary.knots = bKnots)
 
     ## function determining j from x
-    foo <- stats::stepfun(x = knots, y = seq(ord, df))
-    j <- as.integer(foo(augX))
+    j <- if (length(knots)) {
+             foo <- stats::stepfun(x = knots, y = seq.int(ord, df))
+             as.integer(foo(augX))
+         } else {
+             rep.int(ord, nX + 1L)
+         }
 
-    ## calculate C-spline basis at each internal knot t_j
-    numer1 <- diff(aKnots, lag = ord + 1)[- 1L]
-    isOutKnots <- iSpline(knots, knots = knots, degree = ord,
-                          intercept = FALSE, Boundary.knots = bKnots)
-    matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
-    augMatKnots <- cbind(seq_len(nKnots) + ord, matKnots)
-    diffKnots <- diff(knots)
-    csKnots <- t(apply(augMatKnots, 1, function(b, idx = seq_len(df)) {
-        j <- b[1L]
-        a <- b[- 1L]
-        js <- seq_len(j)
-        a[- js] <- 0
-        a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j - ord] <- diffKnots[j - ord - 1]
-        a
-    }))
-    idxMat <- lower.tri(csKnots, diag = TRUE)
-    linList <- lapply(seq_len(nKnots), function (ind) {
-        cumsum(csKnots[idxMat[, ind], ind])
-    })
-    csKnots[idxMat] <- do.call("c", linList)
+    numer1 <- diff(aKnots, lag = ord + 1L)[- 1L]
+    ## if there is at least one internal knot
+    if (nKnots) {
+        ## calculate C-spline basis at each internal knot t_j
+        isOutKnots <- iSpline(knots, knots = knots, degree = ord,
+                              intercept = FALSE, Boundary.knots = bKnots)
+        matKnots <- rep(numer1, each = nKnots) * isOutKnots / (ord + 1)
+        augKnots <- seq_len(nKnots) + ord
+        diffKnots <- diff(knots)
+        csKnots <- lapply(seq_len(nKnots), function(i, idx) {
+            ji <- augKnots[i]
+            a <- matKnots[i, ]
+            js <- seq_len(ji)
+            a[- js] <- 0
+            a[js] <- rev(cumsum(rev(a[js])))
+            a[idx < ji - ord] <- diffKnots[ji - ord - 1L]
+            a
+        }, idx = seq_len(df))
+        csKnots <- do.call(rbind, csKnots)
+
+        idxMat <- lower.tri(csKnots, diag = TRUE)
+        linList <- lapply(seq_len(nKnots), function(ind) {
+            cumsum(csKnots[idxMat[, ind], ind])
+        })
+        csKnots[idxMat] <- do.call(c, linList)
+    } else {
+        csKnots <- matrix(0, 1L, df)
+    }
 
     ## calculate C-spline basis at each x
     matX <- rep(numer1, each = nX + 1) * isOut1 / (ord + 1)
-    augMatX <- cbind(j, augX, matX)
-    csOut <- t(apply(augMatX, 1, function(b, idx = seq_len(df)) {
-        j <- b[1L]
-        xx <- b[2L]
-        a <- b[- seq_len(2)]
-        js <- seq_len(j)
+    csOut <- lapply(seq_len(nX + 1L), function(i, idx) {
+        ji <- j[i]
+        xx <- augX[i]
+        a <- matX[i, ]
+        js <- seq_len(ji)
         a[- js] <- 0
         a[js] <- rev(cumsum(rev(a[js])))
-        a[idx < j - ord] <- xx - knots[j - ord] +
-            csKnots[j - ord, idx < j - ord]
+        a[idx < ji - ord] <- xx - knots[ji - ord] +
+            csKnots[ji - ord, idx < ji - ord]
         a
-    }))
-    if (! intercept) csOut <- csOut[, - 1L, drop = FALSE]
-    scl <- csOut[nX + 1, ]
-    csOut <- csOut[- (nX + 1), ]
+    }, idx = seq_len(df))
+    csOut <- do.call(rbind, csOut)
+
+    if (! intercept)
+        csOut <- csOut[, - 1L, drop = FALSE]
+    scl <- unname(csOut[nX + 1L, ])
+    csOut <- csOut[- (nX + 1L), ]
 
     ## mSpline basis matrix
     msMat <- attr(isOut, "msMat")
@@ -173,13 +204,16 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
         csOut <- vec * csOut
         isOut <- vec * isOut
         msMat <- vec * msMat
+        attr(isOut, "scale") <- attr(msMat, "scale") <- scale
+        attr(isOut, "scales") <- attr(msMat, "scales") <- scl
     }
 
     ## output
     attr(isOut, "msMat") <- NULL
     attributes(csOut) <- c(attributes(isOut),
                            list(isMat = isOut, msMat = msMat,
-                                scale = scale))
-    class(csOut) <- c("cSpline", "basis", "matrix")
+                                scale = scale, scales = scl))
+    attr(csOut, "derivs") <- NULL
+    class(csOut) <- c("matrix", "cSpline")
     csOut
 }

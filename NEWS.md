@@ -1,3 +1,30 @@
+# CHANGES IN splines2 VERSION 0.2.4
+
+## NEW FEATURES
+
+* Added function `dbs` generating derivative of given order of B-splines. It is
+  a similar function with `splines::splineDesign`. However, it provides a more
+  user-friendly interface and more consistent handling on `NA`'s.
+
+* Added `deriv` methods for derivatives of given order of any existing
+  **splines2** object that can be generated currently.
+
+## MAJOR CHANGES
+
+* Added argument `derivs` to function `mSpline` and `iSpline` for derivatives.
+
+* Changed all the classes of object generated for a better dispatching on
+  methods.
+
+## MINOR CHANGES
+
+* Added tests for all major functions with the help of package **testthat**.
+
+## BUG FIXES
+
+* Fixed the generation of splines basis without any internal knot.
+
+
 # CHANGES IN splines2 VERSION 0.2.3
 
 ## BUG FIXES

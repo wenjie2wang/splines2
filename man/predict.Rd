@@ -4,6 +4,7 @@
 \alias{predict}
 \alias{predict.bSpline2}
 \alias{predict.cSpline}
+\alias{predict.dbs}
 \alias{predict.iSpline}
 \alias{predict.ibs}
 \alias{predict.mSpline}
@@ -13,6 +14,8 @@
 
 \method{predict}{ibs}(object, newx, ...)
 
+\method{predict}{dbs}(object, newx, ...)
+
 \method{predict}{mSpline}(object, newx, ...)
 
 \method{predict}{iSpline}(object, newx, ...)
@@ -21,8 +24,8 @@
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, or \code{cSpline} having attributes describing \code{knots},
-\code{degree}, etc.}
+\code{iSpline}, or \code{cSpline} having attributes describing
+\code{knots}, \code{degree}, etc.}
 
 \item{newx}{The \code{x} values at which evaluations are required.}
 
@@ -45,17 +48,22 @@ in attributes should not be evaluated by this function if \code{rescale} is
 \code{TRUE}.  See \code{\link{cSpline}} for details.
 }
 \examples{
-x <- seq(0, 1, 0.2)
+library(splines2)
+x <- seq.int(0, 1, 0.2)
 knots <- c(0.3, 0.5, 0.6)
-newX <- seq(0.1, 0.9, 0.2)
+newX <- seq.int(0.1, 0.9, 0.2)
 
-## for B-spline
+## for B-splines
 bsMat <- bSpline(x, knots = knots, degree = 2)
 predict(bsMat, newX)
 
-## for integral of B-spline
+## for integral of B-splines
 ibsMat <- ibs(x, knots = knots, degree = 2)
 predict(ibsMat, newX)
+
+## for derivative of B-splines
+dbsMat <- dbs(x, knots = knots, degree = 2)
+predict(dbsMat, newX)
 
 ## for M-spline
 msMat <- mSpline(x, knots = knots, degree = 2)
@@ -70,10 +78,11 @@ csMat <- cSpline(x, knots = knots, degree = 2)
 predict(csMat, newX)
 }
 \seealso{
-\code{\link{bSpline}} for B-spline basis;
-\code{\link{ibs}} for integral of B-spline basis;
-\code{\link{mSpline}} for M-spline basis;
-\code{\link{iSpline}} for I-spline basis;
-\code{\link{cSpline}} for C-spline basis.
+\code{\link{bSpline}} for B-splines;
+\code{\link{ibs}} for integral of B-splines;
+\code{\link{dbs}} for derivative of B-splines;
+\code{\link{mSpline}} for M-splines;
+\code{\link{iSpline}} for I-splines;
+\code{\link{cSpline}} for C-splines.
 }
 
