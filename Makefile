@@ -4,6 +4,7 @@ dir := $(shell pwd)
 version := $(shell grep "Version" DESCRIPTION | sed "s/Version: //")
 pkg := $(shell grep "Package" DESCRIPTION | sed "s/Package: //")
 tar := $(pkg)_$(version).tar.gz
+tests := $(wildcard tests/testthat/*.R)
 checkLog := $(pkg).Rcheck/00check.log
 citation := inst/CITATION
 yr := $(shell date +"%Y")
@@ -33,7 +34,7 @@ $(tar): $(objects)
 	Rscript -e "library(methods); devtools::document();";
 	R CMD build $(dir)
 
-$(checkLog): $(tar)
+$(checkLog): $(tar) $(tests)
 	R CMD check --as-cran $(tar)
 
 $(vignettes): $(rmd)
