@@ -24,8 +24,8 @@
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, or \code{cSpline} having attributes describing \code{knots},
-\code{degree}, etc.}
+\code{iSpline}, or \code{cSpline} having attributes describing
+\code{knots}, \code{degree}, etc.}
 
 \item{newx}{The \code{x} values at which evaluations are required.}
 

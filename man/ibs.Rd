@@ -11,11 +11,11 @@ ibs(x, df = NULL, knots = NULL, degree = 3, intercept = FALSE,
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they were.}
 
-\item{df}{Degrees of freedom of the B-spline basis to be integrated.
-One can specify \code{df} rather than \code{knots}, then the function
+\item{df}{Degrees of freedom of the B-spline basis to be integrated.  One
+can specify \code{df} rather than \code{knots}, then the function
 chooses "df - degree" (minus one if there is an intercept) knots at
-suitable quantiles of \code{x} (which will ignore missing values).
-The default, \code{NULL}, corresponds to no inner knots, i.e.,
+suitable quantiles of \code{x} (which will ignore missing values).  The
+default, \code{NULL}, corresponds to no inner knots, i.e.,
 "degree - intercept".}
 
 \item{knots}{The internal breakpoints that define the B-spline basis to be
@@ -30,9 +30,9 @@ integrated. The default value is 3 for the integral of cubic B-splines.}
 Default is \code{FALSE}.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the B-spline basis
-to be integrated. By default, they are the range of the non-\code{NA} data.
-If both \code{knots} and \code{Boundary.knots} are supplied, the basis
-parameters do not depend on \code{x}. Data can extend beyond
+to be integrated. By default, they are the range of the non-\code{NA}
+data.  If both \code{knots} and \code{Boundary.knots} are supplied, the
+basis parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
 
 \item{...}{Optional arguments for future usage.}
@@ -66,7 +66,7 @@ bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
 ## or by function deriv (recommended) that directly extracts the existing
 ## result from the attribute of ibsMat and thus is much more efficient.
 bsMat <- deriv(ibsMat)
-all.equal(bsMat0, bsMat, check.attributes = FALSE) # equivalent
+stopifnot(all.equal(bsMat0, bsMat, check.attributes = FALSE)) # equivalent
 
 ## plot B-spline basis with their corresponding integrals
 library(graphics)

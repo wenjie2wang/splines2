@@ -32,8 +32,8 @@
 ##'
 ##' @name predict
 ##' @param object Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-##' \code{iSpline}, or \code{cSpline} having attributes describing \code{knots},
-##' \code{degree}, etc.
+##'     \code{iSpline}, or \code{cSpline} having attributes describing
+##'     \code{knots}, \code{degree}, etc.
 ##' @param newx The \code{x} values at which evaluations are required.
 ##' @param ... Optional argument for future usage.
 ##'
@@ -140,7 +140,7 @@ predict.iSpline <- function(object, newx, ...)
         return(object)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
-                                "intercept")])
+                                "intercept", "derivs")])
     do.call("iSpline", a)
 }
 

@@ -23,42 +23,41 @@
 ##' This function generates the B-spline basis matrix for a polynomial spline.
 ##'
 ##' It is an augmented function of \code{\link[splines]{bs}} in package
-##' \code{splines} for B-spline basis that allows piecewise constant (close
-##' on the left, open on the right expect for the right boundary knot) spline
-##' basis with zero degree. When the argument \code{degree} is greater than
-##' zero, it internally calls \code{\link[splines]{bs}} and generates a basis
-##' matrix for representing the family of piecewise polynomials with the
-##' specified interior knots and degree, evaluated at the values of \code{x}.
-##' The function has the same arguments with \code{\link[splines]{bs}} for
-##' ease usage.
+##' \code{splines} for B-spline basis that allows piecewise constant (close on
+##' the left, open on the right) spline basis with zero degree. When the
+##' argument \code{degree} is greater than zero, it internally calls
+##' \code{\link[splines]{bs}} and generates a basis matrix for representing the
+##' family of piecewise polynomials with the specified interior knots and
+##' degree, evaluated at the values of \code{x}.  The function has the same
+##' arguments with \code{\link[splines]{bs}} for ease usage.
 ##'
 ##' @usage
 ##' bSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 ##'         Boundary.knots = range(x, na.rm = TRUE), ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned as they were.
+##'     returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
-##' \code{knots}, then the function chooses "df - degree"
-##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
-##' (which will ignore missing values).  The default, \code{NULL}, corresponds
-##' to no inner knots, i.e., "degree - intercept". If \code{knots} was
-##' specified, \code{df} specified will be ignored.
-##' @param knots The internal breakpoints that define the spline.  The
-##' default is \code{NULL}, which results in a basis for ordinary
-##' polynomial regression.  Typical values are the mean or median
-##' for one knot, quantiles for more knots.  See also
-##' \code{Boundary.knots}.
+##'     \code{knots}, then the function chooses "df - degree" (minus one if
+##'     there is an intercept) knots at suitable quantiles of \code{x} (which
+##'     will ignore missing values).  The default, \code{NULL}, corresponds to
+##'     no inner knots, i.e., "degree - intercept". If \code{knots} was
+##'     specified, \code{df} specified will be ignored.
+##' @param knots The internal breakpoints that define the spline.  The default
+##'     is \code{NULL}, which results in a basis for ordinary polynomial
+##'     regression.  Typical values are the mean or median for one knot,
+##'     quantiles for more knots.  See also \code{Boundary.knots}.
 ##' @param degree Non-negative integer degree of the piecewise polynomial. The
-##' default value is 3 for cubic splines. Zero degree is allowed for this
-##' function, which is the only difference compared with
-##' \code{\link[splines]{bs}} in package \code{splines}.
+##'     default value is 3 for cubic splines. Zero degree is allowed for this
+##'     function, which is the only difference compared with
+##'     \code{\link[splines]{bs}} in package \code{splines}.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##' Default is \code{FALSE}.
+##'     Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the B-spline basis.
-##' By default, they are the range of the non-\code{NA} data.  If both
-##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
-##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
+##'     By default, they are the range of the non-\code{NA} data.  If both
+##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
+##'     parameters do not depend on \code{x}. Data can extend beyond
+##'     \code{Boundary.knots}.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
@@ -76,7 +75,7 @@
 ##' abline(v = knots, lty = 2, col = "gray")
 ##' @seealso
 ##' \code{\link{predict.bSpline2}} for evaluation at given (new) values;
-##' \code{\link{dbs}}, \code{\link{deriv.bSpline2}} for derivative method;
+##' \code{\link{dbs}}, \code{\link{deriv.bSpline2}} for derivatives;
 ##' \code{\link{ibs}} for integral of B-splines;
 ##' \code{\link{mSpline}} for M-splines;
 ##' \code{\link{iSpline}} for I-splines;
@@ -146,9 +145,9 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         foo(xx)
     })
 
-    ## close on the right boundary knot for the last constant piece
-    if (any(rightX <- xx == Boundary.knots[2L]))
-        bsMat[rightX, df] <- 1
+    ## close on the right boundary knot for the last constant piece?
+    ## if (any(rightX <- xx == Boundary.knots[2L]))
+    ##     bsMat[rightX, df] <- 1
 
     ## make sure bsMat is a matrix
     if (! is.matrix(bsMat))

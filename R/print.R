@@ -18,7 +18,7 @@
 ################################################################################
 
 
-##' Print out spline basis matrix
+##' Print Out a Spline Basis Matrix
 ##'
 ##' \code{Print} methods that simply print out the spline basis matrix without
 ##' unnecessary attributes.

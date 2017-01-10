@@ -20,43 +20,48 @@
 
 ##' Derivative of B-Spline Basis for Polynomial Splines
 ##'
-##' This function produces the derivative of B-splines.
+##' This function produces the derivative of given order of B-splines.  It is an
+##' implementation of the close form derivative of B-spline basis based on
+##' recursion relation.  At knots, the derivative is defined to be the right
+##' derivative.
 ##'
-##' It is an implementation of the close form derivative of B-spline basis
-##' based on recursion relation.  Internally, it calls \code{\link{bSpline}}
-##' and generates a basis matrix for representing the family of piecewise
-##' polynomials and their corresponding derivative with the specified
-##' interior knots and degree, evaluated at the values of \code{x}. The
-##' function \code{splineDesign} in \code{splines} package can also be used to
-##' calculate derivative of B-splines.
+##' The function is similar with \code{\link[splines]{splineDesign}}. However,
+##' it provides a more user-friendly interface, a more considerate \code{NA}'s
+##' handling.  Internally, it calls \code{\link{bSpline}} and generates a basis
+##' matrix for representing the family of piecewise polynomials and their
+##' corresponding derivative with the specified interior knots and degree,
+##' evaluated at the values of \code{x}. The function \code{splineDesign} in
+##' \code{splines} package can also be used to calculate derivative of
+##' B-splines.
 ##'
 ##' @usage
 ##' dbs(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
 ##'     intercept = FALSE, Boundary.knots = range(x, na.rm = TRUE), ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned as they were.
-##' @param derivs A positive integer specifying the order of derivative.
-##' By default, it is \code{1L} for the first derivative.
-##' @param df Degrees of freedom of the B-spline basis to be integrated.
-##' One can specify \code{df} rather than \code{knots}, then the function
-##' chooses "df - degree" (minus one if there is an intercept) knots at
-##' suitable quantiles of \code{x} (which will ignore missing values).
-##' The default, \code{NULL}, corresponds to no inner knots, i.e.,
-##' "degree - intercept".
+##'     kept and returned as they were.
+##' @param derivs A positive integer specifying the order of derivative.  By
+##'     default, it is \code{1L} for the first derivative.
+##' @param df Degrees of freedom of the B-spline basis to be differentiated.
+##'     One can specify \code{df} rather than \code{knots}, then the function
+##'     chooses "df - degree" (minus one if there is an intercept) knots at
+##'     suitable quantiles of \code{x} (which will ignore missing values).  The
+##'     default, \code{NULL}, corresponds to no inner knots, i.e.,
+##'     "degree - intercept".
 ##' @param knots The internal breakpoints that define the B-spline basis to be
-##' integrated.  The default is \code{NULL}, which results in a basis for
-##' ordinary polynomial regression.  Typical values are the mean or median
-##' for one knot, quantiles for more knots.  See also \code{Boundary.knots}.
+##'     differentiated.  The default is \code{NULL}, which results in a basis
+##'     for ordinary polynomial regression.  Typical values are the mean or
+##'     median for one knot, quantiles for more knots.  See also
+##'     \code{Boundary.knots}.
 ##' @param degree Non-negative integer degree of the piecewise polynomial to be
-##' integrated. The default value is 3 for the integral of cubic B-splines.
+##'     differentiated. The default value is 3 for the integral of cubic
+##'     B-splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##' Default is \code{FALSE}.
+##'     Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the B-spline basis
-##' to be integrated. By default, they are the range of the non-\code{NA} data.
-##' If both \code{knots} and \code{Boundary.knots} are supplied, the basis
-##' parameters do not depend on \code{x}. Data can extend beyond
-##' \code{Boundary.knots}.
+##'     to be differentiated. By default, they are the range of the
+##'     non-\code{NA} data.  If both \code{knots} and \code{Boundary.knots} are
+##'     supplied, the basis parameters do not depend on \code{x}.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
@@ -68,22 +73,22 @@
 ##' Vol. 27. New York: Springer-Verlag.
 ##' @examples
 ##' library(splines2)
-##' x <- seq(0, 1, 0.01)
+##' x <- seq.int(0, 1, 0.01)
 ##' knots <- c(0.2, 0.4, 0.7)
 ##' ## the second derivative of cubic B-splines with three internal knots
 ##' dMat <- dbs(x, derivs = 2L, knots = knots, intercept = TRUE)
 ##'
-##' ## compare with the results from package splines
+##' ## compare with the results from splineDesign
 ##' ord <- attr(dMat, "degree") + 1L
 ##' bKnots <- attr(dMat, "Boundary.knots")
 ##' aKnots <- c(rep(bKnots[1L], ord), knots, rep(bKnots[2L], ord))
 ##' res <- splines::splineDesign(aKnots, x = x, derivs = 2L)
-##' all.equal(res, dMat, check.attributes = FALSE)
+##' stopifnot(all.equal(res, dMat, check.attributes = FALSE))
 ##' @seealso
-##' \code{\link{bSpline}} for B-spline basis;
-##' \code{\link{mSpline}} for M-spline basis;
-##' \code{\link{iSpline}} for I-spline basis.
-##' \code{\link{cSpline}} for C-spline basis.
+##' \code{\link{predict.dbs}} for evaluation at given (new) values;
+##' \code{\link{deriv.dbs}} for derivative method;
+##' \code{\link{bSpline}} for B-splines;
+##' \code{\link{ibs}} for integral of B-splines.
 ##' @importFrom stats quantile
 ##' @export
 dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,

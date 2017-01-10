@@ -9,7 +9,7 @@
 \alias{print.iSpline}
 \alias{print.ibs}
 \alias{print.mSpline}
-\title{Print out spline basis matrix}
+\title{Print Out a Spline Basis Matrix}
 \usage{
 \method{print}{bSpline2}(x, ...)
 

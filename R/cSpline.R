@@ -34,30 +34,30 @@
 ##'         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##' returned as they were.
+##'     returned as they were.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
-##' \code{knots}, then the function chooses "df - degree"
-##' (minus one if there is an intercept) knots at suitable quantiles of \code{x}
-##' (which will ignore missing values).  The default, \code{NULL}, corresponds
-##' to no inner knots, i.e., "degree - intercept".
-##' @param knots The internal breakpoints that define the spline.  The
-##' default is \code{NULL}, which results in a basis for ordinary
-##' polynomial regression.  Typical values are the mean or median
-##' for one knot, quantiles for more knots.  See also
-##' \code{Boundary.knots}.
+##'     \code{knots}, then the function chooses "df - degree" (minus one if
+##'     there is an intercept) knots at suitable quantiles of \code{x} (which
+##'     will ignore missing values).  The default, \code{NULL}, corresponds to
+##'     no inner knots, i.e., "degree - intercept".
+##' @param knots The internal breakpoints that define the spline.  The default
+##'     is \code{NULL}, which results in a basis for ordinary polynomial
+##'     regression.  Typical values are the mean or median for one knot,
+##'     quantiles for more knots.  See also \code{Boundary.knots}.
 ##' @param degree Non-negative integer degree of the piecewise polynomial. The
-##' default value is 3 for cubic splines.
+##'     default value is 3 for cubic splines.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##' Default is \code{FALSE}.
+##'     Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the C-spline basis.
-##' By default, they are the range of the non-\code{NA} data.  If both
-##' \code{knots} and \code{Boundary.knots} are supplied, the basis parameters
-##' do not depend on \code{x}. Data can extend beyond \code{Boundary.knots}.
+##'     By default, they are the range of the non-\code{NA} data.  If both
+##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
+##'     parameters do not depend on \code{x}. Data can extend beyond
+##'     \code{Boundary.knots}.
 ##' @param scale Logical value (\code{TRUE} by default) indicating whether
-##' scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
-##' to have unit height at right boundary knot; the corresponding I-spline and
-##' M-spline basis matrices shipped in attributes are also scaled to the same
-##' extent.
+##'     scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
+##'     to have unit height at right boundary knot; the corresponding I-spline
+##'     and M-spline basis matrices shipped in attributes are also scaled to the
+##'     same extent.
 ##' @param ... Optional arguments for future usage.
 ##'
 ##' @return A matrix of dimension \code{length(x)} by
@@ -72,7 +72,7 @@
 ##' x <- seq.int(0, 1, 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
 ##'
-##' ### when 'scale = TRUE' (default)
+##' ### when 'scale = TRUE' (by default)
 ##' csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##'
 ##' library(graphics)
@@ -93,12 +93,11 @@
 ##' isMat1 <- deriv(csMat)
 ##' msMat1 <- deriv(csMat, derivs = 2)
 ##' ## equivalent
-##' all.equal(isMat, isMat1, check.attributes = FALSE)
-##' all.equal(msMat, msMat1, check.attributes = FALSE)
-##'
+##' stopifnot(all.equal(isMat, isMat1, check.attributes = FALSE))
+##' stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
 ##' @seealso
 ##' \code{\link{predict.cSpline}} for evaluation at given (new) values;
-##' \code{\link{deriv.cSpline}} for derivative of splines;
+##' \code{\link{deriv.cSpline}} for derivatives;
 ##' \code{\link{iSpline}} for I-splines;
 ##' \code{\link{mSpline}} for M-splines.
 ##' @importFrom stats stepfun
@@ -134,7 +133,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
     ## function determining j from x
     j <- if (length(knots)) {
-             foo <- stats::stepfun(x = knots, y = seq(ord, df))
+             foo <- stats::stepfun(x = knots, y = seq.int(ord, df))
              as.integer(foo(augX))
          } else {
              rep.int(ord, nX + 1L)
