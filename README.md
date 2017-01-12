@@ -1,16 +1,17 @@
 # splines2
 
 The R package **splines2** is a complementary package on splines providing
-functions constructing B-splines, monotone splines (M-splines) and its integral
-(I-splines), convex splines (C-splines), and integral of B-splines. Piecewise
-constant basis of degree zero is allowed for B-spline and M-spline basis.
+functions constructing B-splines, integral of B-splines, monotone splines
+(M-splines) and its integral (I-splines), convex splines (C-splines), and their
+derivatives of given order. Piecewise constant basis is allowed for B-spline and
+M-spline basis.
 
 
 ## Installation of CRAN Version
 
 [![CRAN_Status_Badge][1]][3]
 [![Build Status][4]][5]
-[![codecov](codecov-master)](codecov)
+[![codecov][codecov-master]][codecov]
 [![Downloads from the RStudio CRAN mirror][2]][3]
 
 You can install the released version from [CRAN][3].
@@ -23,7 +24,7 @@ install.packages("splines2")
 ## Development
 
 [![Build Status][6]][5]
-[![codecov](codecov-master)](codecov)
+[![codecov][codecov-dev]][codecov]
 
 
 The latest version of package is under development at [GitHub][7] in branch
@@ -34,7 +35,7 @@ installing it with the help of **devtools** by
 devtools::install_github("wenjie2wang/splines2", ref = "dev")
 ```
 
-or cloning this reposotory to local and install by makefile as follows:
+or cloning this repository to local and install by *Makefile* as follows:
 
 ```
 git clone https://github.com/wenjie2wang/splines2.git
