@@ -10,7 +10,7 @@ constant basis of degree zero is allowed for B-spline and M-spline basis.
 
 [![CRAN_Status_Badge][1]][3]
 [![Build Status][4]][5]
-[![codecov](codecov-master)](codecov)
+[![codecov][codecov-master]][codecov]
 [![Downloads from the RStudio CRAN mirror][2]][3]
 
 You can install the released version from [CRAN][3].
@@ -23,7 +23,7 @@ install.packages("splines2")
 ## Development
 
 [![Build Status][6]][5]
-[![codecov](codecov-master)](codecov)
+[![codecov][codecov-dev]](codecov)
 
 
 The latest version of package is under development at [GitHub][7] in branch
