@@ -1,7 +1,7 @@
 citHeader("To cite splines2 in publications use:")
 
 citEntry(entry = "Manual",
-         Title = "{splines2}: {R}egression Spline Functions and Classes Too}",
+         Title = "{splines2}: {R}egression Spline Functions and Classes Too",
          Author = personList(as.person("Wenjie Wang"),
                              as.person("Jun Yan")),
          Note =	"{R} package version 0.2.4.9000",
