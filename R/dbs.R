@@ -192,7 +192,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
 
     ## recover dimension after sapply
     if (! is.matrix(dMat))
-        dMat <- matrix(dMat, ncol = df)
+        dMat <- matrix(dMat, nrow = 1L)
 
     ## take care of intercept
     if (! intercept)
