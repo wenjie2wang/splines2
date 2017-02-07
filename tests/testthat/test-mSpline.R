@@ -10,12 +10,21 @@ test_that("check outputs", {
     msMat0c <- mSpline(x, knots = knots, degree = 1, intercept = TRUE)
     msMat0d <- mSpline(x, knots = knots, degree = 2)
     msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+    msMat0f <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
+                       Boundary.knots = c(0, 1), derivs = 1)
+    msMat0g <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
+                       Boundary.knots = c(0, 1), derivs = 2)
+    msMat0h <- mSpline(0.1, knots = knots, degree = 2,
+                       Boundary.knots = c(0, 1), derivs = 3)
     expect_output(str(msMat0a), "matrix [1:14, 1]", fixed = TRUE)
     expect_equal(sum(is.na(msMat0b)), 12L) # keep NA's as is
     expect_output(str(msMat0b), "matrix [1:14, 1:4]", fixed = TRUE)
     expect_output(str(msMat0c), "matrix [1:14, 1:5]", fixed = TRUE)
     expect_output(str(msMat0d), "matrix [1:14, 1:5]", fixed = TRUE)
     expect_output(str(msMat0e), "matrix [1:14, 1:6]", fixed = TRUE)
+    expect_output(str(msMat0f), "matrix [1, 1:6]", fixed = TRUE)
+    expect_output(str(msMat0g), "matrix [1, 1:6]", fixed = TRUE)
+    expect_output(str(msMat0h), "matrix [1, 1:5]", fixed = TRUE)
     expect_error(mSpline(x, degree = 0),
                  "'intercept' has to be 'TRUE'", fixed = TRUE)
     expect_warning(mSpline(x, df = 1, knots = 0.5, degree = 0),
