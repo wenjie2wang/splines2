@@ -98,4 +98,3 @@ Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 \code{\link{iSpline}} for I-splines;
 \code{\link{mSpline}} for M-splines.
 }
-

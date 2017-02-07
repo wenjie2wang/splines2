@@ -29,4 +29,3 @@ Generate the Bernstein spline basis matrix given a degree of freedom
 \references{
 \url{https://people.sc.fsu.edu/~jburkardt/c_src/bernstein_polynomial/bernstein_polynomial.html}
 }
-

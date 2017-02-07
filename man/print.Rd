@@ -3,12 +3,12 @@
 \name{print}
 \alias{print}
 \alias{print.bSpline2}
-\alias{print.cSpline}
-\alias{print.dbs}
-\alias{print.deriv}
-\alias{print.iSpline}
 \alias{print.ibs}
+\alias{print.dbs}
 \alias{print.mSpline}
+\alias{print.iSpline}
+\alias{print.cSpline}
+\alias{print.deriv}
 \title{Print Out a Spline Basis Matrix}
 \usage{
 \method{print}{bSpline2}(x, ...)
@@ -38,4 +38,3 @@ Object input.
 \code{Print} methods that simply print out the spline basis matrix without
 unnecessary attributes.
 }
-
