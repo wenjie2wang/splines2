@@ -10,15 +10,15 @@
 |language |(EN)                         |
 |collate  |en_US.UTF-8                  |
 |tz       |America/New_York             |
-|date     |2017-01-10                   |
+|date     |2017-02-09                   |
 
 ## Packages
 
-|package   |*  |version |date       |source                               |
-|:---------|:--|:-------|:----------|:------------------------------------|
-|knitr     |   |1.15.1  |2016-11-22 |cran (@1.15.1)                       |
-|rmarkdown |   |1.3     |2016-12-21 |cran (@1.3)                          |
-|splines2  |   |0.2.4   |2017-01-10 |local (wenjie2wang/splines2@3138842) |
+|package   |*  |version |date       |source                          |
+|:---------|:--|:-------|:----------|:-------------------------------|
+|knitr     |   |1.15.1  |2016-11-22 |cran (@1.15.1)                  |
+|rmarkdown |   |1.3     |2016-12-21 |cran (@1.3)                     |
+|splines2  |   |0.2.5   |2017-02-10 |local (wenjie2wang/splines2@NA) |
 
 # Check results
 1 packages
