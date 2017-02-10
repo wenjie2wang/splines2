@@ -3,11 +3,11 @@
 \name{deriv}
 \alias{deriv}
 \alias{deriv.bSpline2}
-\alias{deriv.cSpline}
 \alias{deriv.dbs}
-\alias{deriv.iSpline}
 \alias{deriv.ibs}
 \alias{deriv.mSpline}
+\alias{deriv.iSpline}
+\alias{deriv.cSpline}
 \title{Derivative of Splines}
 \usage{
 \method{deriv}{bSpline2}(expr, derivs = 1L, ...)
@@ -96,4 +96,3 @@ Vol. 27. New York: Springer-Verlag.
 \code{\link{iSpline}} for I-splines;
 \code{\link{cSpline}} for C-splines.
 }
-

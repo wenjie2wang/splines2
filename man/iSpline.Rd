@@ -86,4 +86,3 @@ Ramsay, J. O. (1988). Monotone regression splines in action.
 \code{\link{mSpline}} for M-splines;
 \code{\link{cSpline}} for C-splines;
 }
-

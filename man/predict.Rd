@@ -3,11 +3,11 @@
 \name{predict}
 \alias{predict}
 \alias{predict.bSpline2}
-\alias{predict.cSpline}
-\alias{predict.dbs}
-\alias{predict.iSpline}
 \alias{predict.ibs}
+\alias{predict.dbs}
 \alias{predict.mSpline}
+\alias{predict.iSpline}
+\alias{predict.cSpline}
 \title{Evaluate a Spline Basis}
 \usage{
 \method{predict}{bSpline2}(object, newx, ...)
@@ -85,4 +85,3 @@ predict(csMat, newX)
 \code{\link{iSpline}} for I-splines;
 \code{\link{cSpline}} for C-splines.
 }
-

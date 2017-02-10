@@ -188,6 +188,9 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
             facVec[idx[1L]] * tmpMat[, 1L, drop = FALSE] -
                 facVec[idx[2L]] * tmpMat[, 2L, drop = FALSE]
         })
+        ## recover dimension after sapply
+        if (! is.matrix(dMat))
+            dMat <- matrix(dMat, nrow = 1L)
     }
 
     ## take care of intercept

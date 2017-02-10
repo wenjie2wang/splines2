@@ -208,16 +208,18 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     if (derivs == 1L) {
         dMat <- attr(expr, "isMat")
         attr(dMat, "msMat") <- attr(expr, "msMat")
-        class(dMat) <- c("matrix", "iSpline", "deriv")
+        class(dMat) <- c("matrix", "iSpline")
     } else if (derivs == 2L) {
         dMat <- attr(expr, "msMat")
-        class(dMat) <- c("matrix", "mSpline", "deriv")
+        class(dMat) <- c("matrix", "mSpline")
     } else {
         dMat <- deriv.mSpline(expr = expr, derivs = derivs - 2L, ...)
-        if (scale)
-            dMat <- dMat * rep(scl, each = nrow(dMat))
         attr(dMat, "derivs") <- derivs - 2L
     }
+
+    ## keep scale
+    if (scale)
+        dMat <- dMat * rep(scl, each = nrow(dMat))
 
     attr(dMat, "scale") <- scale
     attr(dMat, "scales") <- scl

@@ -76,4 +76,3 @@ abline(v = knots, lty = 2, col = "gray")
 \code{\link{iSpline}} for I-splines;
 \code{\link{cSpline}} for C-splines.
 }
-

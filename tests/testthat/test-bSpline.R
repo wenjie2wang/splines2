@@ -3,7 +3,7 @@ context("Testing bSpline")
 
 test_that("call splines::bs", {
     x <- c(NA, seq.int(0, 0.5, 0.1), NA, seq.int(0.6, 1, 0.1), NA)
-    knots <- c(0.25, 0.5, 0.75)
+    knots <- c(0.25, NA, 0.5, 0.75, NA)
     ## for ease of testing
     bsFun <- function(x, df, knots, degree, intercept, Boundary.knots) {
         funCall <- match.call()
@@ -24,7 +24,7 @@ test_that("call splines::bs", {
 
 test_that("outputs of piecewise constant bases", {
     x <- c(NA, seq.int(0, 0.5, 0.1), NA, seq.int(0.6, 1, 0.1), NA)
-    knots <- c(0.25, 0.5, 0.75)
+    knots <- c(0.25, NA, 0.5, 0.75, NA)
     ## for testing splines with degree zero
     bsMat0a <- bSpline(x, degree = 0, intercept = TRUE)
     bsMat0b <- bSpline(x, df = 5, degree = 0)
@@ -59,7 +59,7 @@ test_that("outputs of piecewise constant bases", {
 test_that("two internal knots, degree 0", {
     ## test with two internal knots
     x <- seq.int(0, 5, 0.1)
-    knots <- c(1, 3)
+    knots <- c(1, NA, 3)
     b0_1 <- function(x) as.numeric(x >= 0 & x < 1)
     b0_2 <- function(x) as.numeric(x >= 1 & x < 3)
     b0_3 <- function(x) as.numeric(x >= 3 & x < 5)

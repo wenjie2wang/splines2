@@ -87,4 +87,3 @@ Vol. 27. New York: Springer-Verlag.
 \code{\link{bSpline}} for B-splines;
 \code{\link{ibs}} for integral of B-splines.
 }
-

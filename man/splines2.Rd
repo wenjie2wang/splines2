@@ -12,4 +12,3 @@ constructing B-splines, integral of B-splines, monotone splines
 and their derivatives of given order. Piecewise constant basis is
 allowed for B-spline and M-spline basis.
 }
-
