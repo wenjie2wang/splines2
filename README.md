@@ -35,14 +35,6 @@ installing it with the help of **devtools** by
 devtools::install_github("wenjie2wang/splines2", ref = "dev")
 ```
 
-or cloning this repository to local and install by *Makefile* as follows:
-
-```
-git clone https://github.com/wenjie2wang/splines2.git
-cd splines2
-make install
-```
-
 
 ## Get Started
 
