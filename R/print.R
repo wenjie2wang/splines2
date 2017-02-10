@@ -79,14 +79,6 @@ print.cSpline <- function(x, ...) {
 }
 
 
-##' @rdname print
-##' @export
-print.deriv <- function(x, ...) {
-    print.default(tidyAttr(x, ...))
-    invisible(x)
-}
-
-
 ### internal function ==========================================================
 ## remove all attributes but dim and dimnames
 tidyAttr <- function(x, ...) {
