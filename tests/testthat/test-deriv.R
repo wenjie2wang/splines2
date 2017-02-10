@@ -83,4 +83,6 @@ test_that("test deriv methods for M-splines related", {
     ## simple test for scale = TRUE
     csMat <- cSpline(x, knots = knots)
     expect_equivalent(deriv(csMat, 2), deriv(deriv(csMat)))
+    expect_output(str(deriv(csMat)),
+                  "matrix [1:12, 1:6]", fixed = TRUE)
 })
