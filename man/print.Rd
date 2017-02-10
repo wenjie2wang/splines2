@@ -8,7 +8,6 @@
 \alias{print.mSpline}
 \alias{print.iSpline}
 \alias{print.cSpline}
-\alias{print.deriv}
 \title{Print Out a Spline Basis Matrix}
 \usage{
 \method{print}{bSpline2}(x, ...)
@@ -22,8 +21,6 @@
 \method{print}{iSpline}(x, ...)
 
 \method{print}{cSpline}(x, ...)
-
-\method{print}{deriv}(x, ...)
 }
 \arguments{
 \item{x}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
