@@ -181,15 +181,6 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
         dMat <- deriv.mSpline(expr = expr, derivs = derivs - 1L, ...)
     }
 
-    ## for possible scaling of objects from deriv.cSpline
-    scale <- attr(expr, "scale")
-    scl <- attr(expr, "scales")
-    if (! is.null(scale) && scale) {
-        dMat <- dMat * rep(scl, each = nrow(dMat))
-        attr(dMat, "scale") <- scale
-        attr(dMat, "scales") <- scl
-    }
-
     class(dMat) <- c("matrix", "mSpline")
     dMat
 }
@@ -217,11 +208,5 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
         attr(dMat, "derivs") <- derivs - 2L
     }
 
-    ## keep scale
-    if (scale)
-        dMat <- dMat * rep(scl, each = nrow(dMat))
-
-    attr(dMat, "scale") <- scale
-    attr(dMat, "scales") <- scl
     dMat
 }

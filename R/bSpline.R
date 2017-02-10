@@ -91,14 +91,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         stop("'degree' must be a nonnegative integer.")
 
     ## sort and remove possible NA's in internal knots if exist
-    if (length(knots)) {
-        tmp <- is.na(knots)
-        if (any(tmp)) {
-            omit <- seq_along(knots)[tmp]
-            knots <- knots[- omit]
-        }
+    if (length(knots))
         knots <- sort.int(knots)
-    }
 
     ## take care of possible NA's in `x` for `Boundary.knots`
     nax <- is.na(x)

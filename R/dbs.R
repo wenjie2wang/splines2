@@ -104,14 +104,8 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
         stop("'degree' must be a nonnegative integer.")
 
     ## sort and remove possible NA's in internal knots if exist
-    if (length(knots)) {
-        knots <- sort(knots)
-        tmp <- is.na(knots)
-        if (any(tmp)) {
-            omit <- seq_along(knots)[tmp]
-            knots <- knots[- omit]
-        }
-    }
+    if (length(knots))
+        knots <- sort.int(knots)
 
     ## take care of possible NA's in `x`
     nax <- is.na(x)
