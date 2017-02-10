@@ -9,7 +9,8 @@
 * Fixed evaluation of derivatives of M-splines for a single value. Thanks Ina
   Jazic for reporting the bug and providing possible fix.
 
-* Fixed `deriv.cSpline` method when `scale = TRUE`.
+* Fixed `deriv.cSpline` method for derivatives of order greater than two when
+  `scale = TRUE`.
 
 
 # CHANGES IN splines2 VERSION 0.2.4
