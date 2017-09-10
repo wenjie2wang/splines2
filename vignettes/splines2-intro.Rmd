@@ -12,16 +12,16 @@ output: rmarkdown::html_vignette
 ---
 
 
-The package **splines2** is designed to be a complementary package on splines.
+The package **splines2** is designed to be a supplementary package on splines.
 It provides functions constructing a variety of spline bases that are not
 available from the package **splines** shipped with **R**.  Most functions have
 a very similar user interface with the function `bs` in package
 **splines**. Currently, **splines2** provides function constructing B-splines,
 integral of B-splines, monotone splines (M-splines) and its integral
 (I-splines), convex splines (C-splines), and their derivatives.  Compared with
-package **splines**, **splines2** allows piecewise constant basis for B-splines
-and M-splines. Also, it provides a more user-friendly interface, more consistent
-handling on `NA`'s for derivatives.
+package **splines**, **splines2** allows piecewise constant basis for B-splines.
+Also, it provides a more user-friendly function interface, more consistent
+handling on `NA`'s for spline derivatives.
 
 
 In this vignette, we introduce the basic usage of the functions provided by

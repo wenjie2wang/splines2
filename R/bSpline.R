@@ -94,20 +94,31 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     if (length(knots))
         knots <- sort.int(knots)
 
-    ## take care of possible NA's in `x` for `Boundary.knots`
+    ## take care of possible NA's in `x`
     nax <- is.na(x)
     if (all(nax))
-        stop("'x' cannot be all NA's!")
-    ## if (missing(Boundary.knots) || is.null(Boundary.knots) ||
-    ##     any(is.na(Boundary.knots)))
-    ##     Boundary.knots <- range(x[! nax])
+        stop("The 'x' cannot be all NA's!")
 
     ## call splines::bs for non-zero degree
     if (degree) {
         out <- splines::bs(x = x, df = df, knots = knots,
                            degree = degree, intercept = intercept,
                            Boundary.knots = Boundary.knots)
+        ## add "x" to attributes
         attr(out, "x") <- x
+        ## throw out warning if any internal knot outside boundary.knots
+        knots <- attr(out, "knots")
+        Boundary.knots <- attr(out, "Boundary.knots")
+        ## any internal knots placed outside of boundary knots?
+        outside_knots <- (knots <= Boundary.knots[1L]) |
+            (knots >= Boundary.knots[2L])
+        if (any(outside_knots))
+            warning(wrapMessages(
+                "Some internal knots were not placed",
+                "inside of boundary knots,",
+                "which may cause \nill-conditioned bases!"
+            ))
+        ## update classes
         class(out) <- c("matrix", "bSpline2")
         return(out)
     }
@@ -117,17 +128,33 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     xx <- if (nas <- any(nax)) x[! nax] else x
 
     ## check whether any of x is outside of the boundary knots
-    outside <- rep(FALSE, length(xx))
+    outside_x <- rep(FALSE, length(xx))
     if (! missing(Boundary.knots)) {
-        Boundary.knots <- sort(Boundary.knots[seq_len(2)])
-        outside <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])
+        if (! is.numeric(Boundary.knots) || any(is.na(Boundary.knots)))
+            stop(wrapMessages(
+                "The 'Boundary.knots' has to be",
+                "numeric vector of length 2",
+                "with no missing value."
+            ))
+        if (length(Boundary.knots) > 2) {
+            warning(wrapMessages(
+                "Only the first two values",
+                "in the 'Boundary.knots' were used."
+            ))
+            Boundary.knots <- Boundary.knots[seq_len(2L)]
+        }
+        Boundary.knots <- sort.int(Boundary.knots)
+        outside_x <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])
     }
-    if (any(outside))
-        warning(paste("Some 'x' values beyond boundary knots",
-                      "may cause ill-conditioned bases."))
+    if (any(outside_x))
+        warning(wrapMessages(
+            "Some 'x' values beyond boundary knots",
+            "may cause ill-conditioned bases!"
+        ))
 
     ## prepare inputs for piecewise constant bases
-    inputs <- pieceConst(x = xx[! outside], df = df, knots = knots)
+    inputs <- pieceConst(x = xx[! outside_x], df = df, knots = knots,
+                         Boundary.knots = Boundary.knots)
     knots <- inputs$knots
     ## potentially, df is a bad name since df is also a function in stats
     df <- inputs$df
@@ -152,8 +179,10 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         if (length(knots))
             bsMat <- bsMat[, - 1L, drop = FALSE]
         else
-            stop(paste("'intercept' has to be 'TRUE'",
-                       "for one-piece const basis."))
+            stop(wrapMessages(
+                "The 'intercept' has to be 'TRUE'",
+                "for one-piece const basis."
+            ))
     }
 
     ## keep NA's as is
@@ -180,7 +209,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
 ### internal function ==========================================================
 ##' @importFrom stats quantile
-pieceConst <- function (x, df, knots)
+pieceConst <- function (x, df, knots, Boundary.knots)
 {
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
     ## ind == 1: knots is not NULL; df <- length(knots) + 1
@@ -193,9 +222,23 @@ pieceConst <- function (x, df, knots)
                          length.out = tknots)[- c(1L, tknots)]
         knots <- as.numeric(stats::quantile(x, quans))
     } else {
+        ## any internal knots placed outside of boundary knots?
+        outside_knots <- (knots <= Boundary.knots[1L]) |
+            (knots >= Boundary.knots[2L])
+        ## remove internal knots placed outside of boundary knots
+        if (any(outside_knots)) {
+            knots <- knots[! outside_knots]
+            df0 <- df0 - sum(outside_knots)
+            warning(wrapMessages(
+                "Only internal knots placed inside",
+                "boundary knots were considered."
+            ), call. = FALSE)
+        }
         if (! is.null(df) && df != df0)
-            warning(sprintf(paste("'df' specified was not appropriate.",
-                                  "Used %d instead."), df0))
+            warning(wrapMessages(
+                "The 'df' specified was not appropriate.",
+                sprintf("Used 'df = %d' instead.", df0)
+            ),  call. = FALSE)
     }
     list(df = df0, knots = knots)
 }

@@ -1,6 +1,6 @@
 # splines2
 
-The R package **splines2** is a complementary package on splines providing
+The R package **splines2** is a supplementary package on splines providing
 functions constructing B-splines, integral of B-splines, monotone splines
 (M-splines) and its integral (I-splines), convex splines (C-splines), and their
 derivatives of given order. Piecewise constant basis is allowed for B-spline and
