@@ -1,3 +1,11 @@
+# CHANGES IN splines2 VERSION 0.2.6
+
+## MINOR CHANGES
+
+* Added checks for any internal knot incorrectly placed outside of the boundary
+  knots and added warnings for users' reference.
+
+
 # CHANGES IN splines2 VERSION 0.2.5
 
 ## MINOR CHANGES
@@ -86,5 +94,3 @@
 
 * The first version of **splines2** providing functions constructing M-spline,
   I-spline, and integral of B-spline basis.
-
-
