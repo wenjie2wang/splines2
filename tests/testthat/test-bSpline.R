@@ -48,6 +48,10 @@ test_that("outputs of piecewise constant bases", {
                    "'df' specified was not appropriate.", fixed = TRUE)
     expect_warning(bSpline(x, df = 3, knots = 0.5, degree = 0),
                    "'df' specified was not appropriate.", fixed = TRUE)
+    expect_warning(bSpline(x, knots = c(- 1, 0.5), degree = 0),
+                   "internal knots placed inside", fixed = TRUE)
+    expect_warning(bSpline(x, knots = 0.5, degree = 0, Boundary.knots = 0:2),
+                   "the first two values", fixed = TRUE)
     expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
                            Boundary.knots = c(0, 1)),
                    "beyond boundary knots", fixed = TRUE)

@@ -12,7 +12,7 @@ test_that("check output dimension", {
                   "matrix [1:21, 1:6]", fixed = TRUE)
     expect_output(str(cSpline(x, knots = knots, intercept = TRUE)),
                   "matrix [1:21, 1:7]", fixed = TRUE)
-    expect_error(str(cSpline(x, degree = 0)))
+    expect_error(cSpline(x, degree = 0))
     expect_output(str(cSpline(x, degree = 0, intercept = TRUE)),
                   "matrix [1:21, 1]", fixed = TRUE)
     expect_output(str(cSpline(x, degree = 1)),
