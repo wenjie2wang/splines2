@@ -232,13 +232,13 @@ pieceConst <- function (x, df, knots, Boundary.knots)
             warning(wrapMessages(
                 "Only internal knots placed inside",
                 "boundary knots were considered."
-            ))
+            ), call. = FALSE)
         }
         if (! is.null(df) && df != df0)
             warning(wrapMessages(
                 "The 'df' specified was not appropriate.",
                 sprintf("Used 'df = %d' instead.", df0)
-            ))
+            ),  call. = FALSE)
     }
     list(df = df0, knots = knots)
 }
