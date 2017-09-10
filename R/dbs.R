@@ -127,8 +127,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
     if (! is.null(df)) {
         df0 <- length(knots) + degree + inter
         if (tmp <- (df < df0))
-            warning(gettextf("'df' was too small; have used %d",
-                             df0), domain = NA)
+            warning(sprintf("'df' was too small; have used %d", df0))
 
         df <- ifelse(tmp, df0, df)
         nKnots <- df - degree - inter
