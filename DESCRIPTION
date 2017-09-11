@@ -1,18 +1,20 @@
 Package: splines2
-Title: Regression Spline Functions and Classes Too
+Title: Regression Spline Functions and Classes
 Version: 0.2.6
-Date: 2017-09-10
+Date: 2017-09-11
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wenjie.2.wang@uconn.edu",
            role = c("aut", "cre")),
     person(given = "Jun", family = "Yan", role = "aut")
     )
-Description: A supplementary package on splines providing functions
-    constructing B-splines, integral of B-splines, monotone splines
+Description: Constructs B-splines and its integral, monotone splines
     (M-splines) and its integral (I-splines), convex splines (C-splines),
     and their derivatives of given order. Piecewise constant basis is
-    allowed for B-spline and M-spline basis.
+    allowed for B-splines and M-splines. See
+    De Boor (1978) <doi: 10.1002/zamm.19800600129>,
+    Ramsay (1988) <doi: 10.1214/ss/1177012761>, and
+    Meyer (2008) <doi: 10.1214/08-AOAS167> for more information.
 Imports:
     splines,
     stats
