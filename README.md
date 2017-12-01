@@ -28,7 +28,7 @@ install.packages("splines2")
 
 
 The latest version of package is under development at [GitHub][github-url] in
-branch 'dev'.  If it is able to pass the building check by Travis CI, you may
+branch `dev`.  If it is able to pass the building check by Travis CI, you may
 consider installing it with the help of **remotes** by
 
 ```R
@@ -37,13 +37,12 @@ remotes::install_github("wenjie2wang/splines2", ref = "dev")
 ```
 
 
-## Get Started
+## Getting Started
 
-- [Package vignettes][vignette] provides a quick demonstration for the basic
-  usage of main functions.
+- [Package vignette][vignette] provides a quick demonstration for the basic
+  usage of the main functions.
 
-- [Package help manual][pdf-manual] is also available for more technical
-  details.
+- [Package help manual][pdf-manual] is available for more technical details.
 
 
 ## License

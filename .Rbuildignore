@@ -15,5 +15,6 @@
 ^COPYRIGHT$
 ^LICENSE$
 ^TODO\.org$
+^docs$
 
 R/bernsteinSpl.R
