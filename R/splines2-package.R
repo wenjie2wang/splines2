@@ -18,13 +18,17 @@
 ################################################################################
 
 
-##' splines2: Regression Spline Functions and Classes Too
+##' splines2: Regression Spline Functions and Classes
 ##'
-##' A complementary package on splines providing functions
-##' constructing B-splines, integral of B-splines, monotone splines
-##' (M-splines) and its integral (I-splines), convex splines (C-splines),
-##' and their derivatives of given order. Piecewise constant basis is
-##' allowed for B-spline and M-spline basis.
+##' A supplementary package on splines providing functions constructing
+##' B-splines, integral of B-splines, monotone splines (M-splines) and its
+##' integral (I-splines), convex splines (C-splines), and their derivatives of
+##' given order. Piecewise constant basis is allowed for B-spline and M-spline
+##' basis.
+##'
+##' It is named after the package \pkg{splines}: ``Regression Spline Functions
+##' and Classes''. The tailing number two is simply ``too'' (and by no means for
+##' the generation two).
 ##'
 ##' @docType package
 ##' @name splines2

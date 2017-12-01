@@ -51,18 +51,18 @@ test_that("B-splines derivatives with df given", {
     expect_warning(dbs(x, 1, df = 2, intercept = TRUE))
     expect_warning(dbs(x, 1, df = 3, intercept = TRUE))
     expect_warning(dbs(x, 2, df = 3, intercept = TRUE))
-    expect_output(str(dbs(x, 1, df = 1, degree = 0, intercept = TRUE)),
-                  "matrix [1:21, 1]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 4)),
-                  "matrix [1:21, 1:4]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 4, intercept = TRUE)),
-                  "matrix [1:21, 1:4]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 5)),
-                  "matrix [1:21, 1:5]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 5, intercept = TRUE)),
-                  "matrix [1:21, 1:5]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 5, degree = 0)),
-                  "matrix [1:21, 1:5]", fixed = TRUE)
-    expect_output(str(dbs(x, 1, df = 5, degree = 0, intercept = TRUE)),
-                  "matrix [1:21, 1:5]", fixed = TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 1, degree = 0, intercept = TRUE),
+                             21L, 1L, warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 4), 21L, 4L,
+                             warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 4, intercept = TRUE),
+                             21L, 4L, warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 5),
+                             21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 5, intercept = TRUE),
+                             21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 5, degree = 0),
+                             21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+    expect_equal(isNumMatrix(dbs(x, 1, df = 5, degree = 0, intercept = TRUE),
+                             21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
 })
