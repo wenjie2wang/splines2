@@ -1,18 +1,25 @@
-# CHANGES IN splines2 VERSION 0.2.6
+# splines2 0.2.7
 
-## MINOR CHANGES
+## Minor Changes
+
+* Updated tests for R development version.
+
+
+# splines2 0.2.6
+
+## Minor changes
 
 * Added checks for any internal knot incorrectly placed outside of the boundary
   knots and added warnings for users' reference.
 
 
-# CHANGES IN splines2 VERSION 0.2.5
+# splines2 0.2.5
 
-## MINOR CHANGES
+## Minor changes
 
 * Added more tests and increased code coverage.
 
-## BUG FIXES
+## Bug fixes
 
 * Fixed evaluation of derivatives of M-splines for a single value. Thanks Ina
   Jazic for reporting the bug and providing possible fix.
@@ -21,9 +28,9 @@
   `scale = TRUE`.
 
 
-# CHANGES IN splines2 VERSION 0.2.4
+# splines2 0.2.4
 
-## NEW FEATURES
+## New features
 
 * Added function `dbs` generating derivative of given order of B-splines. It is
   a similar function with `splines::splineDesign`. However, it provides a more
@@ -32,39 +39,39 @@
 * Added `deriv` methods for derivatives of given order of any existing
   **splines2** object that can be generated currently.
 
-## MAJOR CHANGES
+## Major changes
 
 * Added argument `derivs` to function `mSpline` and `iSpline` for derivatives.
 
 * Changed all the classes of object generated for a better dispatching on
   methods.
 
-## MINOR CHANGES
+## Minor changes
 
 * Added tests for all major functions with the help of package **testthat**.
 
-## BUG FIXES
+## Bug fixes
 
 * Fixed the generation of splines without any internal knot.
 
 
-# CHANGES IN splines2 VERSION 0.2.3
+# splines2 0.2.3
 
-## BUG FIXES
+## Bug fixes
 
 * Fixed one-piece constant basis for M-splines.
 
 
-# CHANGES IN splines2 VERSION 0.2.2
+# splines2 0.2.2
 
-## BUG FIXES
+## Bug fixes
 
 * Fixed the NA's handling in all the functions constructing spline bases.
 
 
-# CHANGES IN splines2 VERSION 0.2.1
+# splines2 0.2.1
 
-## NEW FEATURES
+## New features
 
 * Added function `bSpline` generating B-spline basis allowing zero degree or
   piecewise constant basis based on function `bs` in package **splines**.
@@ -78,19 +85,19 @@
 
 * Added `print` methods for all **splines2** objects developed so far.
 
-## MAJOR CHANGES
+## Major changes
 
 * Improved the function `iSpline` to construct I-spline basis directly from
   B-spline basis instead of M-spline basis.
 
-## MINOR CHANGES
+## Minor changes
 
 * Updated all CRAN URL to a canonical form suggested.
 
 
-# CHANGES IN splines2 VERSION 0.1.0
+# splines2 0.1.0
 
-## NEW FEATURES
+## New features
 
 * The first version of **splines2** providing functions constructing M-spline,
   I-spline, and integral of B-spline basis.

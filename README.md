@@ -39,10 +39,8 @@ remotes::install_github("wenjie2wang/splines2", ref = "dev")
 
 ## Getting Started
 
-- [Package vignette][vignette] provides a quick demonstration for the basic
-  usage of the main functions.
-
-- [Package help manual][pdf-manual] is available for more technical details.
+The [package vignette][vignette] provides a quick demonstration for the basic
+usage of the main functions.
 
 
 ## License
@@ -64,8 +62,7 @@ FITNESS FOR A PARTICULAR PURPOSE.
 [travis-master]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=master
 [travis-dev]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=dev
 [github-url]: https://github.com/wenjie2wang/splines2
-[vignette]: https://wenjie-stat.me/splines2/
-[pdf-manual]: https://wenjie-stat.me/splines2/splines2-manual.pdf
+[vignette]: https://wenjie-stat.me/splines2/articles/splines2-intro.html
 [gpl]: https://www.gnu.org/licenses/
 [codecov]: https://codecov.io/gh/wenjie2wang/splines2
 [codecov-master]: https://codecov.io/gh/wenjie2wang/splines2/branch/master/graph/badge.svg
