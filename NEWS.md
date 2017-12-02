@@ -1,6 +1,6 @@
 # splines2 0.2.7
 
-## Minor Changes
+## Minor changes
 
 * Updated tests for R development version.
 
