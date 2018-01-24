@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2017
+##   Copyright (C) 2016-2018
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -130,7 +130,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     ## check whether any of x is outside of the boundary knots
     outside_x <- rep(FALSE, length(xx))
     if (! missing(Boundary.knots)) {
-        if (! is.numeric(Boundary.knots) || any(is.na(Boundary.knots)))
+        if (! is.numeric(Boundary.knots) || anyNA(Boundary.knots))
             stop(wrapMessages(
                 "The 'Boundary.knots' has to be",
                 "numeric vector of length 2",
