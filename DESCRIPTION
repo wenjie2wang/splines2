@@ -1,7 +1,7 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
-Version: 0.2.7.9000
-Date: 2018-01-24
+Version: 0.2.7.9001
+Date: 2018-05-31
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wenjie.2.wang@uconn.edu",
