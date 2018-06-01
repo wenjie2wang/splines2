@@ -1,3 +1,11 @@
+# splines2 0.2.7.9001
+
+## Bug fixes
+
+* Fixed inconsistency of argument `df` for piece-wise constant bases when
+  `knots = NULL`.
+
+
 # splines2 0.2.7
 
 ## Minor changes
