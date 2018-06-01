@@ -100,7 +100,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         stop("The 'x' cannot be all NA's!")
 
     ## call splines::bs for non-zero degree
-    if (degree) {
+    if (degree > 0) {
         out <- splines::bs(x = x, df = df, knots = knots,
                            degree = degree, intercept = intercept,
                            Boundary.knots = Boundary.knots)
@@ -153,8 +153,10 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
         ))
 
     ## prepare inputs for piecewise constant bases
-    inputs <- pieceConst(x = xx[! outside_x], df = df, knots = knots,
-                         Boundary.knots = Boundary.knots)
+    inputs <- pieceConst(x = xx[! outside_x],
+                         df = df, knots = knots,
+                         Boundary.knots = Boundary.knots,
+                         intercept = intercept)
     knots <- inputs$knots
     ## potentially, df is a bad name since df is also a function in stats
     df <- inputs$df
@@ -176,13 +178,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
     ## include intercept or not
     if (! intercept) {
-        if (length(knots))
-            bsMat <- bsMat[, - 1L, drop = FALSE]
-        else
-            stop(wrapMessages(
-                "The 'intercept' has to be 'TRUE'",
-                "for one-piece const basis."
-            ))
+        bsMat <- bsMat[, - 1L, drop = FALSE]
     }
 
     ## keep NA's as is
@@ -209,13 +205,40 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
 
 ### internal function ==========================================================
 ##' @importFrom stats quantile
-pieceConst <- function (x, df, knots, Boundary.knots)
+pieceConst <- function (x, df, knots, Boundary.knots, intercept)
 {
     ind <- (is.null(df) + 1L) * is.null(knots) + 1L
-    ## ind == 1: knots is not NULL; df <- length(knots) + 1
-    ## ind == 2: df is not NULL, while knots is NULL; number of piece <- df
-    ## ind == 3: both df and knots are NULL; one-piece constant, df <- 1
-    df0 <- switch(ind, length(knots) + 1L, as.integer(df), 1L)
+    ## ind == 1: knots is not NULL;
+    ##   df0 = df = length(knots) + 1L
+
+    ## ind == 2: df is not NULL, while knots is NULL;
+    ## df := function input
+    ##   number of knots = df - as.integer(intercept) from `splines::bs`
+    ## df0 := DF of spline bases from splines definition
+    ##      = length(knots) + 1L
+    ##      = df - as.integer(intercept) + 1L
+
+    ## ind == 3: both df and knots are NULL; one-piece constant
+    ##   number of knots = 0, df0 = 1
+
+    int_intercept <- as.integer(intercept)
+    df0 <- switch(ind,
+                  length(knots) + 1L,
+                  {
+                      int_df <- as.integer(df)
+                      if (int_df < 1L)
+                          stop("The spepcified `df` must be positive!",
+                               call. = FALSE)
+                      int_df - int_intercept + 1L
+                  },
+                  {
+                      if (! intercept)
+                          stop(wrapMessages(
+                              "The 'intercept' has to be 'TRUE'",
+                              "for one-piece const basis."
+                          ), call. = FALSE)
+                      1L
+                  })
     if (ind > 1L) {
         tknots <- df0 + 1L
         quans <- seq.int(from = 0, to = 1,
@@ -230,8 +253,8 @@ pieceConst <- function (x, df, knots, Boundary.knots)
             knots <- knots[! outside_knots]
             df0 <- df0 - sum(outside_knots)
             warning(wrapMessages(
-                "Only internal knots placed inside",
-                "boundary knots were considered."
+                "Only internal knots placed inside of",
+                "the boundary knots were considered."
             ), call. = FALSE)
         }
         if (! is.null(df) && df != df0)

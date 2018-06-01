@@ -33,8 +33,8 @@ test_that("outputs of piecewise constant bases", {
     bsMat0e <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
     expect_equal(isNumMatrix(bsMat0a, 14L, 1L,
                              warn_na = FALSE, error_na = FALSE), TRUE)
-    expect_equal(sum(is.na(bsMat0b)), 12L) # keep NA's as is
-    expect_equal(isNumMatrix(bsMat0b, 14L, 4L,
+    expect_equal(sum(is.na(bsMat0b)), 15L) # keep NA's as is
+    expect_equal(isNumMatrix(bsMat0b, 14L, 5L,
                              warn_na = FALSE, error_na = FALSE), TRUE)
     expect_equal(isNumMatrix(bsMat0c, 14L, 5L,
                              warn_na = FALSE, error_na = FALSE), TRUE)
