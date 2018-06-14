@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script>
 <script src="pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Citation and Authors" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">splines2</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="index.html">splines2</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.7.9001</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -73,7 +83,7 @@
   </ul>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -85,6 +95,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -92,22 +103,21 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="contents col-md-9">
-
     <div class="page-header">
       <h1>Citation</h1>
     </div>
 
-    <p>Wang W and Yan J (2017).
+    <p>Wang W, Yan J (2018).
 <em>splines2: Regression Spline Functions and Classes</em>.
-R package version 0.2.7, <a href="https://CRAN.R-project.org/package=splines2">https://CRAN.R-project.org/package=splines2</a>. 
+R package version 0.2.7.9001, <a href="https://CRAN.R-project.org/package=splines2">https://CRAN.R-project.org/package=splines2</a>. 
 </p>
     <pre>@Manual{,
   title = {{splines2}: {R}egression Spline Functions and Classes},
   author = {Wenjie Wang and Jun Yan},
-  note = {{R} package version 0.2.7},
-  year = {2017},
+  note = {{R} package version 0.2.7.9001},
+  year = {2018},
   url = {https://CRAN.R-project.org/package=splines2},
 }</pre>
     <div class="page-header">
@@ -116,11 +126,11 @@ R package version 0.2.7, <a href="https://CRAN.R-project.org/package=splines2">h
 
     <ul class="list-unstyled">
       <li>
-        <p><strong>Wenjie Wang</strong>. Author, maintainer.
+        <p><strong>Wenjie Wang</strong>. Author, maintainer. 
         </p>
       </li>
       <li>
-        <p><strong>Jun Yan</strong>. Author.
+        <p><strong>Jun Yan</strong>. Author. 
         </p>
       </li>
     </ul>
@@ -136,11 +146,14 @@ R package version 0.2.7, <a href="https://CRAN.R-project.org/package=splines2">h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
