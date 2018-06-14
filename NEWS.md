@@ -1,4 +1,4 @@
-# splines2 0.2.7.9001
+# splines2 0.2.8
 
 ## Bug fixes
 
