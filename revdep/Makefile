@@ -6,4 +6,4 @@ check:
 
 .PHONY: clean
 clean:
-	rm -rf *.rds *.Rout *.Rhistory checks
+	rm -rf *.rds *.Rout *.Rhistory checks .cache.rds

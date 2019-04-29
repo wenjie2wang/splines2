@@ -1,11 +1,12 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
 Version: 0.2.8.9000
-Date: 2018-06-14
+Date: 2019-04-28
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wenjie.2.wang@uconn.edu",
-           role = c("aut", "cre")),
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-0363-3180")),
     person(given = "Jun", family = "Yan", role = "aut")
     )
 Description: Constructs B-splines and its integral, monotone splines
@@ -28,4 +29,5 @@ VignetteBuilder: knitr
 License: GPL (>= 3)
 URL: https://github.com/wenjie2wang/splines2
 BugReports: https://github.com/wenjie2wang/splines2/issues
-RoxygenNote: 6.0.1
+Encoding: UTF-8
+RoxygenNote: 6.1.1
