@@ -76,11 +76,11 @@ csMat <- cSpline(x, knots = knots, scale = FALSE)
 isMat <- iSpline(x, knots = knots)
 stopifnot(all.equal(isMat, deriv(csMat), check.attributes = FALSE))
 
-msMat <- mSpline(x, knots = knots)
+msMat <- mSpline(x, knots = knots, intercept = TRUE)
 stopifnot(all.equal(msMat, deriv(isMat), deriv(csMat, 2),
                     deriv(deriv(csMat)), check.attributes = FALSE))
 
-dmsMat <- mSpline(x, knots = knots, derivs = 1)
+dmsMat <- mSpline(x, knots = knots, intercept = TRUE, derivs = 1)
 stopifnot(all.equal(dmsMat, deriv(msMat), deriv(isMat, 2),
                     deriv(deriv(isMat)), deriv(csMat, 3),
                     deriv(deriv(deriv(csMat))), check.attributes = FALSE))

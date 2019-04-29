@@ -41,8 +41,8 @@ test_that("test deriv methods for B-splines related", {
 
 test_that("test deriv methods for M-splines related", {
     ## only test for scale == FALSE
-    csMat <- cSpline(x, knots = knots, scale = FALSE)
-    isMat <- iSpline(x, knots = knots)
+    csMat <- cSpline(x, knots = knots, scale = FALSE, intercept = FALSE)
+    isMat <- iSpline(x, knots = knots, intercept = FALSE)
     msMat <- mSpline(x, knots = knots)
     ms1Mat <- mSpline(x, knots = knots, derivs = 1)
     ms2Mat <- mSpline(x, knots = knots, derivs = 2)
@@ -82,7 +82,7 @@ test_that("test deriv methods for M-splines related", {
     expect_equivalent(ms4Mat, tmp <- deriv(tmp))
     ## simple test for scale = TRUE
     csMat <- cSpline(x, knots = knots, degree = 4)
-    expect_equal(isNumMatrix(deriv(csMat), 12L, 7L,
+    expect_equal(isNumMatrix(deriv(csMat), 12L, 8L,
                              warn_na = FALSE, error_na = FALSE), TRUE)
     expect_equivalent(deriv(csMat, 2), deriv(deriv(csMat)))
     expect_equivalent(deriv(csMat, 3), deriv(deriv(csMat, 2)))

@@ -26,8 +26,8 @@ quantiles for more knots.  See also \code{Boundary.knots}.}
 default value is 3 for cubic splines. Zero degree is allowed for
 piecewise constant basis.}
 
-\item{intercept}{If \code{TRUE}, an intercept is included in the basis;
-Default is \code{FALSE}.}
+\item{intercept}{If \code{TRUE}, all bases will be returned. The default
+value is \code{FALSE}.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the M-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
@@ -47,9 +47,9 @@ Attributes that correspond to the arguments specified are returned
 for usage of other functions in this package.
 }
 \description{
-This function generates the monotone regression spline (or simply called
-M-spline) basis matrix for a polynomial spline or its derivatives of given
-order.
+This function generates the basis matrix of the regression spline called
+M-spline or its derivatives of given order.  For monotone regression,
+\code{\link{iSpline}} should be used.
 }
 \details{
 It is an implementation of the close form M-spline basis based on

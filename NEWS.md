@@ -4,6 +4,12 @@
 
 * Made piece-wise constant bases continuous at right boundary knot for
   consistency with spline bases of non-zero degrees.
+
+* Changed the default value of argument `intercept` in function `iSpline` and
+  `cSpline` to `TRUE` for a complete set of spline bases in shape-restricted
+  regression.
+
+
 # splines2 0.2.8
 
 ## Bug fixes

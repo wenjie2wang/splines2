@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2018
+##   Copyright (C) 2016-2019
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -20,9 +20,9 @@
 
 ##' M-Spline Basis for Polynomial Splines and its Derivatives
 ##'
-##' This function generates the monotone regression spline (or simply called
-##' M-spline) basis matrix for a polynomial spline or its derivatives of given
-##' order.
+##' This function generates the basis matrix of the regression spline called
+##' M-spline or its derivatives of given order.  For monotone regression,
+##' \code{\link{iSpline}} should be used.
 ##'
 ##' It is an implementation of the close form M-spline basis based on
 ##' relationship between M-spline basis and B-spline basis.  In fact, M-spline
@@ -49,8 +49,8 @@
 ##' @param degree Non-negative integer degree of the piecewise polynomial. The
 ##'     default value is 3 for cubic splines. Zero degree is allowed for
 ##'     piecewise constant basis.
-##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##'     Default is \code{FALSE}.
+##' @param intercept If \code{TRUE}, all bases will be returned. The default
+##'     value is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the M-spline basis.
 ##'     By default, they are the range of the non-\code{NA} data.  If both
 ##'     \code{knots} and \code{Boundary.knots} are supplied, the basis

@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2018
+##   Copyright (C) 2016-2019
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -31,7 +31,7 @@
 ##' evaluated at the values of \code{x}.
 ##'
 ##' @usage
-##' iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+##' iSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = TRUE,
 ##'         Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
@@ -50,8 +50,10 @@
 ##'     is defined to be the degree of the associated M-spline instead of actual
 ##'     polynomial degree. In other words, I-spline basis of degree 2 is defined
 ##'     as the integral of associated M-spline basis of degree 2.
-##' @param intercept If \code{TRUE}, an intercept is included in the basis;
-##'     Default is \code{FALSE}.
+##' @param intercept If \code{TRUE} by default, all spline bases are included.
+##'     Notice that when using I-Spline for monotonic regression,
+##'     \code{intercept = TRUE} should be set even when an intercept term is
+##'     considered additional to the spline bases in the model.
 ##' @param Boundary.knots Boundary points at which to anchor the I-spline basis.
 ##'     By default, they are the range of the non-\code{NA} data.  If both
 ##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
@@ -73,7 +75,7 @@
 ##' library(splines2)
 ##' x <- seq.int(0, 1, by = 0.01)
 ##' knots <- c(0.3, 0.5, 0.6)
-##' isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+##' isMat <- iSpline(x, knots = knots, degree = 2)
 ##'
 ##' library(graphics)
 ##' matplot(x, isMat, type = "l", ylab = "I-spline basis")
@@ -81,7 +83,7 @@
 ##'
 ##' ## the derivative of I-splines is M-spline
 ##' msMat1 <- iSpline(x, knots = knots, degree = 2, derivs = 1)
-##' msMat2 <- mSpline(x, knots = knots, degree = 2)
+##' msMat2 <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 ##' stopifnot(all.equal(msMat1, msMat2))
 ##' @seealso
 ##' \code{\link{predict.iSpline}} for evaluation at given (new) values;
@@ -90,7 +92,7 @@
 ##' \code{\link{cSpline}} for C-splines;
 ##' @importFrom stats stepfun
 ##' @export
-iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = TRUE,
                     Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
 {
     ## check order of derivative

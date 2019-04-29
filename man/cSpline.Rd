@@ -4,7 +4,7 @@
 \alias{cSpline}
 \title{C-Spline Basis for Polynomial Splines}
 \usage{
-cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
+cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = TRUE,
         Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
 }
 \arguments{
@@ -25,8 +25,10 @@ quantiles for more knots.  See also \code{Boundary.knots}.}
 \item{degree}{Non-negative integer degree of the piecewise polynomial. The
 default value is 3 for cubic splines.}
 
-\item{intercept}{If \code{TRUE}, an intercept is included in the basis;
-Default is \code{FALSE}.}
+\item{intercept}{If \code{TRUE} by default, all spline bases are included.
+Notice that when using C-Spline for shape-restricted regression,
+\code{intercept = TRUE} should be set even when an intercept term is
+considered additional to the spline bases in the model.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the C-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
@@ -65,7 +67,7 @@ x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 
 ### when 'scale = TRUE' (by default)
-csMat <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
+csMat <- cSpline(x, knots = knots, degree = 2)
 
 library(graphics)
 matplot(x, csMat, type = "l", ylab = "C-spline basis")
@@ -76,12 +78,11 @@ matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
 matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
 
 ### when 'scale = FALSE'
-csMat <- cSpline(x, knots = knots, degree = 2,
-                 intercept = TRUE, scale = FALSE)
+csMat <- cSpline(x, knots = knots, degree = 2, scale = FALSE)
 ## the corresponding I-splines and M-splines (with same arguments)
-isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
+isMat <- iSpline(x, knots = knots, degree = 2)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-## or using deriv methods (much more efficient)
+## or using deriv methods (more efficient)
 isMat1 <- deriv(csMat)
 msMat1 <- deriv(csMat, derivs = 2)
 ## equivalent
