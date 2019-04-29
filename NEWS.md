@@ -1,3 +1,9 @@
+# splines2 0.2.9
+
+## Minor changes
+
+* Made piece-wise constant bases continuous at right boundary knot for
+  consistency with spline bases of non-zero degrees.
 # splines2 0.2.8
 
 ## Bug fixes

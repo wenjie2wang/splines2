@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2018
+##   Copyright (C) 2016-2019
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -162,7 +162,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
     df <- inputs$df
 
     ## piecewise constant basis
-    augKnots <- c(Boundary.knots[1L], knots, Boundary.knots[2L])
+    augKnots <- c(Boundary.knots[1L], knots,
+                  Boundary.knots[2L] + .Machine$double.eps)
     bsMat <- sapply(seq_len(df), function (i) {
         foo <- stats::stepfun(augKnots[i: (i + 1L)], c(0L, 1L, 0L))
         foo(xx)
