@@ -118,7 +118,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = TRUE,
     ## default, for derivs == 0L, return I-splines
     if (! derivs) {
         ## define knot sequence
-        aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
+        ## aKnots <- sort(c(rep(bKnots, ord + 1L), knots))
 
         ## take care of possible NA's in `x` for the following calculation
         nax <- is.na(x)

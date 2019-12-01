@@ -1,6 +1,8 @@
+working
 *.tar.gz
 *.Rcheck/
-test/
+*.so
+*.o
 *.*~
 *~
 
@@ -19,3 +21,9 @@ test/
 vignettes/*.html
 vignettes/*.pdf
 
+# ignore tags
+TAGS
+GTAGS
+GRTAGS
+GPATH
+.clang_complete

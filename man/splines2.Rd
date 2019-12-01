@@ -3,7 +3,6 @@
 \docType{package}
 \name{splines2}
 \alias{splines2}
-\alias{splines2-package}
 \title{splines2: Regression Spline Functions and Classes}
 \description{
 A supplementary package on splines providing functions constructing

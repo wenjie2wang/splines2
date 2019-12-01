@@ -4,12 +4,12 @@ citEntry(entry = "Manual",
          Title = "{splines2}: {R}egression Spline Functions and Classes",
          Author = personList(as.person("Wenjie Wang"),
                              as.person("Jun Yan")),
-         Note =	"{R} package version 0.2.8.9000",
+         Note =	"{R} package version 0.3.0.9000",
          Year =	"2019",
          Url = "https://CRAN.R-project.org/package=splines2",
 
          textVersion = paste("Wang, W., Yan, J. (2019). splines2:",
                              "Regression Spline Functions and Classes.",
-                             "R package version 0.2.8.9000.",
+                             "R package version 0.3.0.9000",
                              "https://CRAN.R-project.org/package=splines2")
 )

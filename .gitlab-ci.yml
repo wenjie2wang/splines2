@@ -1,0 +1,8 @@
+job:
+  script:
+    - bash misc/deploy_docs.sh
+  only:
+    - master
+  tags:
+    - droplets
+    - shell
