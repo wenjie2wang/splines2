@@ -22,7 +22,7 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    tinytest
 Depends:
     R (>= 3.2.3)
 VignetteBuilder: knitr
