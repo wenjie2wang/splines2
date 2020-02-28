@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2019
+##   Copyright (C) 2016-2020
 ##
 ##   This file is part of the R package splines2.
 ##
@@ -29,6 +29,9 @@
 ##' It is named after the package \pkg{splines}: ``Regression Spline Functions
 ##' and Classes''. The tailing number two is simply ``too'' (and by no means for
 ##' the generation two).
+##'
+##' @importFrom Rcpp sourceCpp
+##' @useDynLib splines2
 ##'
 ##' @docType package
 ##' @name splines2
