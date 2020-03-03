@@ -18,7 +18,6 @@ R/bernsteinSpl\.R
 ^docs$
 ^revdep$
 ^test$
-inst/include/
-misc/
-working/
+^misc$
+^working$
 ~$
