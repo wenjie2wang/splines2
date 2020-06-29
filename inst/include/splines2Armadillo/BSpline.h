@@ -19,7 +19,7 @@
 #define SPLINES2_BSPLINE_H
 
 #include <stdexcept>
-#include <memory>
+// #include <memory>
 
 #include "aliases.h"
 #include "utils.h"
@@ -169,33 +169,55 @@ namespace splines2arma {
         // integral of B-splines
         rmat integral(const bool complete_basis = true)
         {
-            rmat b_mat { this->basis(complete_basis) };
             // back up current results
-            rvec old_knot_sequence { this->knot_sequence_ };
+            bool backup_basis { this->is_basis_latest_ };
+            bool backup_knot_sequence { this->is_knot_sequence_latest_ };
+            rmat old_basis;
+            rvec old_knot_sequence;
+            if (backup_basis) {
+                old_basis = this->spline_basis_;
+            }
+            if (backup_knot_sequence) {
+                old_knot_sequence = this->knot_sequence_;
+            }
             // get basis matrix for (degree - derivs)
             this->set_degree(this->degree_ + 1);
             rmat i_mat { this->basis(false) };
             // restore
             this->set_degree(this->degree_ - 1);
-            this->spline_basis_ = b_mat;
-            this->knot_sequence_ = old_knot_sequence;
-            this->is_knot_sequence_latest_ = true;
-            this->is_basis_latest_ = true;
-            // remove first columns if needed
-            if (! complete_basis) {
-                i_mat = mat_wo_col1(i_mat);
+            if (backup_basis) {
+                this->is_basis_latest_ = true;
+                this->spline_basis_ = old_basis;
+            }
+            if (backup_knot_sequence) {
+                this->is_knot_sequence_latest_ = true;
+                this->knot_sequence_ = old_knot_sequence;
+            } else {
+                this->update_knot_sequence();
             }
             // compute t_{i+k+1} - t_{i}
             arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
-            for (size_t j { static_cast<size_t>(! complete_basis) };
-                 j < numer1.n_elem; ++j) {
+            for (size_t j { 0 }; j < numer1.n_elem; ++j) {
                 numer1(j) = knot_sequence_(j + order_) - knot_sequence_(j);
             }
             // for each row of i_mat
             for (size_t i {0}; i < this->x_.n_elem; ++i) {
-                arma::rowvec numer2 { i_mat.row(i) };
+                size_t k1 { x_index_(i) }, k2 { k1 + degree_ };
+                arma::rowvec numer2 { i_mat(i, arma::span(k1, k2)) };
                 numer2 = cum_sum(numer2, true);
-                i_mat.row(i) = numer2 % numer1 / this->order_;
+                for (size_t j {0}; j < i_mat.n_cols; ++j) {
+                    if (j > k2) {
+                        i_mat(i, j) = 0;
+                    } else if (j >= k1) {
+                        i_mat(i, j) = numer2(j - k1) * numer1(j) / order_;
+                    } else {
+                        i_mat(i, j) = numer1(j) / order_;
+                    }
+                }
+            }
+            // remove first columns if needed
+            if (! complete_basis) {
+                i_mat = mat_wo_col1(i_mat);
             }
             return i_mat;
         }
