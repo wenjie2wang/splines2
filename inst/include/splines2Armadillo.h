@@ -15,10 +15,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#ifndef SPLINES2_H
-#define SPLINES2_H
+#ifndef SPLINES2_ARMADILLO_H
+#define SPLINES2_ARMADILLO_H
 
-#include "splines2/BSpline.h"
-// #include "splines2/utils.h"
+#include "splines2Armadillo/BSpline.h"
+
 
 #endif
