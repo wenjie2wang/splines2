@@ -138,14 +138,15 @@ namespace splines2arma {
         return arma::sort(arma::conv_to<ARMA_VEC_TYPE<T>>::from(res));
     }
 
-    // cumulative sum in possibly reverse order
-    inline arma::vec cum_sum(const arma::vec& x,
-                             const bool reversely = false)
+    // cumulative sum in possibly reverse order>
+    template <typename T>
+    inline T cum_sum(const T& x,
+                     const bool reversely = false)
     {
         // if cumsum reversely
         if (reversely) {
-            const unsigned long int n_x {x.n_rows};
-            arma::vec res {arma::zeros(n_x)};
+            const unsigned long int n_x {x.n_elem};
+            T res { arma::zeros<T>(n_x) };
             double tmp {0.0};
             for (size_t i {1}; i <= n_x; ++i) {
                 tmp += x[n_x - i];
@@ -614,16 +615,15 @@ namespace splines2arma {
     }
 
     // function to remove the first column of a matrix
-    // would use const conference if possible:
-    // see <https://github.com/RcppCore/Rcpp/issues/1045> for discussion
-    inline arma::mat mat_wo_col1(const arma::mat& x)
+    template <typename T>
+    inline T mat_wo_col1(const T& x)
     {
         const arma::uword x_ncol { x.n_cols };
         if (x_ncol > 1) {
             return x.tail_cols(x_ncol - 1);
         }
         // else
-        return arma::mat();
+        return T();
     }
 
     // function to add zero columns to the end of a matrix

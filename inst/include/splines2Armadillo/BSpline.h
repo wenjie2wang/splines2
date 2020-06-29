@@ -99,7 +99,7 @@ namespace splines2arma {
         }
 
         // derivatives of B-splines
-        inline rmat deriv(
+        inline rmat derivative(
             const unsigned int derivs = 1,
             const bool complete_basis = true
             )
@@ -165,6 +165,41 @@ namespace splines2arma {
             }
             return d_mat;
         }
+
+        // integral of B-splines
+        rmat integral(const bool complete_basis = true)
+        {
+            rmat b_mat { this->basis(complete_basis) };
+            // back up current results
+            rvec old_knot_sequence { this->knot_sequence_ };
+            // get basis matrix for (degree - derivs)
+            this->set_degree(this->degree_ + 1);
+            rmat i_mat { this->basis(false) };
+            // restore
+            this->set_degree(this->degree_ - 1);
+            this->spline_basis_ = b_mat;
+            this->knot_sequence_ = old_knot_sequence;
+            this->is_knot_sequence_latest_ = true;
+            this->is_basis_latest_ = true;
+            // remove first columns if needed
+            if (! complete_basis) {
+                i_mat = mat_wo_col1(i_mat);
+            }
+            // compute t_{i+k+1} - t_{i}
+            arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
+            for (size_t j { static_cast<size_t>(! complete_basis) };
+                 j < numer1.n_elem; ++j) {
+                numer1(j) = knot_sequence_(j + order_) - knot_sequence_(j);
+            }
+            // for each row of i_mat
+            for (size_t i {0}; i < this->x_.n_elem; ++i) {
+                arma::rowvec numer2 { i_mat.row(i) };
+                numer2 = cum_sum(numer2, true);
+                i_mat.row(i) = numer2 % numer1 / this->order_;
+            }
+            return i_mat;
+        }
+
 
     };
 
