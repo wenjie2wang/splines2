@@ -19,6 +19,6 @@
 #define SPLINES2_ARMADILLO_H
 
 #include "splines2Armadillo/BSpline.h"
-
+#include "splines2Armadillo/MSpline.h"
 
 #endif
