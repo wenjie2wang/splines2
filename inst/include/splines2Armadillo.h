@@ -20,5 +20,6 @@
 
 #include "splines2Armadillo/BSpline.h"
 #include "splines2Armadillo/MSpline.h"
+#include "splines2Armadillo/ISpline.h"
 
 #endif
