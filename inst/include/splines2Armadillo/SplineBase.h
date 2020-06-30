@@ -15,8 +15,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#ifndef SPLINE_BASE_H
-#define SPLINE_BASE_H
+#ifndef SPLINE2_SPLINE_BASE_H
+#define SPLINE2_SPLINE_BASE_H
 
 #include <stdexcept>
 
@@ -153,8 +153,20 @@ namespace splines2arma {
         SplineBase() {}
 
         // explicit constructor
-        explicit SplineBase(const arma::vec& x) :
-            SplineBase(x, arma::vec(), 3, arma::vec()) {}
+        explicit SplineBase(const SplineBase* pSplineBase) :
+            x_ { pSplineBase->x_ },
+            internal_knots_ { pSplineBase->internal_knots_ },
+            boundary_knots_ { pSplineBase->boundary_knots_ },
+            degree_ { pSplineBase->degree_  },
+            order_ { pSplineBase->order_ },
+            is_knot_sequence_latest_ { pSplineBase->is_knot_sequence_latest_ },
+            is_x_index_latest_ { pSplineBase->is_x_index_latest_ },
+            is_basis_latest_ { false }
+        {
+            update_spline_df();
+            update_knot_sequence();
+            update_x_index();
+        }
 
         // constructor with specificied internal_knots
         SplineBase(const arma::vec& x,

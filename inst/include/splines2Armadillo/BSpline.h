@@ -19,7 +19,6 @@
 #define SPLINES2_BSPLINE_H
 
 #include <stdexcept>
-// #include <memory>
 
 #include "aliases.h"
 #include "utils.h"
@@ -133,12 +132,12 @@ namespace splines2arma {
             rmat d_mat { this->basis(true) };
             // restore
             this->set_degree(this->degree_ + derivs);
+            this->is_basis_latest_ = backup_basis;
+            this->is_knot_sequence_latest_ = backup_knot_sequence;
             if (backup_basis) {
-                this->is_basis_latest_ = true;
                 this->spline_basis_ = old_basis;
             }
             if (backup_knot_sequence) {
-                this->is_knot_sequence_latest_ = true;
                 this->knot_sequence_ = old_knot_sequence;
             } else {
                 this->update_knot_sequence();
@@ -167,7 +166,7 @@ namespace splines2arma {
         }
 
         // integral of B-splines
-        rmat integral(const bool complete_basis = true)
+        inline rmat integral(const bool complete_basis = true)
         {
             // back up current results
             bool backup_basis { this->is_basis_latest_ };
@@ -185,12 +184,12 @@ namespace splines2arma {
             rmat i_mat { this->basis(false) };
             // restore
             this->set_degree(this->degree_ - 1);
+            this->is_basis_latest_ = backup_basis;
+            this->is_knot_sequence_latest_ = backup_knot_sequence;
             if (backup_basis) {
-                this->is_basis_latest_ = true;
                 this->spline_basis_ = old_basis;
             }
             if (backup_knot_sequence) {
-                this->is_knot_sequence_latest_ = true;
                 this->knot_sequence_ = old_knot_sequence;
             } else {
                 this->update_knot_sequence();
