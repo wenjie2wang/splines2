@@ -72,8 +72,9 @@ namespace splines2arma {
                 for (size_t i {0}; i < x_.n_elem; ++ i) {
                     double saved { 0 };
                     // for each x, at most "order" columns are not zero
-                    // basis(x) is not zero from t_ii to t_{ii+k+1}
-                    // where ii is index of x in terms of bases
+                    // basis_j(x) is not zero from t_j to t_{j+k+1}
+                    // where j is index of x in terms of bases
+                    // knot sequence: t0, t1, t2, ...
                     for (size_t j {0}; j < k; ++j) {
                         size_t j_index { x_index_(i) + j };
                         size_t i1 { j_index + k_offset + 1 };

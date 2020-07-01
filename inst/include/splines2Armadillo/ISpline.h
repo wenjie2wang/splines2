@@ -15,8 +15,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#ifndef SPLINE2_ISPLINE_H
-#define SPLINE2_ISPLINE_H
+#ifndef SPLINES2_ISPLINE_H
+#define SPLINES2_ISPLINE_H
 
 #include <memory>
 #include <stdexcept>
@@ -24,6 +24,7 @@
 #include "aliases.h"
 #include "utils.h"
 #include "SplineBase.h"
+#include "BSpline.h"
 #include "MSpline.h"
 
 namespace splines2arma {
@@ -53,7 +54,7 @@ namespace splines2arma {
                 return mat_wo_col1(this->spline_basis_);
             }
             // else do generation
-            MSpline msp_obj { MSpline(this) };
+            MSpline msp_obj { this };
             this->spline_basis_ = msp_obj.integral(complete_basis);
             this->is_basis_latest_ = true;
             return this->spline_basis_;
@@ -62,7 +63,7 @@ namespace splines2arma {
         inline rmat derivative(const unsigned int derivs = 1,
                                const bool complete_basis = true)
         {
-            MSpline msp_obj { MSpline(this) };
+            MSpline msp_obj { this };
             if (derivs == 1) {
                 return msp_obj.basis(complete_basis);
             }
@@ -71,11 +72,32 @@ namespace splines2arma {
 
         inline rmat integral(const bool complete_basis = true)
         {
-            return rmat();
+            BSpline bsp_obj { this };
+            bsp_obj.set_degree(degree_ + 1);
+            rmat i_mat { bsp_obj.integral(false) };
+            this->update_x_index();
+            // for each row of i_mat
+            for (size_t i {0}; i < this->x_.n_elem; ++i) {
+                size_t k2 { x_index_(i) + degree_ };
+                arma::rowvec numer { i_mat(i, arma::span(0, k2)) };
+                numer = cum_sum(numer, true);
+                for (size_t j {0}; j < i_mat.n_cols; ++j) {
+                    if (j > k2) {
+                        i_mat(i, j) = 0.0;
+                    } else {
+                        i_mat(i, j) = numer(j);
+                    }
+                }
+            }
+            // remove first columns if needed
+            if (! complete_basis) {
+                i_mat = mat_wo_col1(i_mat);
+            }
+            return i_mat;
         }
 
     };
 }  // splines2arma
 
 
-#endif /* SPLINE2_ISPLINE_H */
+#endif /* SPLINES2_ISPLINE_H */
