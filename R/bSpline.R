@@ -57,8 +57,8 @@
 ##' \code{\link{cSpline}} for C-splines.
 ##'
 ##' @export
-bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-                    Boundary.knots = NULL, ...)
+bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
+                    intercept = FALSE, Boundary.knots = NULL, ...)
 {
     ## check inputs
     if ((degree <- as.integer(degree)) < 0)
@@ -85,7 +85,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
               x
           }
     ## call the engine function
-    out <- rcpp_bSpline(
+    out <- rcpp_bSpline_basis(
         x = xx,
         df = df,
         degree = degree,
