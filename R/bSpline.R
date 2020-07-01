@@ -1,39 +1,12 @@
-################################################################################
-##
-##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2020
-##
-##   This file is part of the R package splines2.
-##
-##   The R package splines2 is free software: You can redistribute it and/or
-##   modify it under the terms of the GNU General Public License as published
-##   by the Free Software Foundation, either version 3 of the License, or
-##   any later version (at your option). See the GNU General Public License
-##   at <http://www.gnu.org/licenses/> for details.
-##
-##   The R package splines2 is distributed in the hope that it will be useful,
-##   but WITHOUT ANY WARRANTY without even the implied warranty of
-##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-##
-################################################################################
-
-
 ##' B-Spline Basis for Polynomial Splines
 ##'
-##' This function generates the B-spline basis matrix for a polynomial spline.
+##' Generates the B-spline basis matrix representing the family of piecewise
+##' polynomials with the specified interior knots and degree, evaluated at the
+##' values of \code{x}.
 ##'
-##' It is an augmented function of \code{\link[splines]{bs}} in package
-##' \code{splines} for B-spline basis that allows piecewise constant (close on
-##' the left, open on the right) spline basis with zero degree. When the
-##' argument \code{degree} is greater than zero, it internally calls
-##' \code{\link[splines]{bs}} and generates a basis matrix for representing the
-##' family of piecewise polynomials with the specified interior knots and
-##' degree, evaluated at the values of \code{x}.  The function has the same
-##' arguments with \code{\link[splines]{bs}} for ease usage.
-##'
-##' @usage
-##' bSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-##'         Boundary.knots = range(x, na.rm = TRUE), ...)
+##' It is an augmented function of \code{bs} function in \code{splines} package
+##' for B-spline basis that allows piecewise constant ( left-closed and
+##' right-open except on the right boundary) spline basis with zero degree.
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##'     returned as they were.
@@ -64,6 +37,7 @@
 ##' \code{df = degree + length(knots)} (plus one if intercept is included).
 ##' Attributes that correspond to the arguments specified are returned
 ##' for usage of other functions in this package.
+##'
 ##' @examples
 ##' library(splines2)
 ##' x <- seq.int(0, 1, 0.01)
@@ -73,6 +47,7 @@
 ##' library(graphics)
 ##' matplot(x, bsMat, type = "l", ylab = "Piecewise constant B-spline bases")
 ##' abline(v = knots, lty = 2, col = "gray")
+##'
 ##' @seealso
 ##' \code{\link{predict.bSpline2}} for evaluation at given (new) values;
 ##' \code{\link{dbs}}, \code{\link{deriv.bSpline2}} for derivatives;
@@ -80,189 +55,58 @@
 ##' \code{\link{mSpline}} for M-splines;
 ##' \code{\link{iSpline}} for I-splines;
 ##' \code{\link{cSpline}} for C-splines.
-##' @importFrom splines bs
-##' @importFrom stats stepfun
+##'
 ##' @export
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-                    Boundary.knots = range(x, na.rm = TRUE), ...)
+                    Boundary.knots = NULL, ...)
 {
-    ## check and reformat 'degree'
+    ## check inputs
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
-
-    ## sort and remove possible NA's in internal knots if exist
-    if (length(knots))
-        knots <- sort.int(knots)
-
+    if (is.null(df)) {
+        df <- 0L
+    } else {
+        df <- as.integer(df)
+        if (df < 0) {
+            stop("'df' must be a nonnegative integer.")
+        }
+    }
+    knots <- null2num0(knots)
+    Boundary.knots <- null2num0(Boundary.knots)
     ## take care of possible NA's in `x`
     nax <- is.na(x)
-    if (all(nax))
+    if (all(nax)) {
         stop("The 'x' cannot be all NA's!")
-
-    ## call splines::bs for non-zero degree
-    if (degree > 0) {
-        out <- splines::bs(x = x, df = df, knots = knots,
-                           degree = degree, intercept = intercept,
-                           Boundary.knots = Boundary.knots)
-        ## add "x" to attributes
-        attr(out, "x") <- x
-        ## throw out warning if any internal knot outside boundary.knots
-        knots <- attr(out, "knots")
-        Boundary.knots <- attr(out, "Boundary.knots")
-        ## any internal knots placed outside of boundary knots?
-        outside_knots <- (knots <= Boundary.knots[1L]) |
-            (knots >= Boundary.knots[2L])
-        if (any(outside_knots))
-            warning(wrapMessages(
-                "Some internal knots were not placed",
-                "inside of boundary knots,",
-                "which may cause \nill-conditioned bases!"
-            ))
-        ## update classes
-        class(out) <- c("matrix", "bSpline2")
-        return(out)
     }
-
-    ## else degree is zero
     ## remove NA's in x
-    xx <- if (nas <- any(nax)) x[! nax] else x
-
-    ## check whether any of x is outside of the boundary knots
-    outside_x <- rep(FALSE, length(xx))
-    if (! missing(Boundary.knots)) {
-        if (! is.numeric(Boundary.knots) || anyNA(Boundary.knots))
-            stop(wrapMessages(
-                "The 'Boundary.knots' has to be",
-                "numeric vector of length 2",
-                "with no missing value."
-            ))
-        if (length(Boundary.knots) > 2) {
-            warning(wrapMessages(
-                "Only the first two values",
-                "in the 'Boundary.knots' were used."
-            ))
-            Boundary.knots <- Boundary.knots[seq_len(2L)]
-        }
-        Boundary.knots <- sort.int(Boundary.knots)
-        outside_x <- (xx < Boundary.knots[1L]) | (xx > Boundary.knots[2L])
-    }
-    if (any(outside_x))
-        warning(wrapMessages(
-            "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases!"
-        ))
-
-    ## prepare inputs for piecewise constant bases
-    inputs <- pieceConst(x = xx[! outside_x],
-                         df = df, knots = knots,
-                         Boundary.knots = Boundary.knots,
-                         intercept = intercept)
-    knots <- inputs$knots
-    ## potentially, df is a bad name since df is also a function in stats
-    df <- inputs$df
-
-    ## piecewise constant basis
-    augKnots <- c(Boundary.knots[1L], knots,
-                  Boundary.knots[2L] + .Machine$double.eps)
-    bsMat <- sapply(seq_len(df), function (i) {
-        foo <- stats::stepfun(augKnots[i: (i + 1L)], c(0L, 1L, 0L))
-        foo(xx)
-    })
-
-    ## close on the right boundary knot for the last constant piece?
-    ## if (any(rightX <- xx == Boundary.knots[2L]))
-    ##     bsMat[rightX, df] <- 1
-
-    ## make sure bsMat is a matrix
-    if (! is.matrix(bsMat))
-        bsMat <- matrix(bsMat, nrow = length(xx))
-
-    ## include intercept or not
-    if (! intercept) {
-        bsMat <- bsMat[, - 1L, drop = FALSE]
-    }
-
+    xx <- if (nas <- any(nax)) {
+              x[! nax]
+          } else {
+              x
+          }
+    ## call the engine function
+    out <- rcpp_bSpline(
+        x = xx,
+        df = df,
+        degree = degree,
+        internal_knots = knots,
+        boundary_knots = Boundary.knots,
+        complete_basis = intercept
+    )
     ## keep NA's as is
     if (nas) {
-        nmat <- matrix(NA, length(nax), ncol(bsMat))
-        nmat[! nax, ] <- bsMat
-        bsMat <- nmat
+        nmat <- matrix(NA_real_, length(nax), ncol(out))
+        nmat[! nax, ] <- out
+        out <- nmat
+        attr(out, "x") <- x
     }
-
     ## add dimnames for consistency with bs returns
-    row.names(bsMat) <- names(x)
-    colnames(bsMat) <- as.character(seq_len(df - as.integer(! intercept)))
-
-    ## on attributes
-    tmp <- list(degree = degree,
-                knots = if (is.null(knots)) numeric(0L) else knots,
-                Boundary.knots = Boundary.knots,
-                intercept = intercept, x = x)
-    attributes(bsMat) <- c(attributes(bsMat), tmp)
-    class(bsMat) <- c("matrix", "bSpline2")
-    bsMat
-}
-
-
-### internal function ==========================================================
-##' @importFrom stats quantile
-pieceConst <- function (x, df, knots, Boundary.knots, intercept)
-{
-    ind <- (is.null(df) + 1L) * is.null(knots) + 1L
-    ## ind == 1: knots is not NULL;
-    ##   df0 = df = length(knots) + 1L
-
-    ## ind == 2: df is not NULL, while knots is NULL;
-    ## df := function input
-    ##   number of knots = df - as.integer(intercept) from `splines::bs`
-    ## df0 := DF of spline bases from splines definition
-    ##      = length(knots) + 1L
-    ##      = df - as.integer(intercept) + 1L
-
-    ## ind == 3: both df and knots are NULL; one-piece constant
-    ##   number of knots = 0, df0 = 1
-
-    int_intercept <- as.integer(intercept)
-    df0 <- switch(ind,
-                  length(knots) + 1L,
-                  {
-                      int_df <- as.integer(df)
-                      if (int_df < 1L)
-                          stop("The spepcified `df` must be positive!",
-                               call. = FALSE)
-                      int_df - int_intercept + 1L
-                  },
-                  {
-                      if (! intercept)
-                          stop(wrapMessages(
-                              "The 'intercept' has to be 'TRUE'",
-                              "for one-piece const basis."
-                          ), call. = FALSE)
-                      1L
-                  })
-    if (ind > 1L) {
-        tknots <- df0 + 1L
-        quans <- seq.int(from = 0, to = 1,
-                         length.out = tknots)[- c(1L, tknots)]
-        knots <- as.numeric(stats::quantile(x, quans))
-    } else {
-        ## any internal knots placed outside of boundary knots?
-        outside_knots <- (knots <= Boundary.knots[1L]) |
-            (knots >= Boundary.knots[2L])
-        ## remove internal knots placed outside of boundary knots
-        if (any(outside_knots)) {
-            knots <- knots[! outside_knots]
-            df0 <- df0 - sum(outside_knots)
-            warning(wrapMessages(
-                "Only internal knots placed inside of",
-                "the boundary knots were considered."
-            ), call. = FALSE)
-        }
-        if (! is.null(df) && df != df0)
-            warning(wrapMessages(
-                "The 'df' specified was not appropriate.",
-                sprintf("Used 'df = %d' instead.", df0)
-            ),  call. = FALSE)
+    name_x <- names(x)
+    if (! is.null(name_x)) {
+        row.names(out) <- name_x
     }
-    list(df = df0, knots = knots)
+    ## add class
+    class(out) <- c("matrix", "bSpline2")
+    ## return
+    out
 }
