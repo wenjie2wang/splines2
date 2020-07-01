@@ -24,7 +24,7 @@
 #include "utils.h"
 #include "SplineBase.h"
 
-namespace splines2arma {
+namespace splines2 {
 
     // define a class for B-splines
     class BSpline : public SplineBase

@@ -3,7 +3,7 @@
 
 #include <RcppArmadillo.h>
 
-namespace splines2arma {
+namespace splines2 {
 
     typedef arma::vec rvec;
     typedef arma::mat rmat;
@@ -17,6 +17,6 @@ namespace splines2arma {
         return out;
     }
 
-}  // splines2arma
+}  // splines2
 
 #endif /* SPLINES2_COMMON_H */

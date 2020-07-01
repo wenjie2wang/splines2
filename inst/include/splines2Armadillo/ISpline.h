@@ -27,7 +27,7 @@
 #include "BSpline.h"
 #include "MSpline.h"
 
-namespace splines2arma {
+namespace splines2 {
 
     // define a class for M-splines
     class ISpline : public SplineBase
@@ -97,7 +97,7 @@ namespace splines2arma {
         }
 
     };
-}  // splines2arma
+}  // splines2
 
 
 #endif /* SPLINES2_ISPLINE_H */

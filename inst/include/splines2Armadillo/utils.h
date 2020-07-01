@@ -31,7 +31,7 @@
 // #include <armadillo>
 #include <RcppArmadillo.h>
 
-namespace splines2arma {
+namespace splines2 {
 
     // compare double-precision numbers for almost equality
     inline bool isAlmostEqual(double A, double B)

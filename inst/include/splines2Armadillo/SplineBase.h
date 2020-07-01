@@ -23,7 +23,7 @@
 #include "common.h"
 #include "utils.h"
 
-namespace splines2arma {
+namespace splines2 {
 
     // define base class for some regression splines
     class SplineBase {
