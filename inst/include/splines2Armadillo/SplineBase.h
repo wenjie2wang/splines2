@@ -215,7 +215,16 @@ namespace splines2 {
             this->is_basis_latest_ = false;
             return this;
         }
-        inline SplineBase* set_internal_knots(const arma::vec& internal_knots)
+        inline SplineBase* set_x(const double x)
+        {
+            this->x_ = num2vec(x);
+            this->is_x_index_latest_ = false;
+            this->is_basis_latest_ = false;
+            return this;
+        }
+        inline SplineBase* set_internal_knots(
+            const arma::vec& internal_knots
+            )
         {
             clean_knots(internal_knots);
             // update spline df
@@ -225,7 +234,9 @@ namespace splines2 {
             this->is_basis_latest_ = false;
             return this;
         }
-        inline SplineBase* set_boundary_knots(const arma::vec& boundary_knots)
+        inline SplineBase* set_boundary_knots(
+            const arma::vec& boundary_knots
+            )
         {
             clean_knots(nan_vec(), boundary_knots);
             this->is_knot_sequence_latest_ = false;
@@ -233,7 +244,9 @@ namespace splines2 {
             this->is_basis_latest_ = false;
             return this;
         }
-        inline SplineBase* set_degree(const unsigned int degree)
+        inline SplineBase* set_degree(
+            const unsigned int degree
+            )
         {
             this->degree_ = degree;
             this->order_ = degree + 1;
@@ -279,6 +292,17 @@ namespace splines2 {
             return this->spline_df_;
         }
 
+        // define pure virtual functions
+        inline virtual rmat basis(
+            const bool complete_basis = true
+            ) = 0;
+        inline virtual rmat derivative(
+            const unsigned int derivs = 1,
+            const bool complete_basis = true
+            ) = 0;
+        inline virtual rmat integral(
+            const bool complete_basis = true
+            ) = 0;
 
     };
 

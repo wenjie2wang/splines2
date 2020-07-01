@@ -29,10 +29,10 @@ namespace splines2 {
     // define a class for B-splines
     class BSpline : public SplineBase
     {
+    public:
         // inherits constructors
         using SplineBase::SplineBase;
 
-    public:
         // function members
 
         //! Compute B-spline basis
@@ -41,7 +41,7 @@ namespace splines2 {
         //! complete spline basis
         //!
         //! @return arma::mat
-        inline rmat basis(const bool complete_basis = true)
+        inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest
             if (this->is_basis_latest_) {
@@ -99,7 +99,7 @@ namespace splines2 {
         }
 
         // derivatives of B-splines
-        inline rmat derivative(
+        inline virtual rmat derivative(
             const unsigned int derivs = 1,
             const bool complete_basis = true
             )
@@ -167,7 +167,7 @@ namespace splines2 {
         }
 
         // integral of B-splines
-        inline rmat integral(const bool complete_basis = true)
+        inline virtual rmat integral(const bool complete_basis = true)
         {
             // back up current results
             bool backup_basis { this->is_basis_latest_ };

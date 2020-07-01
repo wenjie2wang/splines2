@@ -18,7 +18,6 @@
 #ifndef SPLINES2_ISPLINE_H
 #define SPLINES2_ISPLINE_H
 
-#include <memory>
 #include <stdexcept>
 
 #include "aliases.h"
@@ -32,9 +31,10 @@ namespace splines2 {
     // define a class for M-splines
     class ISpline : public SplineBase
     {
+    public:
         // inherits constructors
         using SplineBase::SplineBase;
-    public:
+
         // function members
 
         //! Compute I-spline basis
@@ -43,26 +43,33 @@ namespace splines2 {
         //! complete spline basis
         //!
         //! @return arma::mat
-        inline rmat basis(const bool complete_basis = true)
+        inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest
             if (this->is_basis_latest_) {
                 if (complete_basis) {
                     return this->spline_basis_;
                 }
-                // else
                 return mat_wo_col1(this->spline_basis_);
             }
             // else do generation
             MSpline msp_obj { this };
-            this->spline_basis_ = msp_obj.integral(complete_basis);
+            this->spline_basis_ = msp_obj.integral(true);
             this->is_basis_latest_ = true;
-            return this->spline_basis_;
+            if (complete_basis) {
+                return this->spline_basis_;
+            }
+            return mat_wo_col1(this->spline_basis_);
         }
 
-        inline rmat derivative(const unsigned int derivs = 1,
-                               const bool complete_basis = true)
+        inline virtual rmat derivative(const unsigned int derivs = 1,
+                                       const bool complete_basis = true)
         {
+            if (derivs == 0) {
+                throw std::range_error(
+                    "'derivs' has to be a positive integer."
+                    );
+            }
             MSpline msp_obj { this };
             if (derivs == 1) {
                 return msp_obj.basis(complete_basis);
@@ -70,7 +77,7 @@ namespace splines2 {
             return msp_obj.derivative(derivs - 1, complete_basis);
         }
 
-        inline rmat integral(const bool complete_basis = true)
+        inline virtual rmat integral(const bool complete_basis = true)
         {
             BSpline bsp_obj { this };
             bsp_obj.set_degree(degree_ + 1);

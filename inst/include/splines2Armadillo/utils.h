@@ -358,6 +358,14 @@ namespace splines2 {
     inline arma::vec mat2vec(const arma::mat& x) {
         return arma::conv_to<arma::vec>::from(x);
     }
+    inline arma::rowvec mat2rowvec(const arma::mat& x) {
+        return arma::conv_to<arma::rowvec>::from(x);
+    }
+    inline arma::vec num2vec(const double x) {
+        arma::vec out { arma::zeros(1) };
+        out(0) = x;
+        return out;
+    }
 
     // function template for crossprod of two matrix-like objects
     template <typename T_matrix_like>
