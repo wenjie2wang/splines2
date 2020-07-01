@@ -10,19 +10,18 @@ Authors@R: c(
     person(given = "Jun", family = "Yan", role = "aut",
            comment = c(ORCID = "0000-0003-4401-7296"))
     )
-Description: Constructs B-splines and its integral, monotone splines
-    (M-splines) and its integral (I-splines), convex splines (C-splines),
-    and their derivatives of given order. Piecewise constant basis is
+Description: Constructs B-splines and its integral, M-splines
+    and its integral (I-splines), convex splines (C-splines),
+    and their derivatives. Piecewise constant basis is
     allowed for B-splines and M-splines. See
     De Boor (1978) <doi:10.1002/zamm.19800600129>,
     Ramsay (1988) <doi:10.1214/ss/1177012761>, and
     Meyer (2008) <doi:10.1214/08-AOAS167> for more information.
 Imports:
-    Rcpp,
-    splines,
-    stats
-LinkingTo:
     Rcpp
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
 Suggests:
     knitr,
     rmarkdown,
