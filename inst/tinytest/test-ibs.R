@@ -26,7 +26,7 @@ expect_equivalent(i3mat, ibs(x, degree = 3, intercept = TRUE))
 
 ## with two internal knots
 x <- seq.int(0, 4, 0.1)
-knots <- c(NA, 1, NA, 3, NA)
+knots <- c(1, 3)
 ind01 <- function(x) as.numeric(x >= 0 & x < 1)
 ind13 <- function(x) as.numeric(x >= 1 & x < 3)
 ind34 <- function(x) as.numeric(x >= 3 & x <= 4)

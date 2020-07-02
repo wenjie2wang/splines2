@@ -2,7 +2,7 @@
 isNumMatrix <- splines2:::isNumMatrix
 
 x <- seq.int(0, 10, 0.5)
-knots <- c(3, NA, 5, 7, NA)
+knots <- c(3, 5, 7)
 expect_equal(isNumMatrix(cSpline(x, df = 5), 21L, 5L,
                          warn_na = FALSE, error_na = FALSE), TRUE)
 expect_equal(isNumMatrix(cSpline(x, knots = knots, degree = 2),

@@ -14,7 +14,7 @@ expect_equivalent(
     splines::splineDesign(aKnots, derivs = 3, x = x)[- length(x), ]
 )
 
-knots <- c(0.2, NA, 0.4, 0.7, NA)
+knots <- c(0.2, 0.4, 0.7)
 aKnots <- c(rep(0, ord), na.omit(knots), rep(1, ord))
 expect_equivalent(dbs(x, derivs = 1, knots = knots, intercept = TRUE),
                   splines::splineDesign(aKnots, x = x, derivs = 1))
@@ -26,7 +26,7 @@ expect_equivalent(
     splines::splineDesign(aKnots, x = x, derivs = 3)[- length(x), ]
 )
 
-knots <- c(0.3, NA, 0.6)
+knots <- c(0.3, 0.6)
 ord <- 5
 aKnots <- c(rep(0, ord), na.omit(knots), rep(1, ord))
 
@@ -42,11 +42,10 @@ expect_equivalent(
     splines::splineDesign(aKnots, x, ord, derivs = 4)[- length(x), ]
 )
 
-expect_warning(dbs(x, 1, df = 0, intercept = TRUE))
-expect_warning(dbs(x, 1, df = 1, intercept = TRUE))
-expect_warning(dbs(x, 1, df = 2, intercept = TRUE))
-expect_warning(dbs(x, 1, df = 3, intercept = TRUE))
-expect_warning(dbs(x, 2, df = 3, intercept = TRUE))
+expect_error(dbs(x, 1, df = 1, intercept = TRUE), "df")
+expect_error(dbs(x, 1, df = 2, intercept = TRUE), "df")
+expect_error(dbs(x, 1, df = 3, intercept = TRUE), "df")
+expect_error(dbs(x, 2, df = 3, intercept = TRUE), "df")
 expect_equal(isNumMatrix(dbs(x, 1, df = 1, degree = 0, intercept = TRUE),
                          21L, 1L, warn_na = FALSE, error_na = FALSE), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 4), 21L, 4L,

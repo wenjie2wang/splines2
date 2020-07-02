@@ -1,8 +1,13 @@
+## get old implementation for reference
+env2 <- new.env()
+source("../v0.2.8.R", env2)
+
 ## helper function
 isNumMatrix <- splines2:::isNumMatrix
 
+## NA is only allowed in x
 x <- c(NA, seq.int(0, 0.5, 0.1), NA, seq.int(0.6, 1, 0.1), NA)
-knots <- c(0.25, NA, 0.5, 0.75, NA)
+knots <- c(0.25, 0.5, 0.75)
 
 ## for ease of testing
 bsFun <- function(x, df, knots, degree, intercept, Boundary.knots) {
@@ -43,16 +48,8 @@ expect_equal(isNumMatrix(bSpline(x, df = 10, knots = knots, degree = 0L),
 expect_equal(isNumMatrix(bSpline(x, df = 10, knots = knots,
                                  degree = 0, intercept = TRUE),
                          14L, 4L, warn_na = FALSE, error_na = FALSE), TRUE)
-expect_error(bSpline(x, degree = 0),
-             "'intercept' has to be 'TRUE'")
-expect_warning(bSpline(x, df = 1, knots = 0.5, degree = 0),
-               "'df' specified was not appropriate.")
-expect_warning(bSpline(x, df = 3, knots = 0.5, degree = 0),
-               "'df' specified was not appropriate.")
-expect_warning(bSpline(x, knots = c(- 1, 0.5), degree = 0),
-               "internal knots placed inside")
-expect_warning(bSpline(x, knots = 0.5, degree = 0, Boundary.knots = 0:2),
-               "the first two values")
+expect_error(bSpline(x, degree = 0), "No column")
+expect_error(bSpline(x, knots = c(- 1, 0.5), degree = 0), "inside")
 expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)),
                "beyond boundary knots")
@@ -60,9 +57,9 @@ expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
 ## true close form formula given the all knots and degree
 ## test with two internal knots
 x <- seq.int(0, 5, 0.1)
-knots <- c(1, NA, 3)
+knots <- c(1, 3)
 b0_1 <- function(x) as.numeric(x >= 0 & x < 1)
 b0_2 <- function(x) as.numeric(x >= 1 & x < 3)
-b0_3 <- function(x) as.numeric(x >= 3 & x < 5)
+b0_3 <- function(x) as.numeric(x >= 3 & x <= 5)
 expect_equivalent(bSpline(x, knots = knots, degree = 0L, intercept = TRUE),
                   cbind(b0_1(x), b0_2(x), b0_3(x)))

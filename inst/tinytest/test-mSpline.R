@@ -33,12 +33,7 @@ expect_equal(isNumMatrix(msMat0g, 1L, 6L,
                          warn_na = FALSE, error_na = FALSE), TRUE)
 expect_equal(isNumMatrix(msMat0h, 1L, 5L,
                          warn_na = FALSE, error_na = FALSE), TRUE)
-expect_error(mSpline(x, degree = 0),
-             "'intercept' has to be 'TRUE'")
-expect_warning(mSpline(x, df = 1, knots = 0.5, degree = 0),
-               "'df' specified was not appropriate.")
-expect_warning(mSpline(x, df = 3, knots = 0.5, degree = 0),
-               "'df' specified was not appropriate.")
+expect_error(mSpline(x, degree = 0))
 expect_warning(mSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)),
                "beyond boundary knots")
@@ -49,7 +44,7 @@ x <- seq.int(0, 7, 0.1)
 knots <- c(1, 3)
 m0_1 <- function(x) as.numeric(x < 1)
 m0_2 <- function(x) as.numeric(x >= 1 & x < 3) * 0.5
-m0_3 <- function(x) as.numeric(x >= 3 & x < 7) * 0.25
+m0_3 <- function(x) as.numeric(x >= 3 & x <= 7) * 0.25
 expect_equivalent(mSpline(x, knots = knots, degree = 0L, intercept = TRUE),
                   cbind(m0_1(x), m0_2(x), m0_3(x)))
 
