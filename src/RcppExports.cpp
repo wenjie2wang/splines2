@@ -187,22 +187,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_mSpline_integral
-Rcpp::NumericMatrix rcpp_mSpline_integral(const arma::vec& x, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis);
-RcppExport SEXP _splines2_rcpp_mSpline_integral(SEXP xSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
-    Rcpp::traits::input_parameter< const arma::vec& >::type boundary_knots(boundary_knotsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type complete_basis(complete_basisSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_mSpline_integral(x, df, degree, internal_knots, boundary_knots, complete_basis));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_splines2_rcpp_bSpline_basis", (DL_FUNC) &_splines2_rcpp_bSpline_basis, 6},
@@ -215,7 +199,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_splines2_rcpp_iSpline_integral", (DL_FUNC) &_splines2_rcpp_iSpline_integral, 6},
     {"_splines2_rcpp_mSpline_basis", (DL_FUNC) &_splines2_rcpp_mSpline_basis, 6},
     {"_splines2_rcpp_mSpline_derivative", (DL_FUNC) &_splines2_rcpp_mSpline_derivative, 7},
-    {"_splines2_rcpp_mSpline_integral", (DL_FUNC) &_splines2_rcpp_mSpline_integral, 6},
     {NULL, NULL, 0}
 };
 
