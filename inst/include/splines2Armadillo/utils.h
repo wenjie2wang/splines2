@@ -47,6 +47,18 @@ namespace splines2 {
         return res;
     }
 
+    template <typename T>
+    inline T get_inside_x(const T& x, const arma::vec& boundary_knots)
+    {
+        std::vector<double> res;
+        for (size_t i {0}; i < x.n_elem; ++i) {
+            if (x(i) >= boundary_knots(0) && x(i) <= boundary_knots(1)) {
+                res.push_back(x(i));
+            }
+        }
+        return T(res);
+    }
+
     // quantile function
     // reference: Hyndman and Fan (1996)
     inline arma::vec arma_quantile(const arma::vec& x,

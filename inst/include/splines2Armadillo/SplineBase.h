@@ -59,19 +59,24 @@ namespace splines2 {
             if (boundary_knots.has_nan()) {
                 throw std::range_error("Boundary knots cannot contain NA.");
             }
-            if (boundary_knots.n_elem == 0 && this->x_.n_elem > 0 &&
-                this->boundary_knots_.n_elem != 2) {
-                // set boundary knots to be min(x) and max(x)
-                this->boundary_knots_ = arma::zeros(2);
-                this->boundary_knots_(0) = arma::min(this->x_);
-                this->boundary_knots_(1) = arma::max(this->x_);
-                // check if boundary knots are different
-                if (this->boundary_knots_(0) == this->boundary_knots_(1)) {
-                    throw std::range_error(
-                        "Cannot set boundary knots from unique x."
-                        );
+            // for unspecified boundary knots
+            // 1. do generation if no boundary knots have been set
+            // 2. or skip checks if a set of boundary knots have been set
+            if (boundary_knots.n_elem == 0) {
+                if (this->boundary_knots_.n_elem != 2 && this->x_.n_elem > 0) {
+                    // set boundary knots to be min(x) and max(x)
+                    this->boundary_knots_ = arma::zeros(2);
+                    this->boundary_knots_(0) = arma::min(this->x_);
+                    this->boundary_knots_(1) = arma::max(this->x_);
+                    // check if boundary knots are different
+                    if (this->boundary_knots_(0) == this->boundary_knots_(1)) {
+                        throw std::range_error(
+                            "Cannot set boundary knots from unique x."
+                            );
+                    }
                 }
             } else {
+                // specified boundary knots
                 rvec uni_boundary_knots { arma::unique(boundary_knots) };
                 if (uni_boundary_knots.n_elem != 2) {
                     throw std::length_error(
@@ -83,6 +88,9 @@ namespace splines2 {
             if (internal_knots.has_nan()) {
                 throw std::range_error("Internal knots cannot contain NA.");
             }
+            // for non-empty internal knots
+            // 1. get unique values
+            // 2. checks if outside of boundary
             if (internal_knots.n_elem > 0) {
                 rvec uni_internal_knots { arma::unique(internal_knots) };
                 // check internal knots are inside of boundary knots
@@ -205,8 +213,11 @@ namespace splines2 {
             } else {
                 rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
                 prob_vec = prob_vec.subvec(1, n_internal_knots);
-                rvec internal_knots { arma_quantile(this->x_, prob_vec) };
-                this->clean_knots(internal_knots, boundary_knots);
+                this->clean_knots(rvec(), boundary_knots);
+                // get quantiles of x within boundary only
+                rvec x_inside { get_inside_x(x, this->boundary_knots_) };
+                rvec internal_knots { arma_quantile(x_inside, prob_vec) };
+                this->clean_knots(internal_knots);
             }
         }
 
