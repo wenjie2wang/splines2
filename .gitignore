@@ -1,4 +1,5 @@
 working
+docs
 *.tar.gz
 *.Rcheck/
 *.so
