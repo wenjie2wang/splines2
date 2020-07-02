@@ -1,7 +1,7 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
 Version: 0.3.0.9000
-Date: 2020-02-27
+Date: 2020-07-01
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wenjie.2.wang@uconn.edu",
@@ -18,7 +18,8 @@ Description: Constructs B-splines and its integral, M-splines
     Ramsay (1988) <doi:10.1214/ss/1177012761>, and
     Meyer (2008) <doi:10.1214/08-AOAS167> for more information.
 Imports:
-    Rcpp
+    Rcpp,
+    stats
 LinkingTo:
     Rcpp,
     RcppArmadillo
@@ -33,4 +34,4 @@ License: GPL (>= 3)
 URL: https://github.com/wenjie2wang/splines2
 BugReports: https://github.com/wenjie2wang/splines2/issues
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
