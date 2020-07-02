@@ -174,7 +174,7 @@ namespace splines2 {
 
         // constructor with specificied internal_knots
         SplineBase(const rvec& x,
-                   const rvec& internal_knots = rvec(),
+                   const rvec& internal_knots,
                    const unsigned int degree = 3,
                    const rvec& boundary_knots = rvec()) :
             x_ { x },
@@ -187,7 +187,7 @@ namespace splines2 {
 
         // constructor with specified df
         SplineBase(const rvec& x,
-                   const unsigned int spline_df = 4,
+                   const unsigned int spline_df,
                    const unsigned int degree = 3,
                    const rvec& boundary_knots = rvec()) :
             x_ { x },

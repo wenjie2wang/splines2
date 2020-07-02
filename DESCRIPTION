@@ -34,4 +34,4 @@ License: GPL (>= 3)
 URL: https://github.com/wenjie2wang/splines2
 BugReports: https://github.com/wenjie2wang/splines2/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
