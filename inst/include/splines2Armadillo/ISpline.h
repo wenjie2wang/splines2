@@ -87,7 +87,7 @@ namespace splines2 {
             for (size_t i {0}; i < this->x_.n_elem; ++i) {
                 size_t k2 { x_index_(i) + degree_ };
                 arma::rowvec numer { i_mat(i, arma::span(0, k2)) };
-                numer = cum_sum(numer, true);
+                numer = rev_cum_sum(numer);
                 for (size_t j {0}; j < i_mat.n_cols; ++j) {
                     if (j > k2) {
                         i_mat(i, j) = 0.0;
