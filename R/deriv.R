@@ -165,6 +165,7 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
         return(do.call(mSpline, attributes(expr)))
     }
     ## else scaled
-    attr(expr, "derivs") <- derivs
+    derivs0 <- attr(expr, "derivs")
+    attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
     do.call(cSpline, attributes(expr))
 }
