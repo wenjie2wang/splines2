@@ -163,7 +163,12 @@ namespace splines2 {
                     d_mat(i, x_index_(i) + numer) = saved;
                 }
             }
-            return d_mat;
+            // remove the first column if needed
+            if (complete_basis) {
+                return d_mat;
+            }
+            // else
+            return mat_wo_col1(d_mat);
         }
 
         // integral of B-splines
@@ -215,11 +220,11 @@ namespace splines2 {
                     }
                 }
             }
-            // remove first columns if needed
-            if (! complete_basis) {
-                i_mat = mat_wo_col1(i_mat);
+            // remove the first column if needed
+            if (complete_basis) {
+                return i_mat;
             }
-            return i_mat;
+            return mat_wo_col1(i_mat);
         }
 
 

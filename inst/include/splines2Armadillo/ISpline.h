@@ -96,11 +96,11 @@ namespace splines2 {
                     }
                 }
             }
-            // remove first columns if needed
-            if (! complete_basis) {
-                i_mat = mat_wo_col1(i_mat);
+            // remove the first column if needed
+            if (complete_basis) {
+                return i_mat;
             }
-            return i_mat;
+            return mat_wo_col1(i_mat);
         }
 
     };
