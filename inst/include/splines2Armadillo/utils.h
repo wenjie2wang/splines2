@@ -640,7 +640,7 @@ namespace splines2 {
             return x.tail_cols(x_ncol - 1);
         }
         // else
-        throw std::range_error("No column left.");
+        throw std::range_error("No column left in the matrix.");
         return T();
     }
 
