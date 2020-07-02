@@ -88,8 +88,10 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = TRUE, Boundary.knots = NULL,
                     derivs = 0L, scale = TRUE, ...)
 {
-    derivs <- as.integer(derivs)
     ## check inputs
+    if ((derivs <- as.integer(derivs)) < 0) {
+        stop("'derivs' must be a non-negative integer.")
+    }
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
     if (is.null(df)) {

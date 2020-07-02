@@ -53,9 +53,10 @@
 dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
                 intercept = FALSE, Boundary.knots = NULL, ...)
 {
-    ## derivs will be checked for range in c++ code
-    derivs <- as.integer(derivs)
-    ## check and reformat 'degree'
+    ## check inputs
+    if ((derivs <- as.integer(derivs)) <= 0) {
+        stop("'derivs' must be a positive integer.")
+    }
     if ((degree <- as.integer(degree)) < 0) {
         stop("'degree' must be a nonnegative integer.")
     }

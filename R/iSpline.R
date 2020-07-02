@@ -76,7 +76,10 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = TRUE, Boundary.knots = NULL,
                     derivs = 0L, ...)
 {
-    derivs <- as.integer(derivs)
+    ## check inputs
+    if ((derivs <- as.integer(derivs)) < 0) {
+        stop("'derivs' must be a non-negative integer.")
+    }
     if (derivs > 0) {
         return(mSpline(x = x,
                        df = df,
@@ -87,7 +90,6 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                        derivs = derivs - 1L, ...))
     }
     ## else I-Spline basis
-    ## check inputs
     if ((degree <- as.integer(degree)) < 0)
         stop("'degree' must be a nonnegative integer.")
     if (is.null(df)) {
