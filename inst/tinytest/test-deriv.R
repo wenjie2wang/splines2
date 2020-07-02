@@ -87,8 +87,7 @@ expect_equivalent(ms4Mat, tmp <- deriv(tmp))
 
 ## simple test for scale = TRUE
 csMat <- cSpline(x, knots = knots, degree = 4)
-expect_equal(isNumMatrix(deriv(csMat), 12L, 8L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+expect_equal(isNumMatrix(deriv(csMat), 12L, 8L), TRUE)
 expect_equivalent(deriv(csMat, 2), deriv(deriv(csMat)))
 expect_equivalent(deriv(csMat, 3), deriv(deriv(csMat, 2)))
 expect_equivalent(deriv(csMat, 3), deriv(deriv(deriv(csMat))))

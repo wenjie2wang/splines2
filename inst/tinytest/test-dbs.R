@@ -47,16 +47,15 @@ expect_error(dbs(x, 1, df = 2, intercept = TRUE), "df")
 expect_error(dbs(x, 1, df = 3, intercept = TRUE), "df")
 expect_error(dbs(x, 2, df = 3, intercept = TRUE), "df")
 expect_equal(isNumMatrix(dbs(x, 1, df = 1, degree = 0, intercept = TRUE),
-                         21L, 1L, warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(dbs(x, 1, df = 4), 21L, 4L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 1L), TRUE)
+expect_equal(isNumMatrix(dbs(x, 1, df = 4), 21L, 4L), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 4, intercept = TRUE),
-                         21L, 4L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 4L), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 5),
-                         21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 5L), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 5, intercept = TRUE),
-                         21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 5L), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 5, degree = 0),
-                         21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 5L), TRUE)
 expect_equal(isNumMatrix(dbs(x, 1, df = 5, degree = 0, intercept = TRUE),
-                         21L, 5L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         21L, 5L), TRUE)

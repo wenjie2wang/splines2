@@ -16,23 +16,15 @@ msMat0g <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
                    Boundary.knots = c(0, 1), derivs = 2)
 msMat0h <- mSpline(0.1, knots = knots, degree = 2,
                    Boundary.knots = c(0, 1), derivs = 3)
-expect_equal(isNumMatrix(msMat0a, 14L, 1L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+expect_equal(isNumMatrix(msMat0a, 14L, 1L), TRUE)
 expect_equal(sum(is.na(msMat0b)), 12L) # keep NA's as is
-expect_equal(isNumMatrix(msMat0b, 14L, 4L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0c, 14L, 5L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0d, 14L, 5L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0e, 14L, 6L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0f, 1L, 6L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0g, 1L, 6L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(msMat0h, 1L, 5L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+expect_equal(isNumMatrix(msMat0b, 14L, 4L), TRUE)
+expect_equal(isNumMatrix(msMat0c, 14L, 5L), TRUE)
+expect_equal(isNumMatrix(msMat0d, 14L, 5L), TRUE)
+expect_equal(isNumMatrix(msMat0e, 14L, 6L), TRUE)
+expect_equal(isNumMatrix(msMat0f, 1L, 6L), TRUE)
+expect_equal(isNumMatrix(msMat0g, 1L, 6L), TRUE)
+expect_equal(isNumMatrix(msMat0h, 1L, 5L), TRUE)
 expect_error(mSpline(x, degree = 0))
 expect_warning(mSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)),

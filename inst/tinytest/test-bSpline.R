@@ -32,22 +32,17 @@ bsMat0b <- bSpline(x, df = 5, degree = 0)
 bsMat0c <- bSpline(x, df = 5, degree = 0, intercept = TRUE)
 bsMat0d <- bSpline(x, knots = knots, degree = 0)
 bsMat0e <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
-expect_equal(isNumMatrix(bsMat0a, 14L, 1L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+expect_equal(isNumMatrix(bsMat0a, 14L, 1L), TRUE)
 expect_equal(sum(is.na(bsMat0b)), 15L) # keep NA's as is
-expect_equal(isNumMatrix(bsMat0b, 14L, 5L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(bsMat0c, 14L, 5L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(bsMat0d, 14L, 3L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
-expect_equal(isNumMatrix(bsMat0e, 14L, 4L,
-                         warn_na = FALSE, error_na = FALSE), TRUE)
+expect_equal(isNumMatrix(bsMat0b, 14L, 5L), TRUE)
+expect_equal(isNumMatrix(bsMat0c, 14L, 5L), TRUE)
+expect_equal(isNumMatrix(bsMat0d, 14L, 3L), TRUE)
+expect_equal(isNumMatrix(bsMat0e, 14L, 4L), TRUE)
 expect_equal(isNumMatrix(bSpline(x, df = 10, knots = knots, degree = 0L),
-                         14L, 3L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         14L, 3L), TRUE)
 expect_equal(isNumMatrix(bSpline(x, df = 10, knots = knots,
                                  degree = 0, intercept = TRUE),
-                         14L, 4L, warn_na = FALSE, error_na = FALSE), TRUE)
+                         14L, 4L), TRUE)
 expect_error(bSpline(x, degree = 0), "No column")
 expect_error(bSpline(x, knots = c(- 1, 0.5), degree = 0), "inside")
 expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
