@@ -1,22 +1,19 @@
-################################################################################
 ##
-##   R package splines2 by Wenjie Wang and Jun Yan
-##   Copyright (C) 2016-2020
+## R package splines2 by Wenjie Wang and Jun Yan
+## Copyright (C) 2016-2020
 ##
-##   This file is part of the R package splines2.
+## This file is part of the R package splines2.
 ##
-##   The R package splines2 is free software: You can redistribute it and/or
-##   modify it under the terms of the GNU General Public License as published
-##   by the Free Software Foundation, either version 3 of the License, or
-##   any later version (at your option). See the GNU General Public License
-##   at <http://www.gnu.org/licenses/> for details.
+## The R package splines2 is free software: You can redistribute it and/or
+## modify it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or any later
+## version (at your option). See the GNU General Public License at
+## <https://www.gnu.org/licenses/> for details.
 ##
-##   The R package splines2 is distributed in the hope that it will be useful,
-##   but WITHOUT ANY WARRANTY without even the implied warranty of
-##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+## The R package splines2 is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
-################################################################################
-
 
 ##' Evaluate a Spline Basis
 ##'
@@ -37,38 +34,12 @@
 ##' @param newx The \code{x} values at which evaluations are required.
 ##' @param ... Optional argument for future usage.
 ##'
-##' @return An object just like the \code{object} input, except evaluated at
+##' @return
+##' An object just like the \code{object} input, except evaluated at
 ##' the new values of \code{x}.
 ##'
-##' @examples
-##' library(splines2)
-##' x <- seq.int(0, 1, 0.2)
-##' knots <- c(0.3, 0.5, 0.6)
-##' newX <- seq.int(0.1, 0.9, 0.2)
+##' @example inst/examples/ex-predict.R
 ##'
-##' ## for B-splines
-##' bsMat <- bSpline(x, knots = knots, degree = 2)
-##' predict(bsMat, newX)
-##'
-##' ## for integral of B-splines
-##' ibsMat <- ibs(x, knots = knots, degree = 2)
-##' predict(ibsMat, newX)
-##'
-##' ## for derivative of B-splines
-##' dbsMat <- dbs(x, knots = knots, degree = 2)
-##' predict(dbsMat, newX)
-##'
-##' ## for M-spline
-##' msMat <- mSpline(x, knots = knots, degree = 2)
-##' predict(msMat, newX)
-##'
-##' ## for I-spline
-##' isMat <- iSpline(x, knots = knots, degree = 2)
-##' predict(isMat, newX)
-##'
-##' ## for C-spline
-##' csMat <- cSpline(x, knots = knots, degree = 2)
-##' predict(csMat, newX)
 ##' @seealso
 ##' \code{\link{bSpline}} for B-splines;
 ##' \code{\link{ibs}} for integral of B-splines;
@@ -76,6 +47,7 @@
 ##' \code{\link{mSpline}} for M-splines;
 ##' \code{\link{iSpline}} for I-splines;
 ##' \code{\link{cSpline}} for C-splines.
+##'
 ##' @importFrom stats predict
 NULL
 

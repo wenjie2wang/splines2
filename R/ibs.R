@@ -1,3 +1,20 @@
+##
+## R package splines2 by Wenjie Wang and Jun Yan
+## Copyright (C) 2016-2020
+##
+## This file is part of the R package splines2.
+##
+## The R package splines2 is free software: You can redistribute it and/or
+## modify it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or any later
+## version (at your option). See the GNU General Public License at
+## <https://www.gnu.org/licenses/> for details.
+##
+## The R package splines2 is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+##
+
 ##' Integral of B-Spline Basis
 ##'
 ##' Generates the integral of B-spline basis matrix for a polynomial spline.
@@ -20,27 +37,7 @@
 ##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
 ##' Vol. 27. New York: Springer-Verlag.
 ##'
-##' @examples
-##' library(splines2)
-##' x <- seq.int(0, 1, 0.01)
-##' knots <- c(0.2, 0.4, 0.7, 0.9)
-##' ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
-##'
-##' ## the B-spline bases integrated by function bSpline (same arguments)
-##' bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
-##' ## or by function deriv (recommended) that directly extracts the existing
-##' ## result from the attribute of ibsMat and thus is much more efficient.
-##' bsMat <- deriv(ibsMat)
-##' stopifnot(all.equal(bsMat0, bsMat, check.attributes = FALSE)) # equivalent
-##'
-##' ## plot B-spline basis with their corresponding integrals
-##' library(graphics)
-##' par(mfrow = c(1, 2))
-##' matplot(x, bsMat, type = "l", ylab = "B-spline basis")
-##' abline(v = knots, lty = 2, col = "gray")
-##' matplot(x, ibsMat, type = "l", ylab = "Integral of B-spline basis")
-##' abline(v = knots, lty = 2, col = "gray")
-##' par(mfrow = c(1, 1))
+##' @example inst/examples/ex-ibs.R
 ##'
 ##' @seealso
 ##' \code{\link{predict.ibs}} for evaluation at given (new) values;
