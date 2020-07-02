@@ -12,21 +12,22 @@ output: rmarkdown::html_vignette
 ---
 
 
-The package **splines2** is designed to be a supplementary package on splines.
-It provides functions constructing a variety of spline bases that are not
-available from the package **splines** shipped with **R**.  Most functions have
-a very similar user interface with the function `bs` in package
-**splines**. Currently, **splines2** provides function constructing B-splines,
-integral of B-splines, monotone splines (M-splines) and its integral
-(I-splines), convex splines (C-splines), and their derivatives.  Compared with
-package **splines**, **splines2** allows piecewise constant basis for B-splines.
-Also, it provides a more user-friendly function interface, more consistent
-handling on `NA`'s for spline derivatives.
+The **splines2** package is designed to be a supplementary package on splines.
+It provides functions constructing a variety of regression spline bases that are
+not available from the **splines** package shipped with base R.  Most functions
+have a very similar user interface with the function `splines::bs`.
+**splines2** `r packageVersion("splines2")` provides function constructing
+B-splines, integral of B-splines, M-splines and its integral (I-splines), convex
+splines (C-splines), and their derivatives.  Compared with the **splines**
+package, **splines2** allows piecewise constant basis for B-splines.  Also, it
+provides a more user-friendly function interface, more consistent handling on
+`NA`'s for spline derivatives.  Most of the implementation has been re-written
+in C++ with help of Rcpp and RcppArmadillo since v0.3.0.
 
 
-In this vignette, we introduce the basic usage of the functions provided by
-examples. The details of function syntax are available in the package manual and
-thus will be not discussed.
+In this vignette, we introduce the basic usage of most functions in the package
+through examples. The details of function syntax are available in the package
+manual and thus will be not discussed.
 
 
 An outline of the remainder of the vignette is as follows: We first introduce
@@ -54,7 +55,8 @@ library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
 msOut <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-library(graphics) # attach graphics (just in case) for plots
+
+library(graphics)
 par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, msOut, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray") # mark internal knots
@@ -88,20 +90,15 @@ their own polynomial degree.
 
 ```{r iSpline, fig.width=7, fig.height=4, fig.cap = "I-splines of degree two with three internal knots."}
 isOut <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
-par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, isOut, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
 The corresponding M-spline basis matrix can be obtained easily by the `deriv`
-method, which internally exacts the attribute named `msMat` in the object
-returned by function `iSpline`. In other words, if we need both M-spline bases
-and their integral splines in model fitting, `iSpline` and its `deriv` method
-should be used, while an extra function call of `mSpline` should be avoided for
-a better performance.
+method.
 
 ```{r msMat}
-stopifnot(all.equal(msOut, deriv(isOut)))
+stopifnot(all.equal(msOut, deriv(isOut), check.attributes = FALSE))
 ```
 
 ## C-splines using `cSpline` {#cSpline}
@@ -119,16 +116,11 @@ restricted to be nonnegative as well.
 
 Function `cSpline` provides argument `scale` specifying whether scaling on
 C-spline bases is required.  If `scale = TRUE` (by default), each C-spline basis
-is scaled to have unit height at right boundary knot. For its first (second)
-derivative, the `deriv` method can be used, which internally exacts the
-corresponding I-spline (M-spline) bases shipped in attributes `isMat` (`msMat`)
-scaled to the same extent. The derivatives of higher order can be obtained by
-specifying argument `derivs` in the `deriv` method.
+is scaled to have unit height at the right boundary knot.
 
 
 ```{r cSpline-scaled, fig.width=7, fig.height=4, fig.cap = "C-splines of degree two with three internal knots."}
 csOut1 <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
-par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0))
 matplot(x, csOut1, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
@@ -155,7 +147,7 @@ A close-form recursive formulas of B-spline integral and derivative given by
 
 ```{r ibs, fig.width=7, fig.height=4, fig.cap="Piecewise linear B-splines (left) and their integrals (right)."}
 ibsOut <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
-par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0), mfrow = c(1, 2))
+par(mfrow = c(1, 2))
 matplot(x, deriv(ibsOut), type = "l", ylab = "y")
 abline(v = knots, h = 1, lty = 2, col = "gray")
 matplot(x, ibsOut, type = "l", ylab = "y")
@@ -165,7 +157,6 @@ abline(v = knots, h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
 ```{r dbs, fig.width=7, fig.height=4, fig.cap="Cubic B-splines (left) and their first derivative (right)."}
 dbsOut <- dbs(x, knots = knots, intercept = TRUE)
 bsOut <- bSpline(x, knots = knots, intercept = TRUE)
-par(mar = c(2.5, 2.5, 0, 0), mgp = c(1.5, 0.5, 0), mfrow = c(1, 2))
 matplot(x, bsOut, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
 matplot(x, dbsOut, type = "l", ylab = "y")
@@ -207,10 +198,10 @@ predict(isOut, c(0.275, 0.525, 0.8))
 ```
 
 Technically speaking, the methods take all information needed, such as `knots`,
-`degree`, `intercept`, etc., from attributes of the original **splines2**
-objects and call the corresponding function automatically for those new $x$
-values. Therefore, the `predict` methods will not be applicable if those
-attributes are somehow lost after certain operation.
+`degree`, `intercept`, etc., from attributes of the original objects and call
+the corresponding function automatically for those new $x$ values. Therefore,
+the `predict` methods will not be applicable if those attributes are somehow
+lost after some operations.
 
 
 
