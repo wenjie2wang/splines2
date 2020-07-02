@@ -20,7 +20,7 @@
 
 #include <stdexcept>
 
-#include "aliases.h"
+#include "common.h"
 #include "utils.h"
 #include "SplineBase.h"
 
