@@ -31,6 +31,9 @@ namespace splines2 {
     // define a class for M-splines
     class CSpline : public SplineBase
     {
+        // inherits constructors
+        using SplineBase::SplineBase;
+
     private:
         // hide pure virtual function for integral here
         inline rmat integral(const bool complete_basis = true)
@@ -58,9 +61,6 @@ namespace splines2 {
         }
 
     public:
-        // inherits constructors
-        using SplineBase::SplineBase;
-
         // function members
         inline arma::rowvec get_scales()
         {

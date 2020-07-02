@@ -31,10 +31,10 @@ namespace splines2 {
     // define a class for M-splines
     class ISpline : public SplineBase
     {
-    public:
         // inherits constructors
         using SplineBase::SplineBase;
 
+    public:
         // function members
 
         //! Compute I-spline basis

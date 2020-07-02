@@ -29,10 +29,10 @@ namespace splines2 {
     // define a class for B-splines
     class BSpline : public SplineBase
     {
-    public:
         // inherits constructors
         using SplineBase::SplineBase;
 
+    public:
         // function members
 
         //! Compute B-spline basis
