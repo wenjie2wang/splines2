@@ -4,8 +4,16 @@
 \alias{mSpline}
 \title{M-Spline Basis for Polynomial Splines and its Derivatives}
 \usage{
-mSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = FALSE,
-        Boundary.knots = range(x, na.rm = TRUE), derivs = 0L, ...)
+mSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  ...
+)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
@@ -15,7 +23,8 @@ returned as they were.}
 \code{knots}, then the function chooses "df - degree" (minus one if
 there is an intercept) knots at suitable quantiles of \code{x} (which
 will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept".}
+no inner knots, i.e., "degree - intercept". If \code{knots} was
+specified, \code{df} specified will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
@@ -23,13 +32,14 @@ regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.  See also \code{Boundary.knots}.}
 
 \item{degree}{Non-negative integer degree of the piecewise polynomial. The
-default value is 3 for cubic splines. Zero degree is allowed for
-piecewise constant basis.}
+default value is 3 for cubic splines. Zero degree is allowed for this
+function, which is the only difference compared with
+\code{\link[splines]{bs}} in package \code{splines}.}
 
-\item{intercept}{If \code{TRUE}, all bases will be returned. The default
-value is \code{FALSE}.}
+\item{intercept}{If \code{TRUE}, an intercept is included in the basis;
+Default is \code{FALSE}.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the M-spline basis.
+\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
@@ -76,6 +86,7 @@ dmsMat <- mSpline(x, knots = knots, degree = 2,
 ## or using the 'deriv' method
 dmsMat1 <- deriv(msMat)
 stopifnot(all.equal(dmsMat, dmsMat1, check.attributes = FALSE))
+
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.

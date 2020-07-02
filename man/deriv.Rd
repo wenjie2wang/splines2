@@ -69,25 +69,25 @@ d2Mat1 <- deriv(bsMat)
 d2Mat2 <- deriv(ibsMat, derivs = 2L)
 ## nested calls are supported but not recommended
 d2Mat3 <- deriv(deriv(ibsMat))
-stopifnot(all.equal(d2Mat1, d2Mat2, d2Mat3, check.attributes = FALSE))
+stopifnot(all.equal(d2Mat1, d2Mat2, check.attributes = FALSE))
+stopifnot(all.equal(d2Mat2, d2Mat3, check.attributes = FALSE))
 
 ## C-splines, I-splines, M-splines and the derivatives
-csMat <- cSpline(x, knots = knots, scale = FALSE)
-isMat <- iSpline(x, knots = knots)
+csMat <- cSpline(x, knots = knots, intercept = TRUE, scale = FALSE)
+isMat <- iSpline(x, knots = knots, intercept = TRUE)
 stopifnot(all.equal(isMat, deriv(csMat), check.attributes = FALSE))
 
 msMat <- mSpline(x, knots = knots, intercept = TRUE)
-stopifnot(all.equal(msMat, deriv(isMat), deriv(csMat, 2),
-                    deriv(deriv(csMat)), check.attributes = FALSE))
+stopifnot(all.equal(msMat, deriv(isMat), check.attributes = FALSE))
+stopifnot(all.equal(msMat, deriv(csMat, 2), check.attributes = FALSE))
+stopifnot(all.equal(msMat, deriv(deriv(csMat)), check.attributes = FALSE))
 
 dmsMat <- mSpline(x, knots = knots, intercept = TRUE, derivs = 1)
-stopifnot(all.equal(dmsMat, deriv(msMat), deriv(isMat, 2),
-                    deriv(deriv(isMat)), deriv(csMat, 3),
-                    deriv(deriv(deriv(csMat))), check.attributes = FALSE))
-}
-\references{
-De Boor, Carl. (1978). \emph{A practical guide to splines}.
-Vol. 27. New York: Springer-Verlag.
+stopifnot(all.equal(dmsMat, deriv(msMat), check.attributes = FALSE))
+stopifnot(all.equal(dmsMat, deriv(isMat, 2), check.attributes = FALSE))
+stopifnot(all.equal(dmsMat, deriv(deriv(isMat)), check.attributes = FALSE))
+stopifnot(all.equal(dmsMat, deriv(csMat, 3), check.attributes = FALSE))
+stopifnot(all.equal(dmsMat, deriv(deriv(deriv(csMat))), check.attributes = FALSE))
 }
 \seealso{
 \code{\link{bSpline}} for B-splines;

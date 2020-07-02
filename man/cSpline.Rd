@@ -2,10 +2,19 @@
 % Please edit documentation in R/cSpline.R
 \name{cSpline}
 \alias{cSpline}
-\title{C-Spline Basis for Polynomial Splines}
+\title{C-Spline Basis for Polynomial Splines or its derivatives}
 \usage{
-cSpline(x, df = NULL, knots = NULL, degree = 3L, intercept = TRUE,
-        Boundary.knots = range(x, na.rm = TRUE), scale = TRUE, ...)
+cSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = TRUE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  scale = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
@@ -15,7 +24,8 @@ returned as they were.}
 \code{knots}, then the function chooses "df - degree" (minus one if
 there is an intercept) knots at suitable quantiles of \code{x} (which
 will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept".}
+no inner knots, i.e., "degree - intercept". If \code{knots} was
+specified, \code{df} specified will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
@@ -30,11 +40,14 @@ Notice that when using C-Spline for shape-restricted regression,
 \code{intercept = TRUE} should be set even when an intercept term is
 considered additional to the spline bases in the model.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the C-spline basis.
+\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
+
+\item{derivs}{A non-negative integer specifying the order of derivatives of
+C-splines. The default value is \code{0L} for C-spline bases.}
 
 \item{scale}{Logical value (\code{TRUE} by default) indicating whether
 scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
@@ -51,15 +64,12 @@ The attributes that correspond to the arguments specified are returned
 for the usage of other functions in this package.
 }
 \description{
-This function generates the convex regression spline (called C-spline) basis
+Generates the convex regression spline (called C-spline) basis
 matrix by integrating I-spline basis for a polynomial spline.
 }
 \details{
-It is an implementation of the close form C-spline basis derived from
-the recursion formula of I-spline and M-spline.  Internally, it calls
-\code{\link{iSpline}} and generates a basis matrix for representing the
-family of piecewise polynomials and their corresponding integrals with the
-specified interior knots and degree, evaluated at the values of \code{x}.
+It is an implementation of the close form C-spline basis derived from the
+recursion formula of I-spline and M-spline.
 }
 \examples{
 library(splines2)
@@ -88,6 +98,7 @@ msMat1 <- deriv(csMat, derivs = 2)
 ## equivalent
 stopifnot(all.equal(isMat, isMat1, check.attributes = FALSE))
 stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
+
 }
 \references{
 Meyer, M. C. (2008). Inference using shape-restricted regression splines.

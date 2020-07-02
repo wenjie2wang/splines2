@@ -2,42 +2,51 @@
 % Please edit documentation in R/dbs.R
 \name{dbs}
 \alias{dbs}
-\title{Derivative of B-Spline Basis for Polynomial Splines}
+\title{Derivatives of B-Spline Basis}
 \usage{
-dbs(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
-    intercept = FALSE, Boundary.knots = range(x, na.rm = TRUE), ...)
+dbs(
+  x,
+  derivs = 1L,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
-kept and returned as they were.}
+returned as they were.}
 
 \item{derivs}{A positive integer specifying the order of derivative.  By
 default, it is \code{1L} for the first derivative.}
 
-\item{df}{Degrees of freedom of the B-spline basis to be differentiated.
-One can specify \code{df} rather than \code{knots}, then the function
-chooses "df - degree" (minus one if there is an intercept) knots at
-suitable quantiles of \code{x} (which will ignore missing values).  The
-default, \code{NULL}, corresponds to no inner knots, i.e.,
-"degree - intercept".}
+\item{df}{Degrees of freedom.  One can specify \code{df} rather than
+\code{knots}, then the function chooses "df - degree" (minus one if
+there is an intercept) knots at suitable quantiles of \code{x} (which
+will ignore missing values).  The default, \code{NULL}, corresponds to
+no inner knots, i.e., "degree - intercept". If \code{knots} was
+specified, \code{df} specified will be ignored.}
 
-\item{knots}{The internal breakpoints that define the B-spline basis to be
-differentiated.  The default is \code{NULL}, which results in a basis
-for ordinary polynomial regression.  Typical values are the mean or
-median for one knot, quantiles for more knots.  See also
-\code{Boundary.knots}.}
+\item{knots}{The internal breakpoints that define the spline.  The default
+is \code{NULL}, which results in a basis for ordinary polynomial
+regression.  Typical values are the mean or median for one knot,
+quantiles for more knots.  See also \code{Boundary.knots}.}
 
-\item{degree}{Non-negative integer degree of the piecewise polynomial to be
-differentiated. The default value is 3 for the integral of cubic
-B-splines.}
+\item{degree}{Non-negative integer degree of the piecewise polynomial. The
+default value is 3 for cubic splines. Zero degree is allowed for this
+function, which is the only difference compared with
+\code{\link[splines]{bs}} in package \code{splines}.}
 
 \item{intercept}{If \code{TRUE}, an intercept is included in the basis;
 Default is \code{FALSE}.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis
-to be differentiated. By default, they are the range of the
-non-\code{NA} data.  If both \code{knots} and \code{Boundary.knots} are
-supplied, the basis parameters do not depend on \code{x}.}
+\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
+By default, they are the range of the non-\code{NA} data.  If both
+\code{knots} and \code{Boundary.knots} are supplied, the basis
+parameters do not depend on \code{x}. Data can extend beyond
+\code{Boundary.knots}.}
 
 \item{...}{Optional arguments for future usage.}
 }
@@ -48,20 +57,16 @@ Attributes that correspond to the arguments specified are returned
 for usage of other functions in this package.
 }
 \description{
-This function produces the derivative of given order of B-splines.  It is an
-implementation of the close form derivative of B-spline basis based on
-recursion relation.  At knots, the derivative is defined to be the right
-derivative.
+Produces the derivative of given order of B-splines.
 }
 \details{
-The function is similar with \code{\link[splines]{splineDesign}}. However,
-it provides a more user-friendly interface, a more considerate \code{NA}'s
-handling.  Internally, it calls \code{\link{bSpline}} and generates a basis
-matrix for representing the family of piecewise polynomials and their
-corresponding derivative with the specified interior knots and degree,
-evaluated at the values of \code{x}. The function \code{splineDesign} in
-\code{splines} package can also be used to calculate derivative of
-B-splines.
+It is an implementation of the close form derivative of B-spline basis based
+on recursion relation.  At knots, the derivative is defined to be the right
+derivative.
+
+The function is similar with \code{splines::splineDesign}. However, it
+provides a more user-friendly interface, a more considerate \code{NA}'s
+handling.
 }
 \examples{
 library(splines2)
