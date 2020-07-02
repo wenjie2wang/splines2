@@ -43,7 +43,7 @@
 ##' Attributes that correspond to the arguments specified are returned
 ##' for usage for other function in this package.
 ##'
-##' @example inst/examples/ex-derivs.R
+##' @example inst/examples/ex-deriv.R
 ##'
 ##' @seealso
 ##' \code{\link{bSpline}} for B-splines;

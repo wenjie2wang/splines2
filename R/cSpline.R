@@ -31,6 +31,8 @@
 ##'     Notice that when using C-Spline for shape-restricted regression,
 ##'     \code{intercept = TRUE} should be set even when an intercept term is
 ##'     considered additional to the spline bases in the model.
+##' @param derivs A non-negative integer specifying the order of derivatives of
+##'     C-splines. The default value is \code{0L} for C-spline bases.
 ##' @param scale Logical value (\code{TRUE} by default) indicating whether
 ##'     scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
 ##'     to have unit height at right boundary knot; the corresponding I-spline
@@ -163,6 +165,14 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                    )
                }
            }
+    ## throw warning if any x is outside of the boundary
+    b_knots <- attr(out, "Boundary.knots")
+    if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+        warning(wrapMessages(
+            "Some 'x' values beyond boundary knots",
+            "may cause ill-conditioned bases."
+        ))
+    }
     ## keep NA's as is
     if (nas) {
         nmat <- matrix(NA, length(nax), ncol(out))

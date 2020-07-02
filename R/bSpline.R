@@ -99,6 +99,14 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
         boundary_knots = Boundary.knots,
         complete_basis = intercept
     )
+    ## throw warning if any x is outside of the boundary
+    b_knots <- attr(out, "Boundary.knots")
+    if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+        warning(wrapMessages(
+            "Some 'x' values beyond boundary knots",
+            "may cause ill-conditioned bases."
+        ))
+    }
     ## keep NA's as is
     if (nas) {
         nmat <- matrix(NA_real_, length(nax), ncol(out))
