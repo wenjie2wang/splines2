@@ -62,6 +62,10 @@ namespace splines2 {
         using SplineBase::SplineBase;
 
         // function members
+        inline arma::rowvec get_scales()
+        {
+            return this->scales_;
+        }
 
         //! Compute I-spline basis
         //!

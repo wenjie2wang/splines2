@@ -614,6 +614,15 @@ namespace splines2 {
     inline arma::vec rvec2arma(const T& x) {
         return arma::vec(x.begin(), x.size(), false);
     }
+    // convert arma matrix type to Rcpp matrix type
+    inline Rcpp::NumericMatrix arma2rmat(const arma::mat& x) {
+        return Rcpp::NumericMatrix(x.n_rows, x.n_cols, x.begin());
+    }
+    // convert Rcpp matrix to arma matrix
+    // cannot add const to x
+    inline arma::mat rmat2arma(Rcpp::NumericMatrix& x) {
+        return arma::mat(x.begin(), x.nrow(), x.ncol(), false);
+    }
 
     // set a value within [a, b]
     inline double ge_le(const double x, const double a, const double b) {
@@ -641,6 +650,25 @@ namespace splines2 {
         // create zero matrix
         arma::mat mat2 { arma::zeros(x.n_rows, n_cols) };
         return arma::join_rows(x, mat2);
+    }
+
+    // remove datum::nan from a given vector
+    inline arma::vec rm_na(arma::vec x)
+    {
+        arma::uvec idx { arma::find_nonfinite(x) };
+        if (idx.n_elem > 0) {
+            x.shed_rows(idx);
+        }
+        return x;
+    }
+
+    // create a character vector ("1", ...) of a given length
+    inline Rcpp::CharacterVector char_seq_len(const unsigned int n) {
+        Rcpp::CharacterVector out { n };
+        for (size_t i {0}; i < n; ++i) {
+            out[i] = std::to_string(i + 1);
+        }
+        return out;
     }
 
 }

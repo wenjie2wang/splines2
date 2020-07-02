@@ -53,9 +53,12 @@ namespace splines2 {
 
         // pre-process some inputs
         // check knots, and do assignment
-        inline void clean_knots(const arma::vec& internal_knots = nan_vec(),
-                                const arma::vec& boundary_knots = rvec())
+        inline void clean_knots(const rvec& internal_knots = rvec(),
+                                const rvec& boundary_knots = rvec())
         {
+            if (boundary_knots.has_nan()) {
+                throw std::range_error("Boundary knots cannot contain NA.");
+            }
             if (boundary_knots.n_elem == 0 && this->x_.n_elem > 0 &&
                 this->boundary_knots_.n_elem != 2) {
                 // set boundary knots to be min(x) and max(x)
@@ -69,7 +72,7 @@ namespace splines2 {
                         );
                 }
             } else {
-                arma::vec uni_boundary_knots { arma::unique(boundary_knots) };
+                rvec uni_boundary_knots { arma::unique(boundary_knots) };
                 if (uni_boundary_knots.n_elem != 2) {
                     throw std::length_error(
                         "Need two distinct boundary knots."
@@ -78,8 +81,9 @@ namespace splines2 {
                 this->boundary_knots_ = uni_boundary_knots;
             }
             if (internal_knots.has_nan()) {
-                // do nothing
-            } else if (internal_knots.n_elem > 0) {
+                throw std::range_error("Internal knots cannot contain NA.");
+            }
+            if (internal_knots.n_elem > 0) {
                 rvec uni_internal_knots { arma::unique(internal_knots) };
                 // check internal knots are inside of boundary knots
                 double min_int_knots { arma::min(internal_knots) };
@@ -102,9 +106,9 @@ namespace splines2 {
             this->spline_df_ = this->internal_knots_.n_elem + this->order_;
         }
 
-        inline arma::vec get_knot_sequence(const unsigned int order = 1)
+        inline rvec get_knot_sequence(const unsigned int order = 1)
         {
-            arma::vec out { arma::zeros(internal_knots_.n_elem + 2 * order) };
+            rvec out { arma::zeros(internal_knots_.n_elem + 2 * order) };
             for (size_t i {0}; i < out.n_elem; ++i) {
                 if (i < order) {
                     out(i) = boundary_knots_(0);
@@ -169,10 +173,10 @@ namespace splines2 {
         }
 
         // constructor with specificied internal_knots
-        SplineBase(const arma::vec& x,
-                   const arma::vec& internal_knots = arma::vec(),
+        SplineBase(const rvec& x,
+                   const rvec& internal_knots = rvec(),
                    const unsigned int degree = 3,
-                   const arma::vec& boundary_knots = arma::vec()) :
+                   const rvec& boundary_knots = rvec()) :
             x_ { x },
             degree_ { degree }
         {
@@ -182,10 +186,10 @@ namespace splines2 {
         }
 
         // constructor with specified df
-        SplineBase(const arma::vec& x,
+        SplineBase(const rvec& x,
                    const unsigned int spline_df = 4,
                    const unsigned int degree = 3,
-                   const arma::vec& boundary_knots = arma::vec()) :
+                   const rvec& boundary_knots = rvec()) :
             x_ { x },
             degree_ { degree }
         {
@@ -202,13 +206,13 @@ namespace splines2 {
                 rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
                 prob_vec = prob_vec.subvec(1, n_internal_knots);
                 rvec internal_knots { arma_quantile(this->x_, prob_vec) };
-                this->clean_knots(rvec(), boundary_knots);
+                this->clean_knots(internal_knots, boundary_knots);
             }
         }
 
         // function members
         // "setter" functions
-        inline SplineBase* set_x(const arma::vec& x)
+        inline SplineBase* set_x(const rvec& x)
         {
             this->x_ = x;
             this->is_x_index_latest_ = false;
@@ -223,7 +227,7 @@ namespace splines2 {
             return this;
         }
         inline SplineBase* set_internal_knots(
-            const arma::vec& internal_knots
+            const rvec& internal_knots
             )
         {
             clean_knots(internal_knots);
@@ -235,10 +239,10 @@ namespace splines2 {
             return this;
         }
         inline SplineBase* set_boundary_knots(
-            const arma::vec& boundary_knots
+            const rvec& boundary_knots
             )
         {
-            clean_knots(nan_vec(), boundary_knots);
+            clean_knots(this->internal_knots_, boundary_knots);
             this->is_knot_sequence_latest_ = false;
             this->is_x_index_latest_ = false;
             this->is_basis_latest_ = false;
@@ -267,15 +271,15 @@ namespace splines2 {
         }
 
         // "getter" functions
-        inline arma::vec get_x() const
+        inline rvec get_x() const
         {
             return this->x_;
         }
-        inline arma::vec get_internal_knots() const
+        inline rvec get_internal_knots() const
         {
             return this->internal_knots_;
         }
-        inline arma::vec get_boundary_knots() const
+        inline rvec get_boundary_knots() const
         {
             return this->boundary_knots_;
         }

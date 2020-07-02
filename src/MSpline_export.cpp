@@ -21,7 +21,7 @@
 #include <splines2Armadillo.h>
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_bSpline_basis(
+Rcpp::NumericMatrix rcpp_mSpline_basis(
     const arma::vec& x,
     const unsigned int df,
     const unsigned int degree,
@@ -33,36 +33,36 @@ Rcpp::NumericMatrix rcpp_bSpline_basis(
     const unsigned int wo_intercept {
         static_cast<unsigned int>(! complete_basis)
     };
-    splines2::BSpline bs_obj;
+    splines2::MSpline ms_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
         unsigned int spline_df { df + wo_intercept };
-        bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, spline_df, degree, boundary_knots);
     } else {
         // else ignore df
-        bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, internal_knots, degree, boundary_knots);
     }
     Rcpp::NumericMatrix out {
-        splines2::arma2rmat(bs_obj.basis(complete_basis))
+        splines2::arma2rmat(ms_obj.basis(complete_basis))
             };
     // add attributes
     out.attr("dimnames") = Rcpp::List::create(
         R_NilValue, splines2::char_seq_len(out.ncol())
         );
     out.attr("x") = splines2::arma2rvec(x);
-    out.attr("degree") = bs_obj.get_degree();
-    out.attr("knots") = splines2::arma2rvec(bs_obj.get_internal_knots());
+    out.attr("degree") = ms_obj.get_degree();
+    out.attr("knots") = splines2::arma2rvec(ms_obj.get_internal_knots());
     out.attr("Boundary.knots") =
-        splines2::arma2rvec(bs_obj.get_boundary_knots());
+        splines2::arma2rvec(ms_obj.get_boundary_knots());
     out.attr("intercept") = complete_basis;
     return out;
 }
 
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_bSpline_derivative(
+Rcpp::NumericMatrix rcpp_mSpline_derivative(
     const arma::vec& x,
     const unsigned int derivs,
     const unsigned int df,
@@ -75,19 +75,19 @@ Rcpp::NumericMatrix rcpp_bSpline_derivative(
     const unsigned int wo_intercept {
         static_cast<unsigned int>(! complete_basis)
     };
-    splines2::BSpline bs_obj;
+    splines2::MSpline ms_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
         unsigned int spline_df { df + wo_intercept };
-        bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, spline_df, degree, boundary_knots);
     } else {
         // else ignore df
-        bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, internal_knots, degree, boundary_knots);
     }
     Rcpp::NumericMatrix out {
-        splines2::arma2rmat(bs_obj.derivative(derivs, complete_basis))
+        splines2::arma2rmat(ms_obj.derivative(derivs, complete_basis))
             };
     // add attributes
     out.attr("dimnames") = Rcpp::List::create(
@@ -95,17 +95,17 @@ Rcpp::NumericMatrix rcpp_bSpline_derivative(
         );
     out.attr("x") = splines2::arma2rvec(x);
     out.attr("derivs") = derivs;
-    out.attr("degree") = bs_obj.get_degree();
-    out.attr("knots") = splines2::arma2rvec(bs_obj.get_internal_knots());
+    out.attr("degree") = ms_obj.get_degree();
+    out.attr("knots") = splines2::arma2rvec(ms_obj.get_internal_knots());
     out.attr("Boundary.knots") =
-        splines2::arma2rvec(bs_obj.get_boundary_knots());
+        splines2::arma2rvec(ms_obj.get_boundary_knots());
     out.attr("intercept") = complete_basis;
     return out;
 }
 
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_bSpline_integral(
+Rcpp::NumericMatrix rcpp_mSpline_integral(
     const arma::vec& x,
     const unsigned int df,
     const unsigned int degree,
@@ -117,29 +117,29 @@ Rcpp::NumericMatrix rcpp_bSpline_integral(
     const unsigned int wo_intercept {
         static_cast<unsigned int>(! complete_basis)
     };
-    splines2::BSpline bs_obj;
+    splines2::MSpline ms_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
         unsigned int spline_df { df + wo_intercept };
-        bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, spline_df, degree, boundary_knots);
     } else {
         // else ignore df
-        bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
+        ms_obj = splines2::MSpline(x, internal_knots, degree, boundary_knots);
     }
     Rcpp::NumericMatrix out {
-        splines2::arma2rmat(bs_obj.integral(complete_basis))
+        splines2::arma2rmat(ms_obj.integral(complete_basis))
             };
     // add attributes
     out.attr("dimnames") = Rcpp::List::create(
         R_NilValue, splines2::char_seq_len(out.ncol())
         );
     out.attr("x") = splines2::arma2rvec(x);
-    out.attr("degree") = bs_obj.get_degree();
-    out.attr("knots") = splines2::arma2rvec(bs_obj.get_internal_knots());
+    out.attr("degree") = ms_obj.get_degree();
+    out.attr("knots") = splines2::arma2rvec(ms_obj.get_internal_knots());
     out.attr("Boundary.knots") =
-        splines2::arma2rvec(bs_obj.get_boundary_knots());
+        splines2::arma2rvec(ms_obj.get_boundary_knots());
     out.attr("intercept") = complete_basis;
     return out;
 }
