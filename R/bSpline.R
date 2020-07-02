@@ -97,7 +97,10 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (nas) {
         nmat <- matrix(NA_real_, length(nax), ncol(out))
         nmat[! nax, ] <- out
+        saved_attr <- attributes(out)
+        saved_attr$dim[1] <- length(nax)
         out <- nmat
+        attributes(out) <- saved_attr
         attr(out, "x") <- x
     }
     ## add dimnames for consistency with bs returns

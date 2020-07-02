@@ -88,9 +88,12 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
     )
     ## keep NA's as is
     if (nas) {
-        nmat <- matrix(NA, length(nax), df)
+        nmat <- matrix(NA, length(nax), ncol(out))
         nmat[! nax, ] <- out
+        saved_attr <- attributes(out)
+        saved_attr$dim[1] <- length(nax)
         out <- nmat
+        attributes(out) <- saved_attr
         attr(out, "x") <- x
     }
     ## add dimnames for consistency with returns from splines::bs
