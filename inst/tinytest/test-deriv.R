@@ -5,6 +5,7 @@ source("../v0.2.8.R", v2)
 ## helper functions
 isNumMatrix <- v2$isNumMatrix
 
+### 1. check correctness first
 x <- c(seq.int(0, 1, 0.1), NA)
 knots <- c(0.3, 0.5, 0.6)
 
@@ -41,15 +42,15 @@ expect_equivalent(d4bsMat, deriv(bsMat, 4))
 expect_equivalent(d4bsMat, deriv(ibsMat, 5))
 expect_equivalent(d4bsMat, deriv(tmp))
 
-## "test deriv methods for M-splines related"
-## only test for scale == FALSE
-csMat <- cSpline(x, knots = knots, scale = FALSE, intercept = FALSE)
-isMat <- iSpline(x, knots = knots, intercept = FALSE)
-msMat <- mSpline(x, knots = knots)
-ms1Mat <- mSpline(x, knots = knots, derivs = 1)
-ms2Mat <- mSpline(x, knots = knots, derivs = 2)
-ms3Mat <- mSpline(x, knots = knots, derivs = 3)
-ms4Mat <- mSpline(x, knots = knots, derivs = 4)
+## test deriv methods for M-splines related
+## if scale == FALSE
+csMat <- cSpline(x, knots = knots, scale = FALSE, intercept = TRUE)
+isMat <- iSpline(x, knots = knots, intercept = TRUE)
+msMat <- mSpline(x, knots = knots, intercept = TRUE)
+ms1Mat <- mSpline(x, knots = knots, derivs = 1, intercept = TRUE)
+ms2Mat <- mSpline(x, knots = knots, derivs = 2, intercept = TRUE)
+ms3Mat <- mSpline(x, knots = knots, derivs = 3, intercept = TRUE)
+ms4Mat <- mSpline(x, knots = knots, derivs = 4, intercept = TRUE)
 
 ## first derivative of csMat == isMat
 expect_equivalent(isMat, tmp <- deriv(csMat))
@@ -89,9 +90,27 @@ expect_equivalent(ms4Mat, deriv(isMat, 5))
 expect_equivalent(ms4Mat, deriv(csMat, 6))
 expect_equivalent(ms4Mat, tmp <- deriv(tmp))
 
-## simple test for scale = TRUE
-csMat <- cSpline(x, knots = knots, degree = 4)
-expect_equal(isNumMatrix(deriv(csMat), 12L, 8L), TRUE)
+## if scale == TRUE
+csMat <- cSpline(x, knots = knots, degree = 4, scale = TRUE,
+                 intercept = TRUE)
+expect_true(isNumMatrix(deriv(csMat), length(x), 8L))
 expect_equivalent(deriv(csMat, 2), deriv(deriv(csMat)))
 expect_equivalent(deriv(csMat, 3), deriv(deriv(csMat, 2)))
+expect_equivalent(deriv(csMat, 3), deriv(deriv(csMat), 2))
 expect_equivalent(deriv(csMat, 3), deriv(deriv(deriv(csMat))))
+expect_equivalent(deriv(csMat, 4), deriv(deriv(deriv(deriv(csMat)))))
+
+
+### 2. check designed features with expectation
+expect_error(deriv(ibsMat, 0), "derivs")
+expect_error(deriv(bsMat, 0), "derivs")
+expect_error(deriv(csMat, 0), "derivs")
+expect_error(deriv(isMat, 0), "derivs")
+## expect_error(deriv(msMat, 0), "derivs")
+## expect_error(deriv(dbsMat, 0), "derivs")
+expect_error(deriv(ibsMat, - 1), "derivs")
+expect_error(deriv(bsMat, - 1), "derivs")
+expect_error(deriv(csMat, - 1), "derivs")
+expect_error(deriv(isMat, - 1), "derivs")
+expect_error(deriv(msMat, - 1), "derivs")
+expect_error(deriv(dbsMat, - 1), "derivs")

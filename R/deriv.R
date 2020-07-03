@@ -85,8 +85,9 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
-    if (derivs < 1L)
+    if (derivs < 1L) {
         stop("'derivs' has to be a positive integer.")
+    }
     ## if first derivative, take result from existing attribute if exists
     if (derivs == 1L) {
         out <- attr(expr, "bsMat")
@@ -106,43 +107,20 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.mSpline <- function(expr, derivs = 1L, ...)
 {
-    ## call function mSpline
     derivs0 <- attr(expr, "derivs")
     attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
     dMat <- do.call(mSpline, attributes(expr))
-    ## for possible scaling of objects from deriv.cSpline
-    scale <- attr(expr, "scale")
-    scl <- attr(expr, "scales")
-    if (isTRUE(scale)) {
-        dMat <- dMat / rep(scl, each = nrow(dMat))
-        attr(dMat, "scale") <- scale
-        attr(dMat, "scales") <- scl
-    }
-    ## prepare for output
     class(dMat) <- c("matrix", "mSpline")
     dMat
 }
-
 
 
 ##' @rdname deriv
 ##' @export
 deriv.iSpline <- function(expr, derivs = 1L, ...)
 {
-    ## quick check on derivs
-    derivs <- as.integer(derivs)
-    if (derivs < 1L)
-        stop("'derivs' has to be a positive integer.")
-    ## extract existing result from attributes for the first derivative
-    if (derivs == 1L) {
-        dMat <- attr(expr, "msMat")
-        if (is.null(dMat))
-            dMat <- do.call(mSpline, attributes(expr))
-    } else {
-        ## for derivative of higher order
-        dMat <- deriv.mSpline(expr = expr, derivs = derivs - 1L, ...)
-    }
-    ## prepare for output
+    attr(expr, "derivs") <- derivs - 1L
+    dMat <- do.call(mSpline, attributes(expr))
     class(dMat) <- c("matrix", "mSpline")
     dMat
 }
@@ -152,6 +130,11 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.cSpline <- function(expr, derivs = 1L, ...)
 {
+    ## quick check on derivs
+    derivs <- as.integer(derivs)
+    if (derivs < 1L) {
+        stop("'derivs' has to be a positive integer.")
+    }
     scl <- attr(expr, "scales")
     ## not scaled
     if (is.null(scl)) {
