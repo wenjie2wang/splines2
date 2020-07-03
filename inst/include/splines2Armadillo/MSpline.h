@@ -119,6 +119,9 @@ namespace splines2 {
                 if (complete_basis) {
                     return arma::zeros(this->x_.n_elem, old_df);
                 }
+                if (old_df == 1) {
+                    throw std::range_error("No column left in the matrix.");
+                }
                 return arma::zeros(this->x_.n_elem, old_df - 1);
             }
             // back up current results if necessary
