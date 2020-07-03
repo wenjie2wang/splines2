@@ -133,6 +133,7 @@ expect_error(mSpline(x, Boundary.knots = c(0.1, 0.5, 1)), "knots")
 expect_true(isNumMatrix(mSpline(x, degree = 0, intercept = TRUE),
                         length(x), 1))
 expect_error(mSpline(x, degree = 0), "No column")
+expect_error(mSpline(x, degree = 0, derivs = 1), "No column")
 
 ## error if any internal knot is not placed inside of boundary
 expect_error(mSpline(x, knots = c(0, 0.5), degree = 0), "inside")
