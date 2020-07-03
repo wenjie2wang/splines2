@@ -1,3 +1,11 @@
+## get implementations of v0.2.8 for reference
+v2 <- new.env()
+source("../v0.2.8.R", v2)
+
+## helper functions
+isNumMatrix <- v2$isNumMatrix
+
+
 ## without internal knots
 x <- seq.int(0, 1, 0.1)
 ## degree = 0

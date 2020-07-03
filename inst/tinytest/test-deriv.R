@@ -1,5 +1,9 @@
-## helper function
-isNumMatrix <- splines2:::isNumMatrix
+## get implementations of v0.2.8 for reference
+v2 <- new.env()
+source("../v0.2.8.R", v2)
+
+## helper functions
+isNumMatrix <- v2$isNumMatrix
 
 x <- c(seq.int(0, 1, 0.1), NA)
 knots <- c(0.3, 0.5, 0.6)

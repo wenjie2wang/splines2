@@ -24,18 +24,6 @@ wrapMessages <- function(..., strwrap.args = list()) {
     paste(wrap_x, collapse = "\n")
 }
 
-## is x a numeric matrix (optionally of nRow rows and nCol columns)
-isNumMatrix <- function(x, nRow = NULL, nCol = NULL, ...)
-{
-    out <- is.numeric(x) && is.matrix(x)
-    if (out) {
-        nDim <- dim(x)
-        if (! is.null(nRow)) out <- out && nDim[1L] == nRow
-        if (! is.null(nCol)) out <- out && nDim[2L] == nCol
-    }
-    out
-}
-
 ## convert null to numeric(0)
 null2num0 <- function(x) {
     if (is.null(x)) {

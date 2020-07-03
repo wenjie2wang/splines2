@@ -1,5 +1,10 @@
-## helper function
-isNumMatrix <- splines2:::isNumMatrix
+## get implementations of v0.2.8 for reference
+v2 <- new.env()
+source("../v0.2.8.R", v2)
+
+## helper functions
+isNumMatrix <- v2$isNumMatrix
+
 
 ## check equal dimension
 x <- seq.int(0, 10, 0.5)
