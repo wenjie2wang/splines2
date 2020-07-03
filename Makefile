@@ -43,6 +43,11 @@ check-as-cran: $(tar)
 vignettes/%.html: vignettes/%.Rmd
 	Rscript -e "library(methods); rmarkdown::render('$?')"
 
+.PHONY: readme
+readme: README.md
+README.md: README.Rmd
+	@Rscript -e "rmarkdown::render('$<')"
+
 ## update copyright year in HEADER, R script and date in DESCRIPTION
 .PHONY: updateTimestamp
 updateTimestamp:

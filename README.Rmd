@@ -1,0 +1,154 @@
+---
+title: splines2
+output: github_document
+---
+
+[![CRAN_Status_Badge][r-pkg-badge]][cran-url]
+[![Downloads from the RStudio CRAN mirror][cranlog-badge]][cran-url]
+[![Build Status][travis-master]][travis]
+[![AppVeyor Build Status][appveyor-master]][appveyor]
+[![codecov][codecov-master]][codecov]
+
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(comment = "")
+options(width = 100, digits = 5)
+```
+
+The R package **splines2** is a supplementary package on splines providing
+functions constructing B-splines, integral of B-splines, monotone splines
+(M-splines) and its integral (I-splines), convex splines (C-splines), and their
+derivatives of given order.
+
+
+## Installation of CRAN Version
+
+You can install the released version from [CRAN][cran-url].
+
+```R
+install.packages("splines2")
+```
+
+## Development
+
+The latest version of package is under development at [GitHub][github-url].  If
+it is able to pass the building check by Travis CI, one may install it by
+
+```R
+if (! require(remotes)) install.packages("remotes")
+remotes::install_github("wenjie2wang/splines2")
+```
+
+## Getting Started
+
+- [Online documentation][pkgdown-url] provides reference for all functions
+- Package vignette for a quick [demonstration][pkg-demo] for the common usage
+  through examples
+
+## Performance
+
+Since v0.3.0, the implementation of the main functions has been rewritten in C++
+with the help of the **Rcpp** and **RcppArmadillo** package. The computational
+performance has thus been boosted.
+
+Some benchmarks with the **splines** package
+(version `r packageVersion("splines")`)
+are provided for reference as follows:
+
+```{r bench-setup}
+library(microbenchmark)
+library(splines)
+library(splines2)
+
+x <- seq.int(0, 1, 0.001)
+degree <- 3
+ord <- degree + 1
+knots <- seq.int(0.1, 0.9, 0.1)
+b_knots <- c(0, 1)
+all_knots <- sort(c(knots, rep(range(x), degree + 1)))
+
+## check equivalency of outputs
+my_check <- function(values) {
+    all(sapply(values[- 1], function(x) {
+        all.equal(unclass(values[[1]]), x, check.attributes = FALSE)
+    }))
+}
+```
+
+For B-splines, function `splines2::bSpline()` provides equivalent results with
+`splines::bs()` and `splines::splineDesign()`, and is about 3x faster than
+`bs()` and 2x faster than `splineDesign()`.
+
+```{r bench-bSpline}
+## B-splines
+microbenchmark(
+    "splines::bs" = bs(x, knots = knots, degree = degree,
+                       intercept = TRUE, Boundary.knots = b_knots),
+    "splines::splineDesign" = splineDesign(x, knots = all_knots, ord = ord),
+    "splines2::bSpline" = bSpline(x, knots = knots, degree = degree,
+                                  intercept = TRUE, Boundary.knots = b_knots),
+    check = my_check,
+    times = 1e3
+)
+```
+
+Similarly, for derivatives of B-splines, `splines2::dbs()` provides equivalent
+results with `splines::splineDesign()`, and is more than 2x faster.
+
+```{r bench-dbs}
+## Derivatives of B-splines
+derivs <- 2
+microbenchmark(
+    "splines::splineDesign" = splineDesign(x, knots = all_knots,
+                                           ord = ord, derivs = derivs),
+    "splines2::dbs" = dbs(x, derivs = derivs, knots = knots, degree = degree,
+                          intercept = TRUE, Boundary.knots = b_knots),
+    check = my_check,
+    times = 1e3
+)
+```
+
+The **splines** package does not provide function producing integrals of
+B-splines.  So we instead performed a comparison with package **ibs** (version
+`r packageVersion("ibs")`), where the function `ibs::ibs()` was also implemented
+in **Rcpp**.
+
+```{r bench-ibs}
+## integrals of B-splines
+set.seed(123)
+coef_sp <- rnorm(length(all_knots) - ord)
+microbenchmark(
+    "ibs::ibs" = ibs::ibs(x, knots = all_knots, ord = ord, coef = coef_sp),
+    "splines2::ibs" =
+        as.numeric(splines2::ibs(x, knots = knots, degree = degree,
+                                 intercept = TRUE, Boundary.knots = b_knots) %*%
+                   coef_sp)
+    ,
+    check = my_check,
+    times = 1e3
+)
+```
+
+The function `ibs::ibs()` returns the integrated B-splines instead of the
+integrals of spline bases.  So we applied the same coefficients to the bases
+from `splines2::ibs()` for equivalent results, which was still much faster than
+`ibs::ibs()`.
+
+
+## License
+
+[GNU General Public License (v3)][gpl]
+
+[r-pkg-badge]: https://www.r-pkg.org/badges/version/splines2
+[cranlog-badge]: https://cranlogs.r-pkg.org/badges/splines2
+[cran-url]: https://CRAN.R-project.org/package=splines2
+[travis]: https://travis-ci.org/wenjie2wang/splines2
+[travis-master]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=master
+[github-url]: https://github.com/wenjie2wang/splines2
+[pkgdown-url]: https://wenjie-stat.me/splines2
+[pkg-demo]: https://wenjie-stat.me/splines2/articles/splines2-intro
+[codecov]: https://codecov.io/gh/wenjie2wang/splines2
+[codecov-master]: https://codecov.io/gh/wenjie2wang/splines2/branch/master/graph/badge.svg
+[appveyor]: https://ci.appveyor.com/project/wenjie2wang/splines2
+[appveyor-master]: https://ci.appveyor.com/api/projects/status/bvoso7nxchg1incb/branch/master?svg=true
+[gpl]: https://www.gnu.org/licenses/

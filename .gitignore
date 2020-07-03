@@ -1,5 +1,6 @@
 working
 docs
+README.html
 *.tar.gz
 *.Rcheck/
 *.so

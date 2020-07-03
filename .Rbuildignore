@@ -4,6 +4,8 @@
 ^COPYRIGHT$
 ^LICENSE$
 ^Makefile$
+^README\.Rmd$
+^README\.html$
 ^TAGS$
 ^TODO\.org$
 ^\#
