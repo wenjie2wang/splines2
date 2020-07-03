@@ -14,10 +14,10 @@ expect_equivalent(dbs(x, derivs = 1, intercept = TRUE),
                   splines::splineDesign(aKnots, x = x, derivs = 1))
 expect_equivalent(dbs(x, derivs = 2, intercept = TRUE),
                   splines::splineDesign(aKnots, x = x, derivs = 2))
-## different at right boundary knot
+## except at right boundary knots
 expect_equivalent(
-    dbs(x, derivs = 3, intercept = TRUE),
-    splines::splineDesign(aKnots, derivs = 3, x = x)
+    dbs(x, derivs = 3, intercept = TRUE)[- length(x), ],
+    splines::splineDesign(aKnots, derivs = 3, x = x)[- length(x), ]
 )
 
 knots <- c(0.2, 0.4, 0.7)
@@ -26,7 +26,6 @@ expect_equivalent(dbs(x, derivs = 1, knots = knots, intercept = TRUE),
                   splines::splineDesign(aKnots, x = x, derivs = 1))
 expect_equivalent(dbs(x, derivs = 2, knots = knots, intercept = TRUE),
                   splines::splineDesign(aKnots, x = x, derivs = 2))
-## again, different at right boundary knot
 expect_equivalent(
     dbs(x, derivs = 3, knots = knots, intercept = TRUE)[- length(x), ],
     splines::splineDesign(aKnots, x = x, derivs = 3)[- length(x), ]
@@ -42,7 +41,6 @@ expect_equivalent(dbs(x, 2, knots = knots, degree = 4, intercept = TRUE),
                   splines::splineDesign(aKnots, x, ord, derivs = 2))
 expect_equivalent(dbs(x, 3, knots = knots, degree = 4, intercept = TRUE),
                   splines::splineDesign(aKnots, x, ord, derivs = 3))
-## again, different at right boundary knot
 expect_equivalent(
     dbs(x, 4, knots = knots, degree = 4, intercept = TRUE)[- length(x), ],
     splines::splineDesign(aKnots, x, ord, derivs = 4)[- length(x), ]

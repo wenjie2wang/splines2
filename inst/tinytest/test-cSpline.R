@@ -44,9 +44,9 @@ expect_equivalent(cSpline(x, df = 5, degree = 0),
 expect_equivalent(cSpline(x, df = 5, degree = 0, intercept = TRUE),
                   v2$cSpline(x, df = 5, degree = 0, intercept = TRUE))
 bsMat0a <- cSpline(x, degree = 0, intercept = TRUE)
-bsMat0b <- cSpline(x, df = 5, degree = 0)
+bsMat0b <- cSpline(x, df = 5, degree = 0, intercept = FALSE)
 bsMat0c <- cSpline(x, df = 5, degree = 0, intercept = TRUE)
-bsMat0d <- cSpline(x, knots = knots, degree = 0)
+bsMat0d <- cSpline(x, knots = knots, degree = 0, intercept = FALSE)
 bsMat0e <- cSpline(x, knots = knots, degree = 0, intercept = TRUE)
 expect_true(isNumMatrix(bsMat0a, 14L, 1L))
 expect_equal(sum(is.na(bsMat0b)), 15L) # keep NA's as is
@@ -55,7 +55,7 @@ expect_true(isNumMatrix(bsMat0c, 14L, 5L))
 expect_true(isNumMatrix(bsMat0d, 14L, 3L))
 expect_true(isNumMatrix(bsMat0e, 14L, 4L))
 expect_true(isNumMatrix(
-    cSpline(x, df = 10, knots = knots, degree = 0L),
+    cSpline(x, df = 10, knots = knots, degree = 0L, intercept = FALSE),
     14L, 3L))
 expect_true(isNumMatrix(
     cSpline(x, df = 10, knots = knots,
@@ -133,7 +133,7 @@ expect_error(cSpline(x, Boundary.knots = c(0.1, 0.5, 1)), "knots")
 ## error if empty matrix
 expect_true(isNumMatrix(cSpline(x, degree = 0, intercept = TRUE),
                         length(x), 1))
-expect_error(cSpline(x, degree = 0), "No column")
+expect_error(cSpline(x, degree = 0, intercept = FALSE), "No column")
 
 ## error if any internal knot is not placed inside of boundary
 expect_error(cSpline(x, knots = c(0, 0.5), degree = 0), "inside")
