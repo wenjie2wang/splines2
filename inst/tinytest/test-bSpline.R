@@ -85,15 +85,24 @@ suppressWarnings({
     )
 })
 
+## keep names of x
+names(x) <- sample(LETTERS, length(x), replace = TRUE)
+expect_equal(rownames(bSpline(x)), names(x))
 
 ### 2. check designed features with expectation
 ## NA is only allowed in x
 
-## error if degree has NA
+## error if all of x are NA's
+expect_error(bSpline(c(NA_real_, NA_real_), degree = 0))
+expect_error(bSpline(c(NA, NA), df = 5))
+
+## error if degree has NA or negative
+expect_error(bSpline(x, degree = - 1))
 expect_error(bSpline(x, degree = c(2, NA)))
 expect_error(bSpline(x, degree = NA))
 
-## error if df has NA
+## error if df has NA or negative
+expect_error(bSpline(x, df = - 1))
 expect_error(bSpline(x, df = c(2, NA)))
 expect_error(bSpline(x, df = NA))
 
