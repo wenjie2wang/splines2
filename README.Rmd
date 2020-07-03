@@ -119,11 +119,10 @@ set.seed(123)
 coef_sp <- rnorm(length(all_knots) - ord)
 microbenchmark(
     "ibs::ibs" = ibs::ibs(x, knots = all_knots, ord = ord, coef = coef_sp),
-    "splines2::ibs" =
-        as.numeric(splines2::ibs(x, knots = knots, degree = degree,
-                                 intercept = TRUE, Boundary.knots = b_knots) %*%
-                   coef_sp)
-    ,
+    "splines2::ibs" = as.numeric(
+        splines2::ibs(x, knots = knots, degree = degree,
+                      intercept = TRUE, Boundary.knots = b_knots) %*% coef_sp
+    ),
     check = my_check,
     times = 1e3
 )
