@@ -81,9 +81,22 @@ names(x) <- sample(LETTERS, length(x), replace = TRUE)
 expect_equal(rownames(cSpline(x)), names(x))
 
 ## equivalency with I-splines
-expect_equivalent(cSpline(x, df = 5, derivs = 1,
-                          scale = FALSE, intercept = TRUE),
-                  iSpline(x, df = 5, intercept = TRUE))
+expect_equivalent(
+    cSpline(x, df = 5, derivs = 1,
+            scale = FALSE, intercept = TRUE),
+    iSpline(x, df = 5, intercept = TRUE)
+)
+expect_equivalent(
+    cSpline(x, knots = knots, derivs = 1,
+            scale = FALSE, intercept = TRUE),
+    iSpline(x, knots = knots, intercept = TRUE)
+)
+expect_equivalent(
+    cSpline(x, df = 6, degree = 2, derivs = 2,
+            intercept = TRUE, scale = FALSE),
+    iSpline(x, df = 6, degree = 2, derivs = 1,
+            intercept = TRUE)
+)
 expect_equivalent(
     cSpline(x, knots = knots, degree = 2, derivs = 2,
             intercept = TRUE, scale = FALSE),
@@ -91,9 +104,21 @@ expect_equivalent(
             intercept = TRUE)
 )
 expect_equivalent(
+    cSpline(x, df = 6, degree = 2, derivs = 3,
+            intercept = TRUE, scale = FALSE),
+    iSpline(x, df = 6, degree = 2, derivs = 2,
+            intercept = TRUE)
+)
+expect_equivalent(
     cSpline(x, knots = knots, degree = 2, derivs = 3,
             intercept = TRUE, scale = FALSE),
     iSpline(x, knots = knots, degree = 2, derivs = 2,
+            intercept = TRUE)
+)
+expect_equivalent(
+    cSpline(x, df = 6, degree = 2, derivs = 4,
+            intercept = TRUE, scale = FALSE),
+    iSpline(x, df = 6, degree = 2, derivs = 3,
             intercept = TRUE)
 )
 expect_equivalent(

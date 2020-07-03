@@ -46,7 +46,7 @@ msMat0d <- mSpline(x, knots = knots, degree = 2)
 msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 msMat0f <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
                    Boundary.knots = c(0, 1), derivs = 1)
-msMat0g <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
+msMat0g <- mSpline(0.1, df = 6, degree = 2, intercept = TRUE,
                    Boundary.knots = c(0, 1), derivs = 2)
 msMat0h <- mSpline(0.1, knots = knots, degree = 2,
                    Boundary.knots = c(0, 1), derivs = 3)

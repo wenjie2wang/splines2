@@ -130,14 +130,10 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.cSpline <- function(expr, derivs = 1L, ...)
 {
-    ## quick check on derivs
-    derivs <- as.integer(derivs)
-    if (derivs < 1L) {
-        stop("'derivs' has to be a positive integer.")
-    }
     scl <- attr(expr, "scales")
     ## not scaled
     if (is.null(scl)) {
+        derivs <- as.integer(derivs)
         if (derivs == 1L) {
             return(do.call(iSpline, attributes(expr)))
         }
