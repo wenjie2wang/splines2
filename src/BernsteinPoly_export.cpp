@@ -25,15 +25,24 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
     const arma::vec& x,
     const unsigned int degree,
     const unsigned int derivs = 0,
+    const bool integral = false,
     const bool complete_basis = true
     )
 {
     splines2::BernsteinPoly bp_obj { x, degree };
     Rcpp::NumericMatrix out;
-    if (derivs == 0) {
+    if (integral && derivs == 0) {
+        // integrals
+        out = splines2::arma2rmat(bp_obj.integral(complete_basis));
+    } else if ((! integral && derivs == 0) || (integral && derivs == 1)) {
+        // bases
         out = splines2::arma2rmat(bp_obj.basis(complete_basis));
     } else {
-        out = splines2::arma2rmat(bp_obj.derivative(complete_basis));
+        // derivatives
+        out = splines2::arma2rmat(
+            bp_obj.derivative(derivs - static_cast<unsigned int>(integral),
+                              complete_basis)
+            );
     }
     // add attributes
     out.attr("dimnames") = Rcpp::List::create(
@@ -42,27 +51,7 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
     out.attr("x") = splines2::arma2rvec(x);
     out.attr("degree") = bp_obj.get_degree();
     out.attr("derivs") = derivs;
-    out.attr("intercept") = complete_basis;
-    return out;
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_bernsteinPoly_integral(
-    const arma::vec& x,
-    const unsigned int degree,
-    const bool complete_basis = true
-    )
-{
-    splines2::BernsteinPoly bp_obj { x, degree };
-    Rcpp::NumericMatrix out {
-        splines2::arma2rmat(bp_obj.integral(complete_basis))
-    };
-    // add attributes
-    out.attr("dimnames") = Rcpp::List::create(
-        R_NilValue, splines2::char_seq_len(out.ncol())
-        );
-    out.attr("x") = splines2::arma2rvec(x);
-    out.attr("degree") = bp_obj.get_degree();
+    out.attr("integral") = integral;
     out.attr("intercept") = complete_basis;
     return out;
 }

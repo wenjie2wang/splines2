@@ -45,15 +45,7 @@
 ##'
 ##' @example inst/examples/ex-deriv.R
 ##'
-##' @seealso
-##' \code{\link{bSpline}} for B-splines;
-##' \code{\link{ibs}} for integral of B-splines;
-##' \code{\link{mSpline}} for M-splines;
-##' \code{\link{iSpline}} for I-splines;
-##' \code{\link{cSpline}} for C-splines.
-##'
 ##' @importFrom stats deriv
-##'
 NULL
 
 
@@ -147,4 +139,14 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     derivs0 <- attr(expr, "derivs")
     attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
     do.call(cSpline, attributes(expr))
+}
+
+
+##' @rdname deriv
+##' @export
+deriv.bernsteinPoly <- function(expr, derivs = 1L, ...)
+{
+    derivs0 <- attr(expr, "derivs")
+    attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
+    do.call(bernsteinPoly, attributes(expr))
 }
