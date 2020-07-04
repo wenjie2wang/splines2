@@ -170,14 +170,16 @@ namespace splines2 {
             d_mat = add_zero_cols(d_mat, old_df - d_mat.n_cols);
             // derivatives by recursive formula
             for (unsigned int k {1}; k <= derivs; ++k) {
+                const unsigned int k_offset { derivs - k };
+                const size_t numer { degree_ - k_offset };
                 for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
-                    for (size_t j {0}; j < degree_; ++j) {
-                        double term { degree_ * d_mat(i, j) };
+                    for (size_t j {0}; j < numer; ++j) {
+                        double term { numer * d_mat(i, j) };
                         d_mat(i, j) = saved - term;
                         saved = term;
                     }
-                    d_mat(i, degree_) = saved;
+                    d_mat(i, numer) = saved;
                 }
             }
             // remove the first column if needed

@@ -72,6 +72,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_bernsteinPoly
+Rcpp::NumericMatrix rcpp_bernsteinPoly(const arma::vec& x, const unsigned int degree, const unsigned int derivs, const bool integral, const bool complete_basis);
+RcppExport SEXP _splines2_rcpp_bernsteinPoly(SEXP xSEXP, SEXP degreeSEXP, SEXP derivsSEXP, SEXP integralSEXP, SEXP complete_basisSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type degree(degreeSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
+    Rcpp::traits::input_parameter< const bool >::type complete_basis(complete_basisSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_bernsteinPoly(x, degree, derivs, integral, complete_basis));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_cSpline_basis
 Rcpp::NumericMatrix rcpp_cSpline_basis(const arma::vec& x, const unsigned int df, const unsigned int degree, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis);
 RcppExport SEXP _splines2_rcpp_cSpline_basis(SEXP xSEXP, SEXP dfSEXP, SEXP degreeSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP) {
@@ -192,6 +207,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_splines2_rcpp_bSpline_basis", (DL_FUNC) &_splines2_rcpp_bSpline_basis, 6},
     {"_splines2_rcpp_bSpline_derivative", (DL_FUNC) &_splines2_rcpp_bSpline_derivative, 7},
     {"_splines2_rcpp_bSpline_integral", (DL_FUNC) &_splines2_rcpp_bSpline_integral, 6},
+    {"_splines2_rcpp_bernsteinPoly", (DL_FUNC) &_splines2_rcpp_bernsteinPoly, 5},
     {"_splines2_rcpp_cSpline_basis", (DL_FUNC) &_splines2_rcpp_cSpline_basis, 6},
     {"_splines2_rcpp_cSpline_derivative", (DL_FUNC) &_splines2_rcpp_cSpline_derivative, 7},
     {"_splines2_rcpp_iSpline_basis", (DL_FUNC) &_splines2_rcpp_iSpline_basis, 6},
