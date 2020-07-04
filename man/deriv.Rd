@@ -8,6 +8,7 @@
 \alias{deriv.mSpline}
 \alias{deriv.iSpline}
 \alias{deriv.cSpline}
+\alias{deriv.bernsteinPoly}
 \title{Derivative of Splines}
 \usage{
 \method{deriv}{bSpline2}(expr, derivs = 1L, ...)
@@ -21,6 +22,8 @@
 \method{deriv}{iSpline}(expr, derivs = 1L, ...)
 
 \method{deriv}{cSpline}(expr, derivs = 1L, ...)
+
+\method{deriv}{bernsteinPoly}(expr, derivs = 1L, ...)
 }
 \arguments{
 \item{expr}{Objects of class \code{bSpline2}, \code{ibs}, \code{dbs},
@@ -88,11 +91,4 @@ stopifnot(all.equal(dmsMat, deriv(isMat, 2), check.attributes = FALSE))
 stopifnot(all.equal(dmsMat, deriv(deriv(isMat)), check.attributes = FALSE))
 stopifnot(all.equal(dmsMat, deriv(csMat, 3), check.attributes = FALSE))
 stopifnot(all.equal(dmsMat, deriv(deriv(deriv(csMat))), check.attributes = FALSE))
-}
-\seealso{
-\code{\link{bSpline}} for B-splines;
-\code{\link{ibs}} for integral of B-splines;
-\code{\link{mSpline}} for M-splines;
-\code{\link{iSpline}} for I-splines;
-\code{\link{cSpline}} for C-splines.
 }

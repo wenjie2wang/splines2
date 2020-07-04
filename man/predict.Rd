@@ -8,6 +8,7 @@
 \alias{predict.mSpline}
 \alias{predict.iSpline}
 \alias{predict.cSpline}
+\alias{predict.bernsteinPoly}
 \title{Evaluate a Spline Basis}
 \usage{
 \method{predict}{bSpline2}(object, newx, ...)
@@ -21,11 +22,13 @@
 \method{predict}{iSpline}(object, newx, ...)
 
 \method{predict}{cSpline}(object, newx, ...)
+
+\method{predict}{bernsteinPoly}(object, newx, ...)
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, or \code{cSpline} having attributes describing
-\code{knots}, \code{degree}, etc.}
+\code{iSpline}, \code{cSpline}, or \code{bernsteinPoly} with attributes
+describing \code{knots}, \code{degree}, etc.}
 
 \item{newx}{The \code{x} values at which evaluations are required.}
 
@@ -41,11 +44,11 @@ This function evaluates a predefined spline basis at (new) given values.
 \details{
 These are methods for the generic function \code{predict} for objects
 inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, or \code{cSpline}.  If \code{newx} is not given, the
-function returns the input object.  For object returned by function
-\code{\link{cSpline}}, the \code{mSpline} and \code{iSpline} objects shipped
-in attributes should not be evaluated by this function if \code{rescale} is
-\code{TRUE}.  See \code{\link{cSpline}} for details.
+\code{iSpline}, \code{cSpline}, or \code{bernsteinPoly}.  If \code{newx} is
+not given, the function returns the input object.  For object returned by
+function \code{\link{cSpline}}, the \code{mSpline} and \code{iSpline}
+objects shipped in attributes should not be evaluated by this function if
+\code{rescale} is \code{TRUE}.  See \code{\link{cSpline}} for details.
 }
 \examples{
 library(splines2)

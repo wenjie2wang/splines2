@@ -17,7 +17,7 @@ dbs(
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
-returned as they were.}
+returned as they are.}
 
 \item{derivs}{A positive integer specifying the order of derivative.  By
 default, it is \code{1L} for the first derivative.}
@@ -34,10 +34,9 @@ is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.  See also \code{Boundary.knots}.}
 
-\item{degree}{Non-negative integer degree of the piecewise polynomial. The
-default value is 3 for cubic splines. Zero degree is allowed for this
-function, which is the only difference compared with
-\code{\link[splines]{bs}} in package \code{splines}.}
+\item{degree}{A non-negative integer specifying the degree of the piecewise
+polynomial. The default value is 3 for cubic splines. Zero degree is
+allowed for piece-wise constant bases.}
 
 \item{intercept}{If \code{TRUE}, an intercept is included in the basis;
 Default is \code{FALSE}.}

@@ -17,7 +17,7 @@ iSpline(
 }
 \arguments{
 \item{x}{The predictor variable.  Missing values are allowed and will be
-returned as they were.}
+returned as they are.}
 
 \item{df}{Degrees of freedom.  One can specify \code{df} rather than
 \code{knots}, then the function chooses "df - degree" (minus one if
