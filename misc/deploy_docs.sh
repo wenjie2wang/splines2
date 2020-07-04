@@ -22,7 +22,7 @@ cp -r $build_dir/docs/* $target_dir
 git status > $tmp_log
 if egrep -q "modified:[ ]+static/$pkg/" $tmp_log
 then
-    git add -u static/$pkg/
+    git add static/$pkg/
     git commit -m "deploy $pkg $CI_COMMIT_SHORT_SHA by gitlab-runner"
     git push origin master
 else
