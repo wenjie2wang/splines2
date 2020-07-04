@@ -26,7 +26,7 @@
 ##' right-open except on the right boundary) spline basis with zero degree.
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
-##'     returned as they were.
+##'     returned as they are.
 ##' @param df Degrees of freedom.  One can specify \code{df} rather than
 ##'     \code{knots}, then the function chooses "df - degree" (minus one if
 ##'     there is an intercept) knots at suitable quantiles of \code{x} (which
@@ -37,10 +37,9 @@
 ##'     is \code{NULL}, which results in a basis for ordinary polynomial
 ##'     regression.  Typical values are the mean or median for one knot,
 ##'     quantiles for more knots.  See also \code{Boundary.knots}.
-##' @param degree Non-negative integer degree of the piecewise polynomial. The
-##'     default value is 3 for cubic splines. Zero degree is allowed for this
-##'     function, which is the only difference compared with
-##'     \code{\link[splines]{bs}} in package \code{splines}.
+##' @param degree A non-negative integer specifying the degree of the piecewise
+##'     polynomial. The default value is 3 for cubic splines. Zero degree is
+##'     allowed for piece-wise constant bases.
 ##' @param intercept If \code{TRUE}, an intercept is included in the basis;
 ##'     Default is \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the B-spline basis.

@@ -100,6 +100,26 @@ expect_equivalent(deriv(csMat, 3), deriv(deriv(csMat), 2))
 expect_equivalent(deriv(csMat, 3), deriv(deriv(deriv(csMat))))
 expect_equivalent(deriv(csMat, 4), deriv(deriv(deriv(deriv(csMat)))))
 
+## test the method for bernstein polynomials
+bpMat <- bernsteinPoly(x, degree = 3, intercept = TRUE)
+dbpMat <- bernsteinPoly(x, degree = 3, derivs = 1, intercept = TRUE)
+d2bpMat <- bernsteinPoly(x, degree = 3, derivs = 2, intercept = TRUE)
+d3bpMat <- bernsteinPoly(x, degree = 3, derivs = 3, intercept = TRUE)
+d4bpMat <- bernsteinPoly(x, degree = 3, derivs = 4, intercept = TRUE)
+expect_equivalent(deriv(bpMat), dbpMat)
+expect_equivalent(deriv(bpMat, 2), d2bpMat)
+expect_equivalent(deriv(deriv(bpMat)), d2bpMat)
+expect_equivalent(deriv(bpMat, 3), d3bpMat)
+expect_equivalent(deriv(deriv(bpMat, 2)), d3bpMat)
+expect_equivalent(deriv(deriv(bpMat), 2), d3bpMat)
+expect_equivalent(deriv(deriv(deriv(bpMat))), d3bpMat)
+expect_equivalent(deriv(bpMat, 4), d4bpMat)
+expect_equivalent(deriv(deriv(bpMat, 3)), d4bpMat)
+expect_equivalent(deriv(deriv(bpMat), 3), d4bpMat)
+expect_equivalent(deriv(deriv(bpMat, 2), 2), d4bpMat)
+expect_equivalent(deriv(deriv(bpMat, 3)), d4bpMat)
+expect_equivalent(deriv(deriv(deriv(deriv(bpMat)))), d4bpMat)
+
 
 ### 2. check designed features with expectation
 expect_error(deriv(ibsMat, 0), "derivs")

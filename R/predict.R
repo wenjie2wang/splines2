@@ -21,16 +21,16 @@
 ##'
 ##' These are methods for the generic function \code{predict} for objects
 ##' inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
-##' \code{iSpline}, or \code{cSpline}.  If \code{newx} is not given, the
-##' function returns the input object.  For object returned by function
-##' \code{\link{cSpline}}, the \code{mSpline} and \code{iSpline} objects shipped
-##' in attributes should not be evaluated by this function if \code{rescale} is
-##' \code{TRUE}.  See \code{\link{cSpline}} for details.
+##' \code{iSpline}, \code{cSpline}, or \code{bernsteinPoly}.  If \code{newx} is
+##' not given, the function returns the input object.  For object returned by
+##' function \code{\link{cSpline}}, the \code{mSpline} and \code{iSpline}
+##' objects shipped in attributes should not be evaluated by this function if
+##' \code{rescale} is \code{TRUE}.  See \code{\link{cSpline}} for details.
 ##'
 ##' @name predict
 ##' @param object Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-##'     \code{iSpline}, or \code{cSpline} having attributes describing
-##'     \code{knots}, \code{degree}, etc.
+##'     \code{iSpline}, \code{cSpline}, or \code{bernsteinPoly} with attributes
+##'     describing \code{knots}, \code{degree}, etc.
 ##' @param newx The \code{x} values at which evaluations are required.
 ##' @param ... Optional argument for future usage.
 ##'
@@ -127,4 +127,16 @@ predict.cSpline <- function(object, newx, ...)
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept", "scale")])
     do.call("cSpline", a)
+}
+
+
+##' @rdname predict
+##' @export
+predict.bernsteinPoly <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
+    a <- c(list(x = newx),
+           attributes(object)[c("degree", "derivs", "integral", "intercept")])
+    do.call("bernsteinPoly", a)
 }
