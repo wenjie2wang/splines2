@@ -138,12 +138,10 @@ expect_error(cSpline(c(NA, NA), df = 5))
 
 ## error if degree has NA or negative
 expect_error(cSpline(x, degree = - 1))
-expect_error(cSpline(x, degree = c(2, NA)))
 expect_error(cSpline(x, degree = NA))
 
 ## error if df has NA or negative
 expect_error(cSpline(x, df = - 1))
-expect_error(cSpline(x, df = c(2, NA)))
 expect_error(cSpline(x, df = NA))
 
 ## error if knots has NA

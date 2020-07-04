@@ -21,7 +21,7 @@ res1 <- bernsteinPoly(x, degree = 1, intercept = TRUE)
 expect_equivalent(bp1(x), res1)
 res1 <- bernsteinPoly(x, degree = 1, intercept = FALSE,
                       derivs = 1, integral = TRUE)
-expect_equivalent(bp1(x), res1[, - 1L, drop = FALSE])
+expect_equivalent(bp1(x)[, -1L, drop = FALSE], res1)
 ## degree 1: first derivative
 dbp1 <- function(x) {
     matrix(c(- 1, 1), nrow = length(x), ncol = 2, byrow = TRUE)
@@ -30,22 +30,22 @@ res1 <- bernsteinPoly(x, degree = 1, intercept = TRUE, derivs = 1)
 expect_equivalent(dbp1(x), res1)
 res1 <- bernsteinPoly(x, degree = 1, intercept = FALSE,
                       derivs = 2, integral = TRUE)
-expect_equivalent(dbp1(x), res1[, - 1L, drop = FALSE])
+expect_equivalent(dbp1(x)[, - 1L, drop = FALSE], res1)
 ## degree 1: second derivative
 ddbp1 <- function(x) { matrix(0, nrow = length(x), ncol = 2) }
 res1 <- bernsteinPoly(x, degree = 1, intercept = TRUE, derivs = 2)
 expect_equivalent(ddbp1(x), res1)
 res1 <- bernsteinPoly(x, degree = 1, intercept = FALSE,
                       derivs = 3, integral = TRUE)
-expect_equivalent(ddbp1(x), res1[, - 1L, drop = FALSE])
+expect_equivalent(ddbp1(x)[, - 1L, drop = FALSE], res1)
 ## degree 1: integral
 ibp1 <- function(x) {
     cbind(x - 0.5 * x ^ 2, 0.5 * x ^ 2)
 }
 res1 <- bernsteinPoly(x, degree = 1, intercept = TRUE, integral = TRUE)
 expect_equivalent(ibp1(x), res1)
-res1 <- bernsteinPoly(x, degree = 1, intercept = TRUE, integral = FALSE)
-expect_equivalent(ibp1(x), res1[, - 1L, drop = FALSE])
+res1 <- bernsteinPoly(x, degree = 1, intercept = FALSE, integral = TRUE)
+expect_equivalent(ibp1(x)[, - 1L, drop = FALSE], res1)
 
 ## degree 2: basis
 bp2 <- function(x) {
@@ -116,7 +116,6 @@ expect_error(bernsteinPoly(c(NA, NA), degree = 5))
 
 ## error if degree has NA or negative
 expect_error(bernsteinPoly(x, degree = - 1))
-expect_error(bernsteinPoly(x, degree = c(2, NA)))
 expect_error(bernsteinPoly(x, degree = NA))
 
 ## error if empty matrix
