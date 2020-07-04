@@ -163,6 +163,7 @@ namespace splines2 {
     public:
         // the default constructor
         SplineBase() {}
+        virtual ~SplineBase() {}
 
         // explicit constructor
         explicit SplineBase(const SplineBase* pSplineBase) :

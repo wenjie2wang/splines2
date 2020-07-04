@@ -69,7 +69,7 @@ namespace splines2 {
             for (unsigned int k {1}; k <= degree_; ++k) {
                 const unsigned int k_offset { degree_ - k };
                 // use the Cox-de Boor recursive formula
-                for (size_t i {0}; i < x_.n_elem; ++ i) {
+                for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
                     // for each x, at most "order" columns are not zero
                     // basis_j(x) is not zero from t_j to t_{j+k+1}
@@ -152,7 +152,7 @@ namespace splines2 {
             for (unsigned int k {1}; k <= derivs; ++k) {
                 const unsigned int k_offset { derivs - k };
                 const size_t numer { degree_ - k_offset };
-                for (size_t i {0}; i < x_.n_elem; ++ i) {
+                for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
                     for (size_t j {0}; j < numer; ++j) {
                         size_t j_index { x_index_(i) + j };

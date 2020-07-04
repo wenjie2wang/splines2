@@ -1,6 +1,6 @@
 objects := $(wildcard R/*.R) DESCRIPTION
-version := $(shell grep "Version" DESCRIPTION | awk '{print $$NF}')
-pkg := $(shell grep "Package" DESCRIPTION | awk '{print $$NF}')
+version := $(shell egrep "^Version:" DESCRIPTION | awk '{print $$NF}')
+pkg := $(shell egrep "^Package:" DESCRIPTION | awk '{print $$NF}')
 tar := $(pkg)_$(version).tar.gz
 tinytest := $(wildcard tests/testthat/*.R)
 checkLog := $(pkg).Rcheck/00check.log
