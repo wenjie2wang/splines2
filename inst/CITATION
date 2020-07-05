@@ -1,15 +1,14 @@
 citHeader("To cite splines2 in publications use:")
 
-citEntry(entry = "Manual",
-         Title = "{splines2}: {R}egression Spline Functions and Classes",
-         Author = personList(as.person("Wenjie Wang"),
-                             as.person("Jun Yan")),
-         Note =	"{R} package version 0.3.0.9000",
-         Year =	"2019",
-         Url = "https://CRAN.R-project.org/package=splines2",
-
-         textVersion = paste("Wang, W., Yan, J. (2019). splines2:",
-                             "Regression Spline Functions and Classes.",
-                             "R package version 0.3.0.9000",
-                             "https://CRAN.R-project.org/package=splines2")
+bibentry(
+    key = "splines2-package",
+    bibtype = "Manual",
+    title = "{splines2}: {R}egression Spline Functions and Classes",
+    author = c(
+        as.person("Wenjie Wang"),
+        as.person("Jun Yan")
+        ),
+    year = "2020",
+    url = "https://CRAN.R-project.org/package=splines2",
+    note = "{R} package version 0.3.0.9000"
 )

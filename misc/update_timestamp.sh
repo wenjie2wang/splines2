@@ -51,7 +51,7 @@ else
     regexp3="s/version ([0-9]+\.*)+/version $version/"
     sed -i -E "$regexp3" $citation
     # restrict the search and only update the year of package
-    regexp4="/intsurv-package/,/^\)$/ s/20[0-9]{2}/$yr/"
+    regexp4="/splines2-package/,/^\)$/ s/20[0-9]{2}/$yr/"
     sed -i -E "$regexp4" $citation
 
     # done
