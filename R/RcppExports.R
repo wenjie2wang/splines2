@@ -30,8 +30,8 @@ rcpp_bSpline_integral <- function(x, df, degree, internal_knots, boundary_knots,
     .Call('_splines2_rcpp_bSpline_integral', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis)
 }
 
-rcpp_bernsteinPoly <- function(x, degree, derivs = 0L, integral = FALSE, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_bernsteinPoly', PACKAGE = 'splines2', x, degree, derivs, integral, complete_basis)
+rcpp_bernsteinPoly <- function(x, degree, derivs, integral, boundary_knots, complete_basis) {
+    .Call('_splines2_rcpp_bernsteinPoly', PACKAGE = 'splines2', x, degree, derivs, integral, boundary_knots, complete_basis)
 }
 
 rcpp_cSpline_basis <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
