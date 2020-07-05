@@ -24,12 +24,19 @@
 Rcpp::NumericMatrix rcpp_bernsteinPoly(
     const arma::vec& x,
     const unsigned int degree,
-    const unsigned int derivs = 0,
-    const bool integral = false,
-    const bool complete_basis = true
+    const unsigned int derivs,
+    const bool integral,
+    const arma::vec& boundary_knots,
+    const bool complete_basis
     )
 {
-    splines2::BernsteinPoly bp_obj { x, degree };
+    // check boundary knots
+    if (boundary_knots.n_elem != 2) {
+        throw std::range_error("Need two distinct boundary knots.");
+    }
+    splines2::BernsteinPoly bp_obj {
+        x, degree, boundary_knots(0), boundary_knots(1)
+    };
     Rcpp::NumericMatrix out;
     if (integral && derivs == 0) {
         // integrals
@@ -52,6 +59,7 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
     out.attr("degree") = bp_obj.get_degree();
     out.attr("derivs") = derivs;
     out.attr("integral") = integral;
+    out.attr("Boundary.knots") = boundary_knots;
     out.attr("intercept") = complete_basis;
     return out;
 }

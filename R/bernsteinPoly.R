@@ -15,9 +15,10 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Bernstein Polynomial Basis
+##' Generalized Bernstein Polynomial Basis
 ##'
-##' Generate the Bernstein polynomial basis matrix of given degree.
+##' Returns a generalized Bernstein polynomial basis matrix of given degree over
+##' a specified range.
 ##'
 ##' @name bernsteinPoly
 ##'
@@ -32,6 +33,9 @@
 ##' @param integral A logical value.  If \code{TRUE}, the integrals of the
 ##'     Bernstein polynomials will be returned.  The default value is
 ##'     \code{FALSE}.
+##' @param Boundary.knots Boundary points at which to anchor the Bernstein
+##'     polynomial basis. The default value is \code{c(0, 1)} for original
+##'     Bernstein polynomial basis over [0, 1].
 ##'
 ##' @return A numeric matrix of dimension \code{length(x)} by \code{degree +
 ##'     as.integer(intercept)}.
@@ -40,7 +44,8 @@
 ##'
 ##' @export
 bernsteinPoly <- function(x, degree = 3, derivs = 0L, integral = FALSE,
-                          intercept = FALSE, ...)
+                          intercept = FALSE, Boundary.knots = c(0, 1),
+                          ...)
 {
     ## check inputs
     if ((degree <- as.integer(degree)) < 0)
@@ -62,6 +67,7 @@ bernsteinPoly <- function(x, degree = 3, derivs = 0L, integral = FALSE,
         degree = degree,
         derivs = derivs,
         integral = integral,
+        boundary_knots = Boundary.knots,
         complete_basis = intercept
     )
     ## keep NA's as is

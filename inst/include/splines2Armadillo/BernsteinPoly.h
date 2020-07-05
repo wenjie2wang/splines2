@@ -25,12 +25,15 @@
 
 namespace splines2 {
 
-    // define class for Bernstein
+    // define class for generalized Bernstein polynomials over [a, b]
     class BernsteinPoly
     {
     protected:
         unsigned int degree_ = 3;
         unsigned int order_ = 4;
+        double left_boundary_ = 0;  // a
+        double right_boundary_ = 1; // b
+        double range_size_ = 1;     // b - a
         rvec x_;
 
         rmat poly_basis_;
@@ -39,10 +42,25 @@ namespace splines2 {
         // check x
         inline void check_x(const rvec& x) {
             for (size_t i {0}; i < x.n_elem; ++i) {
-                if (x(i) < 0 || x(i) > 1) {
-                    throw std::range_error("The 'x' must be in [0, 1].");
+                if (x(i) < left_boundary_ || x(i) > right_boundary_) {
+                    throw std::range_error(
+                        "The 'x' must be inside of boundary."
+                        );
                 }
             }
+            this->x_ = x;
+        }
+        // check boundary
+        inline void check_boundary(const double left, const double right)
+        {
+            if (left >= right) {
+                throw std::range_error(
+                    "The left boundary must be less than the right boundary."
+                    );
+            }
+            this->left_boundary_ = left;
+            this->right_boundary_ = right;
+            this->range_size_ = right - left;
         }
 
     public:
@@ -52,30 +70,29 @@ namespace splines2 {
         explicit BernsteinPoly(const rvec& x)
         {
             this->check_x(x);
-            this->x_ = x;
         }
 
         BernsteinPoly(const rvec& x,
-                      const unsigned int degree) :
+                      const unsigned int degree,
+                      const double left_boundary = 0,
+                      const double right_boundary = 1) :
             degree_ { degree },
             order_ { degree + 1 }
         {
+            this->check_boundary(left_boundary, right_boundary);
             this->check_x(x);
-            this->x_ = x;
         }
 
         // setter functions
         inline BernsteinPoly* set_x(const rvec& x)
         {
             this->check_x(x);
-            this->x_ = x;
             this->is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_x(const double x)
         {
             this->check_x(num2vec(x));
-            this->x_ = x;
             this->is_basis_latest_ = false;
             return this;
         }
@@ -95,6 +112,12 @@ namespace splines2 {
             }
             return this;
         }
+        inline BernsteinPoly* set_boundary(const double left = 0,
+                                           const double right = 1)
+        {
+            this->check_boundary(left, right);
+            return this;
+        }
 
         // getter functions
         inline rvec get_x() const
@@ -108,6 +131,14 @@ namespace splines2 {
         inline unsigned int get_order() const
         {
             return this->order_;
+        }
+        inline unsigned int get_left_boundary() const
+        {
+            return this->left_boundary_;
+        }
+        inline unsigned int get_right_boundary() const
+        {
+            return this->right_boundary_;
         }
 
         // construct polynomial bases by recursive formula
@@ -130,10 +161,9 @@ namespace splines2 {
                 for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
                     for (size_t j {0}; j < k; ++j) {
-                        double term1 { x_(i) * b_mat(i, j) };
-                        double term2 { b_mat(i, j) - term1 };
-                        b_mat(i, j) = saved + term2;
-                        saved = term1;
+                        double term { b_mat(i, j) / range_size_ };
+                        b_mat(i, j) = saved + (right_boundary_ - x_(i)) * term;
+                        saved = (x_(i) - left_boundary_) * term;
                     }
                     b_mat(i, k) = saved;
                 }
@@ -189,10 +219,11 @@ namespace splines2 {
             for (unsigned int k {1}; k <= derivs; ++k) {
                 const unsigned int k_offset { derivs - k };
                 const size_t numer { degree_ - k_offset };
+                const double numer2 { numer / range_size_  };
                 for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
                     for (size_t j {0}; j < numer; ++j) {
-                        double term { numer * d_mat(i, j) };
+                        double term { numer2 * d_mat(i, j) };
                         d_mat(i, j) = saved - term;
                         saved = term;
                     }
@@ -226,9 +257,10 @@ namespace splines2 {
                 this->poly_basis_ = old_basis;
             }
             // integral by recursive formula
+            const double fac { range_size_ / order_ };
             for (unsigned int i {0}; i < x_.n_elem; ++i) {
-                arma::rowvec tmp { i_mat.row(i) };
-                i_mat.row(i) = rev_cum_sum(tmp) / this->order_;
+                arma::rowvec tmp { i_mat.row(i) * fac };
+                i_mat.row(i) = rev_cum_sum(tmp) ;
             }
             // remove the first column if needed
             if (complete_basis) {
