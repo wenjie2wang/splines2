@@ -10,14 +10,16 @@ Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=master)](https://t
 Status](https://ci.appveyor.com/api/projects/status/bvoso7nxchg1incb/branch/master?svg=true)](https://ci.appveyor.com/project/wenjie2wang/splines2)
 [![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/master/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
 
-The R package **splines2** is a supplementary package on splines
-providing functions to construct
+The R package **splines2** provides functions to construct basis matrix
+of
 
-  - B-splines and its integral
-  - M-splines and its integral (I-splines)
+  - B-splines
+  - M-splines
+  - I-splines
   - convex splines (C-splines)
-  - Bernstein polynomials and its integrals
-  - their derivatives of given order
+  - generalized Bernstein polynomials
+  - their integrals (except C-splines) and derivatives of given order by
+    close-form recusive formulas
 
 In addition to the R interface, **splines2** also provides a C++
 head-only library integrated with **Rcpp**, which allows construction of
