@@ -16,9 +16,19 @@ options(width = 100, digits = 5)
 ```
 
 The R package **splines2** is a supplementary package on splines providing
-functions constructing B-splines, integral of B-splines, monotone splines
-(M-splines) and its integral (I-splines), convex splines (C-splines), and their
-derivatives of given order.
+functions to construct
+
+- B-splines and its integral
+- M-splines and its integral (I-splines)
+- convex splines (C-splines)
+- Bernstein polynomials and its integrals
+- their derivatives of given order
+
+In addition to the R interface, **splines2** also provides a C++ head-only
+library integrated with **Rcpp**, which allows construction of spline basis
+matrix directly in C++ with the help of **Rcpp** (and **RcppArmadillo**).  So it
+can also be treated as a **Rcpp**\* package (similar to **RcppArmadillo**,
+**RcppEigen**, or **RcppNumerical**, etc.)
 
 
 ## Installation of CRAN Version
@@ -41,9 +51,11 @@ remotes::install_github("wenjie2wang/splines2")
 
 ## Getting Started
 
-- [Online documentation][pkgdown-url] provides reference for all functions
-- Package vignette for a quick [demonstration][pkg-demo] for the common usage
-  through examples
+[Online document][pkgdown-url] provides reference for all functions and contains
+the following vignettes:
+
+- [Demonstration of the common usages in R through examples][pkg-demo].
+- [Introduction to the usage with Rcpp][pkg-wi-rcpp]
 
 ## Performance
 
@@ -64,7 +76,7 @@ x <- seq.int(0, 1, 0.001)
 degree <- 3
 ord <- degree + 1
 knots <- seq.int(0.1, 0.9, 0.1)
-b_knots <- c(0, 1)
+b_knots <- range(x)
 all_knots <- sort(c(knots, rep(range(x), degree + 1)))
 
 ## check equivalency of outputs
@@ -136,7 +148,7 @@ from `splines2::ibs()` for equivalent results, which was still much faster than
 
 ## License
 
-[GNU General Public License (v3)][gpl]
+[GNU General Public License][gpl] (≥ 3)
 
 [r-pkg-badge]: https://www.r-pkg.org/badges/version/splines2
 [cranlog-badge]: https://cranlogs.r-pkg.org/badges/splines2
@@ -146,6 +158,7 @@ from `splines2::ibs()` for equivalent results, which was still much faster than
 [github-url]: https://github.com/wenjie2wang/splines2
 [pkgdown-url]: https://wenjie-stat.me/splines2
 [pkg-demo]: https://wenjie-stat.me/splines2/articles/splines2-intro
+[pkg-wi-rcpp]: https://wenjie-stat.me/splines2/articles/splines2-wi-rcpp
 [codecov]: https://codecov.io/gh/wenjie2wang/splines2
 [codecov-master]: https://codecov.io/gh/wenjie2wang/splines2/branch/master/graph/badge.svg
 [appveyor]: https://ci.appveyor.com/project/wenjie2wang/splines2
