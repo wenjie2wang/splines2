@@ -18,17 +18,17 @@ bSpline(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree" (minus one if
-there is an intercept) knots at suitable quantiles of \code{x} (which
-will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept". If \code{knots} was
-specified, \code{df} specified will be ignored.}
+\item{df}{Degree of freedom that equals to the column number of returned
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  If internal knots are specified
+via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  See also \code{Boundary.knots}.}
+quantiles for more knots.}
 
 \item{degree}{A non-negative integer specifying the degree of the piecewise
 polynomial. The default value is 3 for cubic splines. Zero degree is
@@ -46,10 +46,11 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A matrix of dimension \code{length(x)} by
-\code{df = degree + length(knots)} (plus one if intercept is included).
-Attributes that correspond to the arguments specified are returned
-for usage of other functions in this package.
+A numeric matrix with \code{length(x)} rows and \code{df} columns if
+    \code{df} is specified or \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{knots} are specified instead.
+    Attributes that correspond to the arguments specified are returned for
+    usage of other functions in this package.
 }
 \description{
 Generates the B-spline basis matrix representing the family of piecewise
@@ -57,22 +58,33 @@ polynomials with the specified interior knots and degree, evaluated at the
 values of \code{x}.
 }
 \details{
-It is an augmented function of \code{bs} function in \code{splines} package
-for B-spline basis that allows piecewise constant ( left-closed and
-right-open except on the right boundary) spline basis with zero degree.
+This function extends the \code{bs()} function in \code{splines} package for
+B-spline basis by allowing piecewise constant (left-closed and right-open
+except on the right boundary) spline basis with zero degree.
 }
 \examples{
 library(splines2)
+
 x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
-bsMat <- bSpline(x, knots = knots, degree = 0, intercept = TRUE)
 
-library(graphics)
-matplot(x, bsMat, type = "l", ylab = "Piecewise constant B-spline bases")
+## cubic B-splines
+bsMat <- bSpline(x, knots = knots, degree = 3, intercept = TRUE)
+
+par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
+matplot(x, bsMat, type = "l", ylab = "Cubic B-spline Bases")
 abline(v = knots, lty = 2, col = "gray")
+
+## the first derivaitves
+d1Mat <- deriv(bsMat)
+
+## the second derivaitves
+d2Mat <- deriv(bsMat, 2)
+
+## evaluate at new values
+predict(bsMat, c(0.125, 0.801))
 }
 \seealso{
-\code{\link{predict.bSpline2}} for evaluation at given (new) values;
-\code{\link{dbs}}, \code{\link{deriv.bSpline2}} for derivatives;
-\code{\link{ibs}} for integral of B-splines;
+\code{\link{dbs}} for derivatives of B-splines;
+\code{\link{ibs}} for integrals of B-splines;
 }

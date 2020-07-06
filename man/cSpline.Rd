@@ -2,7 +2,7 @@
 % Please edit documentation in R/cSpline.R
 \name{cSpline}
 \alias{cSpline}
-\title{C-Spline Basis for Polynomial Splines or its derivatives}
+\title{C-Spline Basis for Polynomial Splines}
 \usage{
 cSpline(
   x,
@@ -20,20 +20,22 @@ cSpline(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree" (minus one if
-there is an intercept) knots at suitable quantiles of \code{x} (which
-will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept". If \code{knots} was
-specified, \code{df} specified will be ignored.}
+\item{df}{Degree of freedom that equals to the column number of returned
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  If internal knots are specified
+via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  See also \code{Boundary.knots}.}
+quantiles for more knots.}
 
-\item{degree}{Non-negative integer degree of the piecewise polynomial. The
-default value is 3 for cubic splines.}
+\item{degree}{The degree of C-spline defined to be the degree of the
+associated M-spline instead of actual polynomial degree. For example,
+C-spline basis of degree 2 is defined as the scaled double integral of
+associated M-spline basis of degree 2.}
 
 \item{intercept}{If \code{TRUE} by default, all spline bases are included.
 Notice that when using C-Spline for shape-restricted regression,
@@ -58,28 +60,31 @@ same extent.}
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A matrix of dimension \code{length(x)} by
-\code{df = degree + length(knots)} (plus on if intercept is included).
-The attributes that correspond to the arguments specified are returned
-for the usage of other functions in this package.
+A numeric matrix with \code{length(x)} rows and \code{df} columns if
+    \code{df} is specified or \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{knots} are specified instead.
+    Attributes that correspond to the arguments specified are returned for
+    usage of other functions in this package.
 }
 \description{
-Generates the convex regression spline (called C-spline) basis
-matrix by integrating I-spline basis for a polynomial spline.
+Generates the convex regression spline (called C-spline) basis matrix by
+integrating I-spline basis for a polynomial spline or the corresponding
+derivatives.
 }
 \details{
 It is an implementation of the close form C-spline basis derived from the
-recursion formula of I-spline and M-spline.
+recursion formula of I-splines and M-splines.
 }
 \examples{
 library(splines2)
+
 x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 
 ### when 'scale = TRUE' (by default)
 csMat <- cSpline(x, knots = knots, degree = 2)
 
-library(graphics)
+par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 matplot(x, csMat, type = "l", ylab = "C-spline basis")
 abline(v = knots, lty = 2, col = "gray")
 isMat <- deriv(csMat)
@@ -89,24 +94,24 @@ matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
 
 ### when 'scale = FALSE'
 csMat <- cSpline(x, knots = knots, degree = 2, scale = FALSE)
+
 ## the corresponding I-splines and M-splines (with same arguments)
 isMat <- iSpline(x, knots = knots, degree = 2)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+
 ## or using deriv methods (more efficient)
 isMat1 <- deriv(csMat)
 msMat1 <- deriv(csMat, derivs = 2)
+
 ## equivalent
 stopifnot(all.equal(isMat, isMat1, check.attributes = FALSE))
 stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
-
 }
 \references{
 Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
 }
 \seealso{
-\code{\link{predict.cSpline}} for evaluation at given (new) values;
-\code{\link{deriv.cSpline}} for derivatives;
 \code{\link{iSpline}} for I-splines;
 \code{\link{mSpline}} for M-splines.
 }

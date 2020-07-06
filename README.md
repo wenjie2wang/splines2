@@ -22,8 +22,8 @@ of
     close-form recusive formulas
 
 In addition to the R interface, **splines2** also provides a C++
-header-only library integrated with **Rcpp**, which allows construction of
-spline basis matrix directly in C++ with the help of **Rcpp** and
+header-only library integrated with **Rcpp**, which allows construction
+of spline basis matrix directly in C++ with the help of **Rcpp** and
 **RcppArmadillo**. So it can also be treated as a **Rcpp**\* package.
 
 ## Installation of CRAN Version
@@ -75,7 +75,7 @@ degree <- 3
 ord <- degree + 1
 knots <- seq.int(0.1, 0.9, 0.1)
 b_knots <- range(x)
-all_knots <- sort(c(knots, rep(range(x), degree + 1)))
+all_knots <- sort(c(knots, rep(b_knots, ord)))
 
 ## check equivalency of outputs
 my_check <- function(values) {

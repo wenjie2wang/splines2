@@ -15,54 +15,29 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' M-Spline Basis for Polynomial Splines and its Derivatives
+##' M-Spline Basis for Polynomial Splines
 ##'
-##' This function generates the basis matrix of the regression spline called
-##' M-spline or its derivatives of given order.  For monotone regression,
-##' \code{\link{iSpline}} should be used.
+##' Generates the basis matrix of the regression spline called M-spline or the
+##' corresponding derivatives of given order.  For monotone regression,
+##' \code{\link{iSpline}} should be used instead of M-splines.
 ##'
-##' It is an implementation of the close form M-spline basis based on
-##' relationship between M-spline basis and B-spline basis.  In fact, M-spline
-##' basis is a rescaled version of B-spline basis. Internally, it calls function
-##' \code{\link{bSpline}} and generates a basis matrix for representing the
-##' family of piecewise polynomials with the specified interior knots and
-##' degree, evaluated at the values of \code{x}.
+##' It is an implementation of the close form M-spline basis based on the
+##' recursion formula given by Ramsay (1988).
 ##'
 ##' @inheritParams bSpline
+##'
 ##' @param derivs A non-negative integer specifying the order of derivatives of
 ##'     M-splines. The default value is \code{0L} for M-spline bases.
 ##'
-##' @return
-##' A matrix of dimension \code{length(x)} by
-##' \code{df = degree + length(knots)} (plus one if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage of other functions in this package.
+##' @inherit bSpline return
 ##'
 ##' @references
 ##' Ramsay, J. O. (1988). Monotone regression splines in action.
 ##' \emph{Statistical science}, 3(4), 425--441.
 ##'
-##' @examples
-##' ## Example given in the reference paper by Ramsay (1988)
-##' library(splines2)
-##' x <- seq.int(0, 1, 0.01)
-##' knots <- c(0.3, 0.5, 0.6)
-##' msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##'
-##' library(graphics)
-##' matplot(x, msMat, type = "l", ylab = "M-spline basis")
-##' abline(v = knots, lty = 2, col = "gray")
-##'
-##' ## derivatives of M-splines
-##' dmsMat <- mSpline(x, knots = knots, degree = 2,
-##'                   intercept = TRUE, derivs = 1)
-##' ## or using the 'deriv' method
-##' dmsMat1 <- deriv(msMat)
-##' stopifnot(all.equal(dmsMat, dmsMat1, check.attributes = FALSE))
+##' @example inst/examples/ex-mSpline.R
 ##'
 ##' @seealso
-##' \code{\link{predict.mSpline}} for evaluation at given (new) values;
-##' \code{\link{deriv.mSpline}} for derivative method;
 ##' \code{\link{bSpline}} for B-splines;
 ##' \code{\link{iSpline}} for I-splines;
 ##' \code{\link{cSpline}} for C-splines.

@@ -77,7 +77,7 @@ degree <- 3
 ord <- degree + 1
 knots <- seq.int(0.1, 0.9, 0.1)
 b_knots <- range(x)
-all_knots <- sort(c(knots, rep(range(x), degree + 1)))
+all_knots <- sort(c(knots, rep(b_knots, ord)))
 
 ## check equivalency of outputs
 my_check <- function(values) {

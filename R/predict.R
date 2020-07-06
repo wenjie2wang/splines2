@@ -15,24 +15,21 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Evaluate a Spline Basis
+##' Evaluate a Spline Basis at specified points
 ##'
-##' This function evaluates a predefined spline basis at (new) given values.
+##' This function evaluates a predefined spline basis at a (new) given \code{x}.
 ##'
 ##' These are methods for the generic function \code{predict} for objects
 ##' inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
 ##' \code{iSpline}, \code{cSpline}, or \code{bernsteinPoly}.  If \code{newx} is
-##' not given, the function returns the input object.  For object returned by
-##' function \code{\link{cSpline}}, the \code{mSpline} and \code{iSpline}
-##' objects shipped in attributes should not be evaluated by this function if
-##' \code{rescale} is \code{TRUE}.  See \code{\link{cSpline}} for details.
+##' not given, the function returns the input object.
 ##'
 ##' @name predict
 ##' @param object Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
 ##'     \code{iSpline}, \code{cSpline}, or \code{bernsteinPoly} with attributes
 ##'     describing \code{knots}, \code{degree}, etc.
 ##' @param newx The \code{x} values at which evaluations are required.
-##' @param ... Optional argument for future usage.
+##' @param ... Optional argument that are not used.
 ##'
 ##' @return
 ##' An object just like the \code{object} input, except evaluated at
@@ -42,8 +39,8 @@
 ##'
 ##' @seealso
 ##' \code{\link{bSpline}} for B-splines;
-##' \code{\link{ibs}} for integral of B-splines;
-##' \code{\link{dbs}} for derivative of B-splines;
+##' \code{\link{ibs}} for integrals of B-splines;
+##' \code{\link{dbs}} for derivatives of B-splines;
 ##' \code{\link{mSpline}} for M-splines;
 ##' \code{\link{iSpline}} for I-splines;
 ##' \code{\link{cSpline}} for C-splines.

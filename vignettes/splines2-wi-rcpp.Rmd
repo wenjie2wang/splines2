@@ -192,5 +192,5 @@ get_right_boundary()
 The *setter* function also returns a pointer to the current object.
 
 
-# Reference
+## Reference
 

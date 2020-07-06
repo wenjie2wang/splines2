@@ -22,17 +22,17 @@ returned as they are.}
 \item{derivs}{A positive integer specifying the order of derivative.  By
 default, it is \code{1L} for the first derivative.}
 
-\item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree" (minus one if
-there is an intercept) knots at suitable quantiles of \code{x} (which
-will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept". If \code{knots} was
-specified, \code{df} specified will be ignored.}
+\item{df}{Degree of freedom that equals to the column number of returned
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  If internal knots are specified
+via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  See also \code{Boundary.knots}.}
+quantiles for more knots.}
 
 \item{degree}{A non-negative integer specifying the degree of the piecewise
 polynomial. The default value is 3 for cubic splines. Zero degree is
@@ -50,22 +50,20 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A matrix of dimension \code{length(x)} by
-\code{df = degree + length(knots)} (plus on if intercept is included).
-Attributes that correspond to the arguments specified are returned
-for usage of other functions in this package.
+A numeric matrix with \code{length(x)} rows and \code{df} columns if
+    \code{df} is specified or \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{knots} are specified instead.
+    Attributes that correspond to the arguments specified are returned for
+    usage of other functions in this package.
 }
 \description{
-Produces the derivative of given order of B-splines.
+Produces the derivatives of given order of B-splines.
 }
 \details{
-It is an implementation of the close form derivative of B-spline basis based
-on recursion relation.  At knots, the derivative is defined to be the right
-derivative.
-
-The function is similar with \code{splines::splineDesign}. However, it
-provides a more user-friendly interface, a more considerate \code{NA}'s
-handling.
+This function provides a more user-friendly interface and a more consistent
+handling for \code{NA}'s than \code{splines::splineDesign()} for derivatives
+of B-splines.  The implementation is based on the close form recursion
+formula.  At knots, the derivative is defined to be the right derivative.
 }
 \examples{
 library(splines2)
@@ -86,8 +84,6 @@ De Boor, Carl. (1978). \emph{A practical guide to splines}.
 Vol. 27. New York: Springer-Verlag.
 }
 \seealso{
-\code{\link{predict.dbs}} for evaluation at given (new) values;
-\code{\link{deriv.dbs}} for derivative method;
 \code{\link{bSpline}} for B-splines;
-\code{\link{ibs}} for integral of B-splines.
+\code{\link{ibs}} for integrals of B-splines.
 }

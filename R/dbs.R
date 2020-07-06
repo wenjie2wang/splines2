@@ -17,25 +17,19 @@
 
 ##' Derivatives of B-Spline Basis
 ##'
-##' Produces the derivative of given order of B-splines.
+##' Produces the derivatives of given order of B-splines.
 ##'
-##' It is an implementation of the close form derivative of B-spline basis based
-##' on recursion relation.  At knots, the derivative is defined to be the right
-##' derivative.
-##'
-##' The function is similar with \code{splines::splineDesign}. However, it
-##' provides a more user-friendly interface, a more considerate \code{NA}'s
-##' handling.
+##' This function provides a more user-friendly interface and a more consistent
+##' handling for \code{NA}'s than \code{splines::splineDesign()} for derivatives
+##' of B-splines.  The implementation is based on the close form recursion
+##' formula.  At knots, the derivative is defined to be the right derivative.
 ##'
 ##' @inheritParams bSpline
+##'
 ##' @param derivs A positive integer specifying the order of derivative.  By
 ##'     default, it is \code{1L} for the first derivative.
 ##'
-##' @return
-##' A matrix of dimension \code{length(x)} by
-##' \code{df = degree + length(knots)} (plus on if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage of other functions in this package.
+##' @inherit bSpline return
 ##'
 ##' @references
 ##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
@@ -44,10 +38,8 @@
 ##' @example inst/examples/ex-dbs.R
 ##'
 ##' @seealso
-##' \code{\link{predict.dbs}} for evaluation at given (new) values;
-##' \code{\link{deriv.dbs}} for derivative method;
 ##' \code{\link{bSpline}} for B-splines;
-##' \code{\link{ibs}} for integral of B-splines.
+##' \code{\link{ibs}} for integrals of B-splines.
 ##'
 ##' @export
 dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,

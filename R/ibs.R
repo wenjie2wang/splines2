@@ -15,23 +15,15 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Integral of B-Spline Basis
+##' Integrals of B-Spline Basis
 ##'
-##' Generates the integral of B-spline basis matrix for a polynomial spline.
+##' Generates the integrals of B-spline basis matrix.
 ##'
-##' It is an implementation of the close form integral of B-spline basis based
-##' on recursion relation.  Internally, it calls \code{\link{bSpline}} and
-##' generates a basis matrix for representing the family of piecewise
-##' polynomials and their corresponding integrals with the specified interior
-##' knots and degree, evaluated at the values of \code{x}.
+##' The implementation is based on the close form recursion formula.
 ##'
 ##' @inheritParams bSpline
 ##'
-##' @return
-##' A matrix of dimension \code{length(x)} by
-##' \code{df = degree + length(knots)} (plus on if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage of other functions in this package.
+##' @inherit bSpline return
 ##'
 ##' @references
 ##' De Boor, Carl. (1978). \emph{A practical guide to splines}.
@@ -40,8 +32,6 @@
 ##' @example inst/examples/ex-ibs.R
 ##'
 ##' @seealso
-##' \code{\link{predict.ibs}} for evaluation at given (new) values;
-##' \code{\link{deriv.ibs}} for derivative method.
 ##' \code{\link{bSpline}} for B-splines;
 ##' \code{\link{dbs}} for derivatives of B-splines;
 ##'

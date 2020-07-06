@@ -2,7 +2,7 @@
 % Please edit documentation in R/mSpline.R
 \name{mSpline}
 \alias{mSpline}
-\title{M-Spline Basis for Polynomial Splines and its Derivatives}
+\title{M-Spline Basis for Polynomial Splines}
 \usage{
 mSpline(
   x,
@@ -19,17 +19,17 @@ mSpline(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{df}{Degrees of freedom.  One can specify \code{df} rather than
-\code{knots}, then the function chooses "df - degree" (minus one if
-there is an intercept) knots at suitable quantiles of \code{x} (which
-will ignore missing values).  The default, \code{NULL}, corresponds to
-no inner knots, i.e., "degree - intercept". If \code{knots} was
-specified, \code{df} specified will be ignored.}
+\item{df}{Degree of freedom that equals to the column number of returned
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  If internal knots are specified
+via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  See also \code{Boundary.knots}.}
+quantiles for more knots.}
 
 \item{degree}{A non-negative integer specifying the degree of the piecewise
 polynomial. The default value is 3 for cubic splines. Zero degree is
@@ -50,50 +50,46 @@ M-splines. The default value is \code{0L} for M-spline bases.}
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A matrix of dimension \code{length(x)} by
-\code{df = degree + length(knots)} (plus one if intercept is included).
-Attributes that correspond to the arguments specified are returned
-for usage of other functions in this package.
+A numeric matrix with \code{length(x)} rows and \code{df} columns if
+    \code{df} is specified or \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{knots} are specified instead.
+    Attributes that correspond to the arguments specified are returned for
+    usage of other functions in this package.
 }
 \description{
-This function generates the basis matrix of the regression spline called
-M-spline or its derivatives of given order.  For monotone regression,
-\code{\link{iSpline}} should be used.
+Generates the basis matrix of the regression spline called M-spline or the
+corresponding derivatives of given order.  For monotone regression,
+\code{\link{iSpline}} should be used instead of M-splines.
 }
 \details{
-It is an implementation of the close form M-spline basis based on
-relationship between M-spline basis and B-spline basis.  In fact, M-spline
-basis is a rescaled version of B-spline basis. Internally, it calls function
-\code{\link{bSpline}} and generates a basis matrix for representing the
-family of piecewise polynomials with the specified interior knots and
-degree, evaluated at the values of \code{x}.
+It is an implementation of the close form M-spline basis based on the
+recursion formula given by Ramsay (1988).
 }
 \examples{
-## Example given in the reference paper by Ramsay (1988)
 library(splines2)
+
+## Example given in the reference paper by Ramsay (1988)
 x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 
-library(graphics)
-matplot(x, msMat, type = "l", ylab = "M-spline basis")
+par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
+matplot(x, msMat, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
 
 ## derivatives of M-splines
 dmsMat <- mSpline(x, knots = knots, degree = 2,
                   intercept = TRUE, derivs = 1)
-## or using the 'deriv' method
+
+## or using the deriv method
 dmsMat1 <- deriv(msMat)
 stopifnot(all.equal(dmsMat, dmsMat1, check.attributes = FALSE))
-
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
 \emph{Statistical science}, 3(4), 425--441.
 }
 \seealso{
-\code{\link{predict.mSpline}} for evaluation at given (new) values;
-\code{\link{deriv.mSpline}} for derivative method;
 \code{\link{bSpline}} for B-splines;
 \code{\link{iSpline}} for I-splines;
 \code{\link{cSpline}} for C-splines.

@@ -24,8 +24,8 @@
 ##'
 ##' @inheritParams bSpline
 ##'
-##' @param x The predictor variable taking values between 0 and 1.  Missing
-##'     values are allowed and will be returned as they are.
+##' @param x The predictor variable taking values inside of the specified
+##'     boundary.  Missing values are allowed and will be returned as they are.
 ##' @param degree A non-negative integer representing the degree of the
 ##'     polynomials.
 ##' @param derivs A non-negative integer specifying the order of derivatives.

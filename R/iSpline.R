@@ -15,19 +15,16 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' I-Spline Basis for Polynomial Splines or its derivatives
+##' I-Spline Basis for Polynomial Splines
 ##'
 ##' Generates the I-spline (integral of M-spline) basis matrix for a polynomial
-##' spline or its derivatives of given order.
+##' spline or the corresponding derivatives of given order.
 ##'
 ##' It is an implementation of the close form I-spline basis based on the
-##' recursion formula of B-spline basis.  Internally, it calls
-##' \code{\link{mSpline}} and \code{\link{bSpline}}, and generates a basis
-##' matrix for representing the family of piecewise polynomials and their
-##' corresponding integrals with the specified interior knots and degree,
-##' evaluated at the values of \code{x}.
+##' recursion formula given by Ramsay (1988).
 ##'
 ##' @inheritParams bSpline
+##'
 ##' @param degree The degree of I-spline defined to be the degree of the
 ##'     associated M-spline instead of actual polynomial degree. For example,
 ##'     I-spline basis of degree 2 is defined as the integral of associated
@@ -39,35 +36,15 @@
 ##' @param derivs A non-negative integer specifying the order of derivatives of
 ##'     I-splines.
 ##'
-##' @return
-##' A matrix of dimension \code{length(x)} by
-##' \code{df = degree + length(knots)} (plus on if intercept is included).
-##' Attributes that correspond to the arguments specified are returned
-##' for usage of other functions in this package.
+##' @inherit bSpline return
 ##'
 ##' @references
 ##' Ramsay, J. O. (1988). Monotone regression splines in action.
 ##' \emph{Statistical science}, 3(4), 425--441.
 ##'
-##' @examples
-##' ## Example given in the reference paper by Ramsay (1988)
-##' library(splines2)
-##' x <- seq.int(0, 1, by = 0.01)
-##' knots <- c(0.3, 0.5, 0.6)
-##' isMat <- iSpline(x, knots = knots, degree = 2)
-##'
-##' library(graphics)
-##' matplot(x, isMat, type = "l", ylab = "I-spline basis")
-##' abline(v = knots, lty = 2, col = "gray")
-##'
-##' ## the derivative of I-splines is M-spline
-##' msMat1 <- iSpline(x, knots = knots, degree = 2, derivs = 1)
-##' msMat2 <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
-##' stopifnot(all.equal(msMat1, msMat2))
+##' @example inst/examples/ex-iSpline.R
 ##'
 ##' @seealso
-##' \code{\link{predict.iSpline}} for evaluation at given (new) values;
-##' \code{\link{deriv.iSpline}} for derivative method;
 ##' \code{\link{mSpline}} for M-splines;
 ##' \code{\link{cSpline}} for C-splines;
 ##'
