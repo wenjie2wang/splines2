@@ -22,7 +22,7 @@ of
     close-form recusive formulas
 
 In addition to the R interface, **splines2** also provides a C++
-head-only library integrated with **Rcpp**, which allows construction of
+header-only library integrated with **Rcpp**, which allows construction of
 spline basis matrix directly in C++ with the help of **Rcpp** and
 **RcppArmadillo**. So it can also be treated as a **Rcpp**\* package.
 

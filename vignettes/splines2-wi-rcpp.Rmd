@@ -1,0 +1,196 @@
+---
+title: "Using splines2 with Rcpp"
+author: Wenjie Wang
+date: "`r Sys.Date()`"
+bibliography:
+- ../inst/bib/splines2.bib
+vignette: >
+  %\VignetteIndexEntry{Using splines2 with Rcpp}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+output: rmarkdown::html_vignette
+---
+
+In this package vignette, we introduce how to use the C++ header-only library
+that **splines2** contains with the **Rcpp** package [@eddelbuettel2013springer]
+for constructing spline basis.  The introduction is intended for package
+developers who would like to use **splines2** package at C++ level.
+
+## Header File and Name Space
+
+Different with the procedure based functions at R level, **splines2** provides
+several spline classes in its C++ interface for ease of usage and maintenance.
+The implementations use the **Armadillo** [@sanderson2016armadillo] library with
+help of **RcppArmadillo** [@eddelbuettel2014csda] and require C++11.  We may
+include the header file named `splines2Armadillo.h` to get the access to all the
+classes and implementations in the name space `splines2`.
+
+```C++
+#include <RcppArmadillo.h>
+// [[Rcpp::plugins(cpp11)]]
+
+// include header file from splines2 package
+#include <splines2Armadillo.h>
+
+// for ease of demonstration
+using arma
+using splines2
+```
+
+## B-splines
+
+The `BSpline` class is for creating B-spline basis.
+
+### Constructors
+
+There are mainly three constructors in addition to the default constructor:
+`BSpline()`.
+
+The first non-default constructor is called when internal knots are explicitly
+specified.
+
+```C++
+// 1. specified internal_knots
+BSpline(const vec& x,
+        const vec& internal_knots,
+        const unsigned int degree = 3,
+        const vec& boundary_knots = vec())
+```
+
+The second non-default constructor is called when an unsigned integer
+representing the degree of freedom of the *complete spline basis* (different
+with `df` in the R interface) is specified. Then the number of internal knots is
+computed as `spline_df - degree - 1` and the placement of internal knots uses
+quantiles of specified `x`.
+
+```C++
+// 2. specified spline degree of freedom (df)
+BSpline(const vec& x,
+        const unsigned int spline_df,
+        const unsigned int degree = 3,
+        const vec& boundary_knots = vec())
+```
+
+The third non-default constructor is explicit and takes a pointer to a base
+class object.  It can be useful when we want to create a new object using the
+same specification (degree, internal_knots, boundary_knots, etc.) of an existing
+object.
+
+```C++
+// 3. create a new object from a base class pointer
+BSpline(const SplineBase* pSplineBase)
+```
+
+### Function Members
+
+The main methods are
+
+- `basis()` for spline basis matrix
+- `derivative()` for derivatives of spline bases
+- `integral()` for integrals of spline bases
+
+The specific function signatures are as follows:
+
+```C++
+mat basis(const bool complete_basis = true)
+mat derivative(const unsigned int derivs = 1,
+               const bool complete_basis = true)
+mat integral(const bool complete_basis = true)
+```
+
+In addition, we may set and get the spline specifications through the following
+*setter* and *getter* functions, respectively.
+
+```C++
+// setter functions
+set_x(const vec&)
+set_x(const double)
+set_internal_knots(const vec&)
+set_boundary_knots(const vec&)
+set_degree(const unsigned int)
+set_order(const unsigned int)
+
+// getter functions
+get_x()
+get_internal_knots()
+get_boundary_knots()
+get_degree()
+get_order()
+get_spline_df()
+```
+
+The *setter* function returns a pointer to the current object so that the
+specification can be chained for convenience.  For example,
+
+```C++
+vec x { arma::regspace(0, 0.1, 1) }; // 0, 0.1, ..., 1
+BSpline obj { x, 5 };                // degree = 3 dy default
+// change degree to 2 and get basis
+mat basis_mat { obj.set_degree(2)->basis() };
+```
+
+## M-splines, I-splines, and C-splines
+
+The class `MSpline` for M-splines, `ISpline` for I-splines, and `CSpline` for
+C-splines have the exactly same constructors and function members with `BSpline`
+except there is no publicly available `integral()` method for `CSpline`.
+
+
+## Generalized Bernstein Polynomials
+
+The `BernsteinPoly` class is implemented for the generalized Bernstein
+polynomials.
+
+
+### Constructors
+
+The main non-default constructor is as follows:
+
+```C++
+BernsteinPoly(const vec& x,
+              const unsigned int degree,
+              const double left_boundary = 0,
+              const double right_boundary = 1)
+```
+
+### Function Members
+
+Same with `BSpline`, the main methods are
+
+- `basis()` for basis matrix
+- `derivative()` for derivatives of bases
+- `integral()` for integrals of bases
+
+The specific function signatures are as follows:
+
+```C++
+mat basis(const bool complete_basis = true)
+mat derivative(const unsigned int derivs = 1,
+               const bool complete_basis = true)
+mat integral(const bool complete_basis = true)
+```
+
+In addition, we may similarly set and get the specifications through the
+following *setter* and *getter* functions, respectively.
+
+```C++
+// setter functions
+set_x(const vec&)
+set_x(const double)
+set_degree(const unsigned int)
+set_order(const unsigned int)
+set_boundary(const double left, const double right)
+
+// getter functions
+get_x()
+get_degree()
+get_order()
+get_left_boundary()
+get_right_boundary()
+```
+
+The *setter* function also returns a pointer to the current object.
+
+
+# Reference
+
