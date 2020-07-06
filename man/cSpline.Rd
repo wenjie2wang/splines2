@@ -40,7 +40,7 @@ Notice that when using C-Spline for shape-restricted regression,
 \code{intercept = TRUE} should be set even when an intercept term is
 considered additional to the spline bases in the model.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
+\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
@@ -55,7 +55,7 @@ to have unit height at right boundary knot; the corresponding I-spline
 and M-spline basis matrices shipped in attributes are also scaled to the
 same extent.}
 
-\item{...}{Optional arguments for future usage.}
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 A matrix of dimension \code{length(x)} by

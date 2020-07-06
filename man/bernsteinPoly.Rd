@@ -2,7 +2,7 @@
 % Please edit documentation in R/bernsteinPoly.R
 \name{bernsteinPoly}
 \alias{bernsteinPoly}
-\title{Bernstein Polynomial Basis}
+\title{Generalized Bernstein Polynomial Basis}
 \usage{
 bernsteinPoly(
   x,
@@ -10,6 +10,7 @@ bernsteinPoly(
   derivs = 0L,
   integral = FALSE,
   intercept = FALSE,
+  Boundary.knots = c(0, 1),
   ...
 )
 }
@@ -27,17 +28,22 @@ The default value is \code{0L} for Bernstein polynomial bases.}
 Bernstein polynomials will be returned.  The default value is
 \code{FALSE}.}
 
-\item{intercept}{If \code{TRUE}, an intercept is included in the basis;
-Default is \code{FALSE}.}
+\item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
+Otherwise, the first basis will be excluded from the output.}
 
-\item{...}{Optional arguments for future usage.}
+\item{Boundary.knots}{Boundary points at which to anchor the Bernstein
+polynomial basis. The default value is \code{c(0, 1)} for original
+Bernstein polynomial basis over [0, 1].}
+
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 A numeric matrix of dimension \code{length(x)} by \code{degree +
     as.integer(intercept)}.
 }
 \description{
-Generate the Bernstein polynomial basis matrix of given degree.
+Returns a generalized Bernstein polynomial basis matrix of given degree over
+a specified range.
 }
 \examples{
 library(splines2)

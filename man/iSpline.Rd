@@ -41,7 +41,7 @@ Notice that when using I-Spline for monotonic regression,
 \code{intercept = TRUE} should be set even when an intercept term is
 considered additional to the spline bases in the model.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
+\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
@@ -50,7 +50,7 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{derivs}{A non-negative integer specifying the order of derivatives of
 I-splines.}
 
-\item{...}{Optional arguments for future usage.}
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 A matrix of dimension \code{length(x)} by

@@ -35,10 +35,10 @@ quantiles for more knots.  See also \code{Boundary.knots}.}
 polynomial. The default value is 3 for cubic splines. Zero degree is
 allowed for piece-wise constant bases.}
 
-\item{intercept}{If \code{TRUE}, an intercept is included in the basis;
-Default is \code{FALSE}.}
+\item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
+Otherwise, the first basis will be excluded from the output.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the B-spline basis.
+\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
 By default, they are the range of the non-\code{NA} data.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
@@ -47,7 +47,7 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{derivs}{A non-negative integer specifying the order of derivatives of
 M-splines. The default value is \code{0L} for M-spline bases.}
 
-\item{...}{Optional arguments for future usage.}
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 A matrix of dimension \code{length(x)} by
