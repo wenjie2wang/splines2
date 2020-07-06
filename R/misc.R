@@ -31,3 +31,17 @@ null2num0 <- function(x) {
     }
     x
 }
+
+## check key attributions
+check_attr <- function(x, check_derivs = FALSE,
+                       attrs = c("x", "degree", "knots",
+                                 "Boundary.knots", "intercept"))
+{
+    if (check_derivs) {
+        attrs <- c(attrs, "derivs")
+    }
+    if (any(! attrs %in% names(attributes(x)))) {
+        stop("Key attributions are missing.", call. = FALSE)
+    }
+    invisible()
+}

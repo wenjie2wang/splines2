@@ -134,3 +134,7 @@ expect_error(deriv(csMat, - 1), "derivs")
 expect_error(deriv(isMat, - 1), "derivs")
 expect_error(deriv(msMat, - 1), "derivs")
 expect_error(deriv(dbsMat, - 1), "derivs")
+
+meta_obj <- matrix(1:10, nrow = 10, ncol = 5)
+class(meta_obj) <- c("matrix", "bSpline")
+expect_error(deriv(meta_obj), "missing")
