@@ -56,6 +56,7 @@ namespace splines2 {
         inline void clean_knots(const rvec& internal_knots = rvec(),
                                 const rvec& boundary_knots = rvec())
         {
+            // check before assigment
             if (boundary_knots.has_nan()) {
                 throw std::range_error("Boundary knots cannot contain NA.");
             }
@@ -63,27 +64,28 @@ namespace splines2 {
             // 1. do generation if no boundary knots have been set
             // 2. or skip checks if a set of boundary knots have been set
             if (boundary_knots.n_elem == 0) {
-                if (this->boundary_knots_.n_elem != 2 && this->x_.n_elem > 0) {
+                if (boundary_knots_.n_elem != 2 && x_.n_elem > 0) {
                     // set boundary knots to be min(x) and max(x)
-                    this->boundary_knots_ = arma::zeros(2);
-                    this->boundary_knots_(0) = arma::min(this->x_);
-                    this->boundary_knots_(1) = arma::max(this->x_);
+                    double left { arma::min(x_) };
+                    double right { arma::max(x_) };
                     // check if boundary knots are different
-                    if (this->boundary_knots_(0) == this->boundary_knots_(1)) {
+                    if (left == right) {
                         throw std::range_error(
-                            "Cannot set boundary knots from unique x."
+                            "Cannot set boundary knots from x."
                             );
                     }
+                    boundary_knots_ = arma::zeros(2);
+                    boundary_knots_(0) = left;
+                    boundary_knots_(1) = right;
                 }
             } else {
                 // specified boundary knots
                 rvec uni_boundary_knots { arma::unique(boundary_knots) };
                 if (uni_boundary_knots.n_elem != 2) {
                     throw std::length_error(
-                        "Need two distinct boundary knots."
-                        );
+                        "Need two distinct boundary knots.");
                 }
-                this->boundary_knots_ = uni_boundary_knots;
+                boundary_knots_ = uni_boundary_knots;
             }
             if (internal_knots.has_nan()) {
                 throw std::range_error("Internal knots cannot contain NA.");
@@ -96,22 +98,22 @@ namespace splines2 {
                 // check internal knots are inside of boundary knots
                 double min_int_knots { arma::min(internal_knots) };
                 double max_int_knots { arma::max(internal_knots) };
-                if (this->boundary_knots_[0] >= min_int_knots ||
-                    this->boundary_knots_[1] <= max_int_knots) {
+                if (boundary_knots_[0] >= min_int_knots ||
+                    boundary_knots_[1] <= max_int_knots) {
                     throw std::range_error(
                         "Internal knots must be set inside of boundary knots."
                         );
                 }
-                this->internal_knots_ = uni_internal_knots;
+                internal_knots_ = uni_internal_knots;
             } else {
-                this->internal_knots_ = internal_knots;
+                internal_knots_ = internal_knots;
             }
         }
 
         // compute spline df
         inline void update_spline_df()
         {
-            this->spline_df_ = this->internal_knots_.n_elem + this->order_;
+            spline_df_ = internal_knots_.n_elem + order_;
         }
 
         inline rvec get_knot_sequence(const unsigned int order = 1)
@@ -131,7 +133,7 @@ namespace splines2 {
         inline void update_knot_sequence()
         {
             if (! is_knot_sequence_latest_ || knot_sequence_.n_elem == 0) {
-                this->knot_sequence_ = get_knot_sequence(this->order_);
+                knot_sequence_ = get_knot_sequence(order_);
                 is_knot_sequence_latest_ = true;
             }
         }
@@ -145,9 +147,7 @@ namespace splines2 {
                     size_t left_index {0};
                     size_t right_index { internal_knots_.n_elem };
                     while (right_index > left_index) {
-                        size_t cur_index {
-                            (left_index + right_index) / 2
-                        };
+                        size_t cur_index { (left_index + right_index) / 2 };
                         if (x_(i) < internal_knots_(cur_index)) {
                             right_index = cur_index;
                         } else {
@@ -189,9 +189,9 @@ namespace splines2 {
             x_ { x },
             degree_ { degree }
         {
-            this->clean_knots(internal_knots, boundary_knots);
-            this->order_ = this->degree_ + 1;
-            this->update_spline_df();
+            clean_knots(internal_knots, boundary_knots);
+            order_ = degree_ + 1;
+            update_spline_df();
         }
 
         // constructor with specified df
@@ -202,23 +202,23 @@ namespace splines2 {
             x_ { x },
             degree_ { degree }
         {
-            this->order_ = this->degree_ + 1;
-            if (spline_df < this->order_) {
+            order_ = degree_ + 1;
+            if (spline_df < order_) {
                 throw std::range_error("The specified df was too small.");
             }
-            this->spline_df_ = spline_df;
+            spline_df_ = spline_df;
             // determine internal knots by spline_df and x
-            unsigned int n_internal_knots { this->spline_df_ - this->order_ };
+            unsigned int n_internal_knots { spline_df_ - order_ };
             if (n_internal_knots == 0) {
-                this->clean_knots(rvec(), boundary_knots);
+                clean_knots(rvec(), boundary_knots);
             } else {
                 rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
                 prob_vec = prob_vec.subvec(1, n_internal_knots);
-                this->clean_knots(rvec(), boundary_knots);
+                clean_knots(rvec(), boundary_knots);
                 // get quantiles of x within boundary only
-                rvec x_inside { get_inside_x(x, this->boundary_knots_) };
+                rvec x_inside { get_inside_x(x, boundary_knots_) };
                 rvec internal_knots { arma_quantile(x_inside, prob_vec) };
-                this->clean_knots(internal_knots);
+                clean_knots(internal_knots);
             }
         }
 
@@ -226,16 +226,16 @@ namespace splines2 {
         // "setter" functions
         inline SplineBase* set_x(const rvec& x)
         {
-            this->x_ = x;
-            this->is_x_index_latest_ = false;
-            this->is_basis_latest_ = false;
+            x_ = x;
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
             return this;
         }
         inline SplineBase* set_x(const double x)
         {
-            this->x_ = num2vec(x);
-            this->is_x_index_latest_ = false;
-            this->is_basis_latest_ = false;
+            x_ = num2vec(x);
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
             return this;
         }
         inline SplineBase* set_internal_knots(
@@ -244,38 +244,38 @@ namespace splines2 {
         {
             clean_knots(internal_knots);
             // update spline df
-            this->update_spline_df();
-            this->is_knot_sequence_latest_ = false;
-            this->is_x_index_latest_ = false;
-            this->is_basis_latest_ = false;
+            update_spline_df();
+            is_knot_sequence_latest_ = false;
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
             return this;
         }
         inline SplineBase* set_boundary_knots(
             const rvec& boundary_knots
             )
         {
-            clean_knots(this->internal_knots_, boundary_knots);
-            this->is_knot_sequence_latest_ = false;
-            this->is_x_index_latest_ = false;
-            this->is_basis_latest_ = false;
+            clean_knots(internal_knots_, boundary_knots);
+            is_knot_sequence_latest_ = false;
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
             return this;
         }
         inline SplineBase* set_degree(
             const unsigned int degree
             )
         {
-            this->degree_ = degree;
-            this->order_ = degree + 1;
+            degree_ = degree;
+            order_ = degree + 1;
             // update spline df
-            this->update_spline_df();
-            this->is_knot_sequence_latest_ = false;
-            this->is_basis_latest_ = false;
+            update_spline_df();
+            is_knot_sequence_latest_ = false;
+            is_basis_latest_ = false;
             return this;
         }
         inline SplineBase* set_order(const unsigned int order)
         {
             if (order > 0) {
-                this->set_degree(order - 1);
+                set_degree(order - 1);
             } else {
                 throw std::range_error("The 'order' must be at least 1.");
             }
@@ -285,27 +285,27 @@ namespace splines2 {
         // "getter" functions
         inline rvec get_x() const
         {
-            return this->x_;
+            return x_;
         }
         inline rvec get_internal_knots() const
         {
-            return this->internal_knots_;
+            return internal_knots_;
         }
         inline rvec get_boundary_knots() const
         {
-            return this->boundary_knots_;
+            return boundary_knots_;
         }
         inline unsigned int get_degree() const
         {
-            return this->degree_;
+            return degree_;
         }
         inline unsigned int get_order() const
         {
-            return this->order_;
+            return order_;
         }
         inline unsigned int get_spline_df() const
         {
-            return this->spline_df_;
+            return spline_df_;
         }
 
         // define pure virtual functions

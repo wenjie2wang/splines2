@@ -51,20 +51,20 @@ namespace splines2 {
         inline void compute_scales()
         {
             ISpline isp_obj { this };
-            this->scales_ = mat2rowvec(
-                isp_obj.set_x(this->boundary_knots_(1))->integral(true)
+            scales_ = mat2rowvec(
+                isp_obj.set_x(boundary_knots_(1))->integral(true)
                 );
         }
         inline rmat apply_scales(const rmat& x)
         {
-            return x.each_row() / this->scales_;
+            return x.each_row() / scales_;
         }
 
     public:
         // function members
         inline arma::rowvec get_scales()
         {
-            return this->scales_;
+            return scales_;
         }
 
         //! Compute I-spline basis
@@ -76,26 +76,26 @@ namespace splines2 {
         inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest
-            if (this->is_basis_latest_) {
+            if (is_basis_latest_) {
                 if (complete_basis) {
-                    return this->spline_basis_;
+                    return spline_basis_;
                 }
-                return mat_wo_col1(this->spline_basis_);
+                return mat_wo_col1(spline_basis_);
             }
             // else do generation
             ISpline isp_obj { this };
-            this->spline_basis_ = isp_obj.integral(true);
-            this->is_basis_latest_ = true;
+            spline_basis_ = isp_obj.integral(true);
+            is_basis_latest_ = true;
             // compute the scale on the right boundary knot
-            this->scales_ = mat2rowvec(
-                isp_obj.set_x(this->boundary_knots_(1))->integral(true)
+            scales_ = mat2rowvec(
+                isp_obj.set_x(boundary_knots_(1))->integral(true)
                 );
             // rescale each column
-            this->spline_basis_.each_row() /= this->scales_;
+            spline_basis_.each_row() /= scales_;
             if (complete_basis) {
-                return this->spline_basis_;
+                return spline_basis_;
             }
-            return mat_wo_col1(this->spline_basis_);
+            return mat_wo_col1(spline_basis_);
         }
 
         inline virtual rmat derivative(const unsigned int derivs = 1,
@@ -107,7 +107,7 @@ namespace splines2 {
                     );
             }
             // compute scales
-            this->compute_scales();
+            compute_scales();
             if (derivs == 1) {
                 // I-spline
                 ISpline isp_obj { this };

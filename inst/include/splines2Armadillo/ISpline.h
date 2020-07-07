@@ -46,20 +46,20 @@ namespace splines2 {
         inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest
-            if (this->is_basis_latest_) {
+            if (is_basis_latest_) {
                 if (complete_basis) {
-                    return this->spline_basis_;
+                    return spline_basis_;
                 }
-                return mat_wo_col1(this->spline_basis_);
+                return mat_wo_col1(spline_basis_);
             }
             // else do generation
             MSpline msp_obj { this };
-            this->spline_basis_ = msp_obj.integral(true);
-            this->is_basis_latest_ = true;
+            spline_basis_ = msp_obj.integral(true);
+            is_basis_latest_ = true;
             if (complete_basis) {
-                return this->spline_basis_;
+                return spline_basis_;
             }
-            return mat_wo_col1(this->spline_basis_);
+            return mat_wo_col1(spline_basis_);
         }
 
         inline virtual rmat derivative(const unsigned int derivs = 1,
@@ -67,8 +67,7 @@ namespace splines2 {
         {
             if (derivs == 0) {
                 throw std::range_error(
-                    "'derivs' has to be a positive integer."
-                    );
+                    "'derivs' has to be a positive integer.");
             }
             MSpline msp_obj { this };
             if (derivs == 1) {
@@ -82,9 +81,9 @@ namespace splines2 {
             BSpline bsp_obj { this };
             bsp_obj.set_degree(degree_ + 1);
             rmat i_mat { bsp_obj.integral(false) };
-            this->update_x_index();
+            update_x_index();
             // for each row of i_mat
-            for (size_t i {0}; i < this->x_.n_elem; ++i) {
+            for (size_t i {0}; i < x_.n_elem; ++i) {
                 size_t k2 { x_index_(i) + degree_ };
                 arma::rowvec numer { i_mat(i, arma::span(0, k2)) };
                 numer = rev_cum_sum(numer);
