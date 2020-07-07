@@ -149,8 +149,7 @@ The main non-default constructor is as follows:
 ```C++
 BernsteinPoly(const vec& x,
               const unsigned int degree,
-              const double left_boundary = 0,
-              const double right_boundary = 1)
+              const vec& boundary_knots = vec())
 ```
 
 ### Function Members
@@ -179,14 +178,13 @@ set_x(const vec&)
 set_x(const double)
 set_degree(const unsigned int)
 set_order(const unsigned int)
-set_boundary(const double left, const double right)
+set_boundary(const vec&)
 
 // getter functions
 get_x()
 get_degree()
 get_order()
-get_left_boundary()
-get_right_boundary()
+get_boundary()
 ```
 
 The *setter* function also returns a pointer to the current object.

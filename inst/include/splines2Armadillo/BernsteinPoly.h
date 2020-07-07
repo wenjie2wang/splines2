@@ -31,9 +31,8 @@ namespace splines2 {
     protected:
         unsigned int degree_ = 3;
         unsigned int order_ = 4;
-        double left_boundary_ = 0;  // a
-        double right_boundary_ = 1; // b
-        double range_size_ = 1;     // b - a
+        rvec boundary_knots_;   // [a, b]
+        double range_size_ = 1; // b - a
         rvec x_;
 
         rmat poly_basis_;
@@ -41,26 +40,48 @@ namespace splines2 {
 
         // check x
         inline void check_x(const rvec& x) {
+            if (x.has_nan()) {
+                throw std::range_error("x cannot contain NA.");
+            }
             for (size_t i {0}; i < x.n_elem; ++i) {
-                if (x(i) < left_boundary_ || x(i) > right_boundary_) {
+                if (x(i) < boundary_knots_(0) || x(i) > boundary_knots_(1)) {
                     throw std::range_error(
                         "The 'x' must be inside of boundary."
                         );
                 }
             }
-            this->x_ = x;
+            x_ = x;
         }
         // check boundary
-        inline void check_boundary(const double left, const double right)
+        inline void check_boundary(const rvec& boundary_knots)
         {
+            if (boundary_knots.has_nan()) {
+                throw std::range_error("Boundary knots cannot contain NA.");
+            }
+            double left { boundary_knots(0) };
+            double right { boundary_knots(1) };
             if (left >= right) {
                 throw std::range_error(
                     "The left boundary must be less than the right boundary."
                     );
             }
-            this->left_boundary_ = left;
-            this->right_boundary_ = right;
-            this->range_size_ = right - left;
+            boundary_knots_ = arma::zeros(2);
+            boundary_knots_(0) = left;
+            boundary_knots_(1) = right;
+            range_size_ = right - left;
+        }
+        inline void autoset_x_and_boundary(const rvec& x)
+        {
+            if (x.n_elem == 0) {
+                return;
+            } else if (x.has_nan()) {
+                throw std::range_error("x cannot contain NA.");
+            }
+            boundary_knots_ = arma::zeros(2);
+            boundary_knots_(0) = arma::min(x);
+            boundary_knots_(1) = arma::max(x);
+            range_size_ = boundary_knots_(1) - boundary_knots_(0);
+            x_ = x;
         }
 
     public:
@@ -69,108 +90,111 @@ namespace splines2 {
 
         explicit BernsteinPoly(const rvec& x)
         {
-            this->check_x(x);
+            check_x(x);
         }
 
+        // given boundary_knots for consistency with SplineBase
         BernsteinPoly(const rvec& x,
                       const unsigned int degree,
-                      const double left_boundary = 0,
-                      const double right_boundary = 1) :
+                      const rvec& boundary_knots = rvec()) :
             degree_ { degree },
             order_ { degree + 1 }
         {
-            this->check_boundary(left_boundary, right_boundary);
-            this->check_x(x);
+            if (boundary_knots.n_elem == 0) {
+                autoset_x_and_boundary(x);
+            } else if (boundary_knots.n_elem != 2) {
+                throw std::range_error("Need two distinct boundary knots.");
+            } else {
+                check_boundary(boundary_knots);
+                check_x(x);
+            }
         }
 
         // setter functions
         inline BernsteinPoly* set_x(const rvec& x)
         {
-            this->check_x(x);
-            this->is_basis_latest_ = false;
+            check_x(x);
+            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_x(const double x)
         {
-            this->check_x(num2vec(x));
-            this->is_basis_latest_ = false;
+            check_x(num2vec(x));
+            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_degree(const unsigned int degree)
         {
-            this->degree_ = degree;
-            this->order_ = degree + 1;
-            this->is_basis_latest_ = false;
+            degree_ = degree;
+            order_ = degree + 1;
+            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_order(const unsigned int order)
         {
             if (order > 0) {
-                this->set_degree(order - 1);
+                set_degree(order - 1);
             } else {
                 throw std::range_error("The 'order' must be at least 1.");
             }
             return this;
         }
-        inline BernsteinPoly* set_boundary(const double left = 0,
-                                           const double right = 1)
+        inline BernsteinPoly* set_boundary_knots(const rvec& boundary_knots)
         {
-            this->check_boundary(left, right);
+            check_boundary(boundary_knots);
+            check_x(x_);
             return this;
         }
 
         // getter functions
         inline rvec get_x() const
         {
-            return this->x_;
+            return x_;
         }
         inline unsigned int get_degree() const
         {
-            return this->degree_;
+            return degree_;
         }
         inline unsigned int get_order() const
         {
-            return this->order_;
+            return order_;
         }
-        inline unsigned int get_left_boundary() const
+        inline rvec get_boundary_knots() const
         {
-            return this->left_boundary_;
-        }
-        inline unsigned int get_right_boundary() const
-        {
-            return this->right_boundary_;
+            return boundary_knots_;
         }
 
         // construct polynomial bases by recursive formula
         inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest
-            if (this->is_basis_latest_) {
+            if (is_basis_latest_) {
                 if (complete_basis) {
-                    return this->poly_basis_;
+                    return poly_basis_;
                 }
                 // else
-                return mat_wo_col1(this->poly_basis_);
+                return mat_wo_col1(poly_basis_);
             }
             // define output matrix
             rmat b_mat {
-                arma::ones(this->x_.n_elem, this->order_)
-            };
+                arma::ones(x_.n_elem, order_)
+                    };
             // only do if degree >= 1
             for (unsigned int k {1}; k <= degree_; ++k) {
                 for (size_t i {0}; i < x_.n_elem; ++i) {
                     double saved { 0 };
                     for (size_t j {0}; j < k; ++j) {
                         double term { b_mat(i, j) / range_size_ };
-                        b_mat(i, j) = saved + (right_boundary_ - x_(i)) * term;
-                        saved = (x_(i) - left_boundary_) * term;
+                        b_mat(i, j) = saved +
+                            (boundary_knots_(1) - x_(i)) * term;
+                        saved = (x_(i) - boundary_knots_(0)) * term;
                     }
                     b_mat(i, k) = saved;
                 }
             }
             // prepare to return
-            this->poly_basis_ = b_mat;
-            this->is_basis_latest_ = true;
+            poly_basis_ = b_mat;
+            is_basis_latest_ = true;
             if (complete_basis) {
                 return b_mat;
             }
@@ -188,30 +212,30 @@ namespace splines2 {
                     );
             }
             // early exit if derivs is large enough
-            unsigned int old_df { this->order_ };
-            if (this->degree_ < derivs) {
+            unsigned int old_df { order_ };
+            if (degree_ < derivs) {
                 if (complete_basis) {
-                    return arma::zeros(this->x_.n_elem, old_df);
+                    return arma::zeros(x_.n_elem, old_df);
                 }
                 if (old_df == 1) {
                     throw std::range_error("No column left in the matrix.");
                 }
-                return arma::zeros(this->x_.n_elem, old_df - 1);
+                return arma::zeros(x_.n_elem, old_df - 1);
             }
             // back up current results if necessary
-            bool backup_basis { this->is_basis_latest_ };
+            bool backup_basis { is_basis_latest_ };
             rmat old_basis;
             if (backup_basis) {
-                old_basis = this->poly_basis_;
+                old_basis = poly_basis_;
             }
             // get basis matrix for (degree - derivs)
-            this->set_degree(this->degree_ - derivs);
-            rmat d_mat { this->basis(true) };
+            set_degree(degree_ - derivs);
+            rmat d_mat { basis(true) };
             // restore
-            this->set_degree(this->degree_ + derivs);
-            this->is_basis_latest_ = backup_basis;
+            set_degree(degree_ + derivs);
+            is_basis_latest_ = backup_basis;
             if (backup_basis) {
-                this->poly_basis_ = old_basis;
+                poly_basis_ = old_basis;
             }
             // add zero columns
             d_mat = add_zero_cols(d_mat, old_df - d_mat.n_cols);
@@ -242,19 +266,19 @@ namespace splines2 {
         inline virtual rmat integral(const bool complete_basis = true)
         {
             // back up current results if necessary
-            bool backup_basis { this->is_basis_latest_ };
+            bool backup_basis { is_basis_latest_ };
             rmat old_basis;
             if (backup_basis) {
-                old_basis = this->poly_basis_;
+                old_basis = poly_basis_;
             }
             // get basis matrix for (degree + 1) with intercept
-            this->set_degree(this->order_);
-            rmat i_mat { this->basis(false) };
+            set_degree(order_);
+            rmat i_mat { basis(false) };
             // restore
-            this->set_degree(this->degree_ - 1);
-            this->is_basis_latest_ = backup_basis;
+            set_degree(degree_ - 1);
+            is_basis_latest_ = backup_basis;
             if (backup_basis) {
-                this->poly_basis_ = old_basis;
+                poly_basis_ = old_basis;
             }
             // integral by recursive formula
             const double fac { range_size_ / order_ };
