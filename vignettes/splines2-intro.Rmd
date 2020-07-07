@@ -211,10 +211,8 @@ We may obtain the basis matrix of the generalized using the function
 ```{r bp-1, fig.cap="Bernstein polynomials of degree 4 over [0, 1] (left) and the generalized version over [- 1, 1] (right)."}
 x1 <- seq.int(0, 1, 0.01)
 x2 <- seq.int(- 1, 1, 0.01)
-bpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE,
-                        Boundary.knots = c(0, 1))
-bpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE,
-                        Boundary.knots = c(- 1, 1))
+bpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE)
+bpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE)
 par(mfrow = c(1, 2))
 matplot(x1, bpMat1, type = "l", ylab = "y")
 matplot(x2, bpMat2, type = "l", ylab = "y")
@@ -225,11 +223,9 @@ In addition, we may specify `integral = TRUE` or `derivs = 1` in
 
 ```{r bp-2, fig.height=6}
 ibpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE, integral = TRUE)
-ibpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, integral = TRUE,
-                         Boundary.knots = c(- 1, 1))
+ibpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, integral = TRUE)
 dbpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE, derivs = 1)
-dbpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, derivs = 1,
-                         Boundary.knots = c(- 1, 1))
+dbpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, derivs = 1)
 par(mfrow = c(2, 2))
 matplot(x1, ibpMat1, type = "l", ylab = "y")
 matplot(x2, ibpMat2, type = "l", ylab = "y")

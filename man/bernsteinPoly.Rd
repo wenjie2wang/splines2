@@ -7,10 +7,10 @@
 bernsteinPoly(
   x,
   degree = 3,
+  intercept = FALSE,
+  Boundary.knots = NULL,
   derivs = 0L,
   integral = FALSE,
-  intercept = FALSE,
-  Boundary.knots = c(0, 1),
   ...
 )
 }
@@ -21,19 +21,19 @@ boundary.  Missing values are allowed and will be returned as they are.}
 \item{degree}{A non-negative integer representing the degree of the
 polynomials.}
 
+\item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
+Otherwise, the first basis will be excluded from the output.}
+
+\item{Boundary.knots}{Boundary points at which to anchor the Bernstein
+polynomial basis. The default value is \code{NULL} and the boundary
+knots is set internally to be \code{range(x, na.rm = TRUE)}.}
+
 \item{derivs}{A non-negative integer specifying the order of derivatives.
 The default value is \code{0L} for Bernstein polynomial bases.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the integrals of the
 Bernstein polynomials will be returned.  The default value is
 \code{FALSE}.}
-
-\item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
-Otherwise, the first basis will be excluded from the output.}
-
-\item{Boundary.knots}{Boundary points at which to anchor the Bernstein
-polynomial basis. The default value is \code{c(0, 1)} for original
-Bernstein polynomial basis over [0, 1].}
 
 \item{...}{Optional arguments that are not used.}
 }
@@ -55,8 +55,7 @@ x2 <- seq.int(- 2, 2, 0.01)
 bMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE)
 
 ## generalized Bernstein polynomials basis over [- 1, 2]
-bMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE,
-                       Boundary.knots = range(x2))
+bMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE)
 
 par(mfrow = c(1, 2), mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 matplot(x1, bMat1, type = "l", ylab = "y")
@@ -65,10 +64,8 @@ matplot(x2, bMat2, type = "l", ylab = "y")
 ## the first and second derivative matrix
 d1Mat1 <- bernsteinPoly(x1, degree = 4, derivs = 1, intercept = TRUE)
 d2Mat1 <- bernsteinPoly(x1, degree = 4, derivs = 2, intercept = TRUE)
-d1Mat2 <- bernsteinPoly(x2, degree = 4, derivs = 1, intercept = TRUE,
-                        Boundary.knots = range(x2))
-d2Mat2 <- bernsteinPoly(x2, degree = 4, derivs = 2, intercept = TRUE,
-                        Boundary.knots = range(x2))
+d1Mat2 <- bernsteinPoly(x2, degree = 4, derivs = 1, intercept = TRUE)
+d2Mat2 <- bernsteinPoly(x2, degree = 4, derivs = 2, intercept = TRUE)
 
 par(mfrow = c(2, 2))
 matplot(x1, d1Mat1, type = "l", ylab = "y")
@@ -82,8 +79,7 @@ all.equal(d2Mat1, deriv(bMat1, 2))
 
 ## the integrals
 iMat1 <- bernsteinPoly(x1, degree = 4, integral = TRUE, intercept = TRUE)
-iMat2 <- bernsteinPoly(x2, degree = 4, integral = TRUE, intercept = TRUE,
-                       Boundary.knots = range(x2))
+iMat2 <- bernsteinPoly(x2, degree = 4, integral = TRUE, intercept = TRUE)
 all.equal(deriv(iMat1), bMat1, check.attributes = FALSE)
 all.equal(deriv(iMat2), bMat2, check.attributes = FALSE)
 }
