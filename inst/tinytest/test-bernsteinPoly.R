@@ -121,5 +121,10 @@ expect_error(bernsteinPoly(x, degree = NA))
 ## error if empty matrix
 expect_error(bernsteinPoly(x, degree = 0), "No column")
 
-## error if x is outside of [0, 1]
-expect_error(bernsteinPoly(c(- 1, x, 1, 1.1), degree = 2), "[0, 1]")
+## error if x is outside of boundary
+expect_error(bernsteinPoly(c(- 1, x, 1, 1.1), degree = 2,
+                           Boundary.knots = c(0, 1)), "inside")
+
+## error if the specified boundary knots is inappropriate
+expect_error(bernsteinPoly(c(- 1, x, 1, 1.1), degree = 2,
+                           Boundary.knots = 0), "two")

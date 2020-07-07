@@ -5,7 +5,7 @@ dbsMat <- dbs(x)
 msMat <- mSpline(x)
 isMat <- iSpline(x)
 csMat <- cSpline(x)
-bpMat <- bernsteinPoly(seq.int(0, 1, 0.1))
+bpMat <- bernsteinPoly(x)
 
 ## with newx
 expect_equivalent(predict(bsMat, 1), bsMat[3L, , drop = FALSE])
@@ -14,7 +14,7 @@ expect_equivalent(predict(dbsMat, 1), dbsMat[3L, , drop = FALSE])
 expect_equivalent(predict(msMat, 1), msMat[3L, , drop = FALSE])
 expect_equivalent(predict(isMat, 1), isMat[3L, , drop = FALSE])
 expect_equivalent(predict(csMat, 1), csMat[3L, , drop = FALSE])
-expect_equivalent(predict(bpMat, 0.1), bpMat[2L, , drop = FALSE])
+expect_equivalent(predict(bpMat, 1), bpMat[3L, , drop = FALSE])
 
 ## without newx
 expect_equivalent(predict(bsMat), bsMat)

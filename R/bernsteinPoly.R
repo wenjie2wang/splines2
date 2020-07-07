@@ -26,16 +26,16 @@
 ##'
 ##' @param x The predictor variable taking values inside of the specified
 ##'     boundary.  Missing values are allowed and will be returned as they are.
-##' @param degree A non-negative integer representing the degree of the
-##'     polynomials.
-##' @param derivs A non-negative integer specifying the order of derivatives.
-##'     The default value is \code{0L} for Bernstein polynomial bases.
 ##' @param integral A logical value.  If \code{TRUE}, the integrals of the
 ##'     Bernstein polynomials will be returned.  The default value is
 ##'     \code{FALSE}.
 ##' @param Boundary.knots Boundary points at which to anchor the Bernstein
-##'     polynomial basis. The default value is \code{c(0, 1)} for original
-##'     Bernstein polynomial basis over [0, 1].
+##'     polynomial basis. The default value is \code{NULL} and the boundary
+##'     knots is set internally to be \code{range(x, na.rm = TRUE)}.
+##' @param degree A non-negative integer representing the degree of the
+##'     polynomials.
+##' @param derivs A non-negative integer specifying the order of derivatives.
+##'     The default value is \code{0L} for Bernstein polynomial bases.
 ##'
 ##' @return A numeric matrix of dimension \code{length(x)} by \code{degree +
 ##'     as.integer(intercept)}.
@@ -43,8 +43,9 @@
 ##' @example inst/examples/ex-bernsteinPoly.R
 ##'
 ##' @export
-bernsteinPoly <- function(x, degree = 3, derivs = 0L, integral = FALSE,
-                          intercept = FALSE, Boundary.knots = c(0, 1),
+bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
+                          Boundary.knots = NULL,
+                          derivs = 0L, integral = FALSE,
                           ...)
 {
     ## check inputs
@@ -61,6 +62,7 @@ bernsteinPoly <- function(x, degree = 3, derivs = 0L, integral = FALSE,
           } else {
               x
           }
+    Boundary.knots <- null2num0(Boundary.knots)
     ## call the engine function
     out <- rcpp_bernsteinPoly(
         x = xx,

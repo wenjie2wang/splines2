@@ -134,6 +134,7 @@ predict.bernsteinPoly <- function(object, newx, ...)
     if (missing(newx))
         return(object)
     a <- c(list(x = newx),
-           attributes(object)[c("degree", "derivs", "integral", "intercept")])
+           attributes(object)[c("degree", "derivs", "integral",
+                                "intercept", "Boundary.knots")])
     do.call("bernsteinPoly", a)
 }
