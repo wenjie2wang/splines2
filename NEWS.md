@@ -17,6 +17,10 @@
 * Changed the default value of argument `intercept` in function `iSpline` and
   `cSpline` to `TRUE` for a complete set of spline bases in shape-restricted
   regression.
+* Removed the corresponding M-spline basis from attributes of outputs from
+  `iSpline` and `cSpline`.
+* Removed the corresponding B-spline basis from attributes of outputs from
+  `bSpline`.
 
 ## Bug fixes
 
