@@ -178,13 +178,13 @@ set_x(const vec&)
 set_x(const double)
 set_degree(const unsigned int)
 set_order(const unsigned int)
-set_boundary(const vec&)
+set_boundary_knots(const vec&)
 
 // getter functions
 get_x()
 get_degree()
 get_order()
-get_boundary()
+get_boundary_knots()
 ```
 
 The *setter* function also returns a pointer to the current object.
