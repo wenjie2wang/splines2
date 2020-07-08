@@ -6,7 +6,7 @@ x2 <- seq.int(- 2, 2, 0.01)
 ## Bernstein polynomial basis matrix over [0, 1]
 bMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE)
 
-## generalized Bernstein polynomials basis over [- 1, 2]
+## generalized Bernstein polynomials basis over [- 2, 2]
 bMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE)
 
 par(mfrow = c(1, 2), mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))

@@ -19,7 +19,7 @@ of
   - convex splines (C-splines)
   - generalized Bernstein polynomials
   - their integrals (except C-splines) and derivatives of given order by
-    close-form recusive formulas
+    close-form recursive formulas
 
 In addition to the R interface, **splines2** also provides a C++
 header-only library integrated with **Rcpp**, which allows construction
