@@ -50,8 +50,8 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
         R_NilValue, splines2::char_seq_len(out.ncol())
         );
     out.attr("x") = splines2::arma2rvec(x);
-    out.attr("degree") = bp_obj.get_degree();
-    out.attr("derivs") = derivs;
+    out.attr("degree") = static_cast<int>(bp_obj.get_degree());
+    out.attr("derivs") = static_cast<int>(derivs);
     out.attr("integral") = integral;
     out.attr("Boundary.knots") = splines2::arma2rvec(
         bp_obj.get_boundary_knots()

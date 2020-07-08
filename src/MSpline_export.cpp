@@ -52,7 +52,7 @@ Rcpp::NumericMatrix rcpp_mSpline_basis(
         R_NilValue, splines2::char_seq_len(out.ncol())
         );
     out.attr("x") = splines2::arma2rvec(x);
-    out.attr("degree") = ms_obj.get_degree();
+    out.attr("degree") = static_cast<int>(ms_obj.get_degree());
     out.attr("knots") = splines2::arma2rvec(ms_obj.get_internal_knots());
     out.attr("Boundary.knots") =
         splines2::arma2rvec(ms_obj.get_boundary_knots());
@@ -94,8 +94,8 @@ Rcpp::NumericMatrix rcpp_mSpline_derivative(
         R_NilValue, splines2::char_seq_len(out.ncol())
         );
     out.attr("x") = splines2::arma2rvec(x);
-    out.attr("derivs") = derivs;
-    out.attr("degree") = ms_obj.get_degree();
+    out.attr("derivs") = static_cast<int>(derivs);
+    out.attr("degree") = static_cast<int>(ms_obj.get_degree());
     out.attr("knots") = splines2::arma2rvec(ms_obj.get_internal_knots());
     out.attr("Boundary.knots") =
         splines2::arma2rvec(ms_obj.get_boundary_knots());
