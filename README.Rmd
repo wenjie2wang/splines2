@@ -28,7 +28,8 @@ The R package **splines2** provides functions to construct basis matrix of
 In addition to the R interface, **splines2** also provides a C++ header-only
 library integrated with **Rcpp**, which allows construction of spline basis
 matrix directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
-can also be treated as one of the **Rcpp**\* packages.
+can also be treated as one of the **Rcpp\*** packages.  A toy example package
+that uses the C++ interface is available [here][example-pkg].
 
 
 ## Installation of CRAN Version
@@ -157,6 +158,7 @@ from `splines2::ibs()` for equivalent results, which was still much faster than
 [travis-master]: https://travis-ci.org/wenjie2wang/splines2.svg?branch=master
 [github-url]: https://github.com/wenjie2wang/splines2
 [pkgdown-url]: https://wenjie-stat.me/splines2
+[example-pkg]: https://github.com/wenjie2wang/example-pkg-Rcpp-splines2
 [pkg-demo]: https://wenjie-stat.me/splines2/articles/splines2-intro
 [pkg-wi-rcpp]: https://wenjie-stat.me/splines2/articles/splines2-wi-rcpp
 [codecov]: https://codecov.io/gh/wenjie2wang/splines2
@@ -164,3 +166,4 @@ from `splines2::ibs()` for equivalent results, which was still much faster than
 [appveyor]: https://ci.appveyor.com/project/wenjie2wang/splines2
 [appveyor-master]: https://ci.appveyor.com/api/projects/status/bvoso7nxchg1incb/branch/master?svg=true
 [gpl]: https://www.gnu.org/licenses/
+

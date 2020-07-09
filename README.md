@@ -24,8 +24,9 @@ of
 In addition to the R interface, **splines2** also provides a C++
 header-only library integrated with **Rcpp**, which allows construction
 of spline basis matrix directly in C++ with the help of **Rcpp** and
-**RcppArmadillo**. So it can also be treated as one of the **Rcpp**\*
-packages.
+**RcppArmadillo**. So it can also be treated as one of the **Rcpp\***
+packages. A toy example package that uses the C++ interface is available
+[here](https://github.com/wenjie2wang/example-pkg-Rcpp-splines2).
 
 ## Installation of CRAN Version
 
