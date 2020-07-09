@@ -5,14 +5,26 @@
 \alias{splines2}
 \title{splines2: Regression Spline Functions and Classes}
 \description{
-A supplementary package on splines providing functions constructing
-B-splines, integral of B-splines, monotone splines (M-splines) and its
-integral (I-splines), convex splines (C-splines), and their derivatives of
-given order. Piecewise constant basis is allowed for B-spline and M-spline
-basis.
+This package provides functions to construct basis matrix of
+\itemize{
+\item B-splines
+\item M-splines
+\item I-splines
+\item convex splines (C-splines)
+\item generalized Bernstein polynomials
+\item their integrals (except C-splines) and derivatives of given order by
+close-form recursive formulas
+}
 }
 \details{
-It is named after the package \pkg{splines}: ``Regression Spline Functions
-and Classes''. The tailing number two is simply ``too'' (and by no means for
-the generation two).
+In addition to the R interface, it also provides a C++ header-only library
+integrated with \pkg{Rcpp}, which allows construction of spline basis matrix
+directly in C++ with the help of \pkg{Rcpp} and \pkg{RcppArmadillo}.  So it
+can also be treated as one of the \pkg{Rcpp*} packages.  A toy example
+package that uses the C++ interface is available at
+<https://github.com/wenjie2wang/example-pkg-Rcpp-splines2>.
+
+It is named after the \pkg{splines} package:
+"Regression Spline Functions and Classes". The tailing number two is simply
+"too" (and by no means for the generation two).
 }
