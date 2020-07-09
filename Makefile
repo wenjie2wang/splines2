@@ -40,6 +40,13 @@ $(checkLog): $(tar) $(tinytest)
 check-as-cran: $(tar)
 	R CMD check --as-cran $(tar)
 
+.PHONY: check-revdep
+check-revdep: $(tar)
+	@mkdir -p revdep
+	@rm -rf revdep/*.Rcheck
+	@cp $(tar) revdep
+	R CMD BATCH --no-save --no-restore misc/revdep_check.R &
+
 vignettes/%.html: vignettes/%.Rmd
 	Rscript -e "library(methods); rmarkdown::render('$?')"
 

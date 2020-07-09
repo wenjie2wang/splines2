@@ -4,6 +4,7 @@ docs
 README.html
 *.tar.gz
 *.Rcheck/
+*.Rout
 *.so
 *.o
 *.*~

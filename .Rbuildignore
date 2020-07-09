@@ -1,4 +1,5 @@
 \.Rcheck$
+\.Rout$
 \.Rproj$
 \.tar\.gz$
 ^COPYRIGHT$
