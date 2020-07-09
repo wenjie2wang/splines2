@@ -146,12 +146,10 @@ expect_error(ibs(c(NA, NA), df = 5))
 
 ## error if degree has NA or negative
 expect_error(ibs(x, degree = - 1))
-expect_error(ibs(x, degree = c(2, NA)))
 expect_error(ibs(x, degree = NA))
 
 ## error if df has NA or negative
 expect_error(ibs(x, df = - 1))
-expect_error(ibs(x, df = c(2, NA)))
 expect_error(ibs(x, df = NA))
 
 ## error if knots has NA
