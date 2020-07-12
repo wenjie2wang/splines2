@@ -46,10 +46,10 @@ expect_equivalent(
     splines::splineDesign(aKnots, x, ord, derivs = 4)[- length(x), ]
 )
 
-expect_error(dbs(x, 1, df = 1, intercept = TRUE), "df")
-expect_error(dbs(x, 1, df = 2, intercept = TRUE), "df")
-expect_error(dbs(x, 1, df = 3, intercept = TRUE), "df")
-expect_error(dbs(x, 2, df = 3, intercept = TRUE), "df")
+expect_error(dbs(x, 1, df = 1, intercept = TRUE))
+expect_error(dbs(x, 1, df = 2, intercept = TRUE))
+expect_error(dbs(x, 1, df = 3, intercept = TRUE))
+expect_error(dbs(x, 2, df = 3, intercept = TRUE))
 expect_true(
     isNumMatrix(dbs(x, 1, df = 1, degree = 0, intercept = TRUE), 21L, 1L)
 )
@@ -153,26 +153,24 @@ expect_error(dbs(x, df = - 1))
 expect_error(dbs(x, df = NA))
 
 ## error if knots has NA
-expect_error(dbs(x, knots = c(0.1, 0.5, NA)), "knots")
-expect_error(dbs(x, Boundary.knots = c(0.1, 0.5, NA)), "knots")
+expect_error(dbs(x, knots = c(0.1, 0.5, NA)))
+expect_error(dbs(x, Boundary.knots = c(0.1, 0.5, NA)))
 
 ## error if boundary knots are inappropriate
-expect_error(dbs(x, Boundary.knots = 0.1), "knots")
-expect_error(dbs(x, Boundary.knots = c(0.1, 0.1)), "knots")
-expect_error(dbs(x, Boundary.knots = c(0.1, 0.5, 1)), "knots")
+expect_error(dbs(x, Boundary.knots = 0.1))
+expect_error(dbs(x, Boundary.knots = c(0.1, 0.1)))
+expect_error(dbs(x, Boundary.knots = c(0.1, 0.5, 1)))
 
 ## error if empty matrix
 expect_true(isNumMatrix(dbs(x, degree = 0, intercept = TRUE),
                         length(x), 1))
-expect_error(dbs(x, degree = 0), "No column")
+expect_error(dbs(x, degree = 0))
 
 ## error if any internal knot is not placed inside of boundary
-expect_error(dbs(x, knots = c(0, 0.5), degree = 0), "inside")
+expect_error(dbs(x, knots = c(0, 0.5), degree = 0))
 
 ## warning if any x outside of boundary
 expect_warning(dbs(c(x, 10), knots = knots, degree = 0,
-                   Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                   Boundary.knots = c(0, 1)))
 expect_warning(dbs(c(x, 10), knots = knots, degree = 3,
-                   Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                   Boundary.knots = c(0, 1)))

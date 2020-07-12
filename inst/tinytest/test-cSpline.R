@@ -145,26 +145,24 @@ expect_error(cSpline(x, df = - 1))
 expect_error(cSpline(x, df = NA))
 
 ## error if knots has NA
-expect_error(cSpline(x, knots = c(0.1, 0.5, NA)), "knots")
-expect_error(cSpline(x, Boundary.knots = c(0.1, 0.5, NA)), "knots")
+expect_error(cSpline(x, knots = c(0.1, 0.5, NA)))
+expect_error(cSpline(x, Boundary.knots = c(0.1, 0.5, NA)))
 
 ## error if boundary knots are inappropriate
-expect_error(cSpline(x, Boundary.knots = 0.1), "knots")
-expect_error(cSpline(x, Boundary.knots = c(0.1, 0.1)), "knots")
-expect_error(cSpline(x, Boundary.knots = c(0.1, 0.5, 1)), "knots")
+expect_error(cSpline(x, Boundary.knots = 0.1))
+expect_error(cSpline(x, Boundary.knots = c(0.1, 0.1)))
+expect_error(cSpline(x, Boundary.knots = c(0.1, 0.5, 1)))
 
 ## error if empty matrix
 expect_true(isNumMatrix(cSpline(x, degree = 0, intercept = TRUE),
                         length(x), 1))
-expect_error(cSpline(x, degree = 0, intercept = FALSE), "No column")
+expect_error(cSpline(x, degree = 0, intercept = FALSE))
 
 ## error if any internal knot is not placed inside of boundary
-expect_error(cSpline(x, knots = c(0, 0.5), degree = 0), "inside")
+expect_error(cSpline(x, knots = c(0, 0.5), degree = 0))
 
 ## warning if any x outside of boundary
 expect_warning(cSpline(c(x, 10), knots = knots, degree = 0,
-                       Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                       Boundary.knots = c(0, 1)))
 expect_warning(cSpline(c(x, 10), knots = knots, degree = 3,
-                       Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                       Boundary.knots = c(0, 1)))
