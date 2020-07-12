@@ -39,10 +39,11 @@ expect_equivalent(bSpline(x, df = 6, intercept = TRUE),
                   v2$bSpline(x, df = 6, intercept = TRUE))
 
 ## degree zero
-expect_equivalent(bSpline(x, df = 5, degree = 0),
-                  v2$bSpline(x, df = 5, degree = 0))
-expect_equivalent(bSpline(x, df = 5, degree = 0, intercept = TRUE),
-                  v2$bSpline(x, df = 5, degree = 0, intercept = TRUE))
+knots2 <- seq.int(0.2, 0.8, 0.2)
+expect_equivalent(bSpline(x, knots = knots2, degree = 0),
+                  v2$bSpline(x, knots = knots2, degree = 0))
+expect_equivalent(bSpline(x, knots = knots2, degree = 0, intercept = TRUE),
+                  v2$bSpline(x, knots = knots2, degree = 0, intercept = TRUE))
 bsMat0a <- bSpline(x, degree = 0, intercept = TRUE)
 bsMat0b <- bSpline(x, df = 5, degree = 0)
 bsMat0c <- bSpline(x, df = 5, degree = 0, intercept = TRUE)
@@ -105,26 +106,24 @@ expect_error(bSpline(x, df = - 1))
 expect_error(bSpline(x, df = NA))
 
 ## error if knots has NA
-expect_error(bSpline(x, knots = c(0.1, 0.5, NA)), "knots")
-expect_error(bSpline(x, Boundary.knots = c(0.1, 0.5, NA)), "knots")
+expect_error(bSpline(x, knots = c(0.1, 0.5, NA)))
+expect_error(bSpline(x, Boundary.knots = c(0.1, 0.5, NA)))
 
 ## error if boundary knots are inappropriate
-expect_error(bSpline(x, Boundary.knots = 0.1), "knots")
-expect_error(bSpline(x, Boundary.knots = c(0.1, 0.1)), "knots")
-expect_error(bSpline(x, Boundary.knots = c(0.1, 0.5, 1)), "knots")
+expect_error(bSpline(x, Boundary.knots = 0.1))
+expect_error(bSpline(x, Boundary.knots = c(0.1, 0.1)))
+expect_error(bSpline(x, Boundary.knots = c(0.1, 0.5, 1)))
 
 ## error if empty matrix
 expect_true(isNumMatrix(bSpline(x, degree = 0, intercept = TRUE),
                         length(x), 1))
-expect_error(bSpline(x, degree = 0), "No column")
+expect_error(bSpline(x, degree = 0))
 
 ## error if any internal knot is not placed inside of boundary
-expect_error(bSpline(x, knots = c(0, 0.5), degree = 0), "inside")
+expect_error(bSpline(x, knots = c(0, 0.5), degree = 0))
 
 ## warning if any x outside of boundary
 expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
-                       Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                       Boundary.knots = c(0, 1)))
 expect_warning(bSpline(c(x, 10), knots = knots, degree = 3,
-                       Boundary.knots = c(0, 1)),
-               "beyond boundary knots")
+                       Boundary.knots = c(0, 1)))
