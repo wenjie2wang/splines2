@@ -1,3 +1,11 @@
+# splines2 0.3.1
+
+## Minor changes
+
+* Modified testing examples for CRAN tests on r-patched-solaris-x86 and
+  r-oldrel-macos-x86_64.
+
+
 # splines2 0.3.0
 
 ## New features
