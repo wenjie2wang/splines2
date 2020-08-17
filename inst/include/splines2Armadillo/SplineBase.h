@@ -116,7 +116,7 @@ namespace splines2 {
             spline_df_ = internal_knots_.n_elem + order_;
         }
 
-        inline rvec get_knot_sequence(const unsigned int order = 1)
+        inline rvec default_knot_sequence(const unsigned int order = 1)
         {
             rvec out { arma::zeros(internal_knots_.n_elem + 2 * order) };
             for (size_t i {0}; i < out.n_elem; ++i) {
@@ -133,7 +133,7 @@ namespace splines2 {
         inline void update_knot_sequence()
         {
             if (! is_knot_sequence_latest_ || knot_sequence_.n_elem == 0) {
-                knot_sequence_ = get_knot_sequence(order_);
+                knot_sequence_ = default_knot_sequence(order_);
                 is_knot_sequence_latest_ = true;
             }
         }
