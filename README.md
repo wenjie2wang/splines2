@@ -50,13 +50,13 @@ remotes::install_github("wenjie2wang/splines2")
 
 ## Getting Started
 
-[Online document](https://wenjie-stat.me/splines2) provides reference
-for all functions and contains the following vignettes:
+[Online document](https://wwenjie.org/splines2) provides reference for
+all functions and contains the following vignettes:
 
   - [Demonstration of the common usages in R through
-    examples](https://wenjie-stat.me/splines2/articles/splines2-intro).
+    examples](https://wwenjie.org/splines2/articles/splines2-intro).
   - [Introduction to the usage with
-    Rcpp](https://wenjie-stat.me/splines2/articles/splines2-wi-rcpp)
+    Rcpp](https://wwenjie.org/splines2/articles/splines2-wi-rcpp)
 
 ## Performance
 
@@ -64,7 +64,7 @@ Since v0.3.0, the implementation of the main functions has been
 rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
 package. The computational performance has thus been boosted.
 
-Some benchmarks with the **splines** package (version 4.0.1) are
+Some benchmarks with the **splines** package (version 4.0.2) are
 provided for reference as follows:
 
 ``` r
