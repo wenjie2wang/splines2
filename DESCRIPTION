@@ -4,7 +4,7 @@ Version: 0.3.2.9000
 Date: 2020-08-17
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
-           email = "wjwang.stat@gmail.com",
+           email = "wang@wwenjie.org",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0363-3180")),
     person(given = "Jun", family = "Yan", role = "aut",
