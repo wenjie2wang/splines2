@@ -25,9 +25,13 @@ else
     # update copyright year in all R scripts
     for Rfile in R/*.R
     do
-        if ! grep -q 'Copyright (C)' $Rfile; then
-            cat $cprt_R $Rfile > .tmp
-            mv .tmp $Rfile
+        if ! grep -q 'Copyright (C)' $Rfile;
+        then
+            if [ $Rfile != "R/RcppExports.R" ];
+            then
+                cat $cprt_R $Rfile > .tmp
+                mv .tmp $Rfile
+            fi
         fi
         sed -i -E "$regexp1" $Rfile
     done
@@ -35,9 +39,13 @@ else
     # update copyright year in all C++ scripts
     for cppfile in src/*.cpp inst/include/*.h inst/include/*/*.h
     do
-        if ! grep -q 'Copyright (C)' $cppfile; then
-            cat $cprt_cpp $cppfile > .tmp
-            mv .tmp $cppfile
+        if ! grep -q 'Copyright (C)' $cppfile;
+        then
+            if [ $cppfile != "src/RcppExports.cpp" ];
+            then
+                cat $cprt_cpp $cppfile > .tmp
+                mv .tmp $cppfile
+            fi
         fi
         sed -i -E "$regexp1" $cppfile
     done
