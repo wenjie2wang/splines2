@@ -2,7 +2,7 @@ job:
   script:
     - bash misc/deploy_docs.sh
   only:
-    - master
+    - main
   tags:
     - droplets
     - shell
