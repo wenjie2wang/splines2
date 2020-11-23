@@ -42,7 +42,7 @@ install.packages("splines2")
 ## Development
 
 The latest version of package is under development at [GitHub][github-url].  If
-it is able to pass the building check by Travis CI, one may install it by
+it is able to pass the automated package checks, one may install it by
 
 ```R
 if (! require(remotes)) install.packages("remotes")

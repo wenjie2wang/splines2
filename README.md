@@ -39,7 +39,7 @@ install.packages("splines2")
 
 The latest version of package is under development at
 [GitHub](https://github.com/wenjie2wang/splines2). If it is able to pass
-the building check by Travis CI, one may install it by
+the automated package checks, one may install it by
 
 ``` r
 if (! require(remotes)) install.packages("remotes")
@@ -103,10 +103,10 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                      expr     min     lq   mean  median      uq    max neval cld
-               splines::bs 333.902 343.94 375.61 350.798 360.642 2464.6  1000   c
-     splines::splineDesign 204.642 207.82 231.16 210.252 218.290 2578.4  1000  b 
-         splines2::bSpline  84.457  90.06 110.37  93.635  96.261 2197.2  1000 a  
+                      expr     min      lq   mean median      uq    max neval cld
+               splines::bs 333.624 345.985 381.45 353.56 369.332 2459.1  1000   c
+     splines::splineDesign 204.708 208.529 239.15 211.58 220.958 2328.3  1000  b 
+         splines2::bSpline  84.764  90.584 101.50  93.84  97.044 2113.6  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is more than 2x
@@ -126,9 +126,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                      expr     min      lq   mean median      uq    max neval cld
-     splines::splineDesign 273.111 277.192 310.97 279.66 290.778 4271.2  1000   b
-             splines2::dbs  87.586  91.935 112.92  95.24  97.981 2426.3  1000  a 
+                      expr     min      lq   mean  median      uq    max neval cld
+     splines::splineDesign 273.311 277.778 324.64 283.183 292.754 5308.8  1000   b
+             splines2::dbs  87.589  92.416 103.81  96.128  99.986 2355.2  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -151,9 +151,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-              expr     min      lq    mean  median      uq       max neval cld
-          ibs::ibs 2350.47 2546.32 3160.34 3105.79 3312.10 110465.46  1000   b
-     splines2::ibs  262.81  304.63  328.61  331.89  341.81    597.51  1000  a 
+              expr     min      lq    mean  median     uq      max neval cld
+          ibs::ibs 2361.66 2601.33 3188.16 3115.31 3337.0 114069.3  1000   b
+     splines2::ibs  251.87  309.05  377.52  333.76  345.6   3806.2  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline bases. So we applied the same coefficients to
