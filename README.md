@@ -5,20 +5,18 @@ splines2
 [![Downloads from the RStudio CRAN
 mirror](https://cranlogs.r-pkg.org/badges/splines2)](https://CRAN.R-project.org/package=splines2)
 [![Build
-Status](https://travis-ci.org/wenjie2wang/splines2.svg?branch=master)](https://travis-ci.org/wenjie2wang/splines2)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/bvoso7nxchg1incb/branch/master?svg=true)](https://ci.appveyor.com/project/wenjie2wang/splines2)
-[![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/master/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
+Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)](https://github.com/wenjie2wang/splines2/actions)
+[![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
 
 The R package **splines2** provides functions to construct basis matrix
 of
 
-  - B-splines
-  - M-splines
-  - I-splines
-  - convex splines (C-splines)
-  - generalized Bernstein polynomials
-  - their integrals (except C-splines) and derivatives of given order by
+-   B-splines
+-   M-splines
+-   I-splines
+-   convex splines (C-splines)
+-   generalized Bernstein polynomials
+-   their integrals (except C-splines) and derivatives of given order by
     close-form recursive formulas
 
 In addition to the R interface, **splines2** also provides a C++
@@ -53,9 +51,9 @@ remotes::install_github("wenjie2wang/splines2")
 [Online document](https://wwenjie.org/splines2) provides reference for
 all functions and contains the following vignettes:
 
-  - [Demonstration of the common usages in R through
+-   [Demonstration of the common usages in R through
     examples](https://wwenjie.org/splines2/articles/splines2-intro).
-  - [Introduction to the usage with
+-   [Introduction to the usage with
     Rcpp](https://wwenjie.org/splines2/articles/splines2-wi-rcpp)
 
 ## Performance
@@ -64,7 +62,7 @@ Since v0.3.0, the implementation of the main functions has been
 rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
 package. The computational performance has thus been boosted.
 
-Some benchmarks with the **splines** package (version 4.0.2) are
+Some benchmarks with the **splines** package (version 4.0.3) are
 provided for reference as follows:
 
 ``` r
@@ -104,13 +102,11 @@ microbenchmark(
 )
 ```
 
-``` 
-Unit: microseconds
-                  expr     min      lq   mean median      uq    max neval cld
-           splines::bs 335.703 353.810 387.53 362.81 381.259 3015.9  1000   c
- splines::splineDesign 204.151 213.133 244.16 216.05 226.820 2342.8  1000  b 
-     splines2::bSpline  84.866  91.677 108.45  95.46  99.399 2149.9  1000 a  
-```
+    Unit: microseconds
+                      expr     min     lq   mean  median      uq    max neval cld
+               splines::bs 333.902 343.94 375.61 350.798 360.642 2464.6  1000   c
+     splines::splineDesign 204.642 207.82 231.16 210.252 218.290 2578.4  1000  b 
+         splines2::bSpline  84.457  90.06 110.37  93.635  96.261 2197.2  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is more than 2x
@@ -130,9 +126,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                      expr     min      lq   mean median     uq    max neval cld
-     splines::splineDesign 274.066 285.540 330.04  295.3 327.12 4143.4  1000   b
-             splines2::dbs  88.085  94.344 127.73   99.0 107.18 2639.1  1000  a 
+                      expr     min      lq   mean median      uq    max neval cld
+     splines::splineDesign 273.111 277.192 310.97 279.66 290.778 4271.2  1000   b
+             splines2::dbs  87.586  91.935 112.92  95.24  97.981 2426.3  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -155,9 +151,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-              expr     min      lq    mean  median      uq      max neval cld
-          ibs::ibs 2445.25 2666.93 3259.59 3213.59 3342.26 113446.1  1000   b
-     splines2::ibs  264.84  319.18  363.78  338.62  360.94   2826.4  1000  a 
+              expr     min      lq    mean  median      uq       max neval cld
+          ibs::ibs 2350.47 2546.32 3160.34 3105.79 3312.10 110465.46  1000   b
+     splines2::ibs  262.81  304.63  328.61  331.89  341.81    597.51  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline bases. So we applied the same coefficients to
