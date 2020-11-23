@@ -43,7 +43,7 @@ the automated package checks, one may install it by
 
 ``` r
 if (! require(remotes)) install.packages("remotes")
-remotes::install_github("wenjie2wang/splines2")
+remotes::install_github("wenjie2wang/splines2", upgrade = "never")
 ```
 
 ## Getting Started
