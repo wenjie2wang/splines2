@@ -2,7 +2,6 @@
 \.Rout$
 \.Rproj$
 \.tar\.gz$
-^COPYRIGHT$
 ^LICENSE$
 ^Makefile$
 ^README\.Rmd$
@@ -15,6 +14,7 @@
 ^\.\#
 ^\.clang_complete$
 ^\.git$
+^\.github$
 ^\.gitlab-ci.yml$
 ^\.travis\.yml$
 ^appveyor\.yml$
