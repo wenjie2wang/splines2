@@ -58,7 +58,7 @@ predict.bSpline2 <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
-    do.call("bSpline", a)
+    do.call(bSpline, a)
 }
 
 
@@ -71,7 +71,7 @@ predict.ibs <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept")])
-    do.call("ibs", a)
+    do.call(ibs, a)
 }
 
 
@@ -84,7 +84,7 @@ predict.dbs <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept", "derivs")])
-    do.call("dbs", a)
+    do.call(dbs, a)
 }
 
 
@@ -97,7 +97,7 @@ predict.mSpline <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept", "derivs")])
-    do.call("mSpline", a)
+    do.call(mSpline, a)
 }
 
 
@@ -110,7 +110,7 @@ predict.iSpline <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept", "derivs")])
-    do.call("iSpline", a)
+    do.call(iSpline, a)
 }
 
 
@@ -123,7 +123,7 @@ predict.cSpline <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "knots", "Boundary.knots",
                                 "intercept", "scale")])
-    do.call("cSpline", a)
+    do.call(cSpline, a)
 }
 
 
@@ -136,5 +136,18 @@ predict.bernsteinPoly <- function(object, newx, ...)
     a <- c(list(x = newx),
            attributes(object)[c("degree", "derivs", "integral",
                                 "intercept", "Boundary.knots")])
-    do.call("bernsteinPoly", a)
+    do.call(bernsteinPoly, a)
+}
+
+
+##' @rdname predict
+##' @export
+predict.naturalSpline <- function(object, newx, ...)
+{
+    if (missing(newx))
+        return(object)
+    a <- c(list(x = newx),
+           attributes(object)[c("degree", "derivs", "integral",
+                                "intercept", "Boundary.knots")])
+    do.call(naturalSpline, a)
 }

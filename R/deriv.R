@@ -156,9 +156,22 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
 deriv.bernsteinPoly <- function(expr, derivs = 1L, ...)
 {
     ## checks if key attributions still exist
-    check_attr(expr,
+    check_attr(expr, check_derivs = TRUE,
                attrs = c("x", "degree", "Boundary.knots",
                          "intercept", "integral"))
     attr(expr, "derivs") <- attr(expr, "derivs") + derivs
     do.call(bernsteinPoly, attributes(expr))
+}
+
+
+##' @rdname deriv
+##' @export
+deriv.naturalSpline <- function(expr, derivs = 1L, ...)
+{
+    ## checks if key attributions still exist
+    check_attr(expr, check_derivs = TRUE,
+               attrs = c("x", "knots", "Boundary.knots",
+                         "intercept", "integral"))
+    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
+    do.call(naturalSpline, attributes(expr))
 }
