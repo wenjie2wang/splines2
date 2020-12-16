@@ -45,3 +45,7 @@ rcpp_mSpline_derivative <- function(x, derivs, df, degree, internal_knots, bound
     .Call('_splines2_rcpp_mSpline_derivative', PACKAGE = 'splines2', x, derivs, df, degree, internal_knots, boundary_knots, complete_basis)
 }
 
+rcpp_naturalSpline <- function(x, df, internal_knots, boundary_knots, derivs = 0L, integral = FALSE, complete_basis = TRUE) {
+    .Call('_splines2_rcpp_naturalSpline', PACKAGE = 'splines2', x, df, internal_knots, boundary_knots, derivs, integral, complete_basis)
+}
+

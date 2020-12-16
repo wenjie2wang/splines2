@@ -9,6 +9,7 @@
 \alias{deriv.iSpline}
 \alias{deriv.cSpline}
 \alias{deriv.bernsteinPoly}
+\alias{deriv.naturalSpline}
 \title{Derivatives of Spline Bases}
 \usage{
 \method{deriv}{bSpline2}(expr, derivs = 1L, ...)
@@ -24,6 +25,8 @@
 \method{deriv}{cSpline}(expr, derivs = 1L, ...)
 
 \method{deriv}{bernsteinPoly}(expr, derivs = 1L, ...)
+
+\method{deriv}{naturalSpline}(expr, derivs = 1L, ...)
 }
 \arguments{
 \item{expr}{Objects of class \code{bSpline2}, \code{ibs}, \code{dbs},

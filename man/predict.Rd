@@ -9,6 +9,7 @@
 \alias{predict.iSpline}
 \alias{predict.cSpline}
 \alias{predict.bernsteinPoly}
+\alias{predict.naturalSpline}
 \title{Evaluate a Spline Basis at specified points}
 \usage{
 \method{predict}{bSpline2}(object, newx, ...)
@@ -24,6 +25,8 @@
 \method{predict}{cSpline}(object, newx, ...)
 
 \method{predict}{bernsteinPoly}(object, newx, ...)
+
+\method{predict}{naturalSpline}(object, newx, ...)
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},

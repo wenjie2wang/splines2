@@ -71,9 +71,12 @@ knots <- c(0.3, 0.5, 0.6)
 ## cubic B-splines
 bsMat <- bSpline(x, knots = knots, degree = 3, intercept = TRUE)
 
-par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
+op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 matplot(x, bsMat, type = "l", ylab = "Cubic B-spline Bases")
 abline(v = knots, lty = 2, col = "gray")
+
+## reset to previous plotting settings
+par(op)
 
 ## the first derivaitves
 d1Mat <- deriv(bsMat)

@@ -12,7 +12,7 @@ tmp_log=.git_status.log
 ## update docs by pkgdown
 make pkgdown
 
-# go to the repository for wenjie-stat.me
+# go to the repository for wwenjie.org
 cd $docs_repo
 git checkout -f
 git checkout master
