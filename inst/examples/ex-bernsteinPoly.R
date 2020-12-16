@@ -9,7 +9,7 @@ bMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE)
 ## generalized Bernstein polynomials basis over [- 2, 2]
 bMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE)
 
-par(mfrow = c(1, 2), mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
+op <- par(mfrow = c(1, 2), mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 matplot(x1, bMat1, type = "l", ylab = "y")
 matplot(x2, bMat2, type = "l", ylab = "y")
 
@@ -24,6 +24,9 @@ matplot(x1, d1Mat1, type = "l", ylab = "y")
 matplot(x2, d1Mat2, type = "l", ylab = "y")
 matplot(x1, d2Mat1, type = "l", ylab = "y")
 matplot(x2, d2Mat2, type = "l", ylab = "y")
+
+## reset to previous plotting settings
+par(op)
 
 ## or use the deriv method
 all.equal(d1Mat1, deriv(bMat1))

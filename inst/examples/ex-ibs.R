@@ -12,10 +12,11 @@ bsMat <- deriv(ibsMat)
 stopifnot(all.equal(bsMat0, bsMat, check.attributes = FALSE))
 
 ## plot B-spline basis with their corresponding integrals
-library(graphics)
-par(mfrow = c(1, 2))
+op <- par(mfrow = c(1, 2))
 matplot(x, bsMat, type = "l", ylab = "B-spline basis")
 abline(v = knots, lty = 2, col = "gray")
 matplot(x, ibsMat, type = "l", ylab = "Integral of B-spline basis")
 abline(v = knots, lty = 2, col = "gray")
-par(mfrow = c(1, 1))
+
+## reset to previous plotting settings
+par(op)
