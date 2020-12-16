@@ -30,14 +30,14 @@ Rcpp::NumericMatrix rcpp_bSpline_basis(
     const bool complete_basis = true
     )
 {
-    const unsigned int wo_intercept {
-        static_cast<unsigned int>(! complete_basis)
-    };
     splines2::BSpline bs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
+        const unsigned int wo_intercept {
+            static_cast<unsigned int>(! complete_basis)
+        };
         unsigned int spline_df { df + wo_intercept };
         bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
     } else {
@@ -72,14 +72,14 @@ Rcpp::NumericMatrix rcpp_bSpline_derivative(
     const bool complete_basis = true
     )
 {
-    const unsigned int wo_intercept {
-        static_cast<unsigned int>(! complete_basis)
-    };
     splines2::BSpline bs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
+        const unsigned int wo_intercept {
+            static_cast<unsigned int>(! complete_basis)
+        };
         unsigned int spline_df { df + wo_intercept };
         bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
     } else {
@@ -114,14 +114,14 @@ Rcpp::NumericMatrix rcpp_bSpline_integral(
     const bool complete_basis = true
     )
 {
-    const unsigned int wo_intercept {
-        static_cast<unsigned int>(! complete_basis)
-    };
     splines2::BSpline bs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
+        const unsigned int wo_intercept {
+            static_cast<unsigned int>(! complete_basis)
+        };
         unsigned int spline_df { df + wo_intercept };
         bs_obj = splines2::BSpline(x, spline_df, degree, boundary_knots);
     } else {

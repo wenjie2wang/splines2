@@ -30,14 +30,14 @@ Rcpp::NumericMatrix rcpp_cSpline_basis(
     const bool complete_basis = true
     )
 {
-    const unsigned int wo_intercept {
-        static_cast<unsigned int>(! complete_basis)
-    };
     splines2::CSpline cs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
+        const unsigned int wo_intercept {
+            static_cast<unsigned int>(! complete_basis)
+        };
         unsigned int spline_df { df + wo_intercept };
         cs_obj = splines2::CSpline(x, spline_df, degree, boundary_knots);
     } else {
@@ -73,14 +73,14 @@ Rcpp::NumericMatrix rcpp_cSpline_derivative(
     const bool complete_basis = true
     )
 {
-    const unsigned int wo_intercept {
-        static_cast<unsigned int>(! complete_basis)
-    };
     splines2::CSpline cs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
         // compute actual spline degree of freedom
+        const unsigned int wo_intercept {
+            static_cast<unsigned int>(! complete_basis)
+        };
         unsigned int spline_df { df + wo_intercept };
         cs_obj = splines2::CSpline(x, spline_df, degree, boundary_knots);
     } else {

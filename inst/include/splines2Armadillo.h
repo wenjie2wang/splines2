@@ -23,5 +23,6 @@
 #include "splines2Armadillo/ISpline.h"
 #include "splines2Armadillo/CSpline.h"
 #include "splines2Armadillo/BernsteinPoly.h"
+#include "splines2Armadillo/NaturalSpline.h"
 
 #endif
