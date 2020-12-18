@@ -15,9 +15,9 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Cubic Natural Spline Basis for Polynomial Splines
+##' Natural Cubic Spline Basis for Polynomial Splines
 ##'
-##' Generates the nonnegative cubic natural spline basis matrix or the
+##' Generates the nonnegative natural cubic spline basis matrix or the
 ##' corresponding derivatives of given order.
 ##'
 ##' It is an implementation of the natural spline basis based on B-spline basis.

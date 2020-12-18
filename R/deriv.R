@@ -105,7 +105,11 @@ deriv.mSpline <- function(expr, derivs = 1L, ...)
     derivs0 <- attr(expr, "derivs")
     ## checks if key attributions still exist
     check_attr(expr, check_derivs = FALSE)
-    attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
+    attr(expr, "derivs") <- if (is.null(derivs0)) {
+                                derivs
+                            } else {
+                                derivs0 + derivs
+                            }
     dMat <- do.call(mSpline, attributes(expr))
     class(dMat) <- c("matrix", "mSpline")
     dMat
@@ -146,7 +150,11 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     }
     ## else scaled
     derivs0 <- attr(expr, "derivs")
-    attr(expr, "derivs") <- ifelse(is.null(derivs0), derivs, derivs0 + derivs)
+    attr(expr, "derivs") <- if (is.null(derivs0)) {
+                                derivs
+                            } else {
+                                derivs0 + derivs
+                            }
     do.call(cSpline, attributes(expr))
 }
 
