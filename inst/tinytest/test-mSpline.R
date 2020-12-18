@@ -46,7 +46,7 @@ msMat0d <- mSpline(x, knots = knots, degree = 2)
 msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 msMat0f <- mSpline(0.1, knots = knots, degree = 2, intercept = TRUE,
                    Boundary.knots = c(0, 1), derivs = 1)
-msMat0g <- mSpline(0.1, df = 6, degree = 2, intercept = TRUE,
+msMat0g <- mSpline(x, df = 6, degree = 2, intercept = TRUE,
                    Boundary.knots = c(0, 1), derivs = 2)
 msMat0h <- mSpline(0.1, knots = knots, degree = 2,
                    Boundary.knots = c(0, 1), derivs = 3)
@@ -57,7 +57,7 @@ expect_true(isNumMatrix(msMat0c, 14L, 5L))
 expect_true(isNumMatrix(msMat0d, 14L, 5L))
 expect_true(isNumMatrix(msMat0e, 14L, 6L))
 expect_true(isNumMatrix(msMat0f, 1L, 6L))
-expect_true(isNumMatrix(msMat0g, 1L, 6L))
+expect_true(isNumMatrix(msMat0g, 14L, 6L))
 expect_true(isNumMatrix(msMat0h, 1L, 5L))
 expect_error(mSpline(x, degree = 0))
 expect_warning(mSpline(c(x, 10), knots = knots, degree = 0,
