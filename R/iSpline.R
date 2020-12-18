@@ -91,12 +91,14 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
               x
           }
     ## call the engine function
-    out <- rcpp_iSpline_basis(
+    out <- rcpp_iSpline(
         x = xx,
         df = df,
         degree = degree,
         internal_knots = knots,
         boundary_knots = Boundary.knots,
+        derivs = derivs,
+        integral = FALSE,
         complete_basis = intercept
     )
     ## throw warning if any x is outside of the boundary

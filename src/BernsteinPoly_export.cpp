@@ -51,11 +51,11 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
         );
     out.attr("x") = splines2::arma2rvec(x);
     out.attr("degree") = static_cast<int>(bp_obj.get_degree());
-    out.attr("derivs") = static_cast<int>(derivs);
-    out.attr("integral") = integral;
     out.attr("Boundary.knots") = splines2::arma2rvec(
         bp_obj.get_boundary_knots()
         );
+    out.attr("derivs") = static_cast<int>(derivs);
+    out.attr("integral") = integral;
     out.attr("intercept") = complete_basis;
     return out;
 }

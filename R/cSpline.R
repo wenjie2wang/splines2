@@ -87,53 +87,36 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
               x
           }
     out <- if (scale) {
-               if (derivs > 0) {
-                   rcpp_cSpline_derivative(
+               rcpp_cSpline(
+                   x = xx,
+                   df = df,
+                   degree = degree,
+                   internal_knots = knots,
+                   boundary_knots = Boundary.knots,
+                   derivs = derivs,
+                   complete_basis = intercept
+               )
+           } else {
+               if (derivs == 0) {
+                   rcpp_iSpline(
                        x = xx,
-                       derivs = derivs,
                        df = df,
                        degree = degree,
                        internal_knots = knots,
                        boundary_knots = Boundary.knots,
+                       derivs = 0,
+                       integral = TRUE,
                        complete_basis = intercept
                    )
                } else {
-                   rcpp_cSpline_basis(
+                   rcpp_iSpline(
                        x = xx,
                        df = df,
                        degree = degree,
                        internal_knots = knots,
                        boundary_knots = Boundary.knots,
-                       complete_basis = intercept
-                   )
-               }
-           } else {
-               if (derivs == 0) {
-                   rcpp_iSpline_integral(
-                       x = xx,
-                       df = df,
-                       degree = degree,
-                       internal_knots = knots,
-                       boundary_knots = Boundary.knots,
-                       complete_basis = intercept
-                   )
-               } else if (derivs == 1) {
-                   rcpp_iSpline_basis(
-                       x = xx,
-                       df = df,
-                       degree = degree,
-                       internal_knots = knots,
-                       boundary_knots = Boundary.knots,
-                       complete_basis = intercept
-                   )
-               } else if (derivs > 1) {
-                   rcpp_iSpline_derivative(
-                       x = xx,
-                       derivs = derivs - 1L,
-                       df = df,
-                       degree = degree,
-                       internal_knots = knots,
-                       boundary_knots = Boundary.knots,
+                       derivs = derivs - 1,
+                       integral = FALSE,
                        complete_basis = intercept
                    )
                }

@@ -74,28 +74,16 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
           } else {
               x
           }
-    out <- if (derivs > 0) {
-               ## call the engine function
-               rcpp_mSpline_derivative(
-                   x = xx,
-                   derivs = derivs,
-                   df = df,
-                   degree = degree,
-                   internal_knots = knots,
-                   boundary_knots = Boundary.knots,
-                   complete_basis = intercept
-               )
-           } else {
-               ## call the engine function
-               rcpp_mSpline_basis(
-                   x = xx,
-                   df = df,
-                   degree = degree,
-                   internal_knots = knots,
-                   boundary_knots = Boundary.knots,
-                   complete_basis = intercept
-               )
-           }
+    ## call the engine function
+    out <- rcpp_mSpline(
+        x = xx,
+        df = df,
+        degree = degree,
+        internal_knots = knots,
+        boundary_knots = Boundary.knots,
+        derivs = derivs,
+        complete_basis = intercept
+    )
     ## throw warning if any x is outside of the boundary
     b_knots <- attr(out, "Boundary.knots")
     if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
