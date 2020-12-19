@@ -52,6 +52,7 @@ namespace splines2 {
                 return mat_wo_col1(spline_basis_);
             }
             // else do the generation
+            update_spline_df();
             update_x_index();
             update_knot_sequence();
             // define output matrix
@@ -113,44 +114,33 @@ namespace splines2 {
                     "'derivs' has to be a positive integer.");
             }
             // early exit if derivs is large enough
-            unsigned int old_df { spline_df_ };
+            update_spline_df();
             if (degree_ < derivs) {
                 if (complete_basis) {
-                    return arma::zeros(x_.n_elem, old_df);
+                    return arma::zeros(x_.n_elem, spline_df_);
                 }
-                if (old_df == 1) {
+                if (spline_df_ == 1) {
                     throw std::range_error("No column left in the matrix.");
                 }
-                return arma::zeros(x_.n_elem, old_df - 1);
+                return arma::zeros(x_.n_elem, spline_df_ - 1);
             }
-            // back up current results if necessary
-            bool backup_basis { is_basis_latest_ };
-            bool backup_knot_sequence { is_knot_sequence_latest_ };
-            rmat old_basis;
-            rvec old_knot_sequence;
-            if (backup_basis) {
-                old_basis = spline_basis_;
-            }
-            if (backup_knot_sequence) {
-                old_knot_sequence = knot_sequence_;
+            // create a copy of this object
+            MSpline ms_obj2 { this };
+            ms_obj2.set_degree(degree_ - derivs);
+            if (is_expanded_knot_sequence_) {
+                ms_obj2.set_knot_sequence(
+                    knot_sequence_.subvec(
+                        derivs, knot_sequence_.n_elem - derivs - 1
+                        )
+                    );
             }
             // get basis matrix for (degree - derivs)
-            set_degree(degree_ - derivs);
-            rmat d_mat { basis(true) };
-            // restore
-            is_basis_latest_ = backup_basis;
-            is_knot_sequence_latest_ = backup_knot_sequence;
-            set_degree(degree_ + derivs);
-            if (backup_basis) {
-                spline_basis_ = old_basis;
-            }
-            if (backup_knot_sequence) {
-                knot_sequence_ = old_knot_sequence;
-            } else {
-                update_knot_sequence();
-            }
+            rmat d_mat { ms_obj2.basis(true) };
             // add zero columns
-            d_mat = add_zero_cols(d_mat, old_df - d_mat.n_cols);
+            d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
+            // make sure knot sequence and x index are latest
+            update_knot_sequence();
+            update_x_index();
             // main loop
             for (unsigned int k {1}; k <= derivs; ++k) {
                 const unsigned int k_offset { derivs - k };
@@ -183,31 +173,14 @@ namespace splines2 {
         // integral of M-splines (I-splines)
         inline virtual rmat integral(const bool complete_basis = true)
         {
-            // back up current results
-            bool backup_basis { is_basis_latest_ };
-            bool backup_knot_sequence { is_knot_sequence_latest_ };
-            rmat old_basis;
-            rvec old_knot_sequence;
-            if (backup_basis) {
-                old_basis = spline_basis_;
-            }
-            if (backup_knot_sequence) {
-                old_knot_sequence = knot_sequence_;
-            }
+            // create a copy of this object
+            MSpline ms_obj2 { this };
             // get basis matrix for (degree - derivs)
-            set_degree(degree_ + 1);
-            rmat i_mat { basis(false) };
-            rvec knot_sequence_ord { knot_sequence_ };
-            // restore
-            set_degree(degree_ - 1);
-            is_basis_latest_ = backup_basis;
-            is_knot_sequence_latest_ = backup_knot_sequence;
-            if (backup_basis) {
-                spline_basis_ = old_basis;
-            }
-            if (backup_knot_sequence) {
-                knot_sequence_ = old_knot_sequence;
-            }
+            ms_obj2.set_degree(degree_ + 1);
+            rmat i_mat { ms_obj2.basis(false) };
+            rvec knot_sequence_ord { ms_obj2.get_knot_sequence() };
+            // make sure x index is latest
+            update_x_index();
             // compute t_{i+k+1} - t_{i}
             arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
             for (size_t j { 0 }; j < numer1.n_elem; ++j) {

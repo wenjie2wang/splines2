@@ -88,9 +88,20 @@ namespace splines2 {
         BernsteinPoly() {}
         virtual ~BernsteinPoly() {}
 
-        explicit BernsteinPoly(const rvec& x)
+        explicit BernsteinPoly(const BernsteinPoly* pBernsteinPoly)
         {
-            check_x(x);
+            x_ = pBernsteinPoly->x_;
+            degree_ = pBernsteinPoly->degree_;
+            order_ = degree_ + 1;
+            if (pBernsteinPoly->boundary_knots_.n_elem == 0) {
+                autoset_x_and_boundary(x_);
+            } else {
+                check_boundary(pBernsteinPoly->boundary_knots_);
+            }
+            is_basis_latest_ = pBernsteinPoly->is_basis_latest_;
+            if (is_basis_latest_) {
+                poly_basis_ = pBernsteinPoly->poly_basis_;
+            }
         }
 
         // given boundary_knots for consistency with SplineBase
@@ -212,33 +223,21 @@ namespace splines2 {
                     );
             }
             // early exit if derivs is large enough
-            unsigned int old_df { order_ };
             if (degree_ < derivs) {
                 if (complete_basis) {
-                    return arma::zeros(x_.n_elem, old_df);
+                    return arma::zeros(x_.n_elem, order_);
                 }
-                if (old_df == 1) {
+                if (order_ == 1) {
                     throw std::range_error("No column left in the matrix.");
                 }
-                return arma::zeros(x_.n_elem, old_df - 1);
+                return arma::zeros(x_.n_elem, order_ - 1);
             }
-            // back up current results if necessary
-            bool backup_basis { is_basis_latest_ };
-            rmat old_basis;
-            if (backup_basis) {
-                old_basis = poly_basis_;
-            }
+            BernsteinPoly bp_obj2 { this };
             // get basis matrix for (degree - derivs)
-            set_degree(degree_ - derivs);
-            rmat d_mat { basis(true) };
-            // restore
-            set_degree(degree_ + derivs);
-            is_basis_latest_ = backup_basis;
-            if (backup_basis) {
-                poly_basis_ = old_basis;
-            }
+            bp_obj2.set_degree(degree_ - derivs);
+            rmat d_mat { bp_obj2.basis(true) };
             // add zero columns
-            d_mat = add_zero_cols(d_mat, old_df - d_mat.n_cols);
+            d_mat = add_zero_cols(d_mat, order_ - d_mat.n_cols);
             // derivatives by recursive formula
             for (unsigned int k {1}; k <= derivs; ++k) {
                 const unsigned int k_offset { derivs - k };
@@ -265,21 +264,10 @@ namespace splines2 {
         // integrals
         inline virtual rmat integral(const bool complete_basis = true)
         {
-            // back up current results if necessary
-            bool backup_basis { is_basis_latest_ };
-            rmat old_basis;
-            if (backup_basis) {
-                old_basis = poly_basis_;
-            }
+            BernsteinPoly bp_obj2 { this };
             // get basis matrix for (degree + 1) with intercept
-            set_degree(order_);
-            rmat i_mat { basis(false) };
-            // restore
-            set_degree(degree_ - 1);
-            is_basis_latest_ = backup_basis;
-            if (backup_basis) {
-                poly_basis_ = old_basis;
-            }
+            bp_obj2.set_degree(order_);
+            rmat i_mat { bp_obj2.basis(false) };
             // integral by recursive formula
             const double fac { range_size_ / order_ };
             for (unsigned int i {0}; i < x_.n_elem; ++i) {
