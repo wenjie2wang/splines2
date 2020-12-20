@@ -21,10 +21,11 @@ returned as they are.}
 
 \item{df}{Degree of freedom that equals to the column number of returned
 matrix.  One can specify \code{df} rather than \code{knots}, then the
-function chooses \code{df - degree - as.integer(intercept)} internal
-knots at suitable quantiles of \code{x} ignoring missing values and
-those \code{x} outside of the boundary.  If internal knots are specified
-via \code{knots}, the specified \code{df} will be ignored.}
+function chooses \code{df - 1 - as.integer(intercept)} internal knots at
+suitable quantiles of \code{x} ignoring missing values and those
+\code{x} outside of the boundary.  Thus, \code{df} must be greater than
+or equal to \code{2}.  If internal knots are specified via \code{knots},
+the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
@@ -63,12 +64,11 @@ corresponding integrals, or derivatives of given order.
 \details{
 It is an implementation of the natural spline basis based on B-spline basis.
 The constructed spline bases are intended to be non-negative with second
-derivatives being zeros at boundary knots.
-
-A similar implementation is provided by \code{splines::ns}, which uses QR
-decomposition to find the null space of the second derivatives of B-spline
-basis at boundary knots.  However, there is no guarantee that the resulting
-bases are nonnegative over their support.
+derivatives being zeros at boundary knots.  A similar implementation is
+provided by \code{splines::ns}, which uses QR decomposition to find the null
+space of the second derivatives of B-spline basis at boundary knots.
+However, there is no guarantee that the resulting bases are nonnegative over
+their support.
 }
 \examples{
 library(splines2)

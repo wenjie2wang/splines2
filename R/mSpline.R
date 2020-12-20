@@ -32,9 +32,22 @@
 ##'     as.integer(intercept)} internal knots at suitable quantiles of \code{x}
 ##'     ignoring missing values and those \code{x} outside of the boundary.  For
 ##'     periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
-##'     as.integer(intercept)} internal knots will be chose instead. If internal
-##'     knots are specified via \code{knots}, the specified \code{df} will be
-##'     ignored.
+##'     as.integer(intercept)} internal knots will be chose instead and the
+##'     number of internal knots must be greater or equal to the specified
+##'     \code{degree}.  If internal knots are specified via \code{knots}, the
+##'     specified \code{df} will be ignored.
+##' @param knots The internal breakpoints that define the spline.  The default
+##'     is \code{NULL}, which results in a basis for ordinary polynomial
+##'     regression.  Typical values are the mean or median for one knot,
+##'     quantiles for more knots.  For periodic spline basis (\code{periodic =
+##'     TRUE}), the number of knots must be greater or equal to the specified
+##'     \code{degree}.
+##' @param Boundary.knots Boundary points at which to anchor the spline basis.
+##'     By default, they are the range of the non-\code{NA} data.  If both
+##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
+##'     parameters do not depend on \code{x}. Data can extend beyond
+##'     \code{Boundary.knots}.  For periodic spline basis (\code{periodic =
+##'     TRUE}), the specified \code{Boundary.knots} defines the cyclic period.
 ##' @param periodic A logical value.  If \code{TRUE}, periodic spline basis will
 ##'     be returned instead of regular M-spline basis.  The default value is
 ##'     \code{FALSE}.
@@ -42,7 +55,8 @@
 ##'     M-splines. The default value is \code{0L} for M-spline bases.
 ##' @param integral A logical value.  If \code{TRUE}, the corresponding
 ##'     integrals of spline bases will be returned.  The default value is
-##'     \code{FALSE}.
+##'     \code{FALSE}.  For periodic spline, the integral of each basis is
+##'     integrated from the left boundary knot.
 ##'
 ##' @return A numeric matrix with \code{length(x)} rows and \code{df} columns if
 ##'     \code{df} is specified.  If \code{knots} are specified instead, the

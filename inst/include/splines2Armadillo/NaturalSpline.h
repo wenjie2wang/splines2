@@ -134,7 +134,7 @@ namespace splines2 {
             }
             spline_df_ = spline_df;
             // determine internal knots by spline_df and x
-            unsigned int n_internal_knots { spline_df_ - order_ };
+            unsigned int n_internal_knots { spline_df_ - 2 };
             if (n_internal_knots == 0) {
                 clean_knots(rvec(), boundary_knots);
             } else {
