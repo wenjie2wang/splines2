@@ -17,32 +17,20 @@ rcpp_bernsteinPoly <- function(x, degree, derivs, integral, boundary_knots, comp
     .Call('_splines2_rcpp_bernsteinPoly', PACKAGE = 'splines2', x, degree, derivs, integral, boundary_knots, complete_basis)
 }
 
-rcpp_cSpline_basis <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_cSpline_basis', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis)
+rcpp_cSpline <- function(x, df, degree, internal_knots, boundary_knots, derivs, complete_basis = TRUE) {
+    .Call('_splines2_rcpp_cSpline', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, derivs, complete_basis)
 }
 
-rcpp_cSpline_derivative <- function(x, derivs, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_cSpline_derivative', PACKAGE = 'splines2', x, derivs, df, degree, internal_knots, boundary_knots, complete_basis)
+rcpp_iSpline <- function(x, df, degree, internal_knots, boundary_knots, derivs, integral, complete_basis = TRUE) {
+    .Call('_splines2_rcpp_iSpline', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, derivs, integral, complete_basis)
 }
 
-rcpp_iSpline_basis <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_iSpline_basis', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis)
+rcpp_mSpline <- function(x, df, degree, internal_knots, boundary_knots, derivs = 0L, integral = FALSE, complete_basis = TRUE) {
+    .Call('_splines2_rcpp_mSpline', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, derivs, integral, complete_basis)
 }
 
-rcpp_iSpline_derivative <- function(x, derivs, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_iSpline_derivative', PACKAGE = 'splines2', x, derivs, df, degree, internal_knots, boundary_knots, complete_basis)
-}
-
-rcpp_iSpline_integral <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_iSpline_integral', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis)
-}
-
-rcpp_mSpline_basis <- function(x, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_mSpline_basis', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis)
-}
-
-rcpp_mSpline_derivative <- function(x, derivs, df, degree, internal_knots, boundary_knots, complete_basis = TRUE) {
-    .Call('_splines2_rcpp_mSpline_derivative', PACKAGE = 'splines2', x, derivs, df, degree, internal_knots, boundary_knots, complete_basis)
+rcpp_periodic_mSpline <- function(x, df, degree, internal_knots, boundary_knots, derivs = 0L, integral = FALSE, complete_basis = TRUE) {
+    .Call('_splines2_rcpp_periodic_mSpline', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, derivs, integral, complete_basis)
 }
 
 rcpp_naturalSpline <- function(x, df, internal_knots, boundary_knots, derivs = 0L, integral = FALSE, complete_basis = TRUE) {

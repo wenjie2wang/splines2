@@ -17,8 +17,8 @@
 
 ##' Natural Cubic Spline Basis for Polynomial Splines
 ##'
-##' Generates the nonnegative natural cubic spline basis matrix or the
-##' corresponding derivatives of given order.
+##' Generates the nonnegative natural cubic spline basis matrix, the
+##' corresponding integrals, or derivatives of given order.
 ##'
 ##' It is an implementation of the natural spline basis based on B-spline basis.
 ##' The constructed spline bases are intended to be non-negative with second

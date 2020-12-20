@@ -11,7 +11,9 @@ mSpline(
   degree = 3L,
   intercept = FALSE,
   Boundary.knots = NULL,
+  periodic = FALSE,
   derivs = 0L,
+  integral = FALSE,
   ...
 )
 }
@@ -20,11 +22,14 @@ mSpline(
 returned as they are.}
 
 \item{df}{Degree of freedom that equals to the column number of returned
-matrix.  One can specify \code{df} rather than \code{knots}, then the
-function chooses \code{df - degree - as.integer(intercept)} internal
-knots at suitable quantiles of \code{x} ignoring missing values and
-those \code{x} outside of the boundary.  If internal knots are specified
-via \code{knots}, the specified \code{df} will be ignored.}
+matrix.  One can specify \code{df} rather than \code{knots}.  For
+M-spline basis, the function chooses \code{df - degree -
+as.integer(intercept)} internal knots at suitable quantiles of \code{x}
+ignoring missing values and those \code{x} outside of the boundary.  For
+periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
+as.integer(intercept)} internal knots will be chose instead. If internal
+knots are specified via \code{knots}, the specified \code{df} will be
+ignored.}
 
 \item{knots}{The internal breakpoints that define the spline.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
@@ -44,26 +49,36 @@ By default, they are the range of the non-\code{NA} data.  If both
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
 
+\item{periodic}{A logical value.  If \code{TRUE}, periodic spline basis will
+be returned instead of regular M-spline basis.  The default value is
+\code{FALSE}.}
+
 \item{derivs}{A non-negative integer specifying the order of derivatives of
 M-splines. The default value is \code{0L} for M-spline bases.}
+
+\item{integral}{A logical value.  If \code{TRUE}, the corresponding
+integrals of spline bases will be returned.  The default value is
+\code{FALSE}.}
 
 \item{...}{Optional arguments that are not used.}
 }
 \value{
 A numeric matrix with \code{length(x)} rows and \code{df} columns if
-    \code{df} is specified or \code{length(knots) + degree +
-    as.integer(intercept)} columns if \code{knots} are specified instead.
-    Attributes that correspond to the arguments specified are returned for
-    usage of other functions in this package.
+    \code{df} is specified.  If \code{knots} are specified instead, the
+    output matrix will consist of \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{periodic = FALSE}, or
+    \code{length(knots) + as.integer(intercept)} columns if \code{periodic =
+    TRUE}.  Attributes that correspond to the arguments specified are
+    returned for usage of other functions in this package.
 }
 \description{
-Generates the basis matrix of the regression spline called M-spline or the
-corresponding derivatives of given order.  For monotone regression,
-\code{\link{iSpline}} should be used instead of M-splines.
+Generates the basis matrix of regular M-spline, periodic M-spline, and the
+corresponding integrals and derivatives.
 }
 \details{
-It is an implementation of the close form M-spline basis based on the
-recursion formula given by Ramsay (1988).
+This function contains an implementation of the close form M-spline basis
+based on the recursion formula given by Ramsay (1988).  For monotone
+regression, \code{\link{iSpline}} should be used instead of M-splines.
 }
 \examples{
 library(splines2)
@@ -77,9 +92,6 @@ op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 matplot(x, msMat, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
 
-## reset to previous plotting settings
-par(op)
-
 ## derivatives of M-splines
 dmsMat <- mSpline(x, knots = knots, degree = 2,
                   intercept = TRUE, derivs = 1)
@@ -87,6 +99,33 @@ dmsMat <- mSpline(x, knots = knots, degree = 2,
 ## or using the deriv method
 dmsMat1 <- deriv(msMat)
 stopifnot(all.equal(dmsMat, dmsMat1, check.attributes = FALSE))
+
+## periodic M-spline basis
+x <- seq.int(0, 3, 0.01)
+knots <- c(0.3, 0.5, 0.6)
+bknots <- c(0, 1)
+pMat <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
+                Boundary.knots = bknots, periodic = TRUE)
+## integrals
+iMat <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
+                Boundary.knots = bknots, periodic = TRUE, integral = TRUE)
+## first derivatives by "derivs = 1"
+dMat1 <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
+                 Boundary.knots = bknots, periodic = TRUE, derivs = 1)
+## first derivatives by using the deriv() method
+dMat2 <- deriv(pMat)
+
+par(mfrow = c(2, 2))
+matplot(x, pMat, type = "l", ylab = "Periodic Basis")
+abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
+matplot(x, iMat, type = "l", ylab = "Integrals from 0")
+abline(v = seq.int(0, max(x)), h = seq.int(0, max(x)), lty = 2, col = "grey")
+matplot(x, dMat1, type = "l", ylab = "1st derivatives by 'derivs=1'")
+abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
+matplot(x, dMat2, type = "l", ylab = "1st derivatives by 'deriv()'")
+abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
+## reset to previous plotting settings
+par(op)
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.

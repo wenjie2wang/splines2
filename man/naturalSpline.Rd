@@ -2,7 +2,7 @@
 % Please edit documentation in R/naturalSpline.R
 \name{naturalSpline}
 \alias{naturalSpline}
-\title{Cubic Natural Spline Basis for Polynomial Splines}
+\title{Natural Cubic Spline Basis for Polynomial Splines}
 \usage{
 naturalSpline(
   x,
@@ -57,8 +57,8 @@ A numeric matrix with \code{length(x)} rows and \code{df}
     usage of other functions in this package.
 }
 \description{
-Generates the nonnegative cubic natural spline basis matrix or the
-corresponding derivatives of given order.
+Generates the nonnegative natural cubic spline basis matrix, the
+corresponding integrals, or derivatives of given order.
 }
 \details{
 It is an implementation of the natural spline basis based on B-spline basis.
