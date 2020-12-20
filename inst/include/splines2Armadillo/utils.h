@@ -33,6 +33,23 @@
 
 namespace splines2 {
 
+    // compare double-precision numbers for almost equality
+    inline bool isAlmostEqual(double A, double B = 0.0)
+    {
+        double MaxRelDiff {std::numeric_limits<double>::epsilon()};
+        // compute the difference.
+        double diff = std::abs(A - B);
+        A = std::abs(A);
+        B = std::abs(B);
+        // Find the largest
+        double largest = (B > A) ? B : A;
+        if (diff <= largest * MaxRelDiff) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // cumulative sum in possibly reverse order>
     template <typename T>
     inline T rev_cum_sum(const T& x)

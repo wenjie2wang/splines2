@@ -127,13 +127,6 @@ namespace splines2 {
             // create a copy of this object
             MSpline ms_obj2 { this };
             ms_obj2.set_degree(degree_ - derivs);
-            if (is_expanded_knot_sequence_) {
-                ms_obj2.set_knot_sequence(
-                    knot_sequence_.subvec(
-                        derivs, knot_sequence_.n_elem - derivs - 1
-                        )
-                    );
-            }
             // get basis matrix for (degree - derivs)
             rmat d_mat { ms_obj2.basis(true) };
             // add zero columns

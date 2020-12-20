@@ -41,6 +41,7 @@ namespace splines2 {
         // knot sequence
         rvec knot_sequence_;
         bool is_knot_sequence_latest_ = false;
+        bool is_extended_knot_sequence_ = false;
 
         // index of x relative to internal knots
         uvec x_index_;
@@ -130,6 +131,7 @@ namespace splines2 {
             }
             return out;
         }
+
         inline void update_knot_sequence()
         {
             if (! is_knot_sequence_latest_ || knot_sequence_.n_elem == 0) {
@@ -137,6 +139,49 @@ namespace splines2 {
                 is_knot_sequence_latest_ = true;
             }
         }
+
+        // set (extended) knot sequence
+        inline void set_knot_sequence_(const rvec& knot_sequence)
+        {
+            // check the length of specified knot sequence
+            if (knot_sequence.n_elem < 2 * order_) {
+                throw std::length_error(
+                    "The length of specified knot sequence is too small."
+                    );
+            }
+            unsigned int n_internal_knots {
+                knot_sequence.n_elem - 2 * order_
+            };
+            // sort knot sequence
+            knot_sequence_ = arma::sort(knot_sequence);
+            // get boundary knots
+            boundary_knots_ = arma::zeros(2);
+            boundary_knots_(0) = knot_sequence_(degree_);
+            boundary_knots_(1) = knot_sequence_(knot_sequence_.n_elem - order_);
+            if (isAlmostEqual(boundary_knots_(0), boundary_knots_(1))) {
+                throw std::range_error(
+                    "The specified knot sequence has the same boundary knots."
+                    );
+            }
+            // get internal knots
+            if (n_internal_knots > 0) {
+                internal_knots_ = knot_sequence_.subvec(
+                    order_, order_ + n_internal_knots - 1);
+            } else {
+                internal_knots_ = rvec();
+            }
+            // TODO: allow x outside of boundray and knot_sequence
+            // reference: splines::splineDesign()
+            // internally expand again if they is any x outside of boundary
+            // if (arma::min(x_) < boundary_knots_(0) ||
+            //     arma::max(x_) > boundary_knots_(1)) {
+            //
+            // }
+            // set flags to prevent knot sequence from being updated
+            is_knot_sequence_latest_ = true;
+            is_extended_knot_sequence_ = true;
+        }
+
         // allow x outside of boundary
         // let degree 0 basis take 1 outside boundary
         inline void update_x_index()
@@ -171,14 +216,15 @@ namespace splines2 {
             internal_knots_ { pSplineBase->internal_knots_ },
             boundary_knots_ { pSplineBase->boundary_knots_ },
             degree_ { pSplineBase->degree_  },
-            order_ { pSplineBase->order_ },
-            is_knot_sequence_latest_ { pSplineBase->is_knot_sequence_latest_ },
+            knot_sequence_ { pSplineBase->knot_sequence_ },
+            is_knot_sequence_latest_ {
+                pSplineBase->is_knot_sequence_latest_ },
+            is_extended_knot_sequence_ {
+                pSplineBase->is_extended_knot_sequence_ },
             is_x_index_latest_ { pSplineBase->is_x_index_latest_ },
             is_basis_latest_ { false }
         {
-            update_spline_df();
-            update_knot_sequence();
-            update_x_index();
+            order_ = degree_ + 1;
         }
 
         // constructor with specificied internal_knots
@@ -191,7 +237,6 @@ namespace splines2 {
         {
             clean_knots(internal_knots, boundary_knots);
             order_ = degree_ + 1;
-            update_spline_df();
         }
 
         // constructor with specified df
@@ -222,6 +267,17 @@ namespace splines2 {
             }
         }
 
+        // constructor for a given knot sequence
+        SplineBase(const rvec& x,
+                   const unsigned int degree,
+                   const rvec& knot_sequence)
+        {
+            x_ = x;
+            degree_ = degree;
+            order_ = degree_ + 1;
+            set_knot_sequence_(knot_sequence);
+        }
+
         // function members
         // "setter" functions
         inline SplineBase* set_x(const rvec& x)
@@ -243,7 +299,6 @@ namespace splines2 {
             )
         {
             clean_knots(internal_knots);
-            // update spline df
             update_spline_df();
             is_knot_sequence_latest_ = false;
             is_x_index_latest_ = false;
@@ -260,15 +315,25 @@ namespace splines2 {
             is_basis_latest_ = false;
             return this;
         }
+        inline SplineBase* set_knot_sequence(
+            const rvec& knot_sequence
+            )
+        {
+            set_knot_sequence_(knot_sequence);
+            return this;
+        }
         inline SplineBase* set_degree(
             const unsigned int degree
             )
         {
             degree_ = degree;
             order_ = degree + 1;
-            // update spline df
             update_spline_df();
-            is_knot_sequence_latest_ = false;
+            if (is_extended_knot_sequence_) {
+                set_knot_sequence_(knot_sequence_);
+            } else {
+                is_knot_sequence_latest_ = false;
+            }
             is_basis_latest_ = false;
             return this;
         }
@@ -295,6 +360,11 @@ namespace splines2 {
         {
             return boundary_knots_;
         }
+        inline rvec get_knot_sequence()
+        {
+            update_knot_sequence();
+            return knot_sequence_;
+        }
         inline unsigned int get_degree() const
         {
             return degree_;
@@ -303,8 +373,9 @@ namespace splines2 {
         {
             return order_;
         }
-        inline unsigned int get_spline_df() const
+        inline unsigned int get_spline_df()
         {
+            update_spline_df();
             return spline_df_;
         }
 

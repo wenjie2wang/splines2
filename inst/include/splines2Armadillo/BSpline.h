@@ -131,13 +131,6 @@ namespace splines2 {
             // create a copy of this object
             BSpline bs_obj2 { this };
             bs_obj2.set_degree(degree_ - derivs);
-            if (is_expanded_knot_sequence_) {
-                bs_obj2.set_knot_sequence(
-                    knot_sequence_.subvec(
-                        derivs, knot_sequence_.n_elem - derivs - 1
-                        )
-                    );
-            }
             // get basis matrix for (degree - derivs)
             rmat d_mat { bs_obj2.basis(true) };
             // add zero columns
