@@ -29,13 +29,15 @@
 \method{deriv}{naturalSpline}(expr, derivs = 1L, ...)
 }
 \arguments{
-\item{expr}{Objects of class \code{bSpline2}, \code{ibs}, \code{dbs},
-\code{mSpline}, \code{iSpline}, or \code{cSpline}, etc.}
+\item{expr}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
+\code{iSpline}, \code{cSpline}, \code{bernsteinPoly} or
+\code{naturalSpline} with attributes describing \code{knots},
+\code{degree}, etc.}
 
 \item{derivs}{A positive integer specifying the order of derivatives. By
-default, it is \code{1L} for the first derivative.}
+default, it is \code{1L} for the first derivatives.}
 
-\item{...}{Other arguments that are not used.}
+\item{...}{Optional argument that are not used.}
 }
 \value{
 A numeric matrix of the same dimension with the input \code{expr}.
@@ -53,7 +55,7 @@ supported but not recommended.  For a better performance, argument
 This function is designed for objects produced by this package.  It
 internally extracts necessary specification about the spline/polynomial
 basis matrix from its attributes. Therefore, the function will not work if
-the key attributions are not available after some operations.
+the key attributes are not available after some operations.
 }
 \examples{
 library(splines2)

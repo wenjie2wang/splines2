@@ -33,15 +33,21 @@ null2num0 <- function(x) {
 }
 
 ## check key attributions
-check_attr <- function(x, check_derivs = FALSE,
-                       attrs = c("x", "degree", "knots",
-                                 "Boundary.knots", "intercept"))
+check_attr <- function(x, attrs = c("x", "degree", "knots",
+                                    "Boundary.knots", "intercept"))
 {
-    if (check_derivs) {
-        attrs <- c(attrs, "derivs")
-    }
-    if (any(! attrs %in% names(attributes(x)))) {
-        stop("Key attributions are missing.", call. = FALSE)
+    idx <- ! attrs %in% names(attributes(x))
+    if (any(idx)) {
+        stop(wrapMessages(
+            sprintf("Missing attributes: %s.",
+                    paste(attrs[idx], collapse = ", "))
+        ), call. = FALSE)
     }
     invisible()
+}
+
+## return most of the attributes except x and class
+pred_attr <- function(x, except = c("x", "class", "dimnames")) {
+    out <- attributes(x)
+    out[! names(out) %in% except]
 }

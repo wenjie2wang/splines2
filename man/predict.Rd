@@ -3,8 +3,8 @@
 \name{predict}
 \alias{predict}
 \alias{predict.bSpline2}
-\alias{predict.ibs}
 \alias{predict.dbs}
+\alias{predict.ibs}
 \alias{predict.mSpline}
 \alias{predict.iSpline}
 \alias{predict.cSpline}
@@ -14,9 +14,9 @@
 \usage{
 \method{predict}{bSpline2}(object, newx, ...)
 
-\method{predict}{ibs}(object, newx, ...)
-
 \method{predict}{dbs}(object, newx, ...)
+
+\method{predict}{ibs}(object, newx, ...)
 
 \method{predict}{mSpline}(object, newx, ...)
 
@@ -30,8 +30,9 @@
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, \code{cSpline}, or \code{bernsteinPoly} with attributes
-describing \code{knots}, \code{degree}, etc.}
+\code{iSpline}, \code{cSpline}, \code{bernsteinPoly} or
+\code{naturalSpline} with attributes describing \code{knots},
+\code{degree}, etc.}
 
 \item{newx}{The \code{x} values at which evaluations are required.}
 
@@ -79,12 +80,4 @@ predict(isMat, newX)
 ## for C-spline
 csMat <- cSpline(x, knots = knots, degree = 2)
 predict(csMat, newX)
-}
-\seealso{
-\code{\link{bSpline}} for B-splines;
-\code{\link{ibs}} for integrals of B-splines;
-\code{\link{dbs}} for derivatives of B-splines;
-\code{\link{mSpline}} for M-splines;
-\code{\link{iSpline}} for I-splines;
-\code{\link{cSpline}} for C-splines.
 }
