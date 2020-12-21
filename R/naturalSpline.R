@@ -70,8 +70,8 @@ naturalSpline <- function(x, df = NULL, knots = NULL,
         df <- 0L
     } else {
         df <- as.integer(df)
-        if (df < 0) {
-            stop("'df' must be a nonnegative integer.")
+        if (df < 2) {
+            stop("'df' must be >= 2.")
         }
     }
     knots <- null2num0(knots)

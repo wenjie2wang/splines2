@@ -41,7 +41,7 @@ namespace splines2 {
         // the results depend on knot sequence only
         inline void set_null_colvecs(bool standardize = true)
         {
-            null_colvecs_ = arma::zeros<arma::mat>(spline_df_, spline_df_ - 2);
+            null_colvecs_ = arma::zeros<arma::mat>(spline_df_ + 2, spline_df_);
             size_t n_knots { internal_knots_.n_elem };
             if (n_knots == 0) {
                 // without any internal knot
@@ -70,18 +70,18 @@ namespace splines2 {
                 // with at least two internal knots
                 for (size_t i {0}; i < 3; ++i) {
                     null_colvecs_(i, 0) = 1.0;
-                    null_colvecs_(spline_df_ - i - 1, 1) = 1.0;
+                    null_colvecs_(spline_df_ - i + 1, 1) = 1.0;
                 }
                 null_colvecs_(1, 2) = 1.0;
                 null_colvecs_(2, 2) = 1.0 +
                     (internal_knots_(1) - boundary_knots_(0)) /
                     (internal_knots_(0) - boundary_knots_(0));
-                null_colvecs_(spline_df_ - 3, 3) = 1.0 +
+                null_colvecs_(spline_df_ - 1, 3) = 1.0 +
                     (boundary_knots_(1) - internal_knots_(n_knots - 2)) /
                     (boundary_knots_(1) - internal_knots_(n_knots - 1));
-                null_colvecs_(spline_df_ - 2, 3) = 1.0;
-                if (spline_df_ > 6) {
-                    for (size_t j {3}; j < spline_df_ - 3; ++j) {
+                null_colvecs_(spline_df_, 3) = 1.0;
+                if (spline_df_ > 4) {
+                    for (size_t j {3}; j < spline_df_ - 1; ++j) {
                         null_colvecs_(j, j + 1) = 1.0;
                     }
                 }
@@ -95,6 +95,13 @@ namespace splines2 {
             }
         }
 
+        // compute spline df
+        inline void update_spline_df()
+        {
+            spline_df_ = internal_knots_.n_elem + 2;
+        }
+
+
     public:
         // the default constructor
         NaturalSpline() {}
@@ -105,6 +112,7 @@ namespace splines2 {
         {
             degree_ = 3;
             order_ = 4;
+            update_spline_df();
             this->set_null_colvecs();
         }
 

@@ -112,7 +112,7 @@ namespace splines2 {
         }
 
         // compute spline df
-        inline void update_spline_df()
+        inline virtual void update_spline_df()
         {
             spline_df_ = internal_knots_.n_elem + order_;
         }
