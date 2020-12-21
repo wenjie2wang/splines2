@@ -107,6 +107,43 @@ ibp3 <- function(x) {
 res3 <- bernsteinPoly(x, degree = 3, intercept = TRUE, integral = TRUE)
 expect_equivalent(ibp3(x), res3)
 
+## for given boundary knots
+a <- - 1.23
+b <- 2.68
+get_x <- function(x, a, b) {
+    (x - a) / (b - a)
+}
+xx <- seq.int(a, b, by = 0.01)
+
+## basis
+res0 <- bp3(get_x(xx, a, b))
+res1 <- bernsteinPoly(xx, degree = 3, intercept = TRUE,
+                      Boundary.knots = c(a, b))
+expect_equivalent(res0, res1)
+
+## first derivatives
+res0 <- dbp3(get_x(xx, a, b)) / (b - a)
+res1 <- bernsteinPoly(xx, degree = 3, intercept = TRUE,
+                      Boundary.knots = c(a, b), derivs = 1)
+expect_equivalent(res0, res1)
+
+## second derivatives
+res0 <- ddbp3(get_x(xx, a, b)) / (b - a) ^ 2
+res1 <- bernsteinPoly(xx, degree = 3, intercept = TRUE,
+                      Boundary.knots = c(a, b), derivs = 2)
+expect_equivalent(res0, res1)
+
+## integral
+res0 <- ibp3(get_x(xx, a, b)) * (b - a)
+res1 <- bernsteinPoly(xx, degree = 3, intercept = TRUE,
+                      Boundary.knots = c(a, b), integral = TRUE)
+expect_equivalent(res0, res1)
+
+## for named x
+named_x <- seq.int(- 1, 1, 0.1)
+names(named_x) <- paste("x =", sprintf("%.1f", named_x))
+res3 <- bernsteinPoly(named_x, degree = 5)
+expect_equal(row.names(res3), names(named_x))
 
 ### 2. edge cases
 ## NA is only allowed in x

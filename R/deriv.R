@@ -97,15 +97,10 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.mSpline <- function(expr, derivs = 1L, ...)
 {
-    derivs0 <- attr(expr, "derivs")
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "derivs", "integral", "periodic",
                        "knots", "Boundary.knots", "intercept"))
-    attr(expr, "derivs") <- if (is.null(derivs0)) {
-                                derivs
-                            } else {
-                                derivs0 + derivs
-                            }
+    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
     do.call(mSpline, attributes(expr))
 }
 
@@ -153,12 +148,7 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
         do.call(mSpline, attributes(expr))
     } else {
         ## else scaled
-        derivs0 <- attr(expr, "derivs")
-        attr(expr, "derivs") <- if (is.null(derivs0)) {
-                                    derivs
-                                } else {
-                                    derivs0 + derivs
-                                }
+        attr(expr, "derivs") <- attr(expr, "derivs") + derivs
         do.call(cSpline, attributes(expr))
     }
 }

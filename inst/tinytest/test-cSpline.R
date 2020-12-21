@@ -166,3 +166,6 @@ expect_warning(cSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)))
 expect_warning(cSpline(c(x, 10), knots = knots, degree = 3,
                        Boundary.knots = c(0, 1)))
+
+## error if negative derivs
+expect_error(cSpline(x, df = 5, degree = 3, derivs = - 1))
