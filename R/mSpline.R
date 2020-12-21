@@ -94,7 +94,9 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     } else {
         df <- as.integer(df)
         if (df < 0) {
-            stop("'df' must be a nonnegative integer.")
+            stop("The 'df' must be a nonnegative integer.")
+        } else if (periodic && df < degree) {
+            stop("The 'df' must be >= 'degree' for periodic spline basis.")
         }
     }
     knots <- null2num0(knots)
