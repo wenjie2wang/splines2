@@ -106,8 +106,10 @@ namespace splines2 {
             if (internal_knots.n_elem > 0) {
                 rvec uni_internal_knots { arma::unique(internal_knots) };
                 // check internal knots are inside of boundary knots
-                double min_int_knots { arma::min(internal_knots) };
-                double max_int_knots { arma::max(internal_knots) };
+                double min_int_knots { uni_internal_knots(0) };
+                double max_int_knots {
+                    uni_internal_knots(uni_internal_knots.n_elem - 1)
+                };
                 if (boundary_knots_[0] >= min_int_knots ||
                     boundary_knots_[1] <= max_int_knots) {
                     throw std::range_error(
@@ -237,6 +239,7 @@ namespace splines2 {
             prob_vec = prob_vec.subvec(1, n_internal_knots);
             clean_knots(rvec(), boundary_knots);
             // get quantiles of x in range
+            set_x_in_range();
             rvec internal_knots { arma_quantile(x_in_range_, prob_vec) };
             clean_knots(internal_knots);
         }
