@@ -42,7 +42,7 @@ expect_equivalent(mSpline(x, df = 6, intercept = TRUE),
 msMat0a <- mSpline(x, degree = 0, intercept = TRUE)
 msMat0b <- mSpline(x, knots = knots, degree = 1)
 msMat0b2 <- mSpline(x, knots = knots, degree = 1, derivs = 1, integral = TRUE)
-expect_equivalent(msMat0b, msMat0b2)
+isMat0a <- mSpline(x, knots = knots, degree = 1, integral = TRUE)
 msMat0c <- mSpline(x, knots = knots, degree = 1, intercept = TRUE)
 msMat0d <- mSpline(x, knots = knots, degree = 2)
 msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
@@ -54,6 +54,8 @@ msMat0h <- mSpline(0.1, knots = knots, degree = 2,
                    Boundary.knots = c(0, 1), derivs = 3)
 expect_true(isNumMatrix(msMat0a, 14L, 1L))
 expect_equal(sum(is.na(msMat0b)), 12L) # keep NA's as is
+expect_equivalent(msMat0b, msMat0b2)
+expect_equivalent(deriv(isMat0a), msMat0b2)
 expect_true(isNumMatrix(msMat0b, 14L, 4L))
 expect_true(isNumMatrix(msMat0c, 14L, 5L))
 expect_true(isNumMatrix(msMat0d, 14L, 5L))

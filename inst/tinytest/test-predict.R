@@ -6,6 +6,7 @@ msMat <- mSpline(x)
 isMat <- iSpline(x)
 csMat <- cSpline(x)
 bpMat <- bernsteinPoly(x)
+nsMat <- naturalSpline(x, df = 3)
 
 ## with newx
 expect_equivalent(predict(bsMat, 1), bsMat[3L, , drop = FALSE])
@@ -15,6 +16,7 @@ expect_equivalent(predict(msMat, 1), msMat[3L, , drop = FALSE])
 expect_equivalent(predict(isMat, 1), isMat[3L, , drop = FALSE])
 expect_equivalent(predict(csMat, 1), csMat[3L, , drop = FALSE])
 expect_equivalent(predict(bpMat, 1), bpMat[3L, , drop = FALSE])
+expect_equivalent(predict(nsMat, 1), nsMat[3L, , drop = FALSE])
 
 ## without newx
 expect_equivalent(predict(bsMat), bsMat)
@@ -24,3 +26,4 @@ expect_equivalent(predict(msMat), msMat)
 expect_equivalent(predict(isMat), isMat)
 expect_equivalent(predict(csMat), csMat)
 expect_equivalent(predict(bpMat), bpMat)
+expect_equivalent(predict(nsMat), nsMat)
