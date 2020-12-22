@@ -14,13 +14,16 @@ knitr::opts_chunk$set(comment = "")
 options(width = 100, digits = 5)
 ```
 
-The R package **splines2** provides functions to construct basis matrix of
+The R package **splines2** (version `r packageVersion("splines2")`) provides
+functions to construct basis matrix of
 
 - B-splines
 - M-splines
 - I-splines
 - convex splines (C-splines)
+- periodic M-splines
 - generalized Bernstein polynomials
+- nonnegative natural cubic splines
 - their integrals (except C-splines) and derivatives of given order by
   close-form recursive formulas
 
@@ -63,14 +66,12 @@ Since v0.3.0, the implementation of the main functions has been rewritten in C++
 with the help of the **Rcpp** and **RcppArmadillo** package. The computational
 performance has thus been boosted.
 
-Some benchmarks with the **splines** package
-(version `r packageVersion("splines")`)
-are provided for reference as follows:
+Some benchmarks are provided for reference as follows:
 
 ```{r bench-setup}
 library(microbenchmark)
-library(splines)
-library(splines2)
+library(splines); packageVersion("splines")
+library(splines2); packageVersion("splines2")
 
 x <- seq.int(0, 1, 0.001)
 degree <- 3
@@ -144,6 +145,51 @@ The function `ibs::ibs()` returns the integrated B-splines instead of the
 integrals of spline bases.  So we applied the same coefficients to the bases
 from `splines2::ibs()` for equivalent results, which was still much faster than
 `ibs::ibs()`.
+
+
+For natural cubic splines (based on B-splines), `splines::ns()` uses QR
+decomposition to find the null space of the second derivatives of B-spline basis
+at boundary knots, while `splines2::naturalSpline()` utilizes the close-form
+null space that can be derived from the recursive formulas of B-splines, which
+produces nonnegative bases (within boundary) and is more computationally
+efficient.
+
+```{r bench-ns}
+microbenchmark(
+    "splines::ns" = ns(x, knots = knots, intercept = TRUE,
+                       Boundary.knots = b_knots),
+    "splines2::naturalSpline" = naturalSpline(
+        x, knots = knots, intercept = TRUE, Boundary.knots = b_knots
+    ),
+    times = 1e3
+)
+```
+
+The function `mSpline()` produces periodic spline basis (based on M-splines)
+when `periodic = TRUE` is specified.  The `splines::periodicSpline()` returns a
+periodic interpolation spline (based on B-splines) instead of basis matrix.
+So we performed a comparison with package **pbs**
+(version `r packageVersion("pbs")`), where the function `pbs::pbs()` produces a
+basis matrix of periodic B-spline by using `splines::spline.des()` (a wrapper
+function of `splines::splineDesign()`).
+
+```{r bench-periodic}
+microbenchmark(
+    "pbs::pbs" = pbs::pbs(x, knots = knots, degree = degree, intercept = TRUE,
+                          Boundary.knots = b_knots, periodic = TRUE),
+    "splines2::naturalSpline" = mSpline(
+        x, knots = knots, degree = degree, intercept = TRUE,
+        Boundary.knots = b_knots, periodic = TRUE
+    ),
+    times = 1e3
+)
+```
+
+<details><summary>Session Information for Benchmarks</summary>
+```{r session-info}
+sessionInfo()
+```
+</details>
 
 
 ## License
