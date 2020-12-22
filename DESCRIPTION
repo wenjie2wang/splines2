@@ -1,6 +1,6 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
-Version: 0.3.2.9002
+Version: 0.4.0.9000
 Date: 2020-12-22
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
@@ -10,9 +10,12 @@ Authors@R: c(
     person(given = "Jun", family = "Yan", role = "aut",
            comment = c(ORCID = "0000-0003-4401-7296"))
     )
-Description: Constructs B-splines and its integral, M-splines
-    and its integral (I-splines), convex splines (C-splines),
-    generalized Bernstein polynomials, and their derivatives.
+Description: Constructs basis matrix of B-splines, M-splines
+    I-splines, convex splines (C-splines), periodic M-splines,
+    nonnegative natural cubic splines,
+    generalized Bernstein polynomials, and their integrals
+    (except C-splines) and derivatives of given order
+    by close-form recursive formulas.
     It also contains a C++ head-only library integrated with Rcpp.
     See De Boor (1978) <doi:10.1002/zamm.19800600129>,
     Ramsay (1988) <doi:10.1214/ss/1177012761>, and
