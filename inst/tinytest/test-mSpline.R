@@ -41,6 +41,8 @@ expect_equivalent(mSpline(x, df = 6, intercept = TRUE),
 ## for testing splines with degree zero
 msMat0a <- mSpline(x, degree = 0, intercept = TRUE)
 msMat0b <- mSpline(x, knots = knots, degree = 1)
+msMat0b2 <- mSpline(x, knots = knots, degree = 1, derivs = 1, integral = TRUE)
+expect_equivalent(msMat0b, msMat0b2)
 msMat0c <- mSpline(x, knots = knots, degree = 1, intercept = TRUE)
 msMat0d <- mSpline(x, knots = knots, degree = 2)
 msMat0e <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)

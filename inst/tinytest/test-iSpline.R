@@ -132,3 +132,6 @@ expect_warning(iSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)))
 expect_warning(iSpline(c(x, 10), knots = knots, degree = 3,
                        Boundary.knots = c(0, 1)))
+
+## error for negative derivs
+expect_error(iSpline(x, derivs = - 1))

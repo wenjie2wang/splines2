@@ -42,6 +42,10 @@ expect_equivalent(nsMat3, deriv(nsMat0, 2))
 expect_true(all(abs(predict(nsMat3, 0)) < 1e-12))
 expect_true(all(abs(predict(nsMat3, 1)) < 1e-12))
 
+## keep names of x
+names(x) <- sample(LETTERS, length(x), replace = TRUE)
+expect_equal(rownames(naturalSpline(x, df = 3)), names(x))
+
 ### 2. checking inputs
 x <- c(NA, seq.int(0, 0.5, 0.1), NA, seq.int(0.6, 1, 0.1), NA)
 knots <- c(0.25, 0.5, 0.8)
@@ -50,3 +54,6 @@ b_knots <- c(0, 1)
 
 ## warning for having x outside of boundary
 expect_warning(naturalSpline(x2, df = 5, Boundary.knots = b_knots))
+expect_error(naturalSpline(x2, df = 5, derivs = - 1))
+expect_error(naturalSpline(x2, df = 1))
+expect_error(naturalSpline(rep(NA, 10), df = 2))
