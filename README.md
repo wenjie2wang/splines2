@@ -206,7 +206,7 @@ comparison with package **pbs** (version 1.1), where the function
 microbenchmark(
     "pbs::pbs" = pbs::pbs(x, knots = knots, degree = degree, intercept = TRUE,
                           Boundary.knots = b_knots, periodic = TRUE),
-    "splines2::naturalSpline" = mSpline(
+    "splines2::mSpline" = mSpline(
         x, knots = knots, degree = degree, intercept = TRUE,
         Boundary.knots = b_knots, periodic = TRUE
     ),
