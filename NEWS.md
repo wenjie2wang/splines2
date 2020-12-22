@@ -1,3 +1,19 @@
+# splines2 0.4.0
+
+## New features
+
+* Added function `naturalSpline` providing implementation of nonnegative natural
+  cubic splines.
+* Added argument `periodic` to function `mSpline` for periodic M-spline basis.
+* Added argument `integral` to function `mSpline` for integral of each M-spline
+  basis or periodic M-spline basis.
+* Added `deriv`, `predict`, and `print` method for `naturalSpline` class object.
+
+## Minor changes
+
+* Updated the `deriv` method for `mSpline` class object for periodic M-splines.
+
+
 # splines2 0.3.1
 
 ## Minor changes
@@ -10,7 +26,8 @@
 
 ## New features
 
-* Added generalized Bernstein polynomials in function `BersteinPoly`.
+* Added function `BersteinPoly` providing implementation of generalized
+  Bernstein polynomials.
 * Added C++ interface that can be easily integrated with **Rcpp**.
 
 ## Major changes
