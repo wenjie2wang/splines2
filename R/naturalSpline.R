@@ -23,7 +23,7 @@
 ##' It is an implementation of the natural spline basis based on B-spline basis,
 ##' which utilizes the close-form null space that can be derived from the
 ##' recursive formulas of B-splines.  The constructed spline bases are intended
-##' to be non-negative (within boundary) with second derivatives being zeros at
+##' to be nonnegative (within boundary) with second derivatives being zeros at
 ##' boundary knots.
 ##'
 ##' A similar implementation is provided by \code{splines::ns}, which uses QR
@@ -40,7 +40,7 @@
 ##'     \code{x} outside of the boundary.  Thus, \code{df} must be greater than
 ##'     or equal to \code{2}.  If internal knots are specified via \code{knots},
 ##'     the specified \code{df} will be ignored.
-##' @param derivs A non-negative integer specifying the order of derivatives of
+##' @param derivs A nonnegative integer specifying the order of derivatives of
 ##'     natural splines. The default value is \code{0L} for the spline bases.
 ##' @param integral A logical value.  If \code{TRUE}, the integrals of the
 ##'     natural spline bases will be returned.  The default value is

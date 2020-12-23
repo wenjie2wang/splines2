@@ -16,8 +16,8 @@ construct basis matrix of
 -   I-splines
 -   convex splines (C-splines)
 -   periodic M-splines
+-   natural cubic splines
 -   generalized Bernstein polynomials
--   nonnegative natural cubic splines
 -   their integrals (except C-splines) and derivatives of given order by
     close-form recursive formulas
 
@@ -113,10 +113,10 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                      expr     min      lq   mean  median     uq    max neval cld
-               splines::bs 333.749 348.617 388.90 358.440 377.56 2498.6  1000   c
-     splines::splineDesign 203.887 208.859 237.79 213.392 225.03 2368.5  1000  b 
-         splines2::bSpline  84.793  91.834 112.42  95.251 101.62 2223.7  1000 a  
+                      expr     min      lq   mean  median      uq    max neval cld
+               splines::bs 335.683 344.499 382.18 352.441 368.265 2531.3  1000   c
+     splines::splineDesign 206.776 210.522 233.81 213.150 221.888 2340.3  1000  b 
+         splines2::bSpline  85.427  91.076 111.01  94.108  96.919 2260.3  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is more than 2x
@@ -137,8 +137,8 @@ microbenchmark(
 
     Unit: microseconds
                       expr     min      lq   mean median     uq    max neval cld
-     splines::splineDesign 274.122 280.075 321.67 287.29 303.82 4302.5  1000   b
-             splines2::dbs  94.824  99.975 123.74 103.18 110.19 2436.1  1000  a 
+     splines::splineDesign 276.253 279.967 319.62 285.29 299.21 5047.1  1000   b
+             splines2::dbs  94.798  98.338 121.30 101.53 106.29 2571.0  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -162,8 +162,8 @@ microbenchmark(
 
     Unit: microseconds
               expr     min      lq    mean  median      uq      max neval cld
-          ibs::ibs 2384.52 2682.02 3250.42 3146.05 3365.27 113546.3  1000   b
-     splines2::ibs  264.84  326.24  433.53  349.99  361.85   7268.1  1000  a 
+          ibs::ibs 2366.11 2632.01 3195.60 3116.11 3338.40 115479.6  1000   b
+     splines2::ibs  269.92  312.98  339.78  345.56  354.21   1246.3  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline bases. So we applied the same coefficients to
@@ -173,9 +173,9 @@ much faster than `ibs::ibs()`.
 For natural cubic splines (based on B-splines), `splines::ns()` uses QR
 decomposition to find the null space of the second derivatives of
 B-spline basis at boundary knots, while `splines2::naturalSpline()`
-utilizes the close-form null space that can be derived from the
-recursive formulas of B-splines, which produces nonnegative bases
-(within boundary) and is more computationally efficient.
+utilizes the close-form null space derived from the second derivatives
+of cubic B-splines, which produces nonnegative bases (within boundary)
+and is more computationally efficient.
 
 ``` r
 microbenchmark(
@@ -190,8 +190,8 @@ microbenchmark(
 
     Unit: microseconds
                         expr    min     lq   mean median     uq    max neval cld
-                 splines::ns 617.65 641.41 725.34 656.38 681.46 3543.4  1000   b
-     splines2::naturalSpline 130.01 139.77 167.25 149.88 156.82 2760.1  1000  a 
+                 splines::ns 622.45 635.51 716.01 646.20 662.50 3544.9  1000   b
+     splines2::naturalSpline 130.89 139.24 166.53 149.63 153.49 2826.6  1000  a 
 
 The function `mSpline()` produces periodic spline basis (based on
 M-splines) when `periodic = TRUE` is specified. The
@@ -215,9 +215,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                        expr    min     lq   mean median     uq    max neval cld
-                    pbs::pbs 427.04 440.99 501.47 452.21 469.57 3805.5  1000   b
-     splines2::naturalSpline 121.99 130.05 154.12 139.06 144.34 3019.3  1000  a 
+                  expr    min     lq   mean median     uq    max neval cld
+              pbs::pbs 429.31 439.80 498.89 448.09 460.72 3687.4  1000   b
+     splines2::mSpline 122.63 129.48 153.46 138.70 143.17 2963.1  1000  a 
 
 <details>
 <summary>

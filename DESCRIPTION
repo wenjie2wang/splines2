@@ -12,10 +12,9 @@ Authors@R: c(
     )
 Description: Constructs basis matrix of B-splines, M-splines
     I-splines, convex splines (C-splines), periodic M-splines,
-    nonnegative natural cubic splines,
-    generalized Bernstein polynomials, and their integrals
-    (except C-splines) and derivatives of given order
-    by close-form recursive formulas.
+    natural cubic splines, generalized Bernstein polynomials,
+    and their integrals (except C-splines) and derivatives
+    of given order by close-form recursive formulas.
     It also contains a C++ head-only library integrated with Rcpp.
     See De Boor (1978) <doi:10.1002/zamm.19800600129>,
     Ramsay (1988) <doi:10.1214/ss/1177012761>, and

@@ -41,7 +41,7 @@ By default, they are the range of the non-\code{NA} data.  If both
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
 
-\item{derivs}{A non-negative integer specifying the order of derivatives of
+\item{derivs}{A nonnegative integer specifying the order of derivatives of
 natural splines. The default value is \code{0L} for the spline bases.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the integrals of the
@@ -65,7 +65,7 @@ corresponding integrals, or derivatives of given order.
 It is an implementation of the natural spline basis based on B-spline basis,
 which utilizes the close-form null space that can be derived from the
 recursive formulas of B-splines.  The constructed spline bases are intended
-to be non-negative (within boundary) with second derivatives being zeros at
+to be nonnegative (within boundary) with second derivatives being zeros at
 boundary knots.
 
 A similar implementation is provided by \code{splines::ns}, which uses QR

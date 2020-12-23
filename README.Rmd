@@ -22,8 +22,8 @@ functions to construct basis matrix of
 - I-splines
 - convex splines (C-splines)
 - periodic M-splines
+- natural cubic splines
 - generalized Bernstein polynomials
-- nonnegative natural cubic splines
 - their integrals (except C-splines) and derivatives of given order by
   close-form recursive formulas
 
@@ -150,7 +150,7 @@ from `splines2::ibs()` for equivalent results, which was still much faster than
 For natural cubic splines (based on B-splines), `splines::ns()` uses QR
 decomposition to find the null space of the second derivatives of B-spline basis
 at boundary knots, while `splines2::naturalSpline()` utilizes the close-form
-null space that can be derived from the recursive formulas of B-splines, which
+null space derived from the second derivatives of cubic B-splines, which
 produces nonnegative bases (within boundary) and is more computationally
 efficient.
 
