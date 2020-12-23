@@ -113,22 +113,22 @@ In addition, we may set and get the spline specifications through the following
 
 ```C++
 // setter functions
-void set_x(const vec&)
-void set_x(const double)
-void set_internal_knots(const vec&)
-void set_boundary_knots(const vec&)
-void set_knot_sequence(const vec& knot_sequence)
-void set_degree(const unsigned int)
-void set_order(const unsigned int)
+SplineBase* set_x(const vec&);
+SplineBase* set_x(const double);
+SplineBase* set_internal_knots(const vec&);
+SplineBase* set_boundary_knots(const vec&);
+SplineBase* set_knot_sequence(const vec&);
+SplineBase* set_degree(const unsigned int);
+SplineBase* set_order(const unsigned int);
 
 // getter functions
-vec get_x()
-vec get_internal_knots()
-vec get_boundary_knots()
-vec get_knot_sequence()
-unsigned int get_degree()
-unsigned int get_order()
-unsigned int get_spline_df()
+vec get_x();
+vec get_internal_knots();
+vec get_boundary_knots();
+vec get_knot_sequence();
+unsigned int get_degree();
+unsigned int get_order();
+unsigned int get_spline_df();
 ```
 
 The *setter* function returns a pointer to the current object so that the
@@ -190,17 +190,17 @@ following *setter* and *getter* functions, respectively.
 
 ```C++
 // setter functions
-void set_x(const vec&)
-void set_x(const double)
-void set_degree(const unsigned int)
-void set_order(const unsigned int)
-void set_boundary_knots(const vec&)
+SplineBase* set_x(const vec&);
+SplineBase* set_x(const double);
+SplineBase* set_degree(const unsigned int);
+SplineBase* set_order(const unsigned int);
+SplineBase* set_boundary_knots(const vec&);
 
 // getter functions
-vec get_x()
-unsigned int get_degree()
-unsigned int get_order()
-vec get_boundary_knots()
+vec get_x();
+unsigned int get_degree();
+unsigned int get_order();
+vec get_boundary_knots();
 ```
 
 The *setter* function also returns a pointer to the current object.

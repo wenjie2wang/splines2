@@ -23,6 +23,8 @@
 ##' \item M-splines
 ##' \item I-splines
 ##' \item convex splines (C-splines)
+##' \item periodic M-splines
+##' \item natural cubic splines
 ##' \item generalized Bernstein polynomials
 ##' \item their integrals (except C-splines) and derivatives of given order by
 ##' close-form recursive formulas
