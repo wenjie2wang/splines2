@@ -171,13 +171,14 @@ namespace splines2 {
             BSpline bs_obj2 { this };
             bs_obj2.set_degree(degree_ + 1);
             rmat i_mat { bs_obj2.basis(false) };
-            // make sure knot sequence and x index are latest
-            update_knot_sequence();
+            rvec knot_sequence_ord { bs_obj2.get_knot_sequence() };
+            // make sure x index are latest
             update_x_index();
             // compute t_{i+k+1} - t_{i}
             arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
             for (size_t j { 0 }; j < numer1.n_elem; ++j) {
-                numer1(j) = knot_sequence_(j + order_) - knot_sequence_(j);
+                numer1(j) = knot_sequence_ord(j + order_ + 1) -
+                    knot_sequence_ord(j + 1);
             }
             // for each row of i_mat
             for (size_t i {0}; i < x_.n_elem; ++i) {

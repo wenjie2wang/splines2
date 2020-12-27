@@ -174,7 +174,7 @@ namespace splines2 {
             rvec knot_sequence_ord { ms_obj2.get_knot_sequence() };
             // make sure x index is latest
             update_x_index();
-            // compute t_{i+k+1} - t_{i}
+            // compute t_{i+k+2} - t_{i}
             arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
             for (size_t j { 0 }; j < numer1.n_elem; ++j) {
                 numer1(j) = knot_sequence_ord(j + order_ + 2) -
