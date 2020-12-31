@@ -239,19 +239,19 @@ stopifnot(is_equivalent(msMat, deriv(deriv(csMat2))))
 
 ## Generalized Bernstein Polynomials
 
-The Bernstein polynomials has also been applied to shape-constrained regression
+The Bernstein polynomials have also been applied to shape-constrained regression
 analysis [@wang2012csda].  The $i$-th basis of the generalized Bernstein
 polynomials of degree $n$ over $[a, b]$ is defined as follows:
 $$
-B_i^n(x)=\frac{1}{(b-a)^n}{n\choose i}(x-a)^i (b-x)^{n-i},~0\le i\le n,
+B_i^n(x)=\frac{1}{(b-a)^n}{n\choose i}(x-a)^i (b-x)^{n-i},~i\in\{0,\ldots,n\},
 $$
 where $a\le x\le b$.
-Obviously, it reduces to Bernstein polynomials defined over $[0, 1]$ when $a =
-0$ and $b = 1$.
+Obviously, it reduces to regular Bernstein polynomials defined over $[0, 1]$
+when $a = 0$ and $b = 1$.
 
 We may obtain the basis matrix of the generalized using the function
-`bernsteinPoly()`.  For example, the Bernstein polynomials of degree 4 over [0,
-1] and is generated as follows:
+`bernsteinPoly()`.  For example, the Bernstein polynomials of degree 4 over
+$[0, 1]$ and is generated as follows:
 
 ```{r bp-1, fig.cap = "Bernstein polynomials of degree 4 over [0, 1] (left) and the generalized version over [- 1, 1] (right)."}
 x1 <- seq.int(0, 1, 0.01)
