@@ -52,8 +52,7 @@ knots <- c(0.25, 0.5, 0.8)
 x2 <- c(- 1, 2, x)
 b_knots <- c(0, 1)
 
-## warning for having x outside of boundary
-expect_warning(naturalSpline(x2, df = 5, Boundary.knots = b_knots))
+## expect errors
 expect_error(naturalSpline(x2, df = 5, derivs = - 1))
 expect_error(naturalSpline(x2, df = 1))
 expect_error(naturalSpline(rep(NA, 10), df = 2))

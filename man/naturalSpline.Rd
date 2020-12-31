@@ -44,9 +44,9 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
 natural splines. The default value is \code{0L} for the spline bases.}
 
-\item{integral}{A logical value.  If \code{TRUE}, the integrals of the
-natural spline bases will be returned.  The default value is
-\code{FALSE}.}
+\item{integral}{A logical value.  The default value is \code{FALSE}.  If
+\code{TRUE}, this function will return the integrated natural splines
+from the left boundary knot.}
 
 \item{...}{Optional arguments that are not used.}
 }
@@ -59,14 +59,16 @@ A numeric matrix with \code{length(x)} rows and \code{df}
 }
 \description{
 Generates the nonnegative natural cubic spline basis matrix, the
-corresponding integrals, or derivatives of given order.
+corresponding integrals (from the left boundary knot), or derivatives of
+given order.  Each basis is assumed to follow a linear trend for \code{x}
+outside of boundary.
 }
 \details{
 It is an implementation of the natural spline basis based on B-spline basis,
 which utilizes the close-form null space that can be derived from the
-recursive formulas of B-splines.  The constructed spline bases are intended
-to be nonnegative (within boundary) with second derivatives being zeros at
-boundary knots.
+recursive formula for the second derivatives of B-splines.  The constructed
+spline bases are intended to be nonnegative within boundary with second
+derivatives being zeros at boundary knots.
 
 A similar implementation is provided by \code{splines::ns}, which uses QR
 decomposition to find the null space of the second derivatives of B-spline
