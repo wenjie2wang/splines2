@@ -33,6 +33,11 @@ namespace splines2 {
     protected:
         rmat null_colvecs_;
 
+        // indices of x placed outside of boundary (left/right)
+        bool is_x_outside_latest_ = false;
+        uvec x_outside_left_;
+        uvec x_outside_right_;
+
         using SplineBase::set_degree;
         using SplineBase::set_order;
 
@@ -95,6 +100,16 @@ namespace splines2 {
             }
         }
 
+        // update x index for outside
+        inline void update_x_outside()
+        {
+            if (! is_x_outside_latest_) {
+                x_outside_left_ = arma::find(x_ < boundary_knots_(0));
+                x_outside_right_ = arma::find(x_ > boundary_knots_(1));
+                is_x_outside_latest_ = true;
+            }
+        }
+
         // compute spline df
         inline void update_spline_df()
         {
@@ -114,6 +129,7 @@ namespace splines2 {
             order_ = 4;
             update_spline_df();
             this->set_null_colvecs();
+            update_x_outside();
         }
 
         // constructor with specificied internal_knots
@@ -126,6 +142,7 @@ namespace splines2 {
             order_ = 4;
             clean_knots(internal_knots, boundary_knots);
             update_spline_df();
+            update_x_outside();
         }
 
         // constructor with specified df
@@ -154,6 +171,7 @@ namespace splines2 {
                 rvec internal_knots { arma_quantile(x_inside, prob_vec) };
                 clean_knots(internal_knots);
             }
+            update_x_outside();
         }
 
         // function members
@@ -176,7 +194,37 @@ namespace splines2 {
             }
             this->set_null_colvecs();
             BSpline bs_obj { this };
-            spline_basis_ = bs_obj.basis(true) * null_colvecs_;
+            rmat bsMat { bs_obj.basis(true) };
+            // precess x outside of boundary
+            update_x_outside();
+            if (x_outside_left_.n_elem > 0 || x_outside_right_.n_elem > 0) {
+                BSpline bs_tmp;
+                bs_tmp.set_degree(3);
+                bs_tmp.set_internal_knots(internal_knots_);
+                bs_tmp.set_boundary_knots(boundary_knots_);
+                if (x_outside_left_.n_elem > 0) {
+                    bs_tmp.set_x(boundary_knots_(0));
+                    rmat tt1 { bs_tmp.basis(true) };
+                    rmat tt2 { bs_tmp.derivative(true) };
+                    for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
+                        size_t idx { x_outside_left_(k) };
+                        bsMat.row(idx) = tt1 +
+                            tt2 * (x_(idx) - boundary_knots_(0));
+                    }
+                }
+                if (x_outside_right_.n_elem > 0) {
+                    bs_tmp.set_x(boundary_knots_(1));
+                    rmat tt1 { bs_tmp.basis(true) };
+                    rmat tt2 { bs_tmp.derivative(true) };
+                    for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
+                        size_t idx { x_outside_right_(k) };
+                        bsMat.row(idx) = tt1 +
+                            tt2 * (x_(idx) - boundary_knots_(1));
+                    }
+                }
+            }
+            // apply null space
+            spline_basis_ = bsMat * null_colvecs_;
             is_basis_latest_ = true;
             if (complete_basis) {
                 return spline_basis_;
@@ -190,7 +238,52 @@ namespace splines2 {
         {
             this->set_null_colvecs();
             BSpline bs_obj { this };
-            rmat out { bs_obj.derivative(derivs, true) * null_colvecs_ };
+            rmat bsMat { bs_obj.derivative(derivs, true) };
+            // precess x outside of boundary
+            update_x_outside();
+            if (x_outside_left_.n_elem > 0 || x_outside_right_.n_elem > 0) {
+                if (derivs > 1) {
+                    arma::rowvec zero_row {
+                        arma::zeros<arma::rowvec>(bsMat.n_cols)
+                    };
+                    if (x_outside_left_.n_elem > 0) {
+                        for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
+                            size_t idx { x_outside_left_(k) };
+                            bsMat.row(idx) = zero_row;
+                        }
+                    }
+                    if (x_outside_right_.n_elem > 0) {
+                        for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
+                            size_t idx { x_outside_right_(k) };
+                            bsMat.row(idx) = zero_row;
+                        }
+                    }
+                } else {
+                    // derivs = 1
+                    BSpline bs_tmp;
+                    bs_tmp.set_degree(3);
+                    bs_tmp.set_internal_knots(internal_knots_);
+                    bs_tmp.set_boundary_knots(boundary_knots_);
+                    if (x_outside_left_.n_elem > 0) {
+                        bs_tmp.set_x(boundary_knots_(0));
+                        rmat tt2 { bs_tmp.derivative(true) };
+                        for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
+                            size_t idx { x_outside_left_(k) };
+                            bsMat.row(idx) = tt2;
+                        }
+                    }
+                    if (x_outside_right_.n_elem > 0) {
+                        bs_tmp.set_x(boundary_knots_(1));
+                        rmat tt2 { bs_tmp.derivative(true) };
+                        for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
+                            size_t idx { x_outside_right_(k) };
+                            bsMat.row(idx) = tt2;
+                        }
+                    }
+                }
+            }
+            // apply null space
+            rmat out { bsMat * null_colvecs_ };
             if (complete_basis) {
                 return out;
             }
@@ -202,13 +295,77 @@ namespace splines2 {
         {
             this->set_null_colvecs();
             BSpline bs_obj { this };
-            rmat out { bs_obj.integral(true) * null_colvecs_ };
+            rmat bsMat { bs_obj.integral(true) };
+            // precess x outside of boundary
+            update_x_outside();
+            if (x_outside_left_.n_elem > 0 || x_outside_right_.n_elem > 0) {
+                // integrate from left boundary
+                if (x_outside_left_.n_elem > 0) {
+                    arma::rowvec zero_row {
+                        arma::zeros<arma::rowvec>(bsMat.n_cols)
+                    };
+                    for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
+                        size_t idx { x_outside_left_(k) };
+                        bsMat.row(idx) = zero_row;
+                    }
+                }
+                if (x_outside_right_.n_elem > 0) {
+                    BSpline bs_tmp;
+                    bs_tmp.set_degree(3);
+                    bs_tmp.set_internal_knots(internal_knots_);
+                    bs_tmp.set_boundary_knots(boundary_knots_);
+                    bs_tmp.set_x(boundary_knots_(1));
+                    arma::rowvec right_row {
+                        bs_obj.set_x(boundary_knots_(1))->integral(true).row(0)
+                    };
+                    rmat tt1 { bs_tmp.basis(true) };
+                    rmat tt2 { bs_tmp.derivative(true) };
+                    for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
+                        size_t idx { x_outside_right_(k) };
+                        double tmp { x_(idx) - boundary_knots_(1) };
+                        bsMat.row(idx) = right_row + tt1 * tmp +
+                            0.5 * tt2 * tmp * tmp;
+                    }
+                }
+            }
+            // apply null space
+            rmat out { bsMat * null_colvecs_ };
             if (complete_basis) {
                 return out;
             }
             // else
             return mat_wo_col1(out);
         }
+
+        // re-define some "setter" functions
+        inline virtual NaturalSpline* set_x(const rvec& x)
+        {
+            x_ = x;
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
+            is_x_outside_latest_ = false;
+            return this;
+        }
+        inline virtual NaturalSpline* set_x(const double x)
+        {
+            x_ = num2vec(x);
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
+            is_x_outside_latest_ = false;
+            return this;
+        }
+        inline virtual NaturalSpline* set_boundary_knots(
+            const rvec& boundary_knots
+            )
+        {
+            clean_knots(internal_knots_, boundary_knots);
+            is_knot_sequence_latest_ = false;
+            is_x_index_latest_ = false;
+            is_basis_latest_ = false;
+            is_x_outside_latest_ = false;
+            return this;
+        }
+
 
     };
 
