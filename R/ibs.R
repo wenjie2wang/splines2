@@ -41,13 +41,13 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3,
 {
     ## check inputs
     if ((degree <- as.integer(degree)) < 0)
-        stop("'degree' must be a nonnegative integer.")
+        stop("The 'degree' must be a nonnegative integer.")
     if (is.null(df)) {
         df <- 0L
     } else {
         df <- as.integer(df)
         if (df < 0) {
-            stop("'df' must be a nonnegative integer.")
+            stop("The 'df' must be a nonnegative integer.")
         }
     }
     knots <- null2num0(knots)

@@ -63,7 +63,7 @@ predict.dbs <- function(object, newx, ...)
     ## checks if key attributes still exist
     ## checks if key attributes still exist
     check_attr(object, c("x", "degree", "derivs",
-                       "knots", "Boundary.knots", "intercept"))
+                         "knots", "Boundary.knots", "intercept"))
     do.call(dbs, c(list(x = newx), pred_attr(object)))
 }
 
@@ -88,7 +88,7 @@ predict.mSpline <- function(object, newx, ...)
         return(object)
     ## checks if key attributes still exist
     check_attr(object, c("x", "degree", "derivs", "integral", "periodic",
-                       "knots", "Boundary.knots", "intercept"))
+                         "knots", "Boundary.knots", "intercept"))
     do.call(mSpline, c(list(x = newx), pred_attr(object)))
 }
 
@@ -101,7 +101,7 @@ predict.iSpline <- function(object, newx, ...)
         return(object)
     ## checks if key attributes still exist
     check_attr(object, c("x", "degree", "derivs",
-                       "knots", "Boundary.knots", "intercept"))
+                         "knots", "Boundary.knots", "intercept"))
     do.call(iSpline, c(list(x = newx), pred_attr(object)))
 }
 
@@ -114,7 +114,7 @@ predict.cSpline <- function(object, newx, ...)
         return(object)
     ## checks if key attributes still exist
     check_attr(object, c("x", "degree", "derivs",
-                       "knots", "Boundary.knots", "intercept"))
+                         "knots", "Boundary.knots", "intercept"))
     do.call(cSpline, c(list(x = newx), pred_attr(object)))
 }
 
@@ -127,7 +127,7 @@ predict.bernsteinPoly <- function(object, newx, ...)
         return(object)
     ## checks if key attributes still exist
     check_attr(object, c("x", "degree", "derivs", "integral",
-                       "Boundary.knots", "intercept"))
+                         "Boundary.knots", "intercept"))
     do.call(bernsteinPoly, c(list(x = newx), pred_attr(object)))
 }
 
@@ -140,6 +140,6 @@ predict.naturalSpline <- function(object, newx, ...)
         return(object)
     ## checks if key attributes still exist
     check_attr(object, c("x", "derivs", "integral",
-                       "knots", "Boundary.knots", "intercept"))
+                         "knots", "Boundary.knots", "intercept"))
     do.call(naturalSpline, c(list(x = newx), pred_attr(object)))
 }

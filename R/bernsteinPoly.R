@@ -50,7 +50,7 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
 {
     ## check inputs
     if ((degree <- as.integer(degree)) < 0)
-        stop("'degree' must be a nonnegative integer.")
+        stop("The 'degree' must be a nonnegative integer.")
     ## take care of possible NA's in `x`
     nax <- is.na(x)
     if (all(nax)) {

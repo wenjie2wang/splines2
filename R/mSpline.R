@@ -85,10 +85,10 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) < 0) {
-        stop("'derivs' must be a non-negative integer.")
+        stop("The 'derivs' must be a non-negative integer.")
     }
     if ((degree <- as.integer(degree)) < 0)
-        stop("'degree' must be a nonnegative integer.")
+        stop("The 'degree' must be a nonnegative integer.")
     if (is.null(df)) {
         df <- 0L
     } else {

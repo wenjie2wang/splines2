@@ -78,7 +78,7 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
     ## quick check on derivs
     derivs <- as.integer(derivs)
     if (derivs < 1L) {
-        stop("'derivs' has to be a positive integer.")
+        stop("The 'derivs' has to be a positive integer.")
     }
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "knots", "Boundary.knots", "intercept"))
@@ -112,7 +112,7 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
     ## quick check on derivs
     derivs <- as.integer(derivs)
     if (derivs < 1L) {
-        stop("'derivs' has to be a positive integer.")
+        stop("The 'derivs' has to be a positive integer.")
     }
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "derivs",
@@ -129,7 +129,7 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     ## quick check on derivs
     derivs <- as.integer(derivs)
     if (derivs < 1L) {
-        stop("'derivs' has to be a positive integer.")
+        stop("The 'derivs' has to be a positive integer.")
     }
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "derivs",

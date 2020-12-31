@@ -47,17 +47,17 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) <= 0) {
-        stop("'derivs' must be a positive integer.")
+        stop("The 'derivs' must be a positive integer.")
     }
     if ((degree <- as.integer(degree)) < 0) {
-        stop("'degree' must be a nonnegative integer.")
+        stop("The 'degree' must be a nonnegative integer.")
     }
     if (is.null(df)) {
         df <- 0L
     } else {
         df <- as.integer(df)
         if (df < 0) {
-            stop("'df' must be a nonnegative integer.")
+            stop("The 'df' must be a nonnegative integer.")
         }
     }
     knots <- null2num0(knots)
@@ -65,7 +65,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
     ## take care of possible NA's in `x`
     nax <- is.na(x)
     if (all(nax)) {
-        stop("'x' cannot be all NA's!")
+        stop("The 'x' cannot be all NA's!")
     }
     nas <- any(nax)
     ## remove NA's
