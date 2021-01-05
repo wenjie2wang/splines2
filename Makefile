@@ -43,7 +43,7 @@ check-as-cran: $(tar)
 .PHONY: check-revdep
 check-revdep: $(tar)
 	@mkdir -p revdep
-	@rm -rf revdep/*.Rcheck
+	@rm -rf revdep/{*.Rcheck,*.tar.gz}
 	@cp $(tar) revdep
 	R CMD BATCH --no-save --no-restore misc/revdep_check.R &
 
