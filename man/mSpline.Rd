@@ -21,40 +21,40 @@ mSpline(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{df}{Degree of freedom that equals to the column number of returned
+\item{df}{Degree of freedom that equals to the column number of the returned
 matrix.  One can specify \code{df} rather than \code{knots}.  For
-M-spline basis, the function chooses \code{df - degree -
+M-splines, the function chooses \code{df - degree -
 as.integer(intercept)} internal knots at suitable quantiles of \code{x}
 ignoring missing values and those \code{x} outside of the boundary.  For
 periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
-as.integer(intercept)} internal knots will be chose instead and the
+as.integer(intercept)} internal knots will be chosen instead and the
 number of internal knots must be greater or equal to the specified
 \code{degree}.  If internal knots are specified via \code{knots}, the
 specified \code{df} will be ignored.}
 
-\item{knots}{The internal breakpoints that define the spline.  The default
+\item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  For periodic spline basis (\code{periodic =
+quantiles for more knots.  For periodic splines (\code{periodic =
 TRUE}), the number of knots must be greater or equal to the specified
 \code{degree}.}
 
-\item{degree}{A non-negative integer specifying the degree of the piecewise
-polynomial. The default value is 3 for cubic splines. Zero degree is
-allowed for piece-wise constant bases.}
+\item{degree}{A nonnegative integer specifying the degree of the piecewise
+polynomial. The default value is \code{3} for cubic splines. Zero degree
+is allowed for piecewise constant bases.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
-By default, they are the range of the non-\code{NA} data.  If both
+\item{Boundary.knots}{Boundary points at which to anchor the splines.  By
+default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
-\code{Boundary.knots}.  For periodic spline basis (\code{periodic =
-TRUE}), the specified \code{Boundary.knots} defines the cyclic period.}
+\code{Boundary.knots}.  For periodic splines (\code{periodic = TRUE}),
+the specified \code{Boundary.knots} define the cyclic period.}
 
-\item{periodic}{A logical value.  If \code{TRUE}, periodic spline basis will
-be returned instead of regular M-spline basis.  The default value is
+\item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
+be returned instead of regular M-splines.  The default value is
 \code{FALSE}.}
 
 \item{derivs}{A non-negative integer specifying the order of derivatives of
@@ -68,7 +68,7 @@ integrated from the left boundary knot.}
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A numeric matrix with \code{length(x)} rows and \code{df} columns if
+A numeric matrix of \code{length(x)} rows and \code{df} columns if
     \code{df} is specified.  If \code{knots} are specified instead, the
     output matrix will consist of \code{length(knots) + degree +
     as.integer(intercept)} columns if \code{periodic = FALSE}, or
@@ -83,7 +83,8 @@ corresponding integrals and derivatives.
 \details{
 This function contains an implementation of the close form M-spline basis
 based on the recursion formula given by Ramsay (1988).  For monotone
-regression, \code{\link{iSpline}} should be used instead of M-splines.
+regression, one can use I-splines (see \code{\link{iSpline}}) instead of
+M-splines.
 }
 \examples{
 library(splines2)

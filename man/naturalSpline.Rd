@@ -27,7 +27,7 @@ suitable quantiles of \code{x} ignoring missing values and those
 or equal to \code{2}.  If internal knots are specified via \code{knots},
 the specified \code{df} will be ignored.}
 
-\item{knots}{The internal breakpoints that define the spline.  The default
+\item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.}
@@ -35,8 +35,8 @@ quantiles for more knots.}
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
-By default, they are the range of the non-\code{NA} data.  If both
+\item{Boundary.knots}{Boundary points at which to anchor the splines.  By
+default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
@@ -51,7 +51,7 @@ from the left boundary knot.}
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A numeric matrix with \code{length(x)} rows and \code{df}
+A numeric matrix of \code{length(x)} rows and \code{df}
     columns if \code{df} is specified or \code{length(knots) + 1 +
     as.integer(intercept)} columns if \code{knots} are specified instead.
     Attributes that correspond to the arguments specified are returned for

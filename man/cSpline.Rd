@@ -20,14 +20,14 @@ cSpline(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{df}{Degree of freedom that equals to the column number of returned
+\item{df}{Degree of freedom that equals to the column number of the returned
 matrix.  One can specify \code{df} rather than \code{knots}, then the
 function chooses \code{df - degree - as.integer(intercept)} internal
 knots at suitable quantiles of \code{x} ignoring missing values and
 those \code{x} outside of the boundary.  If internal knots are specified
 via \code{knots}, the specified \code{df} will be ignored.}
 
-\item{knots}{The internal breakpoints that define the spline.  The default
+\item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.}
@@ -42,8 +42,8 @@ Notice that when using C-Spline for shape-restricted regression,
 \code{intercept = TRUE} should be set even when an intercept term is
 considered additional to the spline bases in the model.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
-By default, they are the range of the non-\code{NA} data.  If both
+\item{Boundary.knots}{Boundary points at which to anchor the splines.  By
+default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
@@ -51,20 +51,19 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{derivs}{A non-negative integer specifying the order of derivatives of
 C-splines. The default value is \code{0L} for C-spline bases.}
 
-\item{scale}{Logical value (\code{TRUE} by default) indicating whether
-scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
-to have unit height at right boundary knot; the corresponding I-spline
-and M-spline basis matrices shipped in attributes are also scaled to the
-same extent.}
+\item{scale}{A logical value indicating if scaling C-splines is required. If
+\code{TRUE} by default, each C-spline basis is scaled to have unit
+height at right boundary knot; the corresponding I-spline and M-spline
+basis matrices shipped in attributes are also scaled to the same extent.}
 
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A numeric matrix with \code{length(x)} rows and \code{df} columns if
+A numeric matrix of \code{length(x)} rows and \code{df} columns if
     \code{df} is specified or \code{length(knots) + degree +
     as.integer(intercept)} columns if \code{knots} are specified instead.
-    Attributes that correspond to the arguments specified are returned for
-    usage of other functions in this package.
+    Attributes that correspond to the arguments specified are returned
+    mainly for other functions in this package.
 }
 \description{
 Generates the convex regression spline (called C-spline) basis matrix by
@@ -112,7 +111,7 @@ stopifnot(all.equal(msMat, msMat1, check.attributes = FALSE))
 }
 \references{
 Meyer, M. C. (2008). Inference using shape-restricted regression splines.
-\emph{The Annals of Applied Statistics}, 1013--1033. Chicago
+\emph{The Annals of Applied Statistics}, 2(3), 1013--1033.
 }
 \seealso{
 \code{\link{iSpline}} for I-splines;

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dbs.R
 \name{dbs}
 \alias{dbs}
-\title{Derivatives of B-Spline Basis}
+\title{Derivatives of B-Splines}
 \usage{
 dbs(
   x,
@@ -19,30 +19,30 @@ dbs(
 \item{x}{The predictor variable.  Missing values are allowed and will be
 returned as they are.}
 
-\item{derivs}{A positive integer specifying the order of derivative.  By
-default, it is \code{1L} for the first derivative.}
+\item{derivs}{A positive integer specifying the order of derivative.  The
+default value is \code{1L} for the first derivative.}
 
-\item{df}{Degree of freedom that equals to the column number of returned
+\item{df}{Degree of freedom that equals to the column number of the returned
 matrix.  One can specify \code{df} rather than \code{knots}, then the
 function chooses \code{df - degree - as.integer(intercept)} internal
 knots at suitable quantiles of \code{x} ignoring missing values and
 those \code{x} outside of the boundary.  If internal knots are specified
 via \code{knots}, the specified \code{df} will be ignored.}
 
-\item{knots}{The internal breakpoints that define the spline.  The default
+\item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.}
 
-\item{degree}{A non-negative integer specifying the degree of the piecewise
-polynomial. The default value is 3 for cubic splines. Zero degree is
-allowed for piece-wise constant bases.}
+\item{degree}{A nonnegative integer specifying the degree of the piecewise
+polynomial. The default value is \code{3} for cubic splines. Zero degree
+is allowed for piecewise constant bases.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
 
-\item{Boundary.knots}{Boundary points at which to anchor the spline basis.
-By default, they are the range of the non-\code{NA} data.  If both
+\item{Boundary.knots}{Boundary points at which to anchor the splines.  By
+default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
@@ -50,11 +50,11 @@ parameters do not depend on \code{x}. Data can extend beyond
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A numeric matrix with \code{length(x)} rows and \code{df} columns if
+A numeric matrix of \code{length(x)} rows and \code{df} columns if
     \code{df} is specified or \code{length(knots) + degree +
     as.integer(intercept)} columns if \code{knots} are specified instead.
-    Attributes that correspond to the arguments specified are returned for
-    usage of other functions in this package.
+    Attributes that correspond to the arguments specified are returned
+    mainly for other functions in this package.
 }
 \description{
 Produces the derivatives of given order of B-splines.
@@ -63,7 +63,8 @@ Produces the derivatives of given order of B-splines.
 This function provides a more user-friendly interface and a more consistent
 handling for \code{NA}'s than \code{splines::splineDesign()} for derivatives
 of B-splines.  The implementation is based on the close form recursion
-formula.  At knots, the derivative is defined to be the right derivative.
+formula.  At knots, the derivative is defined to be the right derivative
+except at the right boundary knot.
 }
 \examples{
 library(splines2)

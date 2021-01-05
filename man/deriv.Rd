@@ -43,14 +43,14 @@ default, it is \code{1L} for the first derivatives.}
 A numeric matrix of the same dimension with the input \code{expr}.
 }
 \description{
-Returns derivatives of given order for the spline bases.
+Returns derivatives of given order for the given spline bases.
 }
 \details{
-At knots, the derivative is defined to be the right derivative. By default,
-the function returns the first derivatives.  For derivatives of order
-greater than one, the nested call such as \code{deriv(deriv(expr))} is
-supported but not recommended.  For a better performance, argument
-\code{derivs} should be specified instead.
+At knots, the derivative is defined to be the right derivative except at the
+right boundary knot. By default, the function returns the first derivatives.
+For derivatives of order greater than one, nested function calls such as
+\code{deriv(deriv(expr))} are supported but not recommended.  For a better
+performance, argument \code{derivs} should be specified instead.
 
 This function is designed for objects produced by this package.  It
 internally extracts necessary specification about the spline/polynomial
