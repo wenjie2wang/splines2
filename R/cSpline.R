@@ -36,17 +36,16 @@
 ##'     considered additional to the spline bases in the model.
 ##' @param derivs A non-negative integer specifying the order of derivatives of
 ##'     C-splines. The default value is \code{0L} for C-spline bases.
-##' @param scale Logical value (\code{TRUE} by default) indicating whether
-##'     scaling on C-spline basis is required. If TRUE, C-spline basis is scaled
-##'     to have unit height at right boundary knot; the corresponding I-spline
-##'     and M-spline basis matrices shipped in attributes are also scaled to the
-##'     same extent.
+##' @param scale A logical value indicating if scaling C-splines is required. If
+##'     \code{TRUE} by default, each C-spline basis is scaled to have unit
+##'     height at right boundary knot; the corresponding I-spline and M-spline
+##'     basis matrices shipped in attributes are also scaled to the same extent.
 ##'
 ##' @inherit bSpline return
 ##'
 ##' @references
 ##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
-##' \emph{The Annals of Applied Statistics}, 1013--1033. Chicago
+##' \emph{The Annals of Applied Statistics}, 2(3), 1013--1033.
 ##'
 ##' @example inst/examples/ex-cSpline.R
 ##'

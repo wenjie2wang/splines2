@@ -15,9 +15,9 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Integrals of B-Spline Basis
+##' Integrals of B-Splines
 ##'
-##' Generates the integrals of B-spline basis matrix.
+##' Generates basis matrix for integrals of B-splines.
 ##'
 ##' The implementation is based on the close form recursion formula.
 ##'

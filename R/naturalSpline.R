@@ -48,7 +48,7 @@
 ##'     \code{TRUE}, this function will return the integrated natural splines
 ##'     from the left boundary knot.
 ##'
-##' @return A numeric matrix with \code{length(x)} rows and \code{df}
+##' @return A numeric matrix of \code{length(x)} rows and \code{df}
 ##'     columns if \code{df} is specified or \code{length(knots) + 1 +
 ##'     as.integer(intercept)} columns if \code{knots} are specified instead.
 ##'     Attributes that correspond to the arguments specified are returned for

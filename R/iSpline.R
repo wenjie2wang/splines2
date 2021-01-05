@@ -40,7 +40,7 @@
 ##'
 ##' @references
 ##' Ramsay, J. O. (1988). Monotone regression splines in action.
-##' \emph{Statistical science}, 3(4), 425--441.
+##' \emph{Statistical Science}, 3(4), 425--441.
 ##'
 ##' @example inst/examples/ex-iSpline.R
 ##'
