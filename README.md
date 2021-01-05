@@ -8,7 +8,7 @@ mirror](https://cranlogs.r-pkg.org/badges/splines2)](https://CRAN.R-project.org/
 Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)](https://github.com/wenjie2wang/splines2/actions)
 [![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
 
-The R package **splines2** (version 0.4.0.9000) provides functions to
+The R package **splines2** (version 0.4.0) provides functions to
 construct basis matrix of
 
 -   B-splines
@@ -68,18 +68,9 @@ Some benchmarks are provided for reference as follows:
 
 ``` r
 library(microbenchmark)
-library(splines); packageVersion("splines")
-```
+library(splines)
+library(splines2)
 
-    [1] '4.0.3'
-
-``` r
-library(splines2); packageVersion("splines2")
-```
-
-    [1] '0.4.0.9000'
-
-``` r
 x <- seq.int(0, 1, 0.001)
 degree <- 3
 ord <- degree + 1
@@ -114,9 +105,9 @@ microbenchmark(
 
     Unit: microseconds
                       expr     min      lq   mean  median      uq    max neval cld
-               splines::bs 335.683 344.499 382.18 352.441 368.265 2531.3  1000   c
-     splines::splineDesign 206.776 210.522 233.81 213.150 221.888 2340.3  1000  b 
-         splines2::bSpline  85.427  91.076 111.01  94.108  96.919 2260.3  1000 a  
+               splines::bs 334.223 343.512 387.22 348.919 357.694 2411.1  1000   c
+     splines::splineDesign 204.099 207.442 229.40 209.077 212.476 2405.5  1000  b 
+         splines2::bSpline  84.664  89.761 101.60  93.141  95.017 2207.3  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is more than 2x
@@ -137,8 +128,8 @@ microbenchmark(
 
     Unit: microseconds
                       expr     min      lq   mean median     uq    max neval cld
-     splines::splineDesign 276.253 279.967 319.62 285.29 299.21 5047.1  1000   b
-             splines2::dbs  94.798  98.338 121.30 101.53 106.29 2571.0  1000  a 
+     splines::splineDesign 273.380 275.748 318.42  277.5 286.54 3090.9  1000   b
+             splines2::dbs  94.028  96.278 119.10  100.1 103.28 2470.5  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -162,8 +153,8 @@ microbenchmark(
 
     Unit: microseconds
               expr     min      lq    mean  median      uq      max neval cld
-          ibs::ibs 2366.11 2632.01 3195.60 3116.11 3338.40 115479.6  1000   b
-     splines2::ibs  269.92  312.98  339.78  345.56  354.21   1246.3  1000  a 
+          ibs::ibs 2384.30 2738.88 3333.44 3228.45 3386.56 158057.5  1000   b
+     splines2::ibs  269.84  311.57  342.44  331.51  344.61   3313.4  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline bases. So we applied the same coefficients to
@@ -190,8 +181,8 @@ microbenchmark(
 
     Unit: microseconds
                         expr    min     lq   mean median     uq    max neval cld
-                 splines::ns 622.45 635.51 716.01 646.20 662.50 3544.9  1000   b
-     splines2::naturalSpline 130.89 139.24 166.53 149.63 153.49 2826.6  1000  a 
+                 splines::ns 618.53 630.45 727.34 638.80 662.70 3578.7  1000   b
+     splines2::naturalSpline 120.85 129.15 145.92 140.73 144.93 2735.4  1000  a 
 
 The function `mSpline()` produces periodic spline basis (based on
 M-splines) when `periodic = TRUE` is specified. The
@@ -216,8 +207,8 @@ microbenchmark(
 
     Unit: microseconds
                   expr    min     lq   mean median     uq    max neval cld
-              pbs::pbs 429.31 439.80 498.89 448.09 460.72 3687.4  1000   b
-     splines2::mSpline 122.63 129.48 153.46 138.70 143.17 2963.1  1000  a 
+              pbs::pbs 425.69 433.98 492.19 439.95 458.24 3633.6  1000   b
+     splines2::mSpline 121.05 125.72 156.36 135.61 138.76 2907.3  1000  a 
 
 <details>
 <summary>
@@ -246,13 +237,13 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.0.9000  microbenchmark_1.4-7
+    [1] splines2_0.4.0       microbenchmark_1.4-7
 
     loaded via a namespace (and not attached):
      [1] Rcpp_1.0.5       knitr_1.30       magrittr_2.0.1   MASS_7.3-53      ibs_1.4         
      [6] lattice_0.20-41  rlang_0.4.9      multcomp_1.4-15  stringr_1.4.0    tools_4.0.3     
     [11] grid_4.0.3       xfun_0.19        TH.data_1.0-10   htmltools_0.5.0  yaml_2.2.1      
-    [16] survival_3.2-7   digest_0.6.27    Matrix_1.2-18    codetools_0.2-16 evaluate_0.14   
+    [16] survival_3.2-7   digest_0.6.27    Matrix_1.3-0     codetools_0.2-16 evaluate_0.14   
     [21] rmarkdown_2.6    sandwich_3.0-0   stringi_1.5.3    compiler_4.0.3   pbs_1.1         
     [26] mvtnorm_1.1-1    zoo_1.8-8       
 

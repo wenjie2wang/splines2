@@ -70,8 +70,8 @@ Some benchmarks are provided for reference as follows:
 
 ```{r bench-setup}
 library(microbenchmark)
-library(splines); packageVersion("splines")
-library(splines2); packageVersion("splines2")
+library(splines)
+library(splines2)
 
 x <- seq.int(0, 1, 0.001)
 degree <- 3
