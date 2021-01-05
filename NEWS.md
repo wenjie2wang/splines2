@@ -2,16 +2,17 @@
 
 ## New features
 
-* Added function `naturalSpline` providing implementation of nonnegative natural
-  cubic splines.
-* Added argument `periodic` to function `mSpline` for periodic M-spline basis.
-* Added argument `integral` to function `mSpline` for integral of each M-spline
-  basis or periodic M-spline basis.
+* Added function `naturalSpline()` providing implementation of nonnegative
+  natural cubic splines.
+* Added argument `periodic` to function `mSpline()` for periodic M-splines.
+* Added argument `integral` to function `mSpline()` for integrals of M-splines
+  or periodic M-splines.
 * Added `deriv`, `predict`, and `print` method for `naturalSpline` class object.
 
 ## Minor changes
 
-* Updated the `deriv` method for `mSpline` class object for periodic M-splines.
+* Updated the `deriv()` method for `mSpline` class object for periodic
+  M-splines.
 
 
 # splines2 0.3.1
@@ -26,7 +27,7 @@
 
 ## New features
 
-* Added function `BersteinPoly` providing implementation of generalized
+* Added function `BersteinPoly()` providing implementation of generalized
   Bernstein polynomials.
 * Added C++ interface that can be easily integrated with **Rcpp**.
 
@@ -39,25 +40,30 @@
 
 * Made piece-wise constant bases continuous at right boundary knot for
   consistency with spline bases of non-zero degrees.
-* Changed the default value of argument `intercept` in function `iSpline` and
-  `cSpline` to `TRUE` for a complete set of spline bases in shape-restricted
+* Changed the default value of argument `intercept` in function `iSpline()` and
+  `cSpline()` to `TRUE` for a complete set of spline bases in shape-restricted
   regression.
 * Removed the corresponding M-spline basis from attributes of outputs from
-  `iSpline` and `cSpline`.
+  `iSpline()` and `cSpline()`.
 * Removed the corresponding B-spline basis from attributes of outputs from
-  `bSpline`.
+  `bSpline()`.
 
 ## Bug fixes
 
-* Fixed `deriv.mSpline` method for third derivatives of scaled C-splines.
+* Fixed `deriv.mSpline()` method for third derivatives of scaled C-splines.
 
 
 # splines2 0.2.8
 
 ## Bug fixes
 
-* Fixed inconsistency of argument `df` for piece-wise constant bases when
-  `knots = NULL`.
+* Fixed inconsistency of argument `df` for piecewise constant bases when `knots
+  = NULL`.
+
+## Minor changes
+
+* Rewrote testing suite for using the **tinytest** package instead of
+  **testthat**.
 
 
 # splines2 0.2.7
@@ -85,7 +91,7 @@
 
 * Fixed evaluation of derivatives of M-splines for a single value. Thanks Ina
   Jazic for reporting the bug and providing possible fix.
-* Fixed `deriv.cSpline` method for derivatives of order greater than two when
+* Fixed `deriv.cSpline()` method for derivatives of order greater than two when
   `scale = TRUE`.
 
 
@@ -93,15 +99,16 @@
 
 ## New features
 
-* Added function `dbs` generating derivative of given order of B-splines. It is
-  a similar function with `splines::splineDesign`. However, it provides a more
-  user-friendly interface and more consistent handling on `NA`'s.
-* Added `deriv` methods for derivatives of given order of any existing
+* Added function `dbs()` generating derivative of given order of B-splines. It
+  is a similar function with `splines::splineDesign()`. However, it provides a
+  more user-friendly interface and more consistent handling on `NA`'s.
+* Added `deriv()` methods for derivatives of given order of any existing
   **splines2** object that can be generated currently.
 
 ## Major changes
 
-* Added argument `derivs` to function `mSpline` and `iSpline` for derivatives.
+* Added argument `derivs` to function `mSpline()` and `iSpline()` for
+  derivatives.
 * Changed all the classes of object generated for a better dispatching on
   methods.
 
@@ -132,17 +139,17 @@
 
 ## New features
 
-* Added function `bSpline` generating B-spline basis allowing zero degree or
-  piecewise constant basis based on function `bs` in package **splines**.
-* Introduced function `bSpline` to allow M-splines of degree zero.
-* Added function `cSpline` constructing convex spline (C-spline) basis.
-* Added `predict` methods for `bSpline2` object and `cSpline` object generated
-  by `bSpline` and `cSpline`, respectively.
-* Added `print` methods for all **splines2** objects developed so far.
+* Added function `bSpline()` generating B-spline basis allowing zero degree or
+  piecewise constant basis based on function `bs()` in the **splines** package.
+* Introduced function `bSpline()` to allow M-splines of degree zero.
+* Added function `cSpline()` constructing convex spline (C-spline) basis.
+* Added `predict()` methods for `bSpline2` object and `cSpline` object generated
+  by `bSpline()` and `cSpline()`, respectively.
+* Added `print()` methods for all **splines2** objects developed so far.
 
 ## Major changes
 
-* Improved the function `iSpline` to construct I-spline basis directly from
+* Improved the function `iSpline()` to construct I-spline basis directly from
   B-spline basis instead of M-spline basis.
 
 ## Minor changes
