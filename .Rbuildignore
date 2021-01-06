@@ -2,6 +2,9 @@
 \.Rout$
 \.Rproj$
 \.tar\.gz$
+^GPATH$
+^GRTAGS$
+^GTAGS$
 ^LICENSE$
 ^Makefile$
 ^README\.Rmd$
