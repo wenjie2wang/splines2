@@ -34,10 +34,6 @@ $(tar): $(objects)
 	R CMD build .
 
 $(checkLog): $(tar) $(tinytest)
-	R CMD check $(tar)
-
-.PHONY: check-as-cran
-check-as-cran: $(tar)
 	R CMD check --as-cran $(tar)
 
 .PHONY: check-revdep
