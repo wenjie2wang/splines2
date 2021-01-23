@@ -1,7 +1,7 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
-Version: 0.4.1
-Date: 2021-01-06
+Version: 0.4.2.9000
+Date: 2021-01-22
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wang@wwenjie.org",
@@ -10,7 +10,7 @@ Authors@R: c(
     person(given = "Jun", family = "Yan", role = "aut",
            comment = c(ORCID = "0000-0003-4401-7296"))
     )
-Description: Constructs basis matrix of B-splines, M-splines
+Description: Constructs basis matrix of B-splines, M-splines,
     I-splines, convex splines (C-splines), periodic M-splines,
     natural cubic splines, generalized Bernstein polynomials,
     and their integrals (except C-splines) and derivatives
