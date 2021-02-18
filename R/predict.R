@@ -21,8 +21,9 @@
 ##'
 ##' These are methods for the generic function \code{predict} for objects
 ##' inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
-##' \code{iSpline}, \code{cSpline}, or \code{bernsteinPoly}.  If \code{newx} is
-##' not given, the function returns the input object.
+##' \code{iSpline}, \code{cSpline}, \code{naturalSpline}, or
+##' \code{bernsteinPoly}.  If \code{newx} is not given, the function returns the
+##' input object.
 ##'
 ##' @name predict
 ##' @param object Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
@@ -30,7 +31,7 @@
 ##'     \code{naturalSpline} with attributes describing \code{knots},
 ##'     \code{degree}, etc.
 ##' @param newx The \code{x} values at which evaluations are required.
-##' @param ... Optional argument that are not used.
+##' @param ... Optional arguments that are not used.
 ##'
 ##' @return
 ##' An object just like the \code{object} input, except evaluated at

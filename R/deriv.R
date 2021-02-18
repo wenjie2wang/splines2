@@ -38,7 +38,7 @@
 ##'     \code{degree}, etc.
 ##' @param derivs A positive integer specifying the order of derivatives. By
 ##'     default, it is \code{1L} for the first derivatives.
-##' @param ... Optional argument that are not used.
+##' @param ... Optional arguments that are not used.
 ##'
 ##' @return A numeric matrix of the same dimension with the input \code{expr}.
 ##'

@@ -21,6 +21,8 @@
 ##' to obtain internal or boundary knots from the objects produced by this
 ##' package.
 ##'
+##' @name knots
+##'
 ##' @param Fn An \code{splines2} object produced by this package.
 ##' @param type A character vector of length one indicating the type of knots to
 ##'     return.  The available choices are \code{"internal"} for internal knots
