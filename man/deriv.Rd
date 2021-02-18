@@ -37,7 +37,7 @@
 \item{derivs}{A positive integer specifying the order of derivatives. By
 default, it is \code{1L} for the first derivatives.}
 
-\item{...}{Optional argument that are not used.}
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 A numeric matrix of the same dimension with the input \code{expr}.

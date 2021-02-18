@@ -36,7 +36,7 @@
 
 \item{newx}{The \code{x} values at which evaluations are required.}
 
-\item{...}{Optional argument that are not used.}
+\item{...}{Optional arguments that are not used.}
 }
 \value{
 An object just like the \code{object} input, except evaluated at
@@ -48,8 +48,9 @@ This function evaluates a predefined spline basis at a (new) given \code{x}.
 \details{
 These are methods for the generic function \code{predict} for objects
 inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, \code{cSpline}, or \code{bernsteinPoly}.  If \code{newx} is
-not given, the function returns the input object.
+\code{iSpline}, \code{cSpline}, \code{naturalSpline}, or
+\code{bernsteinPoly}.  If \code{newx} is not given, the function returns the
+input object.
 }
 \examples{
 library(splines2)
