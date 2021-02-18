@@ -38,3 +38,13 @@ expect_equivalent(knots(isMat), inter_knots2)
 expect_equivalent(knots(csMat), inter_knots2)
 expect_equivalent(knots(bpMat), NULL)
 expect_equivalent(knots(nsMat), inter_knots3)
+
+## boundary knots
+expect_equivalent(knots(bsMat, "boundary"), boundary_knots)
+expect_equivalent(knots(ibsMat, "boundary"), boundary_knots)
+expect_equivalent(knots(dbsMat, "boundary"), boundary_knots)
+expect_equivalent(knots(msMat, "boundary"), boundary_knots)
+expect_equivalent(knots(isMat, "boundary"), boundary_knots)
+expect_equivalent(knots(csMat, "boundary"), boundary_knots)
+expect_equivalent(knots(bpMat, "boundary"), boundary_knots)
+expect_equivalent(knots(nsMat, "boundary"), boundary_knots)
