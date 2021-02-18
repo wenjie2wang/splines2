@@ -1,3 +1,11 @@
+# splines2 0.4.2.9000
+
+## New features
+
+* Added `knots()` methods to extract internal knots and boundary knots from a
+  given *spline2* object.
+
+
 # splines2 0.4.1
 
 ## New features
