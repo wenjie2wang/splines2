@@ -42,7 +42,8 @@ parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
 
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
-natural splines. The default value is \code{0L} for the spline bases.}
+natural splines. The default value is \code{0L} for the spline basis
+functions.}
 
 \item{integral}{A logical value.  The default value is \code{FALSE}.  If
 \code{TRUE}, this function will return the integrated natural splines
@@ -67,13 +68,13 @@ outside of boundary.
 It is an implementation of the natural spline basis based on B-spline basis,
 which utilizes the close-form null space that can be derived from the
 recursive formula for the second derivatives of B-splines.  The constructed
-spline bases are intended to be nonnegative within boundary with second
-derivatives being zeros at boundary knots.
+spline basis functions are intended to be nonnegative within boundary with
+second derivatives being zeros at boundary knots.
 
 A similar implementation is provided by \code{splines::ns}, which uses QR
 decomposition to find the null space of the second derivatives of B-spline
 basis at boundary knots.  However, there is no guarantee that the resulting
-bases are nonnegative within boundary.
+basis functions are nonnegative within boundary.
 }
 \examples{
 library(splines2)

@@ -41,7 +41,7 @@ TRUE}), the number of knots must be greater or equal to the specified
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
-is allowed for piecewise constant bases.}
+is allowed for piecewise constant basis functions.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
@@ -58,11 +58,11 @@ be returned instead of regular M-splines.  The default value is
 \code{FALSE}.}
 
 \item{derivs}{A non-negative integer specifying the order of derivatives of
-M-splines. The default value is \code{0L} for M-spline bases.}
+M-splines. The default value is \code{0L} for M-spline basis functions.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the corresponding
-integrals of spline bases will be returned.  The default value is
-\code{FALSE}.  For periodic spline, the integral of each basis is
+integrals of spline basis functions will be returned.  The default value
+is \code{FALSE}.  For periodic splines, the integral of each basis is
 integrated from the left boundary knot.}
 
 \item{...}{Optional arguments that are not used.}

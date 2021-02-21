@@ -53,7 +53,7 @@ Rcpp::NumericMatrix rcpp_mSpline(
         // integrals
         out = splines2::arma2rmat(ms_obj.integral(complete_basis));
     } else if ((! integral && derivs == 0) || (integral && derivs == 1)) {
-        // bases
+        // basis functions
         out = splines2::arma2rmat(ms_obj.basis(complete_basis));
     } else {
         // derivatives
@@ -113,7 +113,7 @@ Rcpp::NumericMatrix rcpp_periodic_mSpline(
         // integrals
         out = splines2::arma2rmat(ms_obj.integral(complete_basis));
     } else if ((! integral && derivs == 0) || (integral && derivs == 1)) {
-        // bases
+        // basis functions
         out = splines2::arma2rmat(ms_obj.basis(complete_basis));
     } else {
         // derivatives

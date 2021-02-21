@@ -54,10 +54,10 @@
 ##'     be returned instead of regular M-splines.  The default value is
 ##'     \code{FALSE}.
 ##' @param derivs A non-negative integer specifying the order of derivatives of
-##'     M-splines. The default value is \code{0L} for M-spline bases.
+##'     M-splines. The default value is \code{0L} for M-spline basis functions.
 ##' @param integral A logical value.  If \code{TRUE}, the corresponding
-##'     integrals of spline bases will be returned.  The default value is
-##'     \code{FALSE}.  For periodic spline, the integral of each basis is
+##'     integrals of spline basis functions will be returned.  The default value
+##'     is \code{FALSE}.  For periodic splines, the integral of each basis is
 ##'     integrated from the left boundary knot.
 ##'
 ##' @return A numeric matrix of \code{length(x)} rows and \code{df} columns if
@@ -146,7 +146,7 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (! periodic && any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases."
+            "may cause ill-conditioned basis functions."
         ))
     }
     ## keep NA's as is

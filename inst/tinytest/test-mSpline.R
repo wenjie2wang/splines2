@@ -77,7 +77,7 @@ expect_true(isNumMatrix(msMat0f, 1, length(knots) + 2))
 expect_true(isNumMatrix(msMat0g, length(x), 6))
 
 ## true close form formula given the all knots and degree
-## transformation of constant bases
+## transformation of constant basis
 x3 <- seq.int(0, 7, 0.1)
 m0_1 <- function(x) as.numeric(x < 1)
 m0_2 <- function(x) as.numeric(x >= 1 & x < 3) * 0.5
@@ -85,7 +85,7 @@ m0_3 <- function(x) as.numeric(x >= 3 & x <= 7) * 0.25
 expect_equivalent(mSpline(x3, knots = c(1, 3), degree = 0L, intercept = TRUE),
                   cbind(m0_1(x3), m0_2(x3), m0_3(x3)))
 
-## transformation of linear bases
+## transformation of linear basis
 x4 <- seq.int(0, 3, 0.1)
 ind01 <- function(x) as.numeric(x >= 0 & x < 1)
 ind12 <- function(x) as.numeric(x >= 1 & x < 2)
@@ -169,7 +169,7 @@ expect_equal(attr(tmp, "Boundary.knots"), range(x, na.rm = TRUE))
 expect_equal(length(attr(tmp, "knots")), 8)
 
 ## intercept = TRUE
-## bases
+## basis
 res0 <- mSpline(x, df = 6, degree = 3, intercept = TRUE,
                 Boundary.knots = b_knots, periodic = TRUE)
 tmp <- mSpline(x, df = 6, degree = 3, intercept = TRUE,
@@ -245,7 +245,7 @@ expect_equivalent(matrix(predict(res3, 0.25), byrow = TRUE,
                   predict(res3, 0.25 + 1:4))
 
 ## intercept = FALSE
-## bases
+## basis
 res0 <- mSpline(x, df = 6, degree = 3, intercept = FALSE,
                 Boundary.knots = b_knots, periodic = TRUE)
 tmp <- mSpline(x, df = 6, degree = 3, intercept = FALSE,
@@ -324,7 +324,7 @@ knots <- c(0.3, 0.6, 0.8)
 b_knots <- c(0, 1)
 
 ## intercept = TRUE
-## bases
+## basis
 res0 <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
                 Boundary.knots = b_knots, periodic = TRUE)
 tmp <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
@@ -375,7 +375,7 @@ expect_equivalent(matrix(predict(res3, 0.25), byrow = TRUE,
 
 ## intercept = FALSE
 knots <- c(0.2, 0.5, 0.6, 0.75)
-## bases
+## basis
 res0 <- mSpline(x, knots = knots, degree = 3, intercept = FALSE,
                 Boundary.knots = b_knots, periodic = TRUE)
 tmp <- mSpline(x, knots = knots, degree = 3, intercept = FALSE,

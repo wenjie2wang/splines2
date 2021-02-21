@@ -32,7 +32,7 @@ quantiles for more knots.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
-is allowed for piecewise constant bases.}
+is allowed for piecewise constant basis functions.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
@@ -65,10 +65,9 @@ x <- seq.int(0, 1, 0.01)
 knots <- c(0.2, 0.4, 0.7, 0.9)
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 
-## the B-spline bases integrated by function bSpline (same arguments)
+## get the corresponding B-splines by bSpline()
 bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
-
-## or by the deriv method
+## or by the deriv() method
 bsMat <- deriv(ibsMat)
 stopifnot(all.equal(bsMat0, bsMat, check.attributes = FALSE))
 

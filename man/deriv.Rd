@@ -10,7 +10,7 @@
 \alias{deriv.cSpline}
 \alias{deriv.bernsteinPoly}
 \alias{deriv.naturalSpline}
-\title{Derivatives of Spline Bases}
+\title{Derivatives of Spline Basis Functions}
 \usage{
 \method{deriv}{bSpline2}(expr, derivs = 1L, ...)
 
@@ -43,7 +43,7 @@ default, it is \code{1L} for the first derivatives.}
 A numeric matrix of the same dimension with the input \code{expr}.
 }
 \description{
-Returns derivatives of given order for the given spline bases.
+Returns derivatives of given order for the given spline basis functions.
 }
 \details{
 At knots, the derivative is defined to be the right derivative except at the

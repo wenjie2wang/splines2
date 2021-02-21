@@ -73,7 +73,7 @@ library(microbenchmark)
 library(splines)
 library(splines2)
 
-x <- seq.int(0, 1, 0.001)
+x <- seq.int(0, 1, 1e-3)
 degree <- 3
 ord <- degree + 1
 knots <- seq.int(0.1, 0.9, 0.1)
@@ -142,17 +142,17 @@ microbenchmark(
 ```
 
 The function `ibs::ibs()` returns the integrated B-splines instead of the
-integrals of spline bases.  So we applied the same coefficients to the bases
-from `splines2::ibs()` for equivalent results, which was still much faster than
-`ibs::ibs()`.
+integrals of spline basis functions.  So we applied the same coefficients to the
+basis functions from `splines2::ibs()` for equivalent results, which was still
+much faster than `ibs::ibs()`.
 
 
 For natural cubic splines (based on B-splines), `splines::ns()` uses QR
 decomposition to find the null space of the second derivatives of B-spline basis
-at boundary knots, while `splines2::naturalSpline()` utilizes the close-form
-null space derived from the second derivatives of cubic B-splines, which
-produces nonnegative bases (within boundary) and is more computationally
-efficient.
+functions at boundary knots, while `splines2::naturalSpline()` utilizes the
+close-form null space derived from the second derivatives of cubic B-splines,
+which produces nonnegative basis functions (within boundary) and is more
+computationally efficient.
 
 ```{r bench-ns}
 microbenchmark(
@@ -165,13 +165,13 @@ microbenchmark(
 )
 ```
 
-The function `mSpline()` produces periodic spline basis (based on M-splines)
-when `periodic = TRUE` is specified.  The `splines::periodicSpline()` returns a
-periodic interpolation spline (based on B-splines) instead of basis matrix.
-So we performed a comparison with package **pbs**
-(version `r packageVersion("pbs")`), where the function `pbs::pbs()` produces a
-basis matrix of periodic B-spline by using `splines::spline.des()` (a wrapper
-function of `splines::splineDesign()`).
+The function `mSpline()` produces periodic spline basis functions (based on
+M-splines) when `periodic = TRUE` is specified.  The `splines::periodicSpline()`
+returns a periodic interpolation spline (based on B-splines) instead of basis
+matrix.  So we performed a comparison with package **pbs** (version `r
+packageVersion("pbs")`), where the function `pbs::pbs()` produces a basis matrix
+of periodic B-spline by using `splines::spline.des()` (a wrapper function of
+`splines::splineDesign()`).
 
 ```{r bench-periodic}
 microbenchmark(

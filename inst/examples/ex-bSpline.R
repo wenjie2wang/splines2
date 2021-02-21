@@ -7,7 +7,7 @@ knots <- c(0.3, 0.5, 0.6)
 bsMat <- bSpline(x, knots = knots, degree = 3, intercept = TRUE)
 
 op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
-matplot(x, bsMat, type = "l", ylab = "Cubic B-spline Bases")
+matplot(x, bsMat, type = "l", ylab = "Cubic B-splines")
 abline(v = knots, lty = 2, col = "gray")
 
 ## reset to previous plotting settings

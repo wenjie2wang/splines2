@@ -36,7 +36,7 @@ quantiles for more knots.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
-is allowed for piecewise constant bases.}
+is allowed for piecewise constant basis functions.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}

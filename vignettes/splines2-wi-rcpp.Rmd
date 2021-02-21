@@ -13,8 +13,8 @@ output: rmarkdown::html_vignette
 
 In this package vignette, we introduce how to use the C++ header-only library
 that **splines2** contains with the **Rcpp** package [@eddelbuettel2013springer]
-for constructing spline basis.  The introduction is intended for package
-developers who would like to use **splines2** package at C++ level.
+for constructing spline basis functions.  The introduction is intended for
+package developers who would like to use **splines2** package at C++ level.
 
 ## Header File and Name Space
 
@@ -39,7 +39,7 @@ using splines2
 
 ## B-splines
 
-The `BSpline` class is for creating B-spline basis.
+The `BSpline` class is for creating B-spline basis functions.
 
 ### Constructors
 
@@ -57,10 +57,10 @@ BSpline(const vec& x,
 ```
 
 The second non-default constructor is called when an unsigned integer
-representing the degree of freedom of the *complete spline basis* (different
-with `df` in the R interface) is specified. Then the number of internal knots is
-computed as `spline_df - degree - 1` and the placement of internal knots uses
-quantiles of specified `x`.
+representing the degree of freedom of the *complete spline basis functions*
+(different with `df` in the R interface) is specified. Then the number of
+internal knots is computed as `spline_df - degree - 1` and the placement of
+internal knots uses quantiles of specified `x`.
 
 ```C++
 // 2. specified spline degree of freedom (df)
@@ -70,9 +70,9 @@ BSpline(const vec& x,
         const vec& boundary_knots = vec())
 ```
 
-The third non-default constructor is intended for bases with an extended knot
-sequence. The multiplicities of knots in the sequence can be different but
-should not be greater than `degree + 1`.
+The third non-default constructor is intended for basis functions with an
+extended knot sequence. The multiplicities of knots in the sequence can be
+different but should not be greater than `degree + 1`.
 
 ```C++
 // 3. specified degree and (extended) knot sequence
@@ -96,8 +96,8 @@ BSpline(const SplineBase* pSplineBase)
 The main methods are
 
 - `basis()` for spline basis matrix
-- `derivative()` for derivatives of spline bases
-- `integral()` for integrals of spline bases
+- `derivative()` for derivatives of spline basis
+- `integral()` for integrals of spline basis
 
 The specific function signatures are as follows:
 
@@ -173,8 +173,8 @@ BernsteinPoly(const vec& x,
 Same with `BSpline`, the main methods are
 
 - `basis()` for basis matrix
-- `derivative()` for derivatives of bases
-- `integral()` for integrals of bases
+- `derivative()` for derivatives of basis functions
+- `integral()` for integrals of basis functions
 
 The specific function signatures are as follows:
 

@@ -22,10 +22,10 @@ par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
 ```
 
 The **splines2** package (version `r packageVersion("splines2")`) provides
-functions constructing a variety of regression spline bases that are not
-available from the **splines** package shipped with base R.  Most functions have
-a very similar user interface with the function `splines::bs()`.  To be more
-specific, it provides functions to construct basis matrix of
+functions constructing a variety of regression spline basis functions that are
+not available from the **splines** package shipped with base R.  Most functions
+have a very similar user interface with the function `splines::bs()`.  To be
+more specific, it provides functions to construct basis matrix of
 
 - B-splines
 - M-splines
@@ -52,11 +52,11 @@ available in the package manual and thus will not be discussed.
 ## B-splines with their integrals and derivatives {#bSpline}
 
 Function `bSpline()` provides B-spline basis matrix and allows `degree = 0` for
-piece-wise constant bases, which extends the `bs()` function in package
+piece-wise constant basis function, which extends the `bs()` function in package
 **splines** with a better computational performance.  One example of linear
 B-splines with two internal knots is given as follows:
 
-```{r bSpline, fig.cap="B-spline bases of degree one with two internal knots."}
+```{r bSpline, fig.cap="B-splines of degree one with two internal knots."}
 library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
@@ -69,7 +69,7 @@ The close-form recursive formula of B-spline integrals and derivatives given by
 @boor1978practical is implemented in function `ibs()` and `dbs()`, respectively.
 Two toy examples are given as follows:
 
-```{r ibs, fig.cap="Piecewise linear B-spline bases (left) and their integrals (right)."}
+```{r ibs, fig.cap="Piecewise linear B-splines (left) and their integrals (right)."}
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 par(mfrow = c(1, 2))
 matplot(x, bsMat, type = "l", ylab = "y")
@@ -78,7 +78,7 @@ matplot(x, ibsMat, type = "l", ylab = "y")
 abline(v = knots, h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
 ```
 
-```{r dbs, fig.cap="Cubic B-spline bases (left) and their first derivative (right)."}
+```{r dbs, fig.cap="Cubic B-spline (left) and their first derivative (right)."}
 bsMat <- bSpline(x, knots = knots, intercept = TRUE)
 dbsMat <- dbs(x, knots = knots, intercept = TRUE)
 par(mfrow = c(1, 2))
@@ -109,7 +109,7 @@ at 0.3, 0.5, and 0.6. The boundary knots by default are the range of the data
 par(mfrow = c(1, 1))
 ```
 
-```{r mSpline, fig.cap = "Quadratic M-spline bases with three internal knots."}
+```{r mSpline, fig.cap = "Quadratic M-spline with three internal knots."}
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 matplot(x, msMat, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
@@ -129,32 +129,33 @@ stopifnot(is_equivalent(dmsMat1, dmsMat2))
 
 ### Periodic M-Splines
 
-The function `mSpline()` produces periodic spline basis (based on M-splines)
-when `periodic = TRUE` is specified.  The `Boundary.knots` defines the start and
-end points of the cyclic period.
+The function `mSpline()` produces periodic splines based on M-spline basis
+functions when `periodic = TRUE` is specified.  The `Boundary.knots` defines the
+start and end points of the cyclic period.  The construction follows periodic
+B-splines discussed in @piegl1997nurbs [Chapter 12].
 
-```{r pms-basis, fig.cap = "Cubic periodic M-spline bases."}
+```{r pms-basis, fig.cap = "Cubic periodic M-splines."}
 x1 <- seq.int(0, 3, 0.01)
 pmsMat <- mSpline(x1, knots = knots, degree = 3, intercept = TRUE,
                   periodic = TRUE, Boundary.knots = c(0, 1))
-matplot(x1, pmsMat, type = "l", xlab = "x", ylab = "Periodic Bases")
+matplot(x1, pmsMat, type = "l", xlab = "x", ylab = "Periodic Basis")
 abline(v = seq.int(0, 3), lty = 2, col = "gray")
 ```
 
 We may still specify the argument `derivs` in `mSpline()` or use the
 corresponding `deriv()` method to obtain the derivatives when `periodic = TRUE`.
 
-```{r pms-deriv, fig.cap = "The first derivatives of the periodic M-spline bases."}
+```{r pms-deriv, fig.cap = "The first derivatives of the periodic M-splines."}
 dpmsMat <- deriv(pmsMat)
 matplot(x1, dpmsMat, type = "l", xlab = "x", ylab = "The 1st derivatives")
 abline(v = seq.int(0, 3), lty = 2, col = "gray")
 ```
 
-Furthermore, we can obtain the integrals of the periodic M-spline bases by
-specifying `integral = TRUE`.  The integral is defined to be integrated from the
-left boundary knot.
+Furthermore, we can obtain the integrals of the periodic M-splines by specifying
+`integral = TRUE`.  The integral is defined to be integrated from the left
+boundary knot.
 
-```{r pms-integral, fig.cap = "The integrals of the periodic M-spline bases."}
+```{r pms-integral, fig.cap = "The integrals of the periodic M-splines."}
 ipmsMat <- mSpline(x1, knots = knots, degree = 3, intercept = TRUE,
                    periodic = TRUE, Boundary.knots = c(0, 1), integral = TRUE)
 matplot(x1, ipmsMat, type = "l", xlab = "x", ylab = "Integrals")
@@ -167,8 +168,8 @@ abline(v = seq.int(0, 3), h = seq.int(0, 3), lty = 2, col = "gray")
 I-splines [@ramsay1988monotone] are simply the integral of M-splines and thus
 monotonically non-decreasing with unit maximum value. A monotonically
 non-decreasing (non-increasing) function can be fitted by a linear combination
-of I-spline bases with non-negative (non-positive) coefficients *plus a
-constant*, where the coefficient of the constant is unconstrained.
+of I-spline basis functions with non-negative (non-positive) coefficients *plus
+a constant*, where the coefficient of the constant is unconstrained.
 
 The example given by @ramsay1988monotone was the I-splines corresponding to that
 quadratic M-splines with three internal knots placed at 0.3, 0.5, and
@@ -204,11 +205,11 @@ I-splines with unit maximum value at the right boundary knot.
 @meyer2008inference applied C-splines to shape-restricted regression
 analysis. The monotone (non-decreasing) property of I-spines ensures the
 convexity of C-splines. A convex regression function can be estimated using
-linear combinations of the C-spline bases with non-negative coefficients, plus
-an unconstrained linear combination of a constant and an identity function
-$g(x)=x$. If the underlying regression function is both increasing and convex,
-the coefficient on the identity function is restricted to be non-negative as
-well.
+linear combinations of the C-spline basis functions with non-negative
+coefficients, plus an unconstrained linear combination of a constant and an
+identity function $g(x)=x$. If the underlying regression function is both
+increasing and convex, the coefficient on the identity function is restricted to
+be non-negative as well.
 
 
 We may specify the argument `scale = FALSE` in function `cSpline()` to disable
@@ -290,28 +291,28 @@ stopifnot(is_equivalent(dbpMat2, deriv(ibpMat2, 2)))
 
 ## Natural Cubic Splines
 
-The function `naturalSpline()` returns nonnegative bases (within boundary) for
-natural cubic splines by utilizing the close-form null space derived from the
-second derivatives of cubic B-splines.  While `splines::ns()` uses QR
-decomposition to find the null space of the second derivatives of B-spline basis
-at boundary knots with no guarantee that the resulting bases are nonnegative
-within boundary.  When `integral = TRUE`, `naturalSpline()` returns integral of
-each natural spline basis.
+The function `naturalSpline()` returns nonnegative basis functions (within
+boundary) for natural cubic splines by utilizing the close-form null space
+derived from the second derivatives of cubic B-splines.  While `splines::ns()`
+uses QR decomposition to find the null space of the second derivatives of
+B-spline basis at boundary knots with no guarantee that the resulting basis are
+nonnegative within boundary.  When `integral = TRUE`, `naturalSpline()` returns
+integral of each natural spline basis.
 
-```{r ns-basis, fig.cap = "Nonnegative natural cubic spline bases (left) and corresponding integrals (right)."}
+```{r ns-basis, fig.cap = "Nonnegative natural cubic splines (left) and corresponding integrals (right)."}
 nsMat <- naturalSpline(x, knots = knots, intercept = TRUE)
 insMat <- naturalSpline(x, knots = knots, intercept = TRUE, integral = TRUE)
 par(mfrow = c(1, 2))
-matplot(x, nsMat, type = "l", ylab = "Bases")
+matplot(x, nsMat, type = "l", ylab = "Basis")
 matplot(x, insMat, type = "l", ylab = "Integrals")
 stopifnot(is_equivalent(nsMat, deriv(insMat)))
 ```
 
 Similar to `bernsteinPoly()`, one may specify the argument `derivs` in
 `naturalSpline()` or use the corresponding `deriv()` method to obtain the
-derivatives of spline bases.
+derivatives of spline basis functions.
 
-```{r ns-deriv, fig.cap = "The derivatives of natural cubic spline bases."}
+```{r ns-deriv, fig.cap = "The derivatives of natural cubic splines."}
 d1nsMat <- naturalSpline(x, knots = knots, intercept = TRUE, derivs = 1)
 d2nsMat <- deriv(nsMat, 2)
 par(mfrow = c(1, 2))

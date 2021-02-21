@@ -29,7 +29,7 @@ polynomial basis. The default value is \code{NULL} and the boundary
 knots is set internally to be \code{range(x, na.rm = TRUE)}.}
 
 \item{derivs}{A non-negative integer specifying the order of derivatives.
-The default value is \code{0L} for Bernstein polynomial bases.}
+The default value is \code{0L} for Bernstein polynomial basis functions.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the integrals of the
 Bernstein polynomials will be returned.  The default value is

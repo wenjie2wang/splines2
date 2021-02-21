@@ -77,7 +77,7 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3,
     if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases."
+            "may cause ill-conditioned basis functions."
         ))
     }
     ## keep NA's as is

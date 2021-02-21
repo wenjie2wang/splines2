@@ -32,7 +32,7 @@ quantiles for more knots.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
-is allowed for piecewise constant bases.}
+is allowed for piecewise constant basis functions.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
@@ -72,7 +72,7 @@ knots <- c(0.3, 0.5, 0.6)
 bsMat <- bSpline(x, knots = knots, degree = 3, intercept = TRUE)
 
 op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
-matplot(x, bsMat, type = "l", ylab = "Cubic B-spline Bases")
+matplot(x, bsMat, type = "l", ylab = "Cubic B-splines")
 abline(v = knots, lty = 2, col = "gray")
 
 ## reset to previous plotting settings

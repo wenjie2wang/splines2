@@ -35,7 +35,7 @@
 ##' @param degree A non-negative integer representing the degree of the
 ##'     polynomials.
 ##' @param derivs A non-negative integer specifying the order of derivatives.
-##'     The default value is \code{0L} for Bernstein polynomial bases.
+##'     The default value is \code{0L} for Bernstein polynomial basis functions.
 ##'
 ##' @return A numeric matrix of dimension \code{length(x)} by \code{degree +
 ##'     as.integer(intercept)}.

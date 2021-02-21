@@ -30,16 +30,17 @@
 ##'     associated M-spline instead of actual polynomial degree. For example,
 ##'     C-spline basis of degree 2 is defined as the scaled double integral of
 ##'     associated M-spline basis of degree 2.
-##' @param intercept If \code{TRUE} by default, all spline bases are included.
-##'     Notice that when using C-Spline for shape-restricted regression,
-##'     \code{intercept = TRUE} should be set even when an intercept term is
-##'     considered additional to the spline bases in the model.
+##' @param intercept If \code{TRUE} by default, all of the spline basis
+##'     functions are returned.  Notice that when using C-Spline for
+##'     shape-restricted regression, \code{intercept = TRUE} should be set even
+##'     when an intercept term is considered additional to the spline basis in
+##'     the model.
 ##' @param derivs A non-negative integer specifying the order of derivatives of
-##'     C-splines. The default value is \code{0L} for C-spline bases.
+##'     C-splines. The default value is \code{0L} for C-spline basis functions.
 ##' @param scale A logical value indicating if scaling C-splines is required. If
 ##'     \code{TRUE} by default, each C-spline basis is scaled to have unit
-##'     height at right boundary knot; the corresponding I-spline and M-spline
-##'     basis matrices shipped in attributes are also scaled to the same extent.
+##'     height at right boundary knot. The corresponding I-spline and M-spline
+##'     produced by \code{deriv} methods will be scaled to the same extent.
 ##'
 ##' @inherit bSpline return
 ##'
@@ -125,7 +126,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases."
+            "may cause ill-conditioned basis functions."
         ))
     }
     ## keep NA's as is

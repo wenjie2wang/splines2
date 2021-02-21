@@ -36,10 +36,10 @@ associated M-spline instead of actual polynomial degree. For example,
 I-spline basis of degree 2 is defined as the integral of associated
 M-spline basis of degree 2.}
 
-\item{intercept}{If \code{TRUE} by default, all spline bases are included.
-Notice that when using I-Spline for monotonic regression,
-\code{intercept = TRUE} should be set even when an intercept term is
-considered additional to the spline bases in the model.}
+\item{intercept}{If \code{TRUE} by default, all of the spline basis
+functions are returned.  Notice that when using I-Spline for monotonic
+regression, \code{intercept = TRUE} should be set even when an intercept
+term is considered additional to the spline basis functions.}
 
 \item{Boundary.knots}{Boundary points at which to anchor the splines.  By
 default, they are the range of \code{x} excluding \code{NA}.  If both

@@ -39,7 +39,7 @@
 ##'     quantiles for more knots.
 ##' @param degree A nonnegative integer specifying the degree of the piecewise
 ##'     polynomial. The default value is \code{3} for cubic splines. Zero degree
-##'     is allowed for piecewise constant bases.
+##'     is allowed for piecewise constant basis functions.
 ##' @param intercept If \code{TRUE}, the complete basis matrix will be returned.
 ##'     Otherwise, the first basis will be excluded from the output.
 ##' @param Boundary.knots Boundary points at which to anchor the splines.  By
@@ -107,7 +107,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases."
+            "may cause ill-conditioned basis functions."
         ))
     }
     ## keep NA's as is

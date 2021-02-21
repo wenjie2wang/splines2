@@ -4,10 +4,9 @@ x <- seq.int(0, 1, 0.01)
 knots <- c(0.2, 0.4, 0.7, 0.9)
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 
-## the B-spline bases integrated by function bSpline (same arguments)
+## get the corresponding B-splines by bSpline()
 bsMat0 <- bSpline(x, knots = knots, degree = 1, intercept = TRUE)
-
-## or by the deriv method
+## or by the deriv() method
 bsMat <- deriv(ibsMat)
 stopifnot(all.equal(bsMat0, bsMat, check.attributes = FALSE))
 

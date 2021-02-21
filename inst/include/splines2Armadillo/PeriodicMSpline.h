@@ -371,7 +371,7 @@ namespace splines2 {
             // create a MSpline object for the extended knot sequence
             MSpline ms_obj { x_in_range_, degree_, knot_sequence_ };
             rmat b_mat { ms_obj.basis(true) };
-            // remove first and last #degree bases
+            // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
             // post-processing
             spline_basis_ = clamp_basis(b_mat);
@@ -412,7 +412,7 @@ namespace splines2 {
                 degree_, extended_boundary_knots_
             };
             rmat b_mat { ms_obj.derivative(derivs, true) };
-            // remove first and last #degree bases
+            // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
             // post-processing
             b_mat = clamp_basis(b_mat);
@@ -436,14 +436,13 @@ namespace splines2 {
                 degree_, extended_boundary_knots_
             };
             rmat b_mat { ms_obj.integral(true) };
-            // remove first and last #degree bases
+            // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
-            size_t mspline_df { internal_knots_.n_elem + order_ };
             // get initial values at the left boundary knot
             rmat v0 {
                 ms_obj.set_x(boundary_knots_(0))->integral(true)
             };
-            // remove first and last #degree bases
+            // remove first and last #degree basis functions
             v0 = v0.cols(degree_, v0.n_cols - order_);
             // clear initial values
             for (size_t i {0}; i < v0.n_cols; ++i) {

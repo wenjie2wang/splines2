@@ -58,7 +58,7 @@ namespace splines2 {
             rmat b_mat {
                 arma::zeros(x_.n_elem, spline_df_)
             };
-            // generate bases of degree 0
+            // generate basis of degree 0
             for (size_t i {0}; i < x_.n_elem; ++i) {
                 b_mat(i, x_index_(i)) = 1;
             }
@@ -74,7 +74,7 @@ namespace splines2 {
                     double saved { 0.0 };
                     // for each x, at most "order" columns are not zero
                     // basis_j(x) is not zero from t_j to t_{j+k+1}
-                    // where j is index of x in terms of bases
+                    // where j is index of x in terms of basis
                     // knot sequence: t0, t1, t2, ...
                     for (size_t j {0}; j < k; ++j) {
                         size_t j_index { x_index_(i) + j };

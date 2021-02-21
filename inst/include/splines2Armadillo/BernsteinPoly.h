@@ -175,7 +175,7 @@ namespace splines2 {
             return boundary_knots_;
         }
 
-        // construct polynomial bases by recursive formula
+        // construct polynomial basis by recursive formula
         inline virtual rmat basis(const bool complete_basis = true)
         {
             // early exit if latest

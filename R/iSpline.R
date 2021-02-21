@@ -29,10 +29,10 @@
 ##'     associated M-spline instead of actual polynomial degree. For example,
 ##'     I-spline basis of degree 2 is defined as the integral of associated
 ##'     M-spline basis of degree 2.
-##' @param intercept If \code{TRUE} by default, all spline bases are included.
-##'     Notice that when using I-Spline for monotonic regression,
-##'     \code{intercept = TRUE} should be set even when an intercept term is
-##'     considered additional to the spline bases in the model.
+##' @param intercept If \code{TRUE} by default, all of the spline basis
+##'     functions are returned.  Notice that when using I-Spline for monotonic
+##'     regression, \code{intercept = TRUE} should be set even when an intercept
+##'     term is considered additional to the spline basis functions.
 ##' @param derivs A non-negative integer specifying the order of derivatives of
 ##'     I-splines.
 ##'
@@ -106,7 +106,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
-            "may cause ill-conditioned bases."
+            "may cause ill-conditioned basis functions."
         ))
     }
     ## keep NA's as is

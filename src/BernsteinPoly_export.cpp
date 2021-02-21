@@ -36,7 +36,7 @@ Rcpp::NumericMatrix rcpp_bernsteinPoly(
         // integrals
         out = splines2::arma2rmat(bp_obj.integral(complete_basis));
     } else if ((! integral && derivs == 0) || (integral && derivs == 1)) {
-        // bases
+        // basis functions
         out = splines2::arma2rmat(bp_obj.basis(complete_basis));
     } else {
         // derivatives
