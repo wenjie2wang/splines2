@@ -66,7 +66,7 @@ namespace splines2 {
         {
             // check before assigment
             if (boundary_knots.has_nan()) {
-                throw std::range_error("Boundary knots cannot contain NA.");
+                throw std::range_error("Boundary knots cannot contain 'NA'.");
             }
             // for unspecified boundary knots
             // 1. do generation if no boundary knots have been set
@@ -79,7 +79,7 @@ namespace splines2 {
                     // check if boundary knots are different
                     if (left == right) {
                         throw std::range_error(
-                            "Cannot set boundary knots from x."
+                            "Cannot set boundary knots from 'x'."
                             );
                     }
                     boundary_knots_ = arma::zeros(2);
@@ -98,7 +98,9 @@ namespace splines2 {
                 range_size_ = boundary_knots_(1) - boundary_knots_(0);
             }
             if (internal_knots.has_nan()) {
-                throw std::range_error("Internal knots cannot contain NA.");
+                throw std::range_error(
+                    "The internal knots cannot contain 'NA'."
+                    );
             }
             // for non-empty internal knots
             // 1. get unique values
@@ -113,7 +115,7 @@ namespace splines2 {
                 if (boundary_knots_[0] >= min_int_knots ||
                     boundary_knots_[1] <= max_int_knots) {
                     throw std::range_error(
-                        "Internal knots must be set inside of boundary knots."
+                        "The internal knots must be inside boundary knots."
                         );
                 }
                 internal_knots_ = uni_internal_knots;
@@ -133,27 +135,32 @@ namespace splines2 {
         // - Farin, G., & Hansford, D. (2000). The essentials of CAGD.
         // - Schumaker, L. (2007). Spline functions: Basic theory.
         // - splines::splineDesign() when outer.ok = TRUE
+        // - Piegl, L., & Tiller, W. (1997). The NURBS book. Springer
         inline void extend_knot_sequence()
         {
             // number of internal knots must >= degree
-            if (internal_knots_.n_elem < degree_) {
+            if (internal_knots_.n_elem + 1 < degree_) {
                 throw std::length_error(
-                    "The number of distinct internal knots must be >= degree.");
+                    "The number of unique internal knots must be >= degree - 1."
+                    );
             }
             // extend to distinct knot sequence first
             rvec res { arma::zeros(internal_knots_.n_elem + 2 * order_) };
-            for (size_t i {0}; i < degree_; ++i) {
-                res(i) = internal_knots_(internal_knots_.n_elem - degree_ + i) -
-                    range_size_;
-            }
-            res(degree_) = boundary_knots_(0);
+            // place the internal knots
             for (size_t i {0}; i < internal_knots_.n_elem; ++i) {
                 res(degree_ + 1 + i) = internal_knots_(i);
             }
+            // place the boundary knots
+            res(degree_) = boundary_knots_(0);
             res(res.n_elem - 1 - degree_) = boundary_knots_(1);
+            // first and last "degree-size" knots
+
+            size_t n_ { degree_ + internal_knots_.n_elem };
             for (size_t i {0}; i < degree_; ++i) {
-                res(res.n_elem - degree_ + i) = range_size_ +
-                    internal_knots_(i);
+                res(degree_ - i - 1) = res(degree_ - i) -
+                    (res(n_ - i + 1) - res(n_ - i));
+                res(n_ + i + 2) = res(n_ + i + 1) +
+                    (res(degree_ + i + 1) - res(degree_ + i));
             }
             extended_boundary_knots_ = arma::zeros(2);
             extended_boundary_knots_(0) = res(0);
@@ -180,12 +187,23 @@ namespace splines2 {
             }
         }
 
-        inline void set_x_in_range() {
+        inline void set_x_in_range()
+        {
             if (is_x_in_range_latest_) {
                 return;
             }
             x_num_shift_ = arma::floor((x_ - boundary_knots_(0)) / range_size_);
             x_in_range_ = x_ - range_size_ * x_num_shift_;
+        }
+
+        inline rmat clamp_basis(const rmat& b_mat)
+        {
+            rmat out { b_mat.head_cols(degree_) + b_mat.tail_cols(degree_) };
+            if (internal_knots_.n_elem + 1 > degree_) {
+                rmat out1 { b_mat.cols(degree_, internal_knots_.n_elem) };
+                out = arma::join_rows(out1, out);
+            }
+            return out;
         }
 
     public:
@@ -211,9 +229,10 @@ namespace splines2 {
             x_ = x;
             degree_ = degree;
             clean_knots(internal_knots, boundary_knots);
-            if (internal_knots_.n_elem < degree_) {
+            if (internal_knots_.n_elem + 1 < degree_) {
                 throw std::length_error(
-                    "The number of distinct internal knots must be >= degree.");
+                    "The number of unique internal knots must be >= degree - 1."
+                    );
             }
             order_ = degree_ + 1;
             update_spline_df();
@@ -226,10 +245,10 @@ namespace splines2 {
         {
             x_ = x;
             degree_ = degree;
-            // spline_df = number(internal_knot) + 1 >= degree + 1
-            if (spline_df < degree + 1) {
+            // spline_df = number(internal_knot) + 1 >= degree
+            if (spline_df < degree) {
                 throw std::range_error(
-                    "The specified basis df must be > degree.");
+                    "The specified 'df' must be > 'degree'.");
             }
             spline_df_ = spline_df;
             order_ = degree_ + 1;
@@ -354,18 +373,14 @@ namespace splines2 {
             rmat b_mat { ms_obj.basis(true) };
             // remove first and last #degree bases
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
-            size_t mspline_df { internal_knots_.n_elem + order_ };
             // post-processing
-            rmat out1 { b_mat.cols(degree_, mspline_df - degree_ - 1) };
-            rmat out2 { b_mat.head_cols(degree_) + b_mat.tail_cols(degree_) };
-            b_mat = arma::join_rows(out1, out2);
-            spline_basis_ = b_mat;
+            spline_basis_ = clamp_basis(b_mat);
             is_basis_latest_ = true;
             if (complete_basis) {
-                return b_mat;
+                return spline_basis_;
             }
             // else
-            return mat_wo_col1(b_mat);
+            return mat_wo_col1(spline_basis_);
         }
 
         inline rmat derivative(
@@ -399,11 +414,9 @@ namespace splines2 {
             rmat b_mat { ms_obj.derivative(derivs, true) };
             // remove first and last #degree bases
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
-            size_t mspline_df { internal_knots_.n_elem + order_ };
             // post-processing
-            rmat out1 { b_mat.cols(degree_, mspline_df - degree_ - 1) };
-            rmat out2 { b_mat.head_cols(degree_) + b_mat.tail_cols(degree_) };
-            b_mat = arma::join_rows(out1, out2);
+            b_mat = clamp_basis(b_mat);
+            is_basis_latest_ = true;
             if (complete_basis) {
                 return b_mat;
             }
@@ -437,9 +450,7 @@ namespace splines2 {
                 b_mat.col(i) -= v0(0, i);
             }
             // post-processing
-            rmat out1 { b_mat.cols(degree_, mspline_df - degree_ - 1) };
-            rmat out2 { b_mat.head_cols(degree_) + b_mat.tail_cols(degree_) };
-            b_mat = arma::join_rows(out1, out2);
+            b_mat = clamp_basis(b_mat);
             // get cumulative sum of integral from left boundary knot
             for (size_t j {0}; j < b_mat.n_cols; ++j) {
                 b_mat.col(j) = (b_mat.col(j) + x_num_shift_) %
