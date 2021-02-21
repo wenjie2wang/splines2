@@ -3,7 +3,7 @@
 ## New features
 
 * Added `knots()` methods to extract internal knots and boundary knots from a
-  given *spline2* object.
+  given *splines2* object.
 
 ## Major changes
 

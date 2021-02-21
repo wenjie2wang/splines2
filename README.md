@@ -74,9 +74,9 @@ library(splines2)
 x <- seq.int(0, 1, 1e-3)
 degree <- 3
 ord <- degree + 1
-knots <- seq.int(0.1, 0.9, 0.1)
-b_knots <- range(x)
-all_knots <- sort(c(knots, rep(b_knots, ord)))
+internal_knots <- seq.int(0.1, 0.9, 0.1)
+boundary_knots <- range(x)
+all_knots <- sort(c(internal_knots, rep(boundary_knots, ord)))
 
 ## check equivalency of outputs
 my_check <- function(values) {
@@ -93,11 +93,11 @@ results with `splines::bs()` and `splines::splineDesign()`, and is about
 ``` r
 ## B-splines
 microbenchmark(
-    "splines::bs" = bs(x, knots = knots, degree = degree,
-                       intercept = TRUE, Boundary.knots = b_knots),
+    "splines::bs" = bs(x, knots = internal_knots, degree = degree,
+                       intercept = TRUE),
     "splines::splineDesign" = splineDesign(x, knots = all_knots, ord = ord),
-    "splines2::bSpline" = bSpline(x, knots = knots, degree = degree,
-                                  intercept = TRUE, Boundary.knots = b_knots),
+    "splines2::bSpline" = bSpline(x, knots = internal_knots, degree = degree,
+                                  intercept = TRUE),
     check = my_check,
     times = 1e3
 )
@@ -119,8 +119,8 @@ derivs <- 2
 microbenchmark(
     "splines::splineDesign" = splineDesign(x, knots = all_knots,
                                            ord = ord, derivs = derivs),
-    "splines2::dbs" = dbs(x, derivs = derivs, knots = knots, degree = degree,
-                          intercept = TRUE, Boundary.knots = b_knots),
+    "splines2::dbs" = dbs(x, derivs = derivs, knots = internal_knots,
+                          degree = degree, intercept = TRUE),
     check = my_check,
     times = 1e3
 )
@@ -143,8 +143,8 @@ coef_sp <- rnorm(length(all_knots) - ord)
 microbenchmark(
     "ibs::ibs" = ibs::ibs(x, knots = all_knots, ord = ord, coef = coef_sp),
     "splines2::ibs" = as.numeric(
-        splines2::ibs(x, knots = knots, degree = degree,
-                      intercept = TRUE, Boundary.knots = b_knots) %*% coef_sp
+        splines2::ibs(x, knots = internal_knots, degree = degree,
+                      intercept = TRUE) %*% coef_sp
     ),
     check = my_check,
     times = 1e3
@@ -171,10 +171,9 @@ computationally efficient.
 
 ``` r
 microbenchmark(
-    "splines::ns" = ns(x, knots = knots, intercept = TRUE,
-                       Boundary.knots = b_knots),
+    "splines::ns" = ns(x, knots = internal_knots, intercept = TRUE),
     "splines2::naturalSpline" = naturalSpline(
-        x, knots = knots, intercept = TRUE, Boundary.knots = b_knots
+        x, knots = internal_knots, intercept = TRUE
     ),
     times = 1e3
 )
@@ -196,11 +195,11 @@ B-spline by using `splines::spline.des()` (a wrapper function of
 
 ``` r
 microbenchmark(
-    "pbs::pbs" = pbs::pbs(x, knots = knots, degree = degree, intercept = TRUE,
-                          Boundary.knots = b_knots, periodic = TRUE),
+    "pbs::pbs" = pbs::pbs(x, knots = internal_knots, degree = degree,
+                          intercept = TRUE, periodic = TRUE),
     "splines2::mSpline" = mSpline(
-        x, knots = knots, degree = degree, intercept = TRUE,
-        Boundary.knots = b_knots, periodic = TRUE
+        x, knots = internal_knots, degree = degree,
+        intercept = TRUE, periodic = TRUE
     ),
     times = 1e3
 )
