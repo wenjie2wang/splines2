@@ -29,15 +29,15 @@ ignoring missing values and those \code{x} outside of the boundary.  For
 periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
 as.integer(intercept)} internal knots will be chosen instead and the
 number of internal knots must be greater or equal to the specified
-\code{degree}.  If internal knots are specified via \code{knots}, the
-specified \code{df} will be ignored.}
+\code{degree - 1}.  If internal knots are specified via \code{knots},
+the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.  For periodic splines (\code{periodic =
 TRUE}), the number of knots must be greater or equal to the specified
-\code{degree}.}
+\code{degree - 1}.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
@@ -51,7 +51,7 @@ default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.  For periodic splines (\code{periodic = TRUE}),
-the specified \code{Boundary.knots} define the cyclic period.}
+the specified boundary knots define the cyclic period.}
 
 \item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
 be returned instead of regular M-splines.  The default value is
@@ -82,9 +82,10 @@ corresponding integrals and derivatives.
 }
 \details{
 This function contains an implementation of the close form M-spline basis
-based on the recursion formula given by Ramsay (1988).  For monotone
-regression, one can use I-splines (see \code{\link{iSpline}}) instead of
-M-splines.
+based on the recursion formula given by Ramsay (1988) or periodic M-spline
+basis following the procedure producing periodic B-splines given in Piegl
+and Tiller (1997).  For monotone regression, one can use I-splines (see
+\code{\link{iSpline}}) instead of M-splines.
 }
 \examples{
 library(splines2)
@@ -136,6 +137,9 @@ par(op)
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
 \emph{Statistical science}, 3(4), 425--441.
+
+Piegl, L., & Tiller, W. (1997). \emph{The NURBS book}. Springer Science \&
+Business Media.
 }
 \seealso{
 \code{\link{bSpline}} for B-splines;

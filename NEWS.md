@@ -5,6 +5,12 @@
 * Added `knots()` methods to extract internal knots and boundary knots from a
   given *spline2* object.
 
+## Major changes
+
+* Updated the generation of the knot sequence for period M-splines following
+  Piegl and Tiller (1997), which relaxed the previous requirement that
+  `length(knots) >= degree` to `length(knots) >= degree - 1`.
+
 
 # splines2 0.4.1
 
