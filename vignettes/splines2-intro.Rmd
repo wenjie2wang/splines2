@@ -54,9 +54,9 @@ available in the package manual and thus will not be discussed.
 Function `bSpline()` provides B-spline basis matrix and allows `degree = 0` for
 piece-wise constant basis function, which extends the `bs()` function in package
 **splines** with a better computational performance.  One example of linear
-B-splines with two internal knots is given as follows:
+B-splines with three internal knots is given as follows:
 
-```{r bSpline, fig.cap="B-splines of degree one with two internal knots."}
+```{r bSpline, fig.cap="B-splines of degree one with three internal knots placed at 0.3, 0.5, and 0.6."}
 library(splines2)
 knots <- c(0.3, 0.5, 0.6)
 x <- seq(0, 1, 0.01)
@@ -109,7 +109,7 @@ at 0.3, 0.5, and 0.6. The boundary knots by default are the range of the data
 par(mfrow = c(1, 1))
 ```
 
-```{r mSpline, fig.cap = "Quadratic M-spline with three internal knots."}
+```{r mSpline, fig.cap = "Quadratic M-spline with three internal knots placed at 0.3, 0.5, and 0.6."}
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 matplot(x, msMat, type = "l", ylab = "y")
 abline(v = knots, lty = 2, col = "gray")
@@ -176,7 +176,7 @@ quadratic M-splines with three internal knots placed at 0.3, 0.5, and
 0.6. Notice that the degree of I-splines is defined from the associated
 M-splines instead of their own polynomial degree.
 
-```{r iSpline, fig.cap = "I-splines of degree two with three internal knots."}
+```{r iSpline, fig.cap = "I-splines of degree two with three internal knots placed at 0.3, 0.5, and 0.6."}
 isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
 matplot(x, isMat, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
@@ -218,7 +218,7 @@ corresponding I-splines will be returned.  If `scale = TRUE` (by default), each
 C-spline basis is scaled to have unit height at the right boundary knot.
 
 
-```{r cSpline-scaled, fig.cap = "C-splines of degree two with three internal knots."}
+```{r cSpline-scaled, fig.cap = "C-splines of degree two with three internal knots placed at 0.3, 0.5, and 0.6."}
 csMat1 <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
 matplot(x, csMat1, type = "l", ylab = "y")
 abline(h = 1, v = knots, lty = 2, col = "gray")
