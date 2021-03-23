@@ -53,7 +53,7 @@ specified.
 BSpline(const vec& x,
         const vec& internal_knots,
         const unsigned int degree = 3,
-        const vec& boundary_knots = vec())
+        const vec& boundary_knots = vec());
 ```
 
 The second non-default constructor is called when an unsigned integer
@@ -67,7 +67,7 @@ internal knots uses quantiles of specified `x`.
 BSpline(const vec& x,
         const unsigned int spline_df,
         const unsigned int degree = 3,
-        const vec& boundary_knots = vec())
+        const vec& boundary_knots = vec());
 ```
 
 The third non-default constructor is intended for basis functions with an
@@ -78,7 +78,7 @@ different but should not be greater than `degree + 1`.
 // 3. specified degree and (extended) knot sequence
 BSpline(const rvec& x,
         const unsigned int degree,
-        const rvec& knot_sequence)
+        const rvec& knot_sequence);
 ```
 
 The fourth non-default constructor is explicit and takes a pointer to a base
@@ -88,7 +88,7 @@ object.
 
 ```C++
 // 4. create a new object from a base class pointer
-BSpline(const SplineBase* pSplineBase)
+BSpline(const SplineBase* pSplineBase);
 ```
 
 ### Function Members
@@ -102,10 +102,10 @@ The main methods are
 The specific function signatures are as follows:
 
 ```C++
-mat basis(const bool complete_basis = true)
+mat basis(const bool complete_basis = true);
 mat derivative(const unsigned int derivs = 1,
-               const bool complete_basis = true)
-mat integral(const bool complete_basis = true)
+               const bool complete_basis = true);
+mat integral(const bool complete_basis = true);
 ```
 
 In addition, we may set and get the spline specifications through the following
@@ -165,7 +165,7 @@ The main non-default constructor is as follows:
 ```C++
 BernsteinPoly(const vec& x,
               const unsigned int degree,
-              const vec& boundary_knots = vec())
+              const vec& boundary_knots = vec());
 ```
 
 ### Function Members
@@ -179,10 +179,10 @@ Same with `BSpline`, the main methods are
 The specific function signatures are as follows:
 
 ```C++
-mat basis(const bool complete_basis = true)
+mat basis(const bool complete_basis = true);
 mat derivative(const unsigned int derivs = 1,
-               const bool complete_basis = true)
-mat integral(const bool complete_basis = true)
+               const bool complete_basis = true);
+mat integral(const bool complete_basis = true);
 ```
 
 In addition, we may similarly set and get the specifications through the
@@ -190,11 +190,11 @@ following *setter* and *getter* functions, respectively.
 
 ```C++
 // setter functions
-SplineBase* set_x(const vec&);
-SplineBase* set_x(const double);
-SplineBase* set_degree(const unsigned int);
-SplineBase* set_order(const unsigned int);
-SplineBase* set_boundary_knots(const vec&);
+BernsteinPoly* set_x(const vec&);
+BernsteinPoly* set_x(const double);
+BernsteinPoly* set_degree(const unsigned int);
+BernsteinPoly* set_order(const unsigned int);
+BernsteinPoly* set_boundary_knots(const vec&);
 
 // getter functions
 vec get_x();
