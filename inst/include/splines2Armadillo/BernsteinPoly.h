@@ -21,6 +21,7 @@
 #include <stdexcept>
 
 #include "common.h"
+#include "SplineBase.h"
 #include "utils.h"
 
 namespace splines2 {
@@ -102,6 +103,30 @@ namespace splines2 {
             if (is_basis_latest_) {
                 poly_basis_ = pBernsteinPoly->poly_basis_;
             }
+        }
+
+        explicit BernsteinPoly(const SplineBase* pSplineBase)
+        {
+            x_ = pSplineBase->get_x();
+            degree_ = pSplineBase->get_degree();
+            order_ = degree_ + 1;
+            rvec bound_knots { pSplineBase->get_boundary_knots() };
+            if (bound_knots.n_elem == 0) {
+                autoset_x_and_boundary(x_);
+            } else {
+                check_boundary(bound_knots);
+            }
+            is_basis_latest_ = false;
+        }
+
+        // explicit conversion
+        template <typename T>
+        explicit operator T() const {
+            T obj;
+            obj.set_x(x_)->
+                set_degree(degree_)->
+                set_boundary_knots(boundary_knots_);
+            return obj;
         }
 
         // given boundary_knots for consistency with SplineBase

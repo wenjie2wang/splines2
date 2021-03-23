@@ -220,6 +220,17 @@ namespace splines2 {
             update_spline_df();
         }
 
+        // explicit conversion
+        template <typename T>
+        explicit operator T() const {
+            T obj;
+            obj.set_x(x_)->
+                set_degree(degree_)->
+                set_internal_knots(internal_knots_)->
+                set_boundary_knots(boundary_knots_);
+            return obj;
+        }
+
         // given boundary_knots for consistency with SplineBase
         PeriodicMSpline(const rvec& x,
                         const rvec& internal_knots,
