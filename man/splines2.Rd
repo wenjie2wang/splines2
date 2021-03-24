@@ -27,6 +27,6 @@ package that uses the C++ interface is available at
 <https://github.com/wenjie2wang/example-pkg-Rcpp-splines2>.
 
 It is named after the \pkg{splines} package:
-"Regression Spline Functions and Classes". The tailing number two is simply
+"Regression Spline Functions and Classes". The trailing number two is simply
 "too" (and by no means for the generation two).
 }
