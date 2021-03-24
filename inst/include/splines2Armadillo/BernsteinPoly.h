@@ -36,9 +36,6 @@ namespace splines2 {
         double range_size_ = 1; // b - a
         rvec x_;
 
-        rmat poly_basis_;
-        bool is_basis_latest_ = false;
-
         // check x
         inline void check_x(const rvec& x) {
             if (x.has_nan()) {
@@ -99,10 +96,6 @@ namespace splines2 {
             } else {
                 check_boundary(pBernsteinPoly->boundary_knots_);
             }
-            is_basis_latest_ = pBernsteinPoly->is_basis_latest_;
-            if (is_basis_latest_) {
-                poly_basis_ = pBernsteinPoly->poly_basis_;
-            }
         }
 
         explicit BernsteinPoly(const SplineBase* pSplineBase)
@@ -116,7 +109,6 @@ namespace splines2 {
             } else {
                 check_boundary(bound_knots);
             }
-            is_basis_latest_ = false;
         }
 
         // explicit conversion
@@ -150,20 +142,17 @@ namespace splines2 {
         inline BernsteinPoly* set_x(const rvec& x)
         {
             check_x(x);
-            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_x(const double x)
         {
             check_x(num2vec(x));
-            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_degree(const unsigned int degree)
         {
             degree_ = degree;
             order_ = degree + 1;
-            is_basis_latest_ = false;
             return this;
         }
         inline BernsteinPoly* set_order(const unsigned int order)
@@ -203,14 +192,6 @@ namespace splines2 {
         // construct polynomial basis by recursive formula
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return poly_basis_;
-                }
-                // else
-                return mat_wo_col1(poly_basis_);
-            }
             // define output matrix
             rmat b_mat {
                 arma::ones(x_.n_elem, order_)
@@ -228,9 +209,6 @@ namespace splines2 {
                     b_mat(i, k) = saved;
                 }
             }
-            // prepare to return
-            poly_basis_ = b_mat;
-            is_basis_latest_ = true;
             if (complete_basis) {
                 return b_mat;
             }

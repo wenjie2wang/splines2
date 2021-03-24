@@ -40,6 +40,7 @@ namespace splines2 {
 
         using SplineBase::set_degree;
         using SplineBase::set_order;
+        using SplineBase::SplineBase;
 
         // get null space vector for the second derivatives
         // of B-spline basis on boundary knotsn
@@ -140,7 +141,7 @@ namespace splines2 {
             x_ = x;
             degree_ = 3;
             order_ = 4;
-            clean_knots(internal_knots, boundary_knots);
+            simplify_knots(internal_knots, boundary_knots);
             update_spline_df();
             update_x_outside();
         }
@@ -161,15 +162,15 @@ namespace splines2 {
             // determine internal knots by spline_df and x
             unsigned int n_internal_knots { spline_df_ - 2 };
             if (n_internal_knots == 0) {
-                clean_knots(rvec(), boundary_knots);
+                simplify_knots(rvec(), boundary_knots);
             } else {
                 rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
                 prob_vec = prob_vec.subvec(1, n_internal_knots);
-                clean_knots(rvec(), boundary_knots);
+                simplify_knots(rvec(), boundary_knots);
                 // get quantiles of x within boundary only
                 rvec x_inside { get_inside_x(x, boundary_knots_) };
                 rvec internal_knots { arma_quantile(x_inside, prob_vec) };
-                clean_knots(internal_knots);
+                simplify_knots(internal_knots);
             }
             update_x_outside();
         }
@@ -184,14 +185,6 @@ namespace splines2 {
         //! @return arma::mat
         inline rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return spline_basis_;
-                }
-                // else
-                return mat_wo_col1(spline_basis_);
-            }
             this->set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.basis(true) };
@@ -224,13 +217,12 @@ namespace splines2 {
                 }
             }
             // apply null space
-            spline_basis_ = bsMat * null_colvecs_;
-            is_basis_latest_ = true;
+            bsMat *= null_colvecs_;
             if (complete_basis) {
-                return spline_basis_;
+                return bsMat;
             }
             // else
-            return mat_wo_col1(spline_basis_);
+            return mat_wo_col1(bsMat);
         }
 
         inline rmat derivative(const unsigned int derivs = 1,
@@ -342,7 +334,6 @@ namespace splines2 {
         {
             x_ = x;
             is_x_index_latest_ = false;
-            is_basis_latest_ = false;
             is_x_outside_latest_ = false;
             return this;
         }
@@ -350,7 +341,6 @@ namespace splines2 {
         {
             x_ = num2vec(x);
             is_x_index_latest_ = false;
-            is_basis_latest_ = false;
             is_x_outside_latest_ = false;
             return this;
         }
@@ -358,10 +348,9 @@ namespace splines2 {
             const rvec& boundary_knots
             )
         {
-            clean_knots(internal_knots_, boundary_knots);
+            simplify_knots(internal_knots_, boundary_knots);
             is_knot_sequence_latest_ = false;
             is_x_index_latest_ = false;
-            is_basis_latest_ = false;
             is_x_outside_latest_ = false;
             return this;
         }

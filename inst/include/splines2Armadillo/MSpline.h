@@ -43,15 +43,6 @@ namespace splines2 {
         //! @return arma::mat
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return spline_basis_;
-                }
-                // else
-                return mat_wo_col1(spline_basis_);
-            }
-            // else do the generation
             update_spline_df();
             update_x_index();
             update_knot_sequence();
@@ -94,8 +85,6 @@ namespace splines2 {
                 }
             }
             // about to return
-            spline_basis_ = b_mat;
-            is_basis_latest_ = true;
             if (complete_basis) {
                 return b_mat;
             }

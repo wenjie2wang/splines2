@@ -35,7 +35,7 @@ namespace splines2 {
     public:
         // function members
 
-        //! Compute B-spline basis
+        //! Compute B-spline basis functions
         //!
         //! @param complete_basis A `bool` value indicating whether to return a
         //! complete spline basis
@@ -43,17 +43,11 @@ namespace splines2 {
         //! @return arma::mat
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return spline_basis_;
-                }
-                // else
-                return mat_wo_col1(spline_basis_);
-            }
-            // else do the generation
             update_spline_df();
             update_x_index();
+            if (is_extended_knot_sequence_) {
+                update_knot_sequence();
+            }
             // define output matrix
             rmat b_mat {
                 arma::zeros(x_.n_elem, spline_df_)
@@ -62,8 +56,8 @@ namespace splines2 {
             for (size_t i {0}; i < x_.n_elem; ++i) {
                 b_mat(i, x_index_(i)) = 1;
             }
-            // only need knot sequence for degree > 0
-            if (degree_ > 0) {
+            // only need knot sequence for degree > 0 unless extended
+            if (degree_ > 0 && ! is_extended_knot_sequence_) {
                 update_knot_sequence();
             }
             // main loop
@@ -81,7 +75,7 @@ namespace splines2 {
                         size_t i1 { j_index + k_offset + 1 };
                         size_t i2 { j_index + order_ };
                         double den { knot_sequence_(i2) - knot_sequence_(i1) };
-                        // the way to generate x_index seems to make den nonzero
+                        // no need to check for distinct internal knots
                         // if (isAlmostEqual(den)) {
                         //     if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
                         //         b_mat(i, j_index) = saved;
@@ -98,8 +92,6 @@ namespace splines2 {
                 }
             }
             // about to return
-            spline_basis_ = b_mat;
-            is_basis_latest_ = true;
             if (complete_basis) {
                 return b_mat;
             }

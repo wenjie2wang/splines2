@@ -36,7 +36,7 @@ namespace splines2 {
     // compare double-precision numbers for almost equality
     inline bool isAlmostEqual(double A, double B = 0.0)
     {
-        double MaxRelDiff {std::numeric_limits<double>::epsilon()};
+        const double MaxRelDiff { std::numeric_limits<double>::epsilon() };
         // compute the difference.
         double diff = std::abs(A - B);
         A = std::abs(A);
@@ -45,9 +45,27 @@ namespace splines2 {
         double largest = (B > A) ? B : A;
         if (diff <= largest * MaxRelDiff) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    template <typename T>
+    inline bool is_approx_equal(const T& A, const T& B) {
+        const double MaxRelDiff { std::numeric_limits<double>::epsilon() };
+        return arma::approx_equal(A, B, "reldiff", MaxRelDiff);
+    }
+
+    template <typename T>
+    // function checking if there exists any duplicates
+    inline bool any_duplicated(const T& x)
+    {
+        std::unordered_set<double> seen;
+        bool res {false};
+        for (size_t i {0}; i < x.n_rows; ++i) {
+            res = ! seen.insert(x(i)).second;
+            if (res) break;
+        }
+        return res;
     }
 
     // cumulative sum in possibly reverse order>

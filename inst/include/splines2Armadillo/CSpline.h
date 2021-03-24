@@ -75,27 +75,18 @@ namespace splines2 {
         //! @return arma::mat
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return spline_basis_;
-                }
-                return mat_wo_col1(spline_basis_);
-            }
-            // else do generation
             ISpline isp_obj { this };
-            spline_basis_ = isp_obj.integral(true);
-            is_basis_latest_ = true;
+            rmat out { isp_obj.integral(true) };
             // compute the scale on the right boundary knot
             scales_ = mat2rowvec(
                 isp_obj.set_x(boundary_knots_(1))->integral(true)
                 );
             // rescale each column
-            spline_basis_.each_row() /= scales_;
+            out.each_row() /= scales_;
             if (complete_basis) {
-                return spline_basis_;
+                return out;
             }
-            return mat_wo_col1(spline_basis_);
+            return mat_wo_col1(out);
         }
 
         inline virtual rmat derivative(const unsigned int derivs = 1,

@@ -45,21 +45,12 @@ namespace splines2 {
         //! @return arma::mat
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            // early exit if latest
-            if (is_basis_latest_) {
-                if (complete_basis) {
-                    return spline_basis_;
-                }
-                return mat_wo_col1(spline_basis_);
-            }
-            // else do generation
             MSpline msp_obj { this };
-            spline_basis_ = msp_obj.integral(true);
-            is_basis_latest_ = true;
+            rmat out { msp_obj.integral(true) };
             if (complete_basis) {
-                return spline_basis_;
+                return out;
             }
-            return mat_wo_col1(spline_basis_);
+            return mat_wo_col1(out);
         }
 
         inline virtual rmat derivative(const unsigned int derivs = 1,
