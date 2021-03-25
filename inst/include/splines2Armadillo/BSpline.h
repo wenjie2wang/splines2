@@ -123,11 +123,15 @@ namespace splines2 {
             BSpline bsp_obj { this };
             bsp_obj.set_degree(degree_ - derivs);
             // get basis matrix for (degree - derivs)
-            rmat d_mat { bsp_obj.basis(true) };
+            rmat d_mat { bsp_obj.get_basis_simple() };
             // make sure knot sequence and x index are latest
             update_knot_sequence();
             update_x_index();
             // add zero columns
+            update_spline_df();
+            // if (spline_df_ <= d_mat.n_cols) {
+            //     throw std::range_error("FIXME: get_derivative_simple()");
+            // }
             d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
             if (has_internal_multiplicity_) {
                 for (unsigned int k {1}; k <= derivs; ++k) {
