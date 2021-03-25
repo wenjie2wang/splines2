@@ -104,18 +104,20 @@ namespace splines2 {
                     sorted_internal_knots(sorted_internal_knots.n_elem - 1)
                 };
                 if (boundary_knots_.n_elem == 2 &&
-                    (boundary_knots_[0] >= min_int_knots ||
-                     boundary_knots_[1] <= max_int_knots)) {
+                    (boundary_knots_[0] > min_int_knots ||
+                     boundary_knots_[1] < max_int_knots)) {
                     throw std::range_error(
-                        "Internal knots must be set inside boundary."
+                        "Internal knots cannot be set outside boundary."
                         );
                 }
                 // check multiplicity
-                has_internal_multiplicity_ = any_duplicated(
-                    sorted_internal_knots
-                    );
+                rvec tmp {
+                    arma::join_vert(sorted_internal_knots, boundary_knots_)
+                };
+                has_internal_multiplicity_ = any_duplicated(tmp);
                 internal_knots_ = sorted_internal_knots;
             } else {
+                has_internal_multiplicity_ = false;
                 internal_knots_ = rvec();
             }
         }
@@ -187,10 +189,14 @@ namespace splines2 {
             if (n_internal_knots > 0) {
                 internal_knots_ = knot_sequence_.subvec(
                     order_, order_ + n_internal_knots - 1);
-                // check any duplicated internal knots
-                has_internal_multiplicity_ = any_duplicated(internal_knots_);
+                // check multiplicity
+                rvec tmp {
+                    arma::join_vert(internal_knots_, boundary_knots_)
+                };
+                has_internal_multiplicity_ = any_duplicated(tmp);
             } else {
                 internal_knots_ = rvec();
+                has_internal_multiplicity_ = false;
             }
             // set surrogate knots
             surrogate_boundary_knots_ = arma::zeros(2);
