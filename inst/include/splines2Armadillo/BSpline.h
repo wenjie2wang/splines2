@@ -110,7 +110,7 @@ namespace splines2 {
                 x_, surrogate_internal_knots_, degree_,
                 surrogate_boundary_knots_
             };
-            rmat out { bsp_obj.basis(true) };
+            rmat out { bsp_obj.get_basis_simple() };
             // remove first and last #degree basis functions
             return out.cols(degree_, out.n_cols - order_);
         }
@@ -188,7 +188,7 @@ namespace splines2 {
                 x_, surrogate_internal_knots_, degree_,
                 surrogate_boundary_knots_
             };
-            rmat out { bsp_obj.derivative(derivs, true) };
+            rmat out { bsp_obj.get_derivative_simple(derivs) };
             // remove first and last #degree basis functions
             return out.cols(degree_, out.n_cols - order_);
         }
@@ -200,6 +200,14 @@ namespace splines2 {
             bsp_obj.set_degree(degree_ + 1);
             rmat i_mat { bsp_obj.basis(false) };
             rvec knot_sequence_ord { bsp_obj.get_knot_sequence() };
+            // throw warning if any x is less than left-most boundary
+            if (arma::any(x_ < bsp_obj.knot_sequence_(0))) {
+                Rcpp::Rcout << "Warning: Found x < the leftmost knot, "
+                            << bsp_obj.knot_sequence_(0)
+                            << ". "
+                            << "The basis integrals were not well-defined."
+                            << std::endl;
+            }
             // make sure x index are latest
             update_x_index();
             // compute t_{(i+1)+k+1} - t_{i+1} of s_{k}
@@ -233,7 +241,7 @@ namespace splines2 {
                 x_, surrogate_internal_knots_, degree_,
                 surrogate_boundary_knots_
             };
-            rmat out { bsp_obj.integral(true) };
+            rmat out { bsp_obj.get_integral_simple() };
             // remove first and last #degree basis functions
             return out.cols(degree_, out.n_cols - order_);
         }
