@@ -110,7 +110,85 @@ namespace splines2 {
                 x_, surrogate_internal_knots_, degree_,
                 surrogate_boundary_knots_
             };
-            rmat out { bsp_obj.basis() };
+            rmat out { bsp_obj.basis(true) };
+            // remove first and last #degree basis functions
+            return out.cols(degree_, out.n_cols - order_);
+        }
+
+        inline virtual rmat get_derivative_simple(
+            const unsigned int derivs = 1
+            )
+        {
+            // create a copy of this object
+            BSpline bsp_obj { this };
+            bsp_obj.set_degree(degree_ - derivs);
+            // get basis matrix for (degree - derivs)
+            rmat d_mat { bsp_obj.basis(true) };
+            // make sure knot sequence and x index are latest
+            update_knot_sequence();
+            update_x_index();
+            // add zero columns
+            d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
+            if (has_internal_multiplicity_) {
+                for (unsigned int k {1}; k <= derivs; ++k) {
+                    const unsigned int k_offset { derivs - k };
+                    const size_t numer { degree_ - k_offset };
+                    for (size_t i {0}; i < x_.n_elem; ++i) {
+                        double saved { 0 };
+                        for (size_t j {0}; j < numer; ++j) {
+                            size_t j_index { x_index_(i) + j };
+                            size_t i1 { j_index + k_offset + 1 };
+                            size_t i2 { j_index + order_ };
+                            double den {
+                                knot_sequence_(i2) - knot_sequence_(i1)
+                            };
+                            if (isAlmostEqual(den)) {
+                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
+                                    d_mat(i, j_index) = saved;
+                                }
+                                saved = 0.0;
+                            } else {
+                                double term { numer * d_mat(i, j_index) / den };
+                                d_mat(i, j_index) = saved - term;
+                                saved = term;
+                            }
+                        }
+                        d_mat(i, x_index_(i) + numer) = saved;
+                    }
+                }
+            } else {
+                for (unsigned int k {1}; k <= derivs; ++k) {
+                    const unsigned int k_offset { derivs - k };
+                    const size_t numer { degree_ - k_offset };
+                    for (size_t i {0}; i < x_.n_elem; ++i) {
+                        double saved { 0 };
+                        for (size_t j {0}; j < numer; ++j) {
+                            size_t j_index { x_index_(i) + j };
+                            size_t i1 { j_index + k_offset + 1 };
+                            size_t i2 { j_index + order_ };
+                            double den {
+                                knot_sequence_(i2) - knot_sequence_(i1)
+                            };
+                            double term { numer * d_mat(i, j_index) / den };
+                            d_mat(i, j_index) = saved - term;
+                            saved = term;
+                        }
+                        d_mat(i, x_index_(i) + numer) = saved;
+                    }
+                }
+            }
+            return d_mat;
+        }
+
+        inline virtual rmat get_derivative_extended(
+            const unsigned int derivs = 1
+            )
+        {
+            BSpline bsp_obj {
+                x_, surrogate_internal_knots_, degree_,
+                surrogate_boundary_knots_
+            };
+            rmat out { bsp_obj.derivative(derivs, true) };
             // remove first and last #degree basis functions
             return out.cols(degree_, out.n_cols - order_);
         }
@@ -164,33 +242,11 @@ namespace splines2 {
                 }
                 return arma::zeros(x_.n_elem, spline_df_ - 1);
             }
-            // create a copy of this object
-            BSpline bs_obj2 { this };
-            bs_obj2.set_degree(degree_ - derivs);
-            // get basis matrix for (degree - derivs)
-            rmat d_mat { bs_obj2.basis(true) };
-            // add zero columns
-            d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
-            // make sure knot sequence and x index are latest
-            update_knot_sequence();
-            update_x_index();
-            // main loop
-            for (unsigned int k {1}; k <= derivs; ++k) {
-                const unsigned int k_offset { derivs - k };
-                const size_t numer { degree_ - k_offset };
-                for (size_t i {0}; i < x_.n_elem; ++i) {
-                    double saved { 0 };
-                    for (size_t j {0}; j < numer; ++j) {
-                        size_t j_index { x_index_(i) + j };
-                        size_t i1 { j_index + k_offset + 1 };
-                        size_t i2 { j_index + order_ };
-                        double den { knot_sequence_(i2) - knot_sequence_(i1) };
-                        double term { numer * d_mat(i, j_index) / den };
-                        d_mat(i, j_index) = saved - term;
-                        saved = term;
-                    }
-                    d_mat(i, x_index_(i) + numer) = saved;
-                }
+            rmat d_mat;
+            if (is_extended_knot_sequence_) {
+                d_mat = get_derivative_extended(derivs);
+            } else {
+                d_mat = get_derivative_simple(derivs);
             }
             // remove the first column if needed
             if (complete_basis) {
