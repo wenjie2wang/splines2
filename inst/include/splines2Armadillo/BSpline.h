@@ -193,6 +193,51 @@ namespace splines2 {
             return out.cols(degree_, out.n_cols - order_);
         }
 
+        inline virtual rmat get_integral_simple()
+        {
+            // create a copy of this object
+            BSpline bsp_obj { this };
+            bsp_obj.set_degree(degree_ + 1);
+            rmat i_mat { bsp_obj.basis(false) };
+            rvec knot_sequence_ord { bsp_obj.get_knot_sequence() };
+            // make sure x index are latest
+            update_x_index();
+            // compute t_{(i+1)+k+1} - t_{i+1} of s_{k}
+            // which is t_{(i+1)+(k+1)+1} - t_{(i+1)+1} of s_{k+1}
+            arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
+            for (size_t j { 0 }; j < numer1.n_elem; ++j) {
+                numer1(j) = knot_sequence_ord(j + order_ + 1) -
+                    knot_sequence_ord(j + 1);
+            }
+            // for each row of i_mat
+            for (size_t i {0}; i < x_.n_elem; ++i) {
+                size_t k1 { x_index_(i) }, k2 { k1 + degree_ };
+                arma::rowvec numer2 { i_mat(i, arma::span(k1, k2)) };
+                numer2 = rev_cum_sum(numer2);
+                for (size_t j {0}; j < i_mat.n_cols; ++j) {
+                    if (j > k2) {
+                        i_mat(i, j) = 0;
+                    } else if (j >= k1) {
+                        i_mat(i, j) = numer2(j - k1) * numer1(j) / order_;
+                    } else {
+                        i_mat(i, j) = numer1(j) / order_;
+                    }
+                }
+            }
+            return i_mat;
+        }
+
+        inline virtual rmat get_integral_extended()
+        {
+            BSpline bsp_obj {
+                x_, surrogate_internal_knots_, degree_,
+                surrogate_boundary_knots_
+            };
+            rmat out { bsp_obj.integral(true) };
+            // remove first and last #degree basis functions
+            return out.cols(degree_, out.n_cols - order_);
+        }
+
     public:
         // inherits constructors
         using SplineBase::SplineBase;
@@ -259,34 +304,11 @@ namespace splines2 {
         // integral of B-splines
         inline virtual rmat integral(const bool complete_basis = true)
         {
-            // create a copy of this object
-            BSpline bs_obj2 { this };
-            bs_obj2.set_degree(degree_ + 1);
-            rmat i_mat { bs_obj2.basis(false) };
-            rvec knot_sequence_ord { bs_obj2.get_knot_sequence() };
-            // make sure x index are latest
-            update_x_index();
-            // compute t_{(i+1)+k+1} - t_{i+1} of s_{k}
-            // which is t_{(i+1)+(k+1)+1} - t_{(i+1)+1} of s_{k+1}
-            arma::rowvec numer1 { arma::zeros<arma::rowvec>(i_mat.n_cols) };
-            for (size_t j { 0 }; j < numer1.n_elem; ++j) {
-                numer1(j) = knot_sequence_ord(j + order_ + 1) -
-                    knot_sequence_ord(j + 1);
-            }
-            // for each row of i_mat
-            for (size_t i {0}; i < x_.n_elem; ++i) {
-                size_t k1 { x_index_(i) }, k2 { k1 + degree_ };
-                arma::rowvec numer2 { i_mat(i, arma::span(k1, k2)) };
-                numer2 = rev_cum_sum(numer2);
-                for (size_t j {0}; j < i_mat.n_cols; ++j) {
-                    if (j > k2) {
-                        i_mat(i, j) = 0;
-                    } else if (j >= k1) {
-                        i_mat(i, j) = numer2(j - k1) * numer1(j) / order_;
-                    } else {
-                        i_mat(i, j) = numer1(j) / order_;
-                    }
-                }
+            rmat i_mat;
+            if (is_extended_knot_sequence_) {
+                i_mat = get_integral_extended();
+            } else {
+                i_mat = get_integral_simple();
             }
             // remove the first column if needed
             if (complete_basis) {
