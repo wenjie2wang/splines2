@@ -29,10 +29,96 @@ namespace splines2 {
     // define a class for B-splines
     class BSpline : public SplineBase
     {
+    protected:
+        inline virtual rmat get_basis_simple()
+        {
+            update_spline_df();
+            update_x_index();
+            // define output matrix
+            rmat b_mat {
+                arma::zeros(x_.n_elem, spline_df_)
+            };
+            // generate basis of degree 0
+            for (size_t i {0}; i < x_.n_elem; ++i) {
+                b_mat(i, x_index_(i)) = 1;
+            }
+            // only need knot sequence for degree > 0 unless extended
+            if (degree_ > 0) {
+                update_knot_sequence();
+            }
+            if (has_internal_multiplicity_) {
+                for (unsigned int k {1}; k <= degree_; ++k) {
+                    const unsigned int k_offset { degree_ - k };
+                    // use the Cox-de Boor recursive formula
+                    for (size_t i {0}; i < x_.n_elem; ++i) {
+                        double saved { 0.0 };
+                        for (size_t j {0}; j < k; ++j) {
+                            size_t j_index { x_index_(i) + j };
+                            size_t i1 { j_index + k_offset + 1 };
+                            size_t i2 { j_index + order_ };
+                            double den {
+                                knot_sequence_(i2) - knot_sequence_(i1)
+                            };
+                            if (isAlmostEqual(den)) {
+                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
+                                    b_mat(i, j_index) = saved;
+                                }
+                                saved = 0.0;
+                            } else {
+                                double term { b_mat(i, j_index) / den };
+                                b_mat(i, j_index) = saved +
+                                    (knot_sequence_(i2) - x_(i)) * term;
+                                saved = (x_(i) - knot_sequence_(i1)) * term;
+                            }
+                        }
+                        b_mat(i, x_index_(i) + k) = saved;
+                    }
+                }
+            } else {
+                for (unsigned int k {1}; k <= degree_; ++k) {
+                    const unsigned int k_offset { degree_ - k };
+                    // use the Cox-de Boor recursive formula
+                    for (size_t i {0}; i < x_.n_elem; ++i) {
+                        double saved { 0.0 };
+                        // for each x, at most "order" columns are not zero
+                        // basis_j(x) is not zero from t_j to t_{j+k+1}
+                        // where j is index of x in terms of basis
+                        // knot sequence: t0, t1, t2, ...
+                        for (size_t j {0}; j < k; ++j) {
+                            size_t j_index { x_index_(i) + j };
+                            size_t i1 { j_index + k_offset + 1 };
+                            size_t i2 { j_index + order_ };
+                            double den {
+                                knot_sequence_(i2) - knot_sequence_(i1)
+                            };
+                            // no need to check for distinct internal knots
+                            double term { b_mat(i, j_index) / den };
+                            b_mat(i, j_index) = saved +
+                                (knot_sequence_(i2) - x_(i)) * term;
+                            saved = (x_(i) - knot_sequence_(i1)) * term;
+                        }
+                        b_mat(i, x_index_(i) + k) = saved;
+                    }
+                }
+            }
+            return b_mat;
+        }
+
+        inline virtual rmat get_basis_extended()
+        {
+            BSpline bsp_obj {
+                x_, surrogate_internal_knots_, degree_,
+                surrogate_boundary_knots_
+            };
+            rmat out { bsp_obj.basis() };
+            // remove first and last #degree basis functions
+            return out.cols(degree_, out.n_cols - order_);
+        }
+
+    public:
         // inherits constructors
         using SplineBase::SplineBase;
 
-    public:
         // function members
 
         //! Compute B-spline basis functions
@@ -43,53 +129,11 @@ namespace splines2 {
         //! @return arma::mat
         inline virtual rmat basis(const bool complete_basis = true)
         {
-            update_spline_df();
-            update_x_index();
+            rmat b_mat;
             if (is_extended_knot_sequence_) {
-                update_knot_sequence();
-            }
-            // define output matrix
-            rmat b_mat {
-                arma::zeros(x_.n_elem, spline_df_)
-            };
-            // generate basis of degree 0
-            for (size_t i {0}; i < x_.n_elem; ++i) {
-                b_mat(i, x_index_(i)) = 1;
-            }
-            // only need knot sequence for degree > 0 unless extended
-            if (degree_ > 0 && ! is_extended_knot_sequence_) {
-                update_knot_sequence();
-            }
-            // main loop
-            for (unsigned int k {1}; k <= degree_; ++k) {
-                const unsigned int k_offset { degree_ - k };
-                // use the Cox-de Boor recursive formula
-                for (size_t i {0}; i < x_.n_elem; ++i) {
-                    double saved { 0.0 };
-                    // for each x, at most "order" columns are not zero
-                    // basis_j(x) is not zero from t_j to t_{j+k+1}
-                    // where j is index of x in terms of basis
-                    // knot sequence: t0, t1, t2, ...
-                    for (size_t j {0}; j < k; ++j) {
-                        size_t j_index { x_index_(i) + j };
-                        size_t i1 { j_index + k_offset + 1 };
-                        size_t i2 { j_index + order_ };
-                        double den { knot_sequence_(i2) - knot_sequence_(i1) };
-                        // no need to check for distinct internal knots
-                        // if (isAlmostEqual(den)) {
-                        //     if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                        //         b_mat(i, j_index) = saved;
-                        //     }
-                        //     saved = 0.0;
-                        // } else {
-                        double term { b_mat(i, j_index) / den };
-                        b_mat(i, j_index) = saved +
-                            (knot_sequence_(i2) - x_(i)) * term;
-                        saved = (x_(i) - knot_sequence_(i1)) * term;
-                        // }
-                    }
-                    b_mat(i, x_index_(i) + k) = saved;
-                }
+                b_mat = get_basis_extended();
+            } else {
+                b_mat = get_basis_simple();
             }
             // about to return
             if (complete_basis) {

@@ -47,9 +47,8 @@ namespace splines2 {
 
         // for extended knot sequence
         // [min(knot_sequence), max(knot_sequence)]
-        rvec surrogate_boundary_knots_;
         rvec surrogate_internal_knots_;
-        rvec surrogate_knot_sequence_;
+        rvec surrogate_boundary_knots_;
 
         // index of x relative to internal knots
         uvec x_index_ = uvec();
@@ -97,25 +96,27 @@ namespace splines2 {
                 throw std::range_error("Internal knots cannot contain NA.");
             }
             // for non-empty internal knots
-            // 1. get unique values
-            // 2. checks if outside of boundary
             if (internal_knots.n_elem > 0) {
-                rvec uni_internal_knots { arma::unique(internal_knots) };
-                // check internal knots are inside of boundary knots
-                double min_int_knots { uni_internal_knots(0) };
+                // check internal knots are inside boundary knots
+                rvec sorted_internal_knots { arma::sort(internal_knots) };
+                double min_int_knots { sorted_internal_knots(0) };
                 double max_int_knots {
-                    uni_internal_knots(uni_internal_knots.n_elem - 1)
+                    sorted_internal_knots(sorted_internal_knots.n_elem - 1)
                 };
                 if (boundary_knots_.n_elem == 2 &&
                     (boundary_knots_[0] >= min_int_knots ||
                      boundary_knots_[1] <= max_int_knots)) {
                     throw std::range_error(
-                        "Internal knots must be set inside of boundary knots."
+                        "Internal knots must be set inside boundary."
                         );
                 }
-                internal_knots_ = uni_internal_knots;
+                // check multiplicity
+                has_internal_multiplicity_ = any_duplicated(
+                    sorted_internal_knots
+                    );
+                internal_knots_ = sorted_internal_knots;
             } else {
-                internal_knots_ = internal_knots;
+                internal_knots_ = rvec();
             }
         }
 
@@ -198,15 +199,13 @@ namespace splines2 {
                 knot_sequence_(knot_sequence_.n_elem - 1);
             surrogate_internal_knots_ =
                 knot_sequence_.subvec(1, knot_sequence_.n_elem - 2);
-            surrogate_knot_sequence_ = get_simple_knot_sequence(
-                surrogate_internal_knots_, surrogate_boundary_knots_, order_
-                );
             // check if it is actually a simple knot sequence
-            is_extended_knot_sequence_ = has_internal_multiplicity_ ||
-                ! (isAlmostEqual(boundary_knots_(0),
-                                 surrogate_boundary_knots_(0)) &&
-                   isAlmostEqual(boundary_knots_(1),
-                                 surrogate_boundary_knots_(1)));
+            is_extended_knot_sequence_ = ! (
+                isAlmostEqual(boundary_knots_(0),
+                              surrogate_boundary_knots_(0)) &&
+                isAlmostEqual(boundary_knots_(1),
+                              surrogate_boundary_knots_(1))
+                );
             // set flags to prevent knot sequence from being updated
             is_knot_sequence_latest_ = true;
         }
@@ -259,10 +258,17 @@ namespace splines2 {
             boundary_knots_ { pSplineBase->boundary_knots_ },
             degree_ { pSplineBase->degree_  },
             knot_sequence_ { pSplineBase->knot_sequence_ },
+            has_internal_multiplicity_ {
+                pSplineBase->is_knot_sequence_latest_ },
             is_knot_sequence_latest_ {
                 pSplineBase->is_knot_sequence_latest_ },
             is_extended_knot_sequence_ {
                 pSplineBase->is_extended_knot_sequence_ },
+            surrogate_internal_knots_ {
+                pSplineBase->surrogate_internal_knots_ },
+            surrogate_boundary_knots_ {
+                pSplineBase->surrogate_boundary_knots_ },
+            x_index_ { pSplineBase->x_index_ },
             is_x_index_latest_ { pSplineBase->is_x_index_latest_ }
         {
             order_ = degree_ + 1;
