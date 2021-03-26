@@ -124,8 +124,8 @@ expect_true(isNumMatrix(iSpline(x, degree = 0, intercept = TRUE),
                         length(x), 1))
 expect_error(iSpline(x, degree = 0, intercept = FALSE))
 
-## error if any internal knot is not placed inside of boundary
-expect_error(iSpline(x, knots = c(0, 0.5), degree = 0))
+## error if any internal knot is placed outside boundary
+expect_error(iSpline(x, knots = c(- 0.1, 0.5), degree = 0))
 
 ## warning if any x outside of boundary
 expect_warning(iSpline(c(x, 10), knots = knots, degree = 0,
