@@ -87,7 +87,7 @@ namespace splines2 {
                 // specified boundary knots
                 rvec uni_boundary_knots { arma::unique(boundary_knots) };
                 if (uni_boundary_knots.n_elem != 2) {
-                    throw std::length_error(
+                    throw std::range_error(
                         "Need two distinct boundary knots.");
                 }
                 boundary_knots_ = uni_boundary_knots;
@@ -167,7 +167,7 @@ namespace splines2 {
         {
             // check the length of specified knot sequence
             if (knot_sequence.n_elem < 2 * order_) {
-                throw std::length_error(
+                throw std::range_error(
                    "The length of specified knot sequence is too small."
                     );
             }
@@ -250,6 +250,16 @@ namespace splines2 {
                 x_index_(i) = left_index;
             }
             is_x_index_latest_ = true;
+        }
+
+        // check if simple knot sequence
+        inline virtual void stopifnot_simple_knot_sequence() const
+        {
+            if (has_internal_multiplicity_ || is_extended_knot_sequence_) {
+                throw std::range_error(
+                    "NaturlSpline is only applicable for simple knot sequence."
+                    );
+            }
         }
 
     public:

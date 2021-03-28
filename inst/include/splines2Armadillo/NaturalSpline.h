@@ -126,6 +126,7 @@ namespace splines2 {
         explicit NaturalSpline(const SplineBase* pSplineBase) :
             SplineBase(pSplineBase)
         {
+            stopifnot_simple_knot_sequence();
             degree_ = 3;
             order_ = 4;
             update_spline_df();
@@ -138,6 +139,7 @@ namespace splines2 {
                       const rvec& internal_knots,
                       const rvec& boundary_knots = rvec())
         {
+            stopifnot_simple_knot_sequence();
             x_ = x;
             degree_ = 3;
             order_ = 4;
@@ -151,6 +153,7 @@ namespace splines2 {
                       const unsigned int spline_df,
                       const rvec& boundary_knots = rvec())
         {
+            stopifnot_simple_knot_sequence();
             x_ = x;
             degree_ = 3;
             order_ = 4;

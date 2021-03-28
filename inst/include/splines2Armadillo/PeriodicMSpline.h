@@ -91,7 +91,7 @@ namespace splines2 {
                 // specified boundary knots
                 rvec uni_boundary_knots { arma::unique(boundary_knots) };
                 if (uni_boundary_knots.n_elem != 2) {
-                    throw std::length_error(
+                    throw std::range_error(
                         "Need two distinct boundary knots.");
                 }
                 boundary_knots_ = uni_boundary_knots;
@@ -140,7 +140,7 @@ namespace splines2 {
         {
             // number of internal knots must >= degree
             if (internal_knots_.n_elem + 1 < degree_) {
-                throw std::length_error(
+                throw std::range_error(
                     "The number of unique internal knots must be >= degree - 1."
                     );
             }
@@ -241,7 +241,7 @@ namespace splines2 {
             degree_ = degree;
             clean_knots(internal_knots, boundary_knots);
             if (internal_knots_.n_elem + 1 < degree_) {
-                throw std::length_error(
+                throw std::range_error(
                     "The number of unique internal knots must be >= degree - 1."
                     );
             }
