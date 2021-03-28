@@ -34,9 +34,9 @@ $(tar): $(objects)
 	R CMD build .
 
 $(checkLog): $(tar) $(tinytest)
-	@printf "\nCheck Rcpp interface: \n\n"
+	@printf "\nCheck the Rcpp interface: \n\n"
 	@Rscript inst/run_rcpp-tests.R inst
-	@printf "\nChecking R interface: \n\n"
+	@printf "\nChecking the R interface: \n\n"
 	R CMD check --as-cran $(tar)
 
 .PHONY: check-revdep
