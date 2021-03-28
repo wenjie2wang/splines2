@@ -5,25 +5,11 @@
 #include "../include/splines2Armadillo.h"
 
 // helper function
-inline Rcpp::List return_list(splines2::BSpline obj,
-                              const bool return_integral = true)
+inline Rcpp::List return_list(splines2::BSpline obj)
 {
-    if (return_integral) {
-        return Rcpp::List::create(
-            Rcpp::Named("basis") = obj.basis(),
-            Rcpp::Named("integral") = obj.integral(),
-            Rcpp::Named("d1") = obj.derivative(),
-            Rcpp::Named("d2") = obj.derivative(2),
-            Rcpp::Named("d3") = obj.derivative(3),
-            Rcpp::Named("degree") = obj.get_degree(),
-            Rcpp::Named("internal_knots") = splines2::arma2rvec(
-                obj.get_internal_knots()),
-            Rcpp::Named("boundary_knots") = splines2::arma2rvec(
-                obj.get_boundary_knots())
-            );
-    }
     return Rcpp::List::create(
         Rcpp::Named("basis") = obj.basis(),
+        Rcpp::Named("integral") = obj.integral(),
         Rcpp::Named("d1") = obj.derivative(),
         Rcpp::Named("d2") = obj.derivative(2),
         Rcpp::Named("d3") = obj.derivative(3),
