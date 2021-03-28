@@ -1,6 +1,3 @@
-library(splines2)
-library(tinytest)
-
 Rcpp::sourceCpp("test-MSpline.cpp")
 
 x <- seq.int(0, 10, 0.02)
