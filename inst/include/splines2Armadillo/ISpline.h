@@ -31,10 +31,44 @@ namespace splines2 {
     // define a class for M-splines
     class ISpline : public SplineBase
     {
+    protected:
+        inline virtual rmat get_integral_simple()
+        {
+            BSpline bsp_obj { this };
+            bsp_obj.set_degree(degree_ + 1);
+            rmat i_mat { bsp_obj.integral(false) };
+            update_x_index();
+            // for each row of i_mat
+            for (size_t i {0}; i < x_.n_elem; ++i) {
+                size_t k2 { x_index_(i) + degree_ };
+                arma::rowvec numer { i_mat(i, arma::span(0, k2)) };
+                numer = rev_cum_sum(numer);
+                for (size_t j {0}; j < i_mat.n_cols; ++j) {
+                    if (j > k2) {
+                        i_mat(i, j) = 0.0;
+                    } else {
+                        i_mat(i, j) = numer(j);
+                    }
+                }
+            }
+            return i_mat;
+        }
+
+        inline virtual rmat get_integral_extended()
+        {
+            ISpline isp_obj {
+                x_, surrogate_internal_knots_, degree_,
+                surrogate_boundary_knots_
+            };
+            rmat out { isp_obj.get_integral_simple() };
+            // remove first and last #degree basis functions
+            return out.cols(degree_, out.n_cols - order_);
+        }
+
+    public:
         // inherits constructors
         using SplineBase::SplineBase;
 
-    public:
         // function members
 
         //! Compute I-spline basis
@@ -69,22 +103,11 @@ namespace splines2 {
 
         inline virtual rmat integral(const bool complete_basis = true)
         {
-            BSpline bsp_obj { this };
-            bsp_obj.set_degree(degree_ + 1);
-            rmat i_mat { bsp_obj.integral(false) };
-            update_x_index();
-            // for each row of i_mat
-            for (size_t i {0}; i < x_.n_elem; ++i) {
-                size_t k2 { x_index_(i) + degree_ };
-                arma::rowvec numer { i_mat(i, arma::span(0, k2)) };
-                numer = rev_cum_sum(numer);
-                for (size_t j {0}; j < i_mat.n_cols; ++j) {
-                    if (j > k2) {
-                        i_mat(i, j) = 0.0;
-                    } else {
-                        i_mat(i, j) = numer(j);
-                    }
-                }
+            rmat i_mat;
+            if (is_extended_knot_sequence_) {
+                i_mat = get_integral_extended();
+            } else {
+                i_mat = get_integral_simple();
             }
             // remove the first column if needed
             if (complete_basis) {
