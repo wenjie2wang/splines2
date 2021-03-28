@@ -38,8 +38,6 @@ namespace splines2 {
         uvec x_outside_left_;
         uvec x_outside_right_;
 
-        using SplineBase::set_degree;
-        using SplineBase::set_order;
         using SplineBase::SplineBase;
 
         // get null space vector for the second derivatives
@@ -116,7 +114,6 @@ namespace splines2 {
         {
             spline_df_ = internal_knots_.n_elem + 2;
         }
-
 
     public:
         // the default constructor
@@ -358,6 +355,21 @@ namespace splines2 {
             return this;
         }
 
+        // placeholders
+        inline virtual NaturalSpline* set_degree(const unsigned int degree)
+        {
+            if (degree) {
+                // do nothing
+            }
+            return this;
+        }
+        inline virtual NaturalSpline* set_order(const unsigned int order)
+        {
+            if (order) {
+                // do nothing
+            }
+            return this;
+        }
 
     };
 
