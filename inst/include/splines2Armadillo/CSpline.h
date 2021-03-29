@@ -33,7 +33,7 @@ namespace splines2 {
     {
     private:
         // hide pure virtual function for integral here
-        inline rmat integral(const bool complete_basis = true)
+        inline rmat integral(const bool complete_basis = true) override
         {
             if (complete_basis) {
                 // do nothing
@@ -73,7 +73,7 @@ namespace splines2 {
         //! complete spline basis
         //!
         //! @return arma::mat
-        inline virtual rmat basis(const bool complete_basis = true)
+        inline rmat basis(const bool complete_basis = true) override
         {
             ISpline isp_obj { this };
             rmat out { isp_obj.integral(true) };
@@ -89,8 +89,8 @@ namespace splines2 {
             return mat_wo_col1(out);
         }
 
-        inline virtual rmat derivative(const unsigned int derivs = 1,
-                                       const bool complete_basis = true)
+        inline rmat derivative(const unsigned int derivs = 1,
+                               const bool complete_basis = true) override
         {
             if (derivs == 0) {
                 throw std::range_error(

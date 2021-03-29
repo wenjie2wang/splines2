@@ -32,7 +32,7 @@ namespace splines2 {
     class ISpline : public SplineBase
     {
     protected:
-        inline virtual rmat get_integral_simple()
+        inline rmat get_integral_simple()
         {
             BSpline bsp_obj { this };
             bsp_obj.set_degree(degree_ + 1);
@@ -54,7 +54,7 @@ namespace splines2 {
             return i_mat;
         }
 
-        inline virtual rmat get_integral_extended()
+        inline rmat get_integral_extended()
         {
             ISpline isp_obj {
                 x_, surrogate_internal_knots_, degree_,
@@ -77,7 +77,7 @@ namespace splines2 {
         //! complete spline basis
         //!
         //! @return arma::mat
-        inline virtual rmat basis(const bool complete_basis = true)
+        inline rmat basis(const bool complete_basis = true) override
         {
             MSpline msp_obj { this };
             rmat out { msp_obj.integral(true) };
@@ -87,8 +87,8 @@ namespace splines2 {
             return mat_wo_col1(out);
         }
 
-        inline virtual rmat derivative(const unsigned int derivs = 1,
-                                       const bool complete_basis = true)
+        inline rmat derivative(const unsigned int derivs = 1,
+                               const bool complete_basis = true) override
         {
             if (derivs == 0) {
                 throw std::range_error(
@@ -101,7 +101,7 @@ namespace splines2 {
             return msp_obj.derivative(derivs - 1, complete_basis);
         }
 
-        inline virtual rmat integral(const bool complete_basis = true)
+        inline rmat integral(const bool complete_basis = true) override
         {
             rmat i_mat;
             if (is_extended_knot_sequence_) {

@@ -190,7 +190,7 @@ namespace splines2 {
         }
 
         // construct polynomial basis by recursive formula
-        inline virtual rmat basis(const bool complete_basis = true)
+        inline rmat basis(const bool complete_basis = true)
         {
             // define output matrix
             rmat b_mat {
@@ -217,8 +217,8 @@ namespace splines2 {
         }
 
         // derivatives
-        inline virtual rmat derivative(const unsigned int derivs = 1,
-                                       const bool complete_basis = true)
+        inline rmat derivative(const unsigned int derivs = 1,
+                               const bool complete_basis = true)
         {
             if (derivs == 0) {
                 throw std::range_error(
@@ -265,7 +265,7 @@ namespace splines2 {
         }
 
         // integrals
-        inline virtual rmat integral(const bool complete_basis = true)
+        inline rmat integral(const bool complete_basis = true)
         {
             BernsteinPoly bp_obj2 { this };
             // get basis matrix for (degree + 1) with intercept

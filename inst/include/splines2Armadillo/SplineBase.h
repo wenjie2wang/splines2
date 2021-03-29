@@ -26,7 +26,8 @@
 namespace splines2 {
 
     // define base class for some regression splines
-    class SplineBase {
+    class SplineBase
+    {
     protected:
         // setter and getter
         rvec x_ = rvec();

@@ -30,7 +30,7 @@ namespace splines2 {
     class BSpline : public SplineBase
     {
     protected:
-        inline virtual rmat get_basis_simple()
+        inline rmat get_basis_simple()
         {
             update_spline_df();
             update_x_index();
@@ -104,7 +104,7 @@ namespace splines2 {
             return b_mat;
         }
 
-        inline virtual rmat get_basis_extended()
+        inline rmat get_basis_extended()
         {
             BSpline bsp_obj {
                 x_, surrogate_internal_knots_, degree_,
@@ -115,7 +115,7 @@ namespace splines2 {
             return out.cols(degree_, out.n_cols - order_);
         }
 
-        inline virtual rmat get_derivative_simple(
+        inline rmat get_derivative_simple(
             const unsigned int derivs = 1
             )
         {
@@ -184,7 +184,7 @@ namespace splines2 {
             return d_mat;
         }
 
-        inline virtual rmat get_derivative_extended(
+        inline rmat get_derivative_extended(
             const unsigned int derivs = 1
             )
         {
@@ -197,7 +197,7 @@ namespace splines2 {
             return out.cols(degree_, out.n_cols - order_);
         }
 
-        inline virtual rmat get_integral_simple()
+        inline rmat get_integral_simple()
         {
             // create a copy of this object
             BSpline bsp_obj { this };
@@ -239,7 +239,7 @@ namespace splines2 {
             return i_mat;
         }
 
-        inline virtual rmat get_integral_extended()
+        inline rmat get_integral_extended()
         {
             BSpline bsp_obj {
                 x_, surrogate_internal_knots_, degree_,
@@ -262,7 +262,7 @@ namespace splines2 {
         //! complete spline basis
         //!
         //! @return arma::mat
-        inline virtual rmat basis(const bool complete_basis = true)
+        inline rmat basis(const bool complete_basis = true) override
         {
             rmat b_mat;
             if (is_extended_knot_sequence_) {
@@ -279,10 +279,10 @@ namespace splines2 {
         }
 
         // derivatives of B-splines
-        inline virtual rmat derivative(
+        inline rmat derivative(
             const unsigned int derivs = 1,
             const bool complete_basis = true
-            )
+            ) override
         {
             if (derivs == 0) {
                 throw std::range_error(
@@ -314,7 +314,7 @@ namespace splines2 {
         }
 
         // integral of B-splines
-        inline virtual rmat integral(const bool complete_basis = true)
+        inline rmat integral(const bool complete_basis = true) override
         {
             rmat i_mat;
             if (is_extended_knot_sequence_) {
