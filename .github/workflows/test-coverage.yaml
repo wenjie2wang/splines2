@@ -15,7 +15,7 @@ jobs:
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TT_AT_HOME: true
+      TT_AT_HOME: TRUE
 
     steps:
       - uses: actions/checkout@v2
