@@ -64,20 +64,22 @@ the following vignettes:
 
 Since v0.3.0, the implementation of the main functions has been rewritten in C++
 with the help of the **Rcpp** and **RcppArmadillo** package. The computational
-performance has thus been boosted.
+performance has thus been boosted and comparable with the function
+`splines::splineDesign()`.
 
-Some benchmarks are provided for reference as follows:
+Some quick microbenchmarks are provided for reference as follows:
 
 ```{r bench-setup}
 library(microbenchmark)
 library(splines)
 library(splines2)
 
-x <- seq.int(0, 1, 1e-3)
+set.seed(123)
+x <- runif(1e3)
 degree <- 3
 ord <- degree + 1
 internal_knots <- seq.int(0.1, 0.9, 0.1)
-boundary_knots <- range(x)
+boundary_knots <- c(0, 1)
 all_knots <- sort(c(internal_knots, rep(boundary_knots, ord)))
 
 ## check equivalency of outputs
@@ -90,23 +92,25 @@ my_check <- function(values) {
 
 For B-splines, function `splines2::bSpline()` provides equivalent results with
 `splines::bs()` and `splines::splineDesign()`, and is about 3x faster than
-`bs()` and 2x faster than `splineDesign()`.
+`bs()` and 2x faster than `splineDesign()` for this example.
 
 ```{r bench-bSpline}
 ## B-splines
 microbenchmark(
     "splines::bs" = bs(x, knots = internal_knots, degree = degree,
-                       intercept = TRUE),
+                       intercept = TRUE, Boundary.knots = boundary_knots),
     "splines::splineDesign" = splineDesign(x, knots = all_knots, ord = ord),
-    "splines2::bSpline" = bSpline(x, knots = internal_knots, degree = degree,
-                                  intercept = TRUE),
+    "splines2::bSpline" = bSpline(
+        x, knots = internal_knots, degree = degree,
+        intercept = TRUE, Boundary.knots = boundary_knots
+    ),
     check = my_check,
     times = 1e3
 )
 ```
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides equivalent
-results with `splines::splineDesign()`, and is more than 2x faster.
+results with `splines::splineDesign()`, and is about 2x faster.
 
 ```{r bench-dbs}
 ## Derivatives of B-splines
@@ -115,7 +119,8 @@ microbenchmark(
     "splines::splineDesign" = splineDesign(x, knots = all_knots,
                                            ord = ord, derivs = derivs),
     "splines2::dbs" = dbs(x, derivs = derivs, knots = internal_knots,
-                          degree = degree, intercept = TRUE),
+                          degree = degree, intercept = TRUE,
+                          Boundary.knots = boundary_knots),
     check = my_check,
     times = 1e3
 )
@@ -134,7 +139,8 @@ microbenchmark(
     "ibs::ibs" = ibs::ibs(x, knots = all_knots, ord = ord, coef = coef_sp),
     "splines2::ibs" = as.numeric(
         splines2::ibs(x, knots = internal_knots, degree = degree,
-                      intercept = TRUE) %*% coef_sp
+                      intercept = TRUE, Boundary.knots = boundary_knots) %*%
+        coef_sp
     ),
     check = my_check,
     times = 1e3
@@ -156,9 +162,11 @@ computationally efficient.
 
 ```{r bench-ns}
 microbenchmark(
-    "splines::ns" = ns(x, knots = internal_knots, intercept = TRUE),
+    "splines::ns" = ns(x, knots = internal_knots, intercept = TRUE,
+                       Boundary.knots = boundary_knots),
     "splines2::naturalSpline" = naturalSpline(
-        x, knots = internal_knots, intercept = TRUE
+        x, knots = internal_knots, intercept = TRUE,
+        Boundary.knots = boundary_knots
     ),
     times = 1e3
 )
@@ -175,10 +183,11 @@ of periodic B-spline by using `splines::spline.des()` (a wrapper function of
 ```{r bench-periodic}
 microbenchmark(
     "pbs::pbs" = pbs::pbs(x, knots = internal_knots, degree = degree,
-                          intercept = TRUE, periodic = TRUE),
+                          intercept = TRUE, periodic = TRUE,
+                          Boundary.knots = boundary_knots),
     "splines2::mSpline" = mSpline(
-        x, knots = internal_knots, degree = degree,
-        intercept = TRUE, periodic = TRUE
+        x, knots = internal_knots, degree = degree, intercept = TRUE,
+        Boundary.knots = boundary_knots, periodic = TRUE
     ),
     times = 1e3
 )
