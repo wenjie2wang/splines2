@@ -29,7 +29,7 @@ jobs:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TT_AT_HOME: TRUE
+      TT_AT_HOME: true
 
     steps:
       - uses: actions/checkout@v2
