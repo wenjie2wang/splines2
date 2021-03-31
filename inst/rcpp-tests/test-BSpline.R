@@ -56,7 +56,7 @@ res31 <- rcpp_bspline3(x, degree, knot_seq)
 expect_equivalent(res, res31)
 
 ## non-default constructor 3: extended knot sequence
-knot_seq <- sort(c(seq.int(0, 10, 1), 1, rep(4, 2), rep(7, 2)))
+knot_seq <- sort(c(seq.int(0, 10, 1), 1, rep(4, 3), rep(7, 2)))
 res32 <- rcpp_bspline3(x, degree, knot_seq)
 expect_equivalent(
     res32$basis,
