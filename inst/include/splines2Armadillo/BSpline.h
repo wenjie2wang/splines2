@@ -46,59 +46,36 @@ namespace splines2 {
             if (degree_ > 0) {
                 update_knot_sequence();
             }
-            if (has_internal_multiplicity_) {
-                for (unsigned int k {1}; k <= degree_; ++k) {
-                    const unsigned int k_offset { degree_ - k };
-                    // use the Cox-de Boor recursive formula
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0.0 };
-                        for (size_t j {0}; j < k; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset + 1 };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            if (isAlmostEqual(den)) {
-                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                                    b_mat(i, j_index) = saved;
-                                }
-                                saved = 0.0;
-                            } else {
-                                double term { b_mat(i, j_index) / den };
-                                b_mat(i, j_index) = saved +
-                                    (knot_sequence_(i2) - x_(i)) * term;
-                                saved = (x_(i) - knot_sequence_(i1)) * term;
-                            }
-                        }
-                        b_mat(i, x_index_(i) + k) = saved;
+            for (unsigned int k {1}; k <= degree_; ++k) {
+                const unsigned int k_offset { degree_ - k };
+                // use the Cox-de Boor recursive formula
+                for (size_t i {0}; i < x_.n_elem; ++i) {
+                    double saved { 0.0 };
+                    // for each x, at most "order" columns are not zero
+                    // basis_j(x) is not zero from t_j to t_{j+k+1}
+                    // where j is index of x in terms of basis
+                    // knot sequence: t0, t1, t2, ...
+                    for (size_t j {0}; j < k; ++j) {
+                        size_t j_index { x_index_(i) + j };
+                        size_t i1 { j_index + k_offset + 1 };
+                        size_t i2 { j_index + order_ };
+                        double den {
+                            knot_sequence_(i2) - knot_sequence_(i1)
+                        };
+                        // if (isAlmostEqual(den)) {
+                        //     if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
+                        //         b_mat(i, j_index) = saved;
+                        //     }
+                        //     saved = 0.0;
+                        // } else {
+                        // no need to check for distinct internal knots
+                        double term { b_mat(i, j_index) / den };
+                        b_mat(i, j_index) = saved +
+                            (knot_sequence_(i2) - x_(i)) * term;
+                        saved = (x_(i) - knot_sequence_(i1)) * term;
+                        // }
                     }
-                }
-            } else {
-                for (unsigned int k {1}; k <= degree_; ++k) {
-                    const unsigned int k_offset { degree_ - k };
-                    // use the Cox-de Boor recursive formula
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0.0 };
-                        // for each x, at most "order" columns are not zero
-                        // basis_j(x) is not zero from t_j to t_{j+k+1}
-                        // where j is index of x in terms of basis
-                        // knot sequence: t0, t1, t2, ...
-                        for (size_t j {0}; j < k; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset + 1 };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            // no need to check for distinct internal knots
-                            double term { b_mat(i, j_index) / den };
-                            b_mat(i, j_index) = saved +
-                                (knot_sequence_(i2) - x_(i)) * term;
-                            saved = (x_(i) - knot_sequence_(i1)) * term;
-                        }
-                        b_mat(i, x_index_(i) + k) = saved;
-                    }
+                    b_mat(i, x_index_(i) + k) = saved;
                 }
             }
             return b_mat;
@@ -133,52 +110,23 @@ namespace splines2 {
             //     throw std::range_error("FIXME: get_derivative_simple()");
             // }
             d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
-            if (has_internal_multiplicity_) {
-                for (unsigned int k {1}; k <= derivs; ++k) {
-                    const unsigned int k_offset { derivs - k };
-                    const size_t numer { degree_ - k_offset };
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        for (size_t j {0}; j < numer; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset + 1 };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            if (isAlmostEqual(den)) {
-                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                                    d_mat(i, j_index) = saved;
-                                }
-                                saved = 0.0;
-                            } else {
-                                double term { numer * d_mat(i, j_index) / den };
-                                d_mat(i, j_index) = saved - term;
-                                saved = term;
-                            }
-                        }
-                        d_mat(i, x_index_(i) + numer) = saved;
+            for (unsigned int k {1}; k <= derivs; ++k) {
+                const unsigned int k_offset { derivs - k };
+                const size_t numer { degree_ - k_offset };
+                for (size_t i {0}; i < x_.n_elem; ++i) {
+                    double saved { 0 };
+                    for (size_t j {0}; j < numer; ++j) {
+                        size_t j_index { x_index_(i) + j };
+                        size_t i1 { j_index + k_offset + 1 };
+                        size_t i2 { j_index + order_ };
+                        double den {
+                            knot_sequence_(i2) - knot_sequence_(i1)
+                        };
+                        double term { numer * d_mat(i, j_index) / den };
+                        d_mat(i, j_index) = saved - term;
+                        saved = term;
                     }
-                }
-            } else {
-                for (unsigned int k {1}; k <= derivs; ++k) {
-                    const unsigned int k_offset { derivs - k };
-                    const size_t numer { degree_ - k_offset };
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        for (size_t j {0}; j < numer; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset + 1 };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            double term { numer * d_mat(i, j_index) / den };
-                            d_mat(i, j_index) = saved - term;
-                            saved = term;
-                        }
-                        d_mat(i, x_index_(i) + numer) = saved;
-                    }
+                    d_mat(i, x_index_(i) + numer) = saved;
                 }
             }
             return d_mat;
@@ -266,6 +214,7 @@ namespace splines2 {
         {
             rmat b_mat;
             if (is_extended_knot_sequence_) {
+                Rcpp::Rcout << "here" << std::endl;
                 b_mat = get_basis_extended();
             } else {
                 b_mat = get_basis_simple();

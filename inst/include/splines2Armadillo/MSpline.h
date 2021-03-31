@@ -47,74 +47,34 @@ namespace splines2 {
                 b_mat(i, j) = 1 / denom;
             }
             // main loop
-            if (has_internal_multiplicity_) {
-                for (unsigned int k {1}; k <= degree_; ++k) {
-                    double dk { static_cast<double>(k) };
-                    double dk1 { (1.0 + 1.0 / dk) };
-                    const unsigned int k_offset { degree_ - k };
-                    // use the Cox-de Boor recursive formula
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        // for each x, at most "order" columns are not zero
-                        // basis(x) is not zero from t_ii to t_{ii+k+1}
-                        // where ii is index of x in terms of basis
-                        for (size_t j {0}; j < k; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            if (isAlmostEqual(den)) {
-                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                                    b_mat(i, j_index) = saved;
-                                }
-                                saved = 0.0;
-                            } else {
-                                double term { dk1 * b_mat(i, j_index) };
-                                b_mat(i, j_index) = saved +
-                                    (knot_sequence_(i2) - x_(i)) * term / den;
-                                double den2 {
-                                    knot_sequence_(i2 + 1) -
-                                    knot_sequence_(i1 + 1)
-                                };
-                                saved = (x_(i) - knot_sequence_(i1 + 1)) *
-                                    term / den2;
-                            }
-                        }
-                        b_mat(i, x_index_(i) + k) = saved;
+            for (unsigned int k {1}; k <= degree_; ++k) {
+                double dk { static_cast<double>(k) };
+                double dk1 { (1.0 + 1.0 / dk) };
+                const unsigned int k_offset { degree_ - k };
+                // use the Cox-de Boor recursive formula
+                for (size_t i {0}; i < x_.n_elem; ++i) {
+                    double saved { 0 };
+                    // for each x, at most "order" columns are not zero
+                    // basis(x) is not zero from t_ii to t_{ii+k+1}
+                    // where ii is index of x in terms of basis
+                    for (size_t j {0}; j < k; ++j) {
+                        size_t j_index { x_index_(i) + j };
+                        size_t i1 { j_index + k_offset };
+                        size_t i2 { j_index + order_ };
+                        double den {
+                            knot_sequence_(i2) - knot_sequence_(i1)
+                        };
+                        double term { dk1 * b_mat(i, j_index) };
+                        b_mat(i, j_index) = saved +
+                            (knot_sequence_(i2) - x_(i)) * term / den;
+                        double den2 {
+                            knot_sequence_(i2 + 1) -
+                            knot_sequence_(i1 + 1)
+                        };
+                        saved = (x_(i) - knot_sequence_(i1 + 1)) *
+                            term / den2;
                     }
-                }
-            } else {
-                for (unsigned int k {1}; k <= degree_; ++k) {
-                    double dk { static_cast<double>(k) };
-                    double dk1 { (1.0 + 1.0 / dk) };
-                    const unsigned int k_offset { degree_ - k };
-                    // use the Cox-de Boor recursive formula
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        // for each x, at most "order" columns are not zero
-                        // basis(x) is not zero from t_ii to t_{ii+k+1}
-                        // where ii is index of x in terms of basis
-                        for (size_t j {0}; j < k; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            double term { dk1 * b_mat(i, j_index) };
-                            b_mat(i, j_index) = saved +
-                                (knot_sequence_(i2) - x_(i)) * term / den;
-                            double den2 {
-                                knot_sequence_(i2 + 1) -
-                                knot_sequence_(i1 + 1)
-                            };
-                            saved = (x_(i) - knot_sequence_(i1 + 1)) *
-                                term / den2;
-                        }
-                        b_mat(i, x_index_(i) + k) = saved;
-                    }
+                    b_mat(i, x_index_(i) + k) = saved;
                 }
             }
             return b_mat;
@@ -149,59 +109,26 @@ namespace splines2 {
             // }
             d_mat = add_zero_cols(d_mat, spline_df_ - d_mat.n_cols);
             // main loop
-            if (has_internal_multiplicity_) {
-                for (unsigned int k {1}; k <= derivs; ++k) {
-                    const unsigned int k_offset { derivs - k };
-                    const size_t numer { degree_ - k_offset };
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        for (size_t j {0}; j < numer; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            if (isAlmostEqual(den)) {
-                                if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                                    d_mat(i, j_index) = saved;
-                                }
-                                saved = 0.0;
-                            } else {
-                                double term { (numer + 1) * d_mat(i, j_index) };
-                                d_mat(i, j_index) = saved - term / den;
-                                double den2 {
-                                    knot_sequence_(i2 + 1) -
-                                    knot_sequence_(i1 + 1)
-                                };
-                                saved = term / den2;
-                            }
-                        }
-                        d_mat(i, x_index_(i) + numer) = saved;
+            for (unsigned int k {1}; k <= derivs; ++k) {
+                const unsigned int k_offset { derivs - k };
+                const size_t numer { degree_ - k_offset };
+                for (size_t i {0}; i < x_.n_elem; ++i) {
+                    double saved { 0 };
+                    for (size_t j {0}; j < numer; ++j) {
+                        size_t j_index { x_index_(i) + j };
+                        size_t i1 { j_index + k_offset };
+                        size_t i2 { j_index + order_ };
+                        double den {
+                            knot_sequence_(i2) - knot_sequence_(i1)
+                        };
+                        double term { (numer + 1) * d_mat(i, j_index) };
+                        d_mat(i, j_index) = saved - term / den;
+                        double den2 {
+                            knot_sequence_(i2 + 1) - knot_sequence_(i1 + 1)
+                        };
+                        saved = term / den2;
                     }
-                }
-            } else {
-                for (unsigned int k {1}; k <= derivs; ++k) {
-                    const unsigned int k_offset { derivs - k };
-                    const size_t numer { degree_ - k_offset };
-                    for (size_t i {0}; i < x_.n_elem; ++i) {
-                        double saved { 0 };
-                        for (size_t j {0}; j < numer; ++j) {
-                            size_t j_index { x_index_(i) + j };
-                            size_t i1 { j_index + k_offset };
-                            size_t i2 { j_index + order_ };
-                            double den {
-                                knot_sequence_(i2) - knot_sequence_(i1)
-                            };
-                            double term { (numer + 1) * d_mat(i, j_index) };
-                            d_mat(i, j_index) = saved - term / den;
-                            double den2 {
-                                knot_sequence_(i2 + 1) - knot_sequence_(i1 + 1)
-                            };
-                            saved = term / den2;
-                        }
-                        d_mat(i, x_index_(i) + numer) = saved;
-                    }
+                    d_mat(i, x_index_(i) + numer) = saved;
                 }
             }
             return d_mat;

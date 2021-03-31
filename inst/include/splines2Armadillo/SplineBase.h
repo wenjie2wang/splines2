@@ -231,6 +231,8 @@ namespace splines2 {
 
         // allow x outside of boundary
         // let degree 0 basis take 1 outside boundary
+        // the way to generate knot index for each x
+        // avoids denominator = 0
         inline virtual void update_x_index()
         {
             if (is_x_index_latest_ && x_index_.n_elem > 0) {
