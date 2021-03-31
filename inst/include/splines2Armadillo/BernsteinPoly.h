@@ -41,11 +41,14 @@ namespace splines2 {
             if (x.has_nan()) {
                 throw std::range_error("x cannot contain NA.");
             }
-            for (size_t i {0}; i < x.n_elem; ++i) {
-                if (x(i) < boundary_knots_(0) || x(i) > boundary_knots_(1)) {
-                    throw std::range_error(
-                        "The 'x' must be inside of boundary."
-                        );
+            if (boundary_knots_.n_elem == 2) {
+                for (size_t i {0}; i < x.n_elem; ++i) {
+                    if (x(i) < boundary_knots_(0) ||
+                        x(i) > boundary_knots_(1)) {
+                        throw std::range_error(
+                            "The 'x' must be inside of boundary."
+                            );
+                    }
                 }
             }
             x_ = x;
@@ -161,6 +164,14 @@ namespace splines2 {
                 set_degree(order - 1);
             } else {
                 throw std::range_error("The 'order' must be at least 1.");
+            }
+            return this;
+        }
+        // placeholder for conversion
+        inline BernsteinPoly* set_internal_knots(const rvec& internal_knots)
+        {
+            if (internal_knots.n_elem > 0) {
+                // do nothing
             }
             return this;
         }
