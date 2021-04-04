@@ -152,14 +152,6 @@ namespace splines2 {
             bsp_obj.set_degree(degree_ + 1);
             rmat i_mat { bsp_obj.basis(false) };
             rvec knot_sequence_ord { bsp_obj.get_knot_sequence() };
-            // throw warning if any x is less than left-most boundary
-            if (arma::any(x_ < bsp_obj.knot_sequence_(0))) {
-                Rcpp::Rcout << "Warning: Found x < the leftmost knot, "
-                            << bsp_obj.knot_sequence_(0)
-                            << ". "
-                            << "The basis integrals were not well-defined."
-                            << std::endl;
-            }
             // make sure x index are latest
             update_x_index();
             // compute t_{(i+1)+k+1} - t_{i+1} of s_{k}
@@ -214,7 +206,6 @@ namespace splines2 {
         {
             rmat b_mat;
             if (is_extended_knot_sequence_) {
-                Rcpp::Rcout << "here" << std::endl;
                 b_mat = get_basis_extended();
             } else {
                 b_mat = get_basis_simple();

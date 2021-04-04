@@ -83,8 +83,8 @@ BSpline(const rvec& x,
 
 The fourth non-default constructor is explicit and takes a pointer to a base
 class object.  It can be useful when we want to create a new object using the
-same specification (degree, internal_knots, boundary_knots, etc.) of an existing
-object.
+same specification (`degree`, `internal_knots`, `boundary_knots`, etc.) of an
+existing object.
 
 ```C++
 // 4. create a new object from a base class pointer
