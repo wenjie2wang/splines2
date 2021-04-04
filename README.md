@@ -21,9 +21,9 @@ construct basis matrix of
 -   their integrals (except C-splines) and derivatives of given order by
     close-form recursive formulas
 
-In addition to the R interface, **splines2** also provides a C++
-header-only library integrated with **Rcpp**, which allows construction
-of spline basis matrix directly in C++ with the help of **Rcpp** and
+In addition to the R interface, **splines2** provides a C++ header-only
+library integrated with **Rcpp**, which allows construction of spline
+basis matrics directly in C++ with the help of **Rcpp** and
 **RcppArmadillo**. So it can also be treated as one of the **Rcpp\***
 packages. A toy example package that uses the C++ interface is available
 [here](https://github.com/wenjie2wang/example-pkg-Rcpp-splines2).
@@ -110,9 +110,9 @@ microbenchmark(
 
     Unit: microseconds
                       expr     min     lq   mean median     uq    max neval cld
-               splines::bs 341.541 353.69 386.03 362.47 377.05 2557.4  1000   c
-     splines::splineDesign 210.537 214.96 246.93 218.30 232.18 2333.0  1000  b 
-         splines2::bSpline  95.048 102.89 121.27 108.09 112.11 2323.0  1000 a  
+               splines::bs 341.885 358.80 396.87 370.41 400.36 2541.5  1000   c
+     splines::splineDesign 207.463 213.20 257.33 218.88 235.11 3205.4  1000  b 
+         splines2::bSpline  94.316 103.24 122.29 108.38 114.06 2186.2  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -134,8 +134,8 @@ microbenchmark(
 
     Unit: microseconds
                       expr    min     lq   mean median     uq    max neval cld
-     splines::splineDesign 280.59 285.86 324.80 291.27 304.98 2546.4  1000   b
-             splines2::dbs 111.17 121.23 144.92 126.38 130.76 2394.9  1000  a 
+     splines::splineDesign 277.86 285.83 324.33 296.22 310.36 2989.7  1000   b
+             splines2::dbs 117.90 124.76 154.17 129.94 136.88 2474.4  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -159,9 +159,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-              expr     min      lq    mean  median      uq      max neval cld
-          ibs::ibs 2391.22 2778.70 3367.50 3248.51 3454.27 158919.0  1000   b
-     splines2::ibs  301.17  348.81  373.06  372.74  385.86   1866.3  1000  a 
+              expr     min      lq    mean  median     uq      max neval cld
+          ibs::ibs 2423.20 2841.16 3430.85 3306.63 3503.6 160076.8  1000   b
+     splines2::ibs  304.83  359.07  426.15  383.33  401.2   3210.2  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. So we applied the same
@@ -190,8 +190,8 @@ microbenchmark(
 
     Unit: microseconds
                         expr    min     lq   mean median     uq    max neval cld
-                 splines::ns 632.85 653.76 748.26 667.64 687.14 4347.4  1000   b
-     splines2::naturalSpline 128.02 137.16 156.13 146.69 150.78 2733.7  1000  a 
+                 splines::ns 635.58 667.05 756.24 684.87 706.97 3594.8  1000   b
+     splines2::naturalSpline 125.78 138.41 168.28 148.04 156.51 2813.3  1000  a 
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -217,8 +217,8 @@ microbenchmark(
 
     Unit: microseconds
                   expr    min     lq   mean median     uq    max neval cld
-              pbs::pbs 428.27 444.91 513.73  455.7 471.59 3716.9  1000   b
-     splines2::mSpline 127.55 138.11 162.07  146.3 151.56 2921.9  1000  a 
+              pbs::pbs 431.08 451.85 530.58 466.01 485.29 3785.7  1000   b
+     splines2::mSpline 122.90 136.44 152.58 145.20 152.10 2737.2  1000  a 
 
 <details>
 <summary>
@@ -250,12 +250,12 @@ sessionInfo()
     [1] splines2_0.4.3.9000  microbenchmark_1.4-7
 
     loaded via a namespace (and not attached):
-     [1] Rcpp_1.0.6        knitr_1.31        magrittr_2.0.1    MASS_7.3-53.1     ibs_1.4          
-     [6] lattice_0.20-41   rlang_0.4.10      multcomp_1.4-16   stringr_1.4.0     tools_4.0.4      
-    [11] grid_4.0.4        xfun_0.22         TH.data_1.0-10    htmltools_0.5.1.1 yaml_2.2.1       
-    [16] survival_3.2-10   digest_0.6.27     Matrix_1.3-2      codetools_0.2-18  evaluate_0.14    
-    [21] rmarkdown_2.7     sandwich_3.0-0    stringi_1.5.3     compiler_4.0.4    pbs_1.1          
-    [26] mvtnorm_1.1-1     zoo_1.8-9        
+     [1] Rcpp_1.0.6        mvtnorm_1.1-1     lattice_0.20-41   codetools_0.2-18  ibs_1.4          
+     [6] zoo_1.8-9         digest_0.6.27     MASS_7.3-53.1     grid_4.0.4        magrittr_2.0.1   
+    [11] evaluate_0.14     rlang_0.4.10      stringi_1.5.3     multcomp_1.4-16   Matrix_1.3-2     
+    [16] sandwich_3.0-0    rmarkdown_2.7     TH.data_1.0-10    tools_4.0.4       stringr_1.4.0    
+    [21] survival_3.2-10   xfun_0.22         yaml_2.2.1        compiler_4.0.4    pbs_1.1          
+    [26] htmltools_0.5.1.1 knitr_1.31       
 
 </details>
 

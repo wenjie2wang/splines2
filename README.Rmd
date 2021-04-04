@@ -10,7 +10,7 @@ output: github_document
 
 
 ```{r setup, echo = FALSE}
-knitr::opts_chunk$set(comment = "")
+knitr::opts_chunk$set(comment = "", cache = TRUE)
 options(width = 100, digits = 5)
 ```
 
@@ -27,9 +27,9 @@ functions to construct basis matrix of
 - their integrals (except C-splines) and derivatives of given order by
   close-form recursive formulas
 
-In addition to the R interface, **splines2** also provides a C++ header-only
+In addition to the R interface, **splines2** provides a C++ header-only
 library integrated with **Rcpp**, which allows construction of spline basis
-matrix directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
+matrics directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
 can also be treated as one of the **Rcpp\*** packages.  A toy example package
 that uses the C++ interface is available [here][example-pkg].
 

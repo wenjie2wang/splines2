@@ -1,14 +1,15 @@
-working
-revdep
-docs
-README.html
-*.tar.gz
+*.*~
 *.Rcheck/
 *.Rout
-*.so
 *.o
-*.*~
+*.so
+*.tar.gz
 *~
+README.html
+README_cache
+docs
+revdep
+working
 
 # History files
 .Rhistory
