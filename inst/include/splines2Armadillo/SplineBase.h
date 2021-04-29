@@ -105,10 +105,10 @@ namespace splines2 {
                     sorted_internal_knots(sorted_internal_knots.n_elem - 1)
                 };
                 if (boundary_knots_.n_elem == 2 &&
-                    (boundary_knots_[0] > min_int_knots ||
-                     boundary_knots_[1] < max_int_knots)) {
+                    (boundary_knots_[0] >= min_int_knots ||
+                     boundary_knots_[1] <= max_int_knots)) {
                     throw std::range_error(
-                        "Internal knots cannot be set outside boundary."
+                        "Internal knots must be set inside boundary."
                         );
                 }
                 // check multiplicity
