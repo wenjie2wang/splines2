@@ -260,7 +260,7 @@ namespace splines2 {
         {
             if (has_internal_multiplicity_ || is_extended_knot_sequence_) {
                 throw std::range_error(
-                    "NaturlSpline is only applicable for simple knot sequence."
+                    "Expected a simple knot sequence."
                     );
             }
         }
