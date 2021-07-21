@@ -76,7 +76,7 @@ msMat0g <- mSpline(x, df = 6, degree = 2,
 expect_true(isNumMatrix(msMat0f, 1, length(knots) + 2))
 expect_true(isNumMatrix(msMat0g, length(x), 6))
 
-## true close form formula given the all knots and degree
+## true closed-form formula given the all knots and degree
 ## transformation of constant basis
 x3 <- seq.int(0, 7, 0.1)
 m0_1 <- function(x) as.numeric(x < 1)

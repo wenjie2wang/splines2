@@ -131,8 +131,8 @@ stopifnot(is_equivalent(dmsMat1, dmsMat2))
 
 The function `mSpline()` produces periodic splines based on M-spline basis
 functions when `periodic = TRUE` is specified.  The `Boundary.knots` defines the
-start and end points of the cyclic period.  The construction follows periodic
-B-splines discussed in @piegl1997nurbs [chapter 12].
+cyclic interval.  The construction follows periodic B-splines discussed in
+@piegl1997nurbs [chapter 12].
 
 ```{r pms-basis, fig.cap = "Cubic periodic M-splines."}
 x1 <- seq.int(0, 3, 0.01)

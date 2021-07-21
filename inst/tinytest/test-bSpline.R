@@ -63,7 +63,7 @@ expect_true(isNumMatrix(
             degree = 0, intercept = TRUE),
     14L, 4L))
 
-## true close form formula given the all knots and degree
+## true closed-form formula given the all knots and degree
 ## test with two internal knots
 x3 <- seq.int(0, 5, 0.1)
 b0_1 <- function(x) as.numeric(x >= 0 & x < 1)

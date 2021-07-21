@@ -1,3 +1,12 @@
+# splines2 0.4.4.9000
+
+## Minor changes
+
+* Made the internal checking procedure more strict to throw error if any
+  internal knots is placed at or outside boundary:
+  [issue 5](https://github.com/wenjie2wang/splines2/issues/5).
+
+
 # splines2 0.4.3
 
 ## New features
@@ -22,7 +31,7 @@
 
 ## Major changes
 
-* Updated the generation of the knot sequence for period M-splines following
+* Updated the generation of the knot sequence for periodic M-splines following
   Piegl and Tiller (1997), which relaxed the previous requirement that
   `length(knots) >= degree` to `length(knots) >= degree - 1`.
 

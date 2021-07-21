@@ -48,7 +48,7 @@ namespace splines2 {
             spline_df_ = internal_knots_.n_elem + 1;
         }
 
-        // extend knot sequence for period splines
+        // extend knot sequence for periodic splines
         // reference:
         // - Farin, G., & Hansford, D. (2000). The essentials of CAGD.
         // - Schumaker, L. (2007). Spline functions: Basic theory.

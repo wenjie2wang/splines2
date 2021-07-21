@@ -20,7 +20,7 @@
 ##' Generates the basis matrix of regular M-spline, periodic M-spline, and the
 ##' corresponding integrals and derivatives.
 ##'
-##' This function contains an implementation of the close form M-spline basis
+##' This function contains an implementation of the closed-form M-spline basis
 ##' based on the recursion formula given by Ramsay (1988) or periodic M-spline
 ##' basis following the procedure producing periodic B-splines given in Piegl
 ##' and Tiller (1997).  For monotone regression, one can use I-splines (see
@@ -33,11 +33,12 @@
 ##'     M-splines, the function chooses \code{df - degree -
 ##'     as.integer(intercept)} internal knots at suitable quantiles of \code{x}
 ##'     ignoring missing values and those \code{x} outside of the boundary.  For
-##'     periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
-##'     as.integer(intercept)} internal knots will be chosen instead and the
-##'     number of internal knots must be greater or equal to the specified
-##'     \code{degree - 1}.  If internal knots are specified via \code{knots},
-##'     the specified \code{df} will be ignored.
+##'     periodic M-spline (\code{periodic = TRUE}), \code{df -
+##'     as.integer(intercept)} internal knots will be chosen at suitable
+##'     quantiles of \code{x} relative to the beginning of the cyclic intervals
+##'     they belong to (see Examples) and the number of internal knots must be
+##'     greater or equal to the specified \code{degree - 1}.  If internal knots
+##'     are specified via \code{knots}, the specified \code{df} will be ignored.
 ##' @param knots The internal breakpoints that define the splines.  The default
 ##'     is \code{NULL}, which results in a basis for ordinary polynomial
 ##'     regression.  Typical values are the mean or median for one knot,
@@ -49,7 +50,7 @@
 ##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
 ##'     parameters do not depend on \code{x}. Data can extend beyond
 ##'     \code{Boundary.knots}.  For periodic splines (\code{periodic = TRUE}),
-##'     the specified boundary knots define the cyclic period.
+##'     the specified boundary knots define the cyclic interval.
 ##' @param periodic A logical value.  If \code{TRUE}, the periodic splines will
 ##'     be returned instead of regular M-splines.  The default value is
 ##'     \code{FALSE}.

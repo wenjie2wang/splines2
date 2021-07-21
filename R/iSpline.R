@@ -20,7 +20,7 @@
 ##' Generates the I-spline (integral of M-spline) basis matrix for a polynomial
 ##' spline or the corresponding derivatives of given order.
 ##'
-##' It is an implementation of the close form I-spline basis based on the
+##' It is an implementation of the closed-form I-spline basis based on the
 ##' recursion formula given by Ramsay (1988).
 ##'
 ##' @inheritParams bSpline

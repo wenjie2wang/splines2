@@ -19,7 +19,7 @@
 ##'
 ##' Generates basis matrix for integrals of B-splines.
 ##'
-##' The implementation is based on the close form recursion formula.
+##' The implementation is based on the closed-form recursion formula.
 ##'
 ##' @inheritParams bSpline
 ##'
