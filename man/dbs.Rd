@@ -62,7 +62,7 @@ Produces the derivatives of given order of B-splines.
 \details{
 This function provides a more user-friendly interface and a more consistent
 handling for \code{NA}'s than \code{splines::splineDesign()} for derivatives
-of B-splines.  The implementation is based on the close form recursion
+of B-splines.  The implementation is based on the closed-form recursion
 formula.  At knots, the derivative is defined to be the right derivative
 except at the right boundary knot.
 }

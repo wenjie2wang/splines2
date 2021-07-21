@@ -72,7 +72,7 @@ integrating I-spline basis for a polynomial spline or the corresponding
 derivatives.
 }
 \details{
-It is an implementation of the close form C-spline basis derived from the
+It is an implementation of the closed-form C-spline basis derived from the
 recursion formula of I-splines and M-splines.
 }
 \examples{

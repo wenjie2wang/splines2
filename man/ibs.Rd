@@ -56,7 +56,7 @@ A numeric matrix of \code{length(x)} rows and \code{df} columns if
 Generates basis matrix for integrals of B-splines.
 }
 \details{
-The implementation is based on the close form recursion formula.
+The implementation is based on the closed-form recursion formula.
 }
 \examples{
 library(splines2)

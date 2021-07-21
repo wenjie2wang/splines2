@@ -26,11 +26,12 @@ matrix.  One can specify \code{df} rather than \code{knots}.  For
 M-splines, the function chooses \code{df - degree -
 as.integer(intercept)} internal knots at suitable quantiles of \code{x}
 ignoring missing values and those \code{x} outside of the boundary.  For
-periodic spline based on M-spline (\code{periodic = TRUE}), \code{df -
-as.integer(intercept)} internal knots will be chosen instead and the
-number of internal knots must be greater or equal to the specified
-\code{degree - 1}.  If internal knots are specified via \code{knots},
-the specified \code{df} will be ignored.}
+periodic M-spline (\code{periodic = TRUE}), \code{df -
+as.integer(intercept)} internal knots will be chosen at suitable
+quantiles of \code{x} relative to the beginning of the cyclic intervals
+they belong to (see Examples) and the number of internal knots must be
+greater or equal to the specified \code{degree - 1}.  If internal knots
+are specified via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
@@ -51,7 +52,7 @@ default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.  For periodic splines (\code{periodic = TRUE}),
-the specified boundary knots define the cyclic period.}
+the specified boundary knots define the cyclic interval.}
 
 \item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
 be returned instead of regular M-splines.  The default value is
@@ -81,7 +82,7 @@ Generates the basis matrix of regular M-spline, periodic M-spline, and the
 corresponding integrals and derivatives.
 }
 \details{
-This function contains an implementation of the close form M-spline basis
+This function contains an implementation of the closed-form M-spline basis
 based on the recursion formula given by Ramsay (1988) or periodic M-spline
 basis following the procedure producing periodic B-splines given in Piegl
 and Tiller (1997).  For monotone regression, one can use I-splines (see
@@ -90,7 +91,7 @@ and Tiller (1997).  For monotone regression, one can use I-splines (see
 \examples{
 library(splines2)
 
-## Example given in the reference paper by Ramsay (1988)
+### example given in the reference paper by Ramsay (1988)
 x <- seq.int(0, 1, 0.01)
 knots <- c(0.3, 0.5, 0.6)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
@@ -107,9 +108,8 @@ dmsMat <- mSpline(x, knots = knots, degree = 2,
 dmsMat1 <- deriv(msMat)
 stopifnot(all.equal(dmsMat, dmsMat1, check.attributes = FALSE))
 
-## periodic M-spline basis
+### periodic M-splines
 x <- seq.int(0, 3, 0.01)
-knots <- c(0.3, 0.5, 0.6)
 bknots <- c(0, 1)
 pMat <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
                 Boundary.knots = bknots, periodic = TRUE)
@@ -133,6 +133,29 @@ matplot(x, dMat2, type = "l", ylab = "1st derivatives by 'deriv()'")
 abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
 ## reset to previous plotting settings
 par(op)
+
+### default placement of internal knots for periodic splines
+default_knots <- function(x, df, intercept = FALSE,
+                        Boundary.knots = range(x, na.rm = TRUE)) {
+    ## get x in the cyclic interval [0, 1)
+    x2 <- (x - Boundary.knots[1]) \%\% (Boundary.knots[2] - Boundary.knots[1])
+    knots <- quantile(x2, probs = seq(0, 1, length.out = df + 2 - intercept))
+    unname(knots[- c(1, length(knots))])
+}
+
+df <- 8
+degree <- 3
+intercept <- TRUE
+internal_knots <- default_knots(x, df, intercept)
+## 1. specify df
+spline_basis1 =  splines2::mSpline(x, degree = degree, df = df,
+                                   periodic = TRUE, intercept = intercept)
+## 2. specify knots
+spline_basis2 =  splines2::mSpline(x, degree = degree, knots = internal_knots,
+                                   periodic = TRUE, intercept = intercept)
+
+all.equal(internal_knots, knots(spline_basis1))
+all.equal(spline_basis1, spline_basis2)
 }
 \references{
 Ramsay, J. O. (1988). Monotone regression splines in action.
