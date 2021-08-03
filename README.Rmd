@@ -4,6 +4,7 @@ output: github_document
 ---
 
 [![CRAN_Status_Badge][r-pkg-badge]][cran-url]
+[![Total_Downloads][cranlog-total]][cran-url]
 [![Downloads from the RStudio CRAN mirror][cranlog-badge]][cran-url]
 [![Build Status][gha-icon]][gha-url]
 [![codecov][codecov-main]][codecov]
@@ -14,7 +15,12 @@ knitr::opts_chunk$set(comment = "", cache = TRUE)
 options(width = 100, digits = 5)
 ```
 
-The R package **splines2** (version `r packageVersion("splines2")`) provides
+The R package **splines2** is intended to be a user-friendly *supplement* to the
+base package **splines**.
+
+## Features
+
+The package **splines2** (version `r packageVersion("splines2")`) provides
 functions to construct basis matrix of
 
 - B-splines
@@ -25,11 +31,11 @@ functions to construct basis matrix of
 - natural cubic splines
 - generalized Bernstein polynomials
 - their integrals (except C-splines) and derivatives of given order by
-  close-form recursive formulas
+  closed-form recursive formulas
 
 In addition to the R interface, **splines2** provides a C++ header-only
 library integrated with **Rcpp**, which allows construction of spline basis
-matrics directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
+functions directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
 can also be treated as one of the **Rcpp\*** packages.  A toy example package
 that uses the C++ interface is available [here][example-pkg].
 
@@ -67,7 +73,7 @@ with the help of the **Rcpp** and **RcppArmadillo** package. The computational
 performance has thus been boosted and comparable with the function
 `splines::splineDesign()`.
 
-Some quick microbenchmarks are provided for reference as follows:
+Some quick micro-benchmarks are provided for reference as follows:
 
 ```{r bench-setup}
 library(microbenchmark)
@@ -206,6 +212,7 @@ sessionInfo()
 
 [r-pkg-badge]: https://www.r-pkg.org/badges/version/splines2
 [cranlog-badge]: https://cranlogs.r-pkg.org/badges/splines2
+[cranlog-total]: https://cranlogs.r-pkg.org/badges/grand-total/splines2
 [cran-url]: https://CRAN.R-project.org/package=splines2
 [gha-icon]: https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg
 [gha-url]: https://github.com/wenjie2wang/splines2/actions

@@ -1,15 +1,21 @@
 splines2
 ================
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/splines2)](https://CRAN.R-project.org/package=splines2)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/splines2)](https://CRAN.R-project.org/package=splines2)
+[![Total_Downloads](https://cranlogs.r-pkg.org/badges/grand-total/splines2)](https://CRAN.R-project.org/package=splines2)
 [![Downloads from the RStudio CRAN
 mirror](https://cranlogs.r-pkg.org/badges/splines2)](https://CRAN.R-project.org/package=splines2)
 [![Build
 Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)](https://github.com/wenjie2wang/splines2/actions)
 [![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
 
-The R package **splines2** (version 0.4.3) provides functions to
-construct basis matrix of
+The R package **splines2** is intended to be a user-friendly
+*supplement* to the base package **splines**.
+
+## Features
+
+The package **splines2** (version 0.4.3) provides functions to construct
+basis matrix of
 
 -   B-splines
 -   M-splines
@@ -19,11 +25,11 @@ construct basis matrix of
 -   natural cubic splines
 -   generalized Bernstein polynomials
 -   their integrals (except C-splines) and derivatives of given order by
-    close-form recursive formulas
+    closed-form recursive formulas
 
 In addition to the R interface, **splines2** provides a C++ header-only
 library integrated with **Rcpp**, which allows construction of spline
-basis matrics directly in C++ with the help of **Rcpp** and
+basis functions directly in C++ with the help of **Rcpp** and
 **RcppArmadillo**. So it can also be treated as one of the **Rcpp\***
 packages. A toy example package that uses the C++ interface is available
 [here](https://github.com/wenjie2wang/example-pkg-Rcpp-splines2).
@@ -65,7 +71,7 @@ rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
 package. The computational performance has thus been boosted and
 comparable with the function `splines::splineDesign()`.
 
-Some quick microbenchmarks are provided for reference as follows:
+Some quick micro-benchmarks are provided for reference as follows:
 
 ``` r
 library(microbenchmark)
@@ -109,10 +115,10 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                      expr     min      lq   mean median     uq    max neval cld
-               splines::bs 336.731 349.625 375.79 357.79 372.94 2459.4  1000   c
-     splines::splineDesign 207.444 211.532 251.32 213.66 223.17 2452.3  1000  b 
-         splines2::bSpline  92.542  99.558 110.78 104.36 107.63 2152.3  1000 a  
+                      expr     min     lq   mean median     uq    max neval cld
+               splines::bs 341.360 357.28 391.56 368.80 383.81 2450.1  1000   c
+     splines::splineDesign 209.045 214.76 247.02 221.69 233.49 2302.9  1000  b 
+         splines2::bSpline  95.311 103.13 118.13 107.06 111.58 2228.7  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -134,8 +140,8 @@ microbenchmark(
 
     Unit: microseconds
                       expr    min     lq   mean median     uq    max neval cld
-     splines::splineDesign 276.58 281.51 308.49 284.38 300.67 2783.0  1000   b
-             splines2::dbs 108.04 115.40 149.81 120.57 124.98 2380.4  1000  a 
+     splines::splineDesign 277.05 283.93 322.72 291.88 307.72 2582.2  1000   b
+             splines2::dbs 109.76 118.34 137.90 123.61 129.36 2471.3  1000  a 
 
 The **splines** package does not provide function producing integrals of
 B-splines. So we instead performed a comparison with package **ibs**
@@ -159,9 +165,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-              expr     min      lq    mean  median      uq      max neval cld
-          ibs::ibs 2403.63 2766.26 3363.20 3277.27 3456.95 158210.4  1000   b
-     splines2::ibs  293.95  340.09  370.32  377.29  387.72   1231.8  1000  a 
+              expr     min     lq    mean  median      uq     max neval cld
+          ibs::ibs 2533.00 2702.7 3333.66 3343.77 3441.02 99936.8  1000   b
+     splines2::ibs  280.47  327.5  361.18  368.46  385.61  1877.6  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. So we applied the same
@@ -190,8 +196,8 @@ microbenchmark(
 
     Unit: microseconds
                         expr    min     lq   mean median     uq    max neval cld
-                 splines::ns 628.24 649.58 742.05 663.07 681.58 3486.3  1000   b
-     splines2::naturalSpline 126.33 133.88 154.71 143.34 147.69 2677.3  1000  a 
+                 splines::ns 637.58 664.64 756.74 682.39 705.99 4500.2  1000   b
+     splines2::naturalSpline 126.34 137.91 161.09 146.73 156.08 2856.1  1000  a 
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -216,9 +222,9 @@ microbenchmark(
 ```
 
     Unit: microseconds
-                  expr    min     lq   mean median     uq     max neval cld
-              pbs::pbs 428.75 440.79 523.18 449.95 468.11 10239.2  1000   b
-     splines2::mSpline 123.40 133.94 150.27 142.59 147.99  2754.9  1000  a 
+                  expr    min     lq   mean median     uq    max neval cld
+              pbs::pbs 426.69 445.07 513.90 460.21 477.88 9580.6  1000   b
+     splines2::mSpline 126.34 140.10 167.51 148.74 157.92 3003.9  1000  a 
 
 <details>
 <summary>
@@ -229,13 +235,13 @@ Session Information for Benchmarks
 sessionInfo()
 ```
 
-    R version 4.0.5 (2021-03-31)
+    R version 4.1.0 (2021-05-18)
     Platform: x86_64-pc-linux-gnu (64-bit)
     Running under: Arch Linux
 
     Matrix products: default
-    BLAS:   /usr/lib/libopenblasp-r0.3.13.so
-    LAPACK: /usr/lib/liblapack.so.3.9.1
+    BLAS:   /usr/lib/libopenblasp-r0.3.17.so
+    LAPACK: /usr/lib/liblapack.so.3.10.0
 
     locale:
      [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
@@ -250,12 +256,12 @@ sessionInfo()
     [1] splines2_0.4.3       microbenchmark_1.4-7
 
     loaded via a namespace (and not attached):
-     [1] Rcpp_1.0.6        mvtnorm_1.1-1     lattice_0.20-41   codetools_0.2-18  ibs_1.4          
-     [6] zoo_1.8-9         digest_0.6.27     MASS_7.3-53.1     grid_4.0.5        magrittr_2.0.1   
-    [11] evaluate_0.14     rlang_0.4.10      stringi_1.5.3     multcomp_1.4-16   Matrix_1.3-2     
-    [16] sandwich_3.0-0    rmarkdown_2.7     TH.data_1.0-10    tools_4.0.5       stringr_1.4.0    
-    [21] survival_3.2-10   xfun_0.22         yaml_2.2.1        compiler_4.0.5    pbs_1.1          
-    [26] htmltools_0.5.1.1 knitr_1.32       
+     [1] Rcpp_1.0.7        mvtnorm_1.1-2     lattice_0.20-44   codetools_0.2-18  ibs_1.4          
+     [6] zoo_1.8-9         digest_0.6.27     MASS_7.3-54       grid_4.1.0        magrittr_2.0.1   
+    [11] evaluate_0.14     rlang_0.4.11      stringi_1.7.3     multcomp_1.4-17   Matrix_1.3-4     
+    [16] sandwich_3.0-1    rmarkdown_2.9     TH.data_1.0-10    tools_4.1.0       stringr_1.4.0    
+    [21] survival_3.2-11   xfun_0.24         yaml_2.2.1        compiler_4.1.0    pbs_1.1          
+    [26] htmltools_0.5.1.1 knitr_1.33       
 
 </details>
 
