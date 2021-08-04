@@ -114,7 +114,7 @@ predict.cSpline <- function(object, newx, ...)
     if (missing(newx))
         return(object)
     ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs",
+    check_attr(object, c("x", "degree", "derivs", "scale",
                          "knots", "Boundary.knots", "intercept"))
     do.call(cSpline, c(list(x = newx), pred_attr(object)))
 }

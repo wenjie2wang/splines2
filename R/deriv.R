@@ -134,9 +134,13 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "derivs",
                        "knots", "Boundary.knots", "intercept"))
-    scl <- attr(expr, "scales")
-    ## not scaled (then "derivs" must be 0 in cSpline call)
-    if (is.null(scl)) {
+    scl <- attr(expr, "scale")
+    if (scl) {
+        ## if scaled
+        attr(expr, "derivs") <- attr(expr, "derivs") + derivs
+        do.call(cSpline, attributes(expr))
+    } else {
+        ## if not scaled (then "derivs" must be 0 in cSpline call)
         derivs <- as.integer(derivs)
         if (derivs == 1L) {
             return(do.call(iSpline, attributes(expr)))
@@ -146,10 +150,6 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
         }
         attr(expr, "derivs") <- derivs - 2L
         do.call(mSpline, attributes(expr))
-    } else {
-        ## else scaled
-        attr(expr, "derivs") <- attr(expr, "derivs") + derivs
-        do.call(cSpline, attributes(expr))
     }
 }
 
