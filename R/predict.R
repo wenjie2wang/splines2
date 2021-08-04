@@ -50,7 +50,8 @@ predict.bSpline2 <- function(object, newx, ...)
     if (missing(newx))
         return(object)
     ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "knots", "Boundary.knots", "intercept"))
+    check_attr(object, c("x", "degree", "knots", "Boundary.knots", "intercept",
+                         "derivs", "integral"))
     do.call(bSpline, c(list(x = newx), pred_attr(object)))
 }
 

@@ -47,6 +47,11 @@
 ##'     \code{knots} and \code{Boundary.knots} are supplied, the basis
 ##'     parameters do not depend on \code{x}. Data can extend beyond
 ##'     \code{Boundary.knots}.
+##' @param derivs A nonnegative integer specifying the order of derivatives of
+##'     B-splines. The default value is \code{0L} for B-spline basis functions.
+##' @param integral A logical value.  If \code{TRUE}, the corresponding
+##'     integrals of spline basis functions will be returned.  The default value
+##'     is \code{FALSE}.
 ##' @param ... Optional arguments that are not used.
 ##'
 ##' @return A numeric matrix of \code{length(x)} rows and \code{df} columns if
@@ -67,9 +72,13 @@
 ##'
 ##' @export
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
-                    intercept = FALSE, Boundary.knots = NULL, ...)
+                    intercept = FALSE, Boundary.knots = NULL,
+                    derivs = 0L, integral = FALSE, ...)
 {
     ## check inputs
+    if ((derivs <- as.integer(derivs)) < 0) {
+        stop("The 'derivs' must be a non-negative integer.")
+    }
     if ((degree <- as.integer(degree)) < 0)
         stop("The 'degree' must be a nonnegative integer.")
     if (is.null(df)) {
@@ -94,12 +103,14 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
               x
           }
     ## call the engine function
-    out <- rcpp_bSpline_basis(
+    out <- rcpp_bSpline(
         x = xx,
         df = df,
         degree = degree,
         internal_knots = knots,
         boundary_knots = Boundary.knots,
+        derivs = derivs,
+        integral = integral,
         complete_basis = intercept
     )
     ## throw warning if any x is outside of the boundary

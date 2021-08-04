@@ -123,7 +123,7 @@ expect_equivalent(deriv(deriv(deriv(deriv(bpMat)))), d4bpMat)
 
 ### 2. check designed features with expectation
 expect_error(deriv(ibsMat, 0))
-expect_error(deriv(bsMat, 0))
+## expect_error(deriv(bsMat, 0))
 ## expect_error(deriv(csMat, 0))
 expect_error(deriv(isMat, 0))
 ## expect_error(deriv(msMat, 0))

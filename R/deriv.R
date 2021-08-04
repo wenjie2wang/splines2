@@ -52,10 +52,11 @@ NULL
 ##' @export
 deriv.bSpline2 <- function(expr, derivs = 1L, ...)
 {
-    attr(expr, "derivs") <- derivs
     ## checks if key attributes still exist
-    check_attr(expr, c("x", "degree", "knots", "Boundary.knots", "intercept"))
-    do.call(dbs, attributes(expr))
+    check_attr(expr, c("x", "degree", "knots", "Boundary.knots", "intercept",
+                       "derivs", "integral"))
+    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
+    do.call(bSpline, attributes(expr))
 }
 
 
@@ -63,10 +64,10 @@ deriv.bSpline2 <- function(expr, derivs = 1L, ...)
 ##' @export
 deriv.dbs <- function(expr, derivs = 1L, ...)
 {
-    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "derivs",
                        "knots", "Boundary.knots", "intercept"))
+    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
     do.call(dbs, attributes(expr))
 }
 
@@ -82,14 +83,8 @@ deriv.ibs <- function(expr, derivs = 1L, ...)
     }
     ## checks if key attributes still exist
     check_attr(expr, c("x", "degree", "knots", "Boundary.knots", "intercept"))
-    ## if first derivative, take result from existing attribute if exists
-    if (derivs == 1L) {
-        do.call(bSpline, attributes(expr))
-    } else {
-        ## for higher order of derivative
-        attr(expr, "derivs") <- derivs - 1L
-        do.call(dbs, attributes(expr))
-    }
+    attr(expr, "derivs") <- derivs - 1L
+    do.call(bSpline, attributes(expr))
 }
 
 

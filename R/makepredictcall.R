@@ -36,7 +36,8 @@ makepredictcall.bSpline2 <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = bSpline,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept")
+        key_attr = c("degree", "knots", "Boundary.knots", "intercept",
+                     "derivs", "integral")
     )
 }
 

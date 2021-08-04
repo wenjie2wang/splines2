@@ -21,15 +21,18 @@
 #include <splines2Armadillo.h>
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_bSpline_basis(
+Rcpp::NumericMatrix rcpp_bSpline(
     const arma::vec& x,
     const unsigned int df,
     const unsigned int degree,
     const arma::vec& internal_knots,
     const arma::vec& boundary_knots,
+    const unsigned int derivs = 0,
+    const bool integral = false,
     const bool complete_basis = true
     )
 {
+    Rcpp::NumericMatrix out;
     splines2::BSpline bs_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
@@ -44,9 +47,20 @@ Rcpp::NumericMatrix rcpp_bSpline_basis(
         // else ignore df
         bs_obj = splines2::BSpline(x, internal_knots, degree, boundary_knots);
     }
-    Rcpp::NumericMatrix out {
-        splines2::arma2rmat(bs_obj.basis(complete_basis))
-            };
+    // 1) basis, 2) derivative, or 3) integral
+    if (integral && derivs == 0) {
+        // integrals
+        out = splines2::arma2rmat(bs_obj.integral(complete_basis));
+    } else if ((! integral && derivs == 0) || (integral && derivs == 1)) {
+        // basis functions
+        out = splines2::arma2rmat(bs_obj.basis(complete_basis));
+    } else {
+        // derivatives
+        out = splines2::arma2rmat(
+            bs_obj.derivative(derivs - static_cast<unsigned int>(integral),
+                              complete_basis)
+            );
+    }
     // add attributes
     out.attr("dimnames") = Rcpp::List::create(
         R_NilValue, splines2::char_seq_len(out.ncol())
@@ -56,6 +70,8 @@ Rcpp::NumericMatrix rcpp_bSpline_basis(
     out.attr("knots") = splines2::arma2rvec(bs_obj.get_internal_knots());
     out.attr("Boundary.knots") =
         splines2::arma2rvec(bs_obj.get_boundary_knots());
+    out.attr("derivs") = static_cast<int>(derivs);
+    out.attr("integral") = integral;
     out.attr("intercept") = complete_basis;
     return out;
 }

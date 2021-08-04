@@ -13,6 +13,10 @@ b_knots <- c(0, 1)
 
 ## default cubic splines without internal knots
 expect_equivalent(bSpline(x), v2$bSpline(x))
+expect_equivalent(bSpline(x, derivs = 1), dbs(x))
+expect_equivalent(bSpline(x, derivs = 2), dbs(x, derivs = 2))
+expect_equivalent(bSpline(x, integral = TRUE), ibs(x))
+expect_equivalent(bSpline(x), bSpline(x, derivs = 1, integral = TRUE))
 
 ## cubic splines with specified df
 expect_equivalent(bSpline(x, df = 5),
