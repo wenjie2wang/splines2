@@ -54,7 +54,7 @@
 ##' @param periodic A logical value.  If \code{TRUE}, the periodic splines will
 ##'     be returned instead of regular M-splines.  The default value is
 ##'     \code{FALSE}.
-##' @param derivs A non-negative integer specifying the order of derivatives of
+##' @param derivs A nonnegative integer specifying the order of derivatives of
 ##'     M-splines. The default value is \code{0L} for M-spline basis functions.
 ##' @param integral A logical value.  If \code{TRUE}, the corresponding
 ##'     integrals of spline basis functions will be returned.  The default value

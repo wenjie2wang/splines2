@@ -11,6 +11,8 @@ bSpline(
   degree = 3L,
   intercept = FALSE,
   Boundary.knots = NULL,
+  derivs = 0L,
+  integral = FALSE,
   ...
 )
 }
@@ -42,6 +44,13 @@ default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
+
+\item{derivs}{A nonnegative integer specifying the order of derivatives of
+B-splines. The default value is \code{0L} for B-spline basis functions.}
+
+\item{integral}{A logical value.  If \code{TRUE}, the corresponding
+integrals of spline basis functions will be returned.  The default value
+is \code{FALSE}.}
 
 \item{...}{Optional arguments that are not used.}
 }
