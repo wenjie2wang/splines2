@@ -1,4 +1,4 @@
-# splines2 0.4.4.9000
+# splines2 0.4.4
 
 ## New features
 
