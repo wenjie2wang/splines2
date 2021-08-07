@@ -18,7 +18,7 @@ bernsteinPoly(
 \item{x}{The predictor variable taking values inside of the specified
 boundary.  Missing values are allowed and will be returned as they are.}
 
-\item{degree}{A non-negative integer representing the degree of the
+\item{degree}{A nonnegative integer representing the degree of the
 polynomials.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
@@ -28,7 +28,7 @@ Otherwise, the first basis will be excluded from the output.}
 polynomial basis. The default value is \code{NULL} and the boundary
 knots is set internally to be \code{range(x, na.rm = TRUE)}.}
 
-\item{derivs}{A non-negative integer specifying the order of derivatives.
+\item{derivs}{A nonnegative integer specifying the order of derivatives.
 The default value is \code{0L} for Bernstein polynomial basis functions.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the integrals of the

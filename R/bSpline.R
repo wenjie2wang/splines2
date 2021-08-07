@@ -77,7 +77,7 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) < 0) {
-        stop("The 'derivs' must be a non-negative integer.")
+        stop("The 'derivs' must be a nonnegative integer.")
     }
     if ((degree <- as.integer(degree)) < 0)
         stop("The 'degree' must be a nonnegative integer.")

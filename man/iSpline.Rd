@@ -47,7 +47,7 @@ default, they are the range of \code{x} excluding \code{NA}.  If both
 parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.}
 
-\item{derivs}{A non-negative integer specifying the order of derivatives of
+\item{derivs}{A nonnegative integer specifying the order of derivatives of
 I-splines.}
 
 \item{...}{Optional arguments that are not used.}

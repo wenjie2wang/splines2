@@ -32,9 +32,9 @@
 ##' @param Boundary.knots Boundary points at which to anchor the Bernstein
 ##'     polynomial basis. The default value is \code{NULL} and the boundary
 ##'     knots is set internally to be \code{range(x, na.rm = TRUE)}.
-##' @param degree A non-negative integer representing the degree of the
+##' @param degree A nonnegative integer representing the degree of the
 ##'     polynomials.
-##' @param derivs A non-negative integer specifying the order of derivatives.
+##' @param derivs A nonnegative integer specifying the order of derivatives.
 ##'     The default value is \code{0L} for Bernstein polynomial basis functions.
 ##'
 ##' @return A numeric matrix of dimension \code{length(x)} by \code{degree +

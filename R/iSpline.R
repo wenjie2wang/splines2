@@ -33,7 +33,7 @@
 ##'     functions are returned.  Notice that when using I-Spline for monotonic
 ##'     regression, \code{intercept = TRUE} should be set even when an intercept
 ##'     term is considered additional to the spline basis functions.
-##' @param derivs A non-negative integer specifying the order of derivatives of
+##' @param derivs A nonnegative integer specifying the order of derivatives of
 ##'     I-splines.
 ##'
 ##' @inherit bSpline return
@@ -55,7 +55,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) < 0) {
-        stop("The 'derivs' must be a non-negative integer.")
+        stop("The 'derivs' must be a nonnegative integer.")
     }
     if (derivs > 0) {
         return(mSpline(x = x,

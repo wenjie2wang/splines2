@@ -21,7 +21,7 @@ base package **splines**.
 ## Features
 
 The package **splines2** (version `r packageVersion("splines2")`) provides
-functions to construct basis matrix of
+functions to construct basis matrices of
 
 - B-splines
 - M-splines
@@ -34,7 +34,7 @@ functions to construct basis matrix of
   closed-form recursive formulas
 
 In addition to the R interface, **splines2** provides a C++ header-only
-library integrated with **Rcpp**, which allows construction of spline basis
+library integrated with **Rcpp**, which allows the construction of spline basis
 functions directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
 can also be treated as one of the **Rcpp\*** packages.  A toy example package
 that uses the C++ interface is available [here][example-pkg].
@@ -50,8 +50,8 @@ install.packages("splines2")
 
 ## Development
 
-The latest version of package is under development at [GitHub][github-url].  If
-it is able to pass the automated package checks, one may install it by
+The latest version of the package is under development at [GitHub][github-url].
+If it is able to pass the automated package checks, one may install it by
 
 ```R
 if (! require(remotes)) install.packages("remotes")
@@ -60,8 +60,8 @@ remotes::install_github("wenjie2wang/splines2", upgrade = "never")
 
 ## Getting Started
 
-[Online document][pkgdown-url] provides reference for all functions and contains
-the following vignettes:
+The [Online document][pkgdown-url] provides a reference for all functions and
+contains the following vignettes:
 
 - [Demonstration of the common usages in R through examples][pkg-demo].
 - [Introduction to the usage with Rcpp][pkg-wi-rcpp]
@@ -69,7 +69,7 @@ the following vignettes:
 ## Performance
 
 Since v0.3.0, the implementation of the main functions has been rewritten in C++
-with the help of the **Rcpp** and **RcppArmadillo** package. The computational
+with the help of the **Rcpp** and **RcppArmadillo** packages. The computational
 performance has thus been boosted and comparable with the function
 `splines::splineDesign()`.
 
@@ -132,10 +132,10 @@ microbenchmark(
 )
 ```
 
-The **splines** package does not provide function producing integrals of
-B-splines.  So we instead performed a comparison with package **ibs** (version
-`r packageVersion("ibs")`), where the function `ibs::ibs()` was also implemented
-in **Rcpp**.
+The **splines** package does not contain an implementation for integrals of
+B-splines.  Thus, we performed a comparison with package **ibs** (version `r
+packageVersion("ibs")`), where the function `ibs::ibs()` was also implemented in
+**Rcpp**.
 
 ```{r bench-ibs}
 ## integrals of B-splines
@@ -154,15 +154,15 @@ microbenchmark(
 ```
 
 The function `ibs::ibs()` returns the integrated B-splines instead of the
-integrals of spline basis functions.  So we applied the same coefficients to the
-basis functions from `splines2::ibs()` for equivalent results, which was still
-much faster than `ibs::ibs()`.
+integrals of spline basis functions.  Thus, we applied the same coefficients to
+the basis functions from `splines2::ibs()` for equivalent results, which was
+still much faster than `ibs::ibs()`.
 
 
-For natural cubic splines (based on B-splines), `splines::ns()` uses QR
+For natural cubic splines (based on B-splines), `splines::ns()` uses the QR
 decomposition to find the null space of the second derivatives of B-spline basis
 functions at boundary knots, while `splines2::naturalSpline()` utilizes the
-close-form null space derived from the second derivatives of cubic B-splines,
+closed-form null space derived from the second derivatives of cubic B-splines,
 which produces nonnegative basis functions (within boundary) and is more
 computationally efficient.
 
@@ -181,7 +181,7 @@ microbenchmark(
 The function `mSpline()` produces periodic spline basis functions (based on
 M-splines) when `periodic = TRUE` is specified.  The `splines::periodicSpline()`
 returns a periodic interpolation spline (based on B-splines) instead of basis
-matrix.  So we performed a comparison with package **pbs** (version `r
+matrix.  Thus, we performed a comparison with package **pbs** (version `r
 packageVersion("pbs")`), where the function `pbs::pbs()` produces a basis matrix
 of periodic B-spline by using `splines::spline.des()` (a wrapper function of
 `splines::splineDesign()`).
