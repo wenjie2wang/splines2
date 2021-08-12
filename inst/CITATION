@@ -12,3 +12,19 @@ bibentry(
     url = "https://CRAN.R-project.org/package=splines2",
     note = "{R} package version 0.4.4"
 )
+
+bibentry(
+    key = "splines2-paper",
+    bibtype = "Article",
+    title = "Shape-Restricted Regression Splines with {R} Package {splines2}",
+    author = c(
+        as.person("Wenjie Wang"),
+        as.person("Jun Yan")
+    ),
+    journal = "Journal of Data Science",
+    year = "2021",
+    volume = "19",
+    number = "3",
+    pages = "498--517",
+    doi = "10.6339/21-JDS1020"
+)

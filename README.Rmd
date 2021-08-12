@@ -8,6 +8,7 @@ output: github_document
 [![Downloads from the RStudio CRAN mirror][cranlog-badge]][cran-url]
 [![Build Status][gha-icon]][gha-url]
 [![codecov][codecov-main]][codecov]
+[![JDS][jds-badge]](https://doi.org/10.6339/21-JDS1020)
 
 
 ```{r setup, echo = FALSE}
@@ -223,5 +224,6 @@ sessionInfo()
 [pkg-wi-rcpp]: https://wwenjie.org/splines2/articles/splines2-wi-rcpp
 [codecov]: https://codecov.io/gh/wenjie2wang/splines2
 [codecov-main]: https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg
+[jds-badge]: https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen
 [gpl]: https://www.gnu.org/licenses/
 

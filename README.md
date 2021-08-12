@@ -8,6 +8,7 @@ mirror](https://cranlogs.r-pkg.org/badges/splines2)](https://CRAN.R-project.org/
 [![Build
 Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)](https://github.com/wenjie2wang/splines2/actions)
 [![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
+[![JDS](https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen)](https://doi.org/10.6339/21-JDS1020)
 
 The R package **splines2** is intended to be a user-friendly
 *supplement* to the base package **splines**.
@@ -15,7 +16,7 @@ The R package **splines2** is intended to be a user-friendly
 ## Features
 
 The package **splines2** (version 0.4.3) provides functions to construct
-basis matrix of
+basis matrices of
 
 -   B-splines
 -   M-splines
@@ -28,8 +29,8 @@ basis matrix of
     closed-form recursive formulas
 
 In addition to the R interface, **splines2** provides a C++ header-only
-library integrated with **Rcpp**, which allows construction of spline
-basis functions directly in C++ with the help of **Rcpp** and
+library integrated with **Rcpp**, which allows the construction of
+spline basis functions directly in C++ with the help of **Rcpp** and
 **RcppArmadillo**. So it can also be treated as one of the **Rcpp\***
 packages. A toy example package that uses the C++ interface is available
 [here](https://github.com/wenjie2wang/example-pkg-Rcpp-splines2).
@@ -45,7 +46,7 @@ install.packages("splines2")
 
 ## Development
 
-The latest version of package is under development at
+The latest version of the package is under development at
 [GitHub](https://github.com/wenjie2wang/splines2). If it is able to pass
 the automated package checks, one may install it by
 
@@ -56,8 +57,8 @@ remotes::install_github("wenjie2wang/splines2", upgrade = "never")
 
 ## Getting Started
 
-[Online document](https://wwenjie.org/splines2) provides reference for
-all functions and contains the following vignettes:
+The [Online document](https://wwenjie.org/splines2) provides a reference
+for all functions and contains the following vignettes:
 
 -   [Demonstration of the common usages in R through
     examples](https://wwenjie.org/splines2/articles/splines2-intro).
@@ -68,7 +69,7 @@ all functions and contains the following vignettes:
 
 Since v0.3.0, the implementation of the main functions has been
 rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
-package. The computational performance has thus been boosted and
+packages. The computational performance has thus been boosted and
 comparable with the function `splines::splineDesign()`.
 
 Some quick micro-benchmarks are provided for reference as follows:
@@ -143,10 +144,10 @@ microbenchmark(
      splines::splineDesign 277.05 283.93 322.72 291.88 307.72 2582.2  1000   b
              splines2::dbs 109.76 118.34 137.90 123.61 129.36 2471.3  1000  a 
 
-The **splines** package does not provide function producing integrals of
-B-splines. So we instead performed a comparison with package **ibs**
-(version 1.4), where the function `ibs::ibs()` was also implemented in
-**Rcpp**.
+The **splines** package does not contain an implementation for integrals
+of B-splines. Thus, we performed a comparison with package **ibs**
+(version `r packageVersion("ibs")`), where the function `ibs::ibs()` was
+also implemented in **Rcpp**.
 
 ``` r
 ## integrals of B-splines
@@ -170,14 +171,14 @@ microbenchmark(
      splines2::ibs  280.47  327.5  361.18  368.46  385.61  1877.6  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
-the integrals of spline basis functions. So we applied the same
+the integrals of spline basis functions. Thus, we applied the same
 coefficients to the basis functions from `splines2::ibs()` for
 equivalent results, which was still much faster than `ibs::ibs()`.
 
-For natural cubic splines (based on B-splines), `splines::ns()` uses QR
-decomposition to find the null space of the second derivatives of
+For natural cubic splines (based on B-splines), `splines::ns()` uses the
+QR decomposition to find the null space of the second derivatives of
 B-spline basis functions at boundary knots, while
-`splines2::naturalSpline()` utilizes the close-form null space derived
+`splines2::naturalSpline()` utilizes the closed-form null space derived
 from the second derivatives of cubic B-splines, which produces
 nonnegative basis functions (within boundary) and is more
 computationally efficient.
@@ -202,7 +203,7 @@ microbenchmark(
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
 `splines::periodicSpline()` returns a periodic interpolation spline
-(based on B-splines) instead of basis matrix. So we performed a
+(based on B-splines) instead of basis matrix. Thus, we performed a
 comparison with package **pbs** (version `r packageVersion("pbs")`),
 where the function `pbs::pbs()` produces a basis matrix of periodic
 B-spline by using `splines::spline.des()` (a wrapper function of
