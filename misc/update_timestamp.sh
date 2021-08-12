@@ -52,8 +52,8 @@ else
     rm $cprt_cpp
 
     # update date in DESCRIPTION
-    regexp2="s/Date: [0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/Date: $dt/"
-    sed -i -E "$regexp2" DESCRIPTION
+    # regexp2="s/Date: [0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/Date: $dt/"
+    # sed -i -E "$regexp2" DESCRIPTION
 
     # update version and year in citation
     regexp3="s/version ([0-9]+\.*)+/version $version/"
