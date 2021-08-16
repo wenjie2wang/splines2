@@ -11,8 +11,8 @@
 
 ## Minor changes
 
-* Made the internal checking procedure more strict to throw error if any
-  internal knots is placed at or outside boundary:
+* Made the internal checking procedure more strict to throw an error if any
+  internal knots are placed at or outside boundary:
   [issue 5](https://github.com/wenjie2wang/splines2/issues/5).
 
 ## Bug fixes
