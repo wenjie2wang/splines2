@@ -34,11 +34,11 @@ functions to construct basis matrices of
 - their integrals (except C-splines) and derivatives of given order by
   closed-form recursive formulas
 
-In addition to the R interface, **splines2** provides a C++ header-only
-library integrated with **Rcpp**, which allows the construction of spline basis
-functions directly in C++ with the help of **Rcpp** and **RcppArmadillo**.  So it
-can also be treated as one of the **Rcpp\*** packages.  A toy example package
-that uses the C++ interface is available [here][example-pkg].
+In addition to the R interface, **splines2** provides a C++ header-only library
+integrated with **Rcpp**, which allows the construction of spline basis
+functions directly in C++ with the help of **Rcpp** and **RcppArmadillo**.
+Thus, it can also be treated as one of the **Rcpp\*** packages.  A toy example
+package that uses the C++ interface is available [here][example-pkg].
 
 
 ## Installation of CRAN Version

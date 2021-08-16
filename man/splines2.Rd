@@ -5,7 +5,7 @@
 \alias{splines2}
 \title{splines2: Regression Spline Functions and Classes}
 \description{
-This package provides functions to construct basis matrix of
+This package provides functions to construct basis matrices of
 \itemize{
 \item B-splines
 \item M-splines
@@ -14,19 +14,25 @@ This package provides functions to construct basis matrix of
 \item periodic M-splines
 \item natural cubic splines
 \item generalized Bernstein polynomials
-\item their integrals (except C-splines) and derivatives of given order by
-close-form recursive formulas
+\item along with their integrals (except C-splines) and derivatives
+    of given order by closed-form recursive formulas
 }
 }
 \details{
 In addition to the R interface, it also provides a C++ header-only library
-integrated with \pkg{Rcpp}, which allows construction of spline basis matrix
-directly in C++ with the help of \pkg{Rcpp} and \pkg{RcppArmadillo}.  So it
-can also be treated as one of the \pkg{Rcpp*} packages.  A toy example
-package that uses the C++ interface is available at
+integrated with \pkg{Rcpp}, which allows the construction of spline basis
+functions directly in C++ with the help of \pkg{Rcpp} and
+\pkg{RcppArmadillo}.  Thus, it can also be treated as one of the \pkg{Rcpp*}
+packages.  A toy example package that uses the C++ interface is available at
 <https://github.com/wenjie2wang/example-pkg-Rcpp-splines2>.
 
-It is named after the \pkg{splines} package:
-"Regression Spline Functions and Classes". The trailing number two is simply
-"too" (and by no means for the generation two).
+The package \pkg{splines2} is intended to be a user-friendly supplement to
+the base package \pkg{splines}.  The trailing number two in the package name
+means "too" (and by no means refers to the generation two).  See Wang and
+Yan (2021) for details and illustrations of how the package can be applied
+to shape-restricted regression.
+}
+\references{
+Wang, W., & Yan, J. (2021). Shape-restricted regression splines with R
+package \pkg{splines2}. \emph{Journal of Data Science}, 19(3), 498--517.
 }

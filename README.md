@@ -15,7 +15,7 @@ The R package **splines2** is intended to be a user-friendly
 
 ## Features
 
-The package **splines2** (version 0.4.3) provides functions to construct
+The package **splines2** (version 0.4.4) provides functions to construct
 basis matrices of
 
 -   B-splines
@@ -31,7 +31,7 @@ basis matrices of
 In addition to the R interface, **splines2** provides a C++ header-only
 library integrated with **Rcpp**, which allows the construction of
 spline basis functions directly in C++ with the help of **Rcpp** and
-**RcppArmadillo**. So it can also be treated as one of the **Rcpp\***
+**RcppArmadillo**. Thus, it can also be treated as one of the **Rcpp\***
 packages. A toy example package that uses the C++ interface is available
 [here](https://github.com/wenjie2wang/example-pkg-Rcpp-splines2).
 
@@ -254,14 +254,14 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.3       microbenchmark_1.4-7
+    [1] splines2_0.4.4       microbenchmark_1.4-7
 
     loaded via a namespace (and not attached):
      [1] Rcpp_1.0.7        mvtnorm_1.1-2     lattice_0.20-44   codetools_0.2-18  ibs_1.4          
      [6] zoo_1.8-9         digest_0.6.27     MASS_7.3-54       grid_4.1.0        magrittr_2.0.1   
     [11] evaluate_0.14     rlang_0.4.11      stringi_1.7.3     multcomp_1.4-17   Matrix_1.3-4     
-    [16] sandwich_3.0-1    rmarkdown_2.9     TH.data_1.0-10    tools_4.1.0       stringr_1.4.0    
-    [21] survival_3.2-11   xfun_0.24         yaml_2.2.1        compiler_4.1.0    pbs_1.1          
+    [16] sandwich_3.0-1    rmarkdown_2.10    TH.data_1.0-10    tools_4.1.0       stringr_1.4.0    
+    [21] survival_3.2-11   xfun_0.25         yaml_2.2.1        compiler_4.1.0    pbs_1.1          
     [26] htmltools_0.5.1.1 knitr_1.33       
 
 </details>
