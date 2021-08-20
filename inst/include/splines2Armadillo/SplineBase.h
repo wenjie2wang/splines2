@@ -19,6 +19,7 @@
 #define SPLINE2_SPLINE_BASE_H
 
 #include <stdexcept>
+#include <algorithm>
 
 #include "common.h"
 #include "utils.h"
@@ -239,18 +240,13 @@ namespace splines2 {
                 return;
             }
             x_index_ = arma::zeros<arma::uvec>(x_.n_elem);
-            for (size_t i {0}; i < x_.n_elem; ++i) {
-                size_t left_index {0};
-                size_t right_index { internal_knots_.n_elem };
-                while (right_index > left_index) {
-                    size_t cur_index { (left_index + right_index) / 2 };
-                    if (x_(i) < internal_knots_(cur_index)) {
-                        right_index = cur_index;
-                    } else {
-                        left_index = cur_index + 1;
-                    }
-                }
-                x_index_(i) = left_index;
+            arma::uvec::iterator xi { x_index_.begin() };
+            arma::vec::iterator it { x_.begin() }, pos, ie { x_.end() },
+                knots_begin { internal_knots_.begin() },
+                knots_end { internal_knots_.end() };
+            for (; it != ie; ++it, ++xi) {
+                pos = std::upper_bound(knots_begin, knots_end, *it);
+                *xi = std::distance(knots_begin, pos);
             }
             is_x_index_latest_ = true;
         }
