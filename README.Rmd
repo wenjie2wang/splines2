@@ -112,7 +112,8 @@ microbenchmark(
         intercept = TRUE, Boundary.knots = boundary_knots
     ),
     check = my_check,
-    times = 1e3
+    times = 1e3,
+    unit = "relative"
 )
 ```
 
@@ -129,7 +130,8 @@ microbenchmark(
                           degree = degree, intercept = TRUE,
                           Boundary.knots = boundary_knots),
     check = my_check,
-    times = 1e3
+    times = 1e3,
+    unit = "relative"
 )
 ```
 
@@ -150,7 +152,8 @@ microbenchmark(
         coef_sp
     ),
     check = my_check,
-    times = 1e3
+    times = 1e3,
+    unit = "relative"
 )
 ```
 
@@ -175,7 +178,8 @@ microbenchmark(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
     ),
-    times = 1e3
+    times = 1e3,
+    unit = "relative"
 )
 ```
 
@@ -196,7 +200,8 @@ microbenchmark(
         x, knots = internal_knots, degree = degree, intercept = TRUE,
         Boundary.knots = boundary_knots, periodic = TRUE
     ),
-    times = 1e3
+    times = 1e3,
+    unit = "relative"
 )
 ```
 
