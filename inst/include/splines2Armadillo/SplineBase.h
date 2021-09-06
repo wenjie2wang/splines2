@@ -138,14 +138,14 @@ namespace splines2 {
             )
         {
             rvec out { arma::zeros(internal_knots.n_elem + 2 * order) };
-            for (size_t i {0}; i < out.n_elem; ++i) {
-                if (i < order) {
-                    out(i) = boundary_knots(0);
-                } else if (i < out.n_elem - order) {
-                    out(i) = internal_knots(i - order);
-                } else {
-                    out(i) = boundary_knots(1);
-                }
+            rvec::iterator it { out.begin() }, it_end { out.end() - 1 };
+            rvec::const_iterator ii { internal_knots.begin() };
+            for (size_t i {0}; i < order; ++i, ++it, --it_end) {
+                *it = boundary_knots(0);
+                *it_end = boundary_knots(1);
+            }
+            for (++it_end; it != it_end; ++it, ++ii) {
+                *it = *ii;
             }
             return out;
         }
