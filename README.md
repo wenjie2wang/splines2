@@ -15,8 +15,8 @@ The R package **splines2** is intended to be a user-friendly
 
 ## Features
 
-The package **splines2** (version 0.4.5.9000) provides functions to
-construct basis matrices of
+The package **splines2** (version 0.4.5) provides functions to construct
+basis matrices of
 
 -   B-splines
 -   M-splines
@@ -118,8 +118,8 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval cld
-               splines::bs 3.6523 3.5555 3.5506 3.4736 3.5177 1.1974  1000   c
-     splines::splineDesign 2.2324 2.1404 2.1467 2.0619 2.0942 1.0849  1000  b 
+               splines::bs 3.6436 3.5392 3.5667 3.4591 3.4965 1.2118  1000   c
+     splines::splineDesign 2.2156 2.1265 2.1414 2.0520 2.1235 1.0717  1000  b 
          splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000 a  
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
@@ -142,9 +142,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr   min    lq   mean median     uq    max neval cld
-     splines::splineDesign 2.678 2.519 2.4873 2.4508 2.5028 1.0712  1000   b
-             splines2::dbs 1.000 1.000 1.0000 1.0000 1.0000 1.0000  1000  a 
+                      expr    min     lq   mean median     uq    max neval cld
+     splines::splineDesign 2.6213 2.4951 2.4608 2.4362 2.4634 1.1087  1000   b
+             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000  a 
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -169,9 +169,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min     lq   mean median     uq   max neval cld
-          ibs::ibs 9.3175 8.4242 9.3377 9.6631 9.6052 30.53  1000   b
-     splines2::ibs 1.0000 1.0000 1.0000 1.0000 1.0000  1.00  1000  a 
+              expr    min     lq   mean median     uq    max neval cld
+          ibs::ibs 9.2171 8.2285 6.5033 9.5655 9.4491 18.632  1000   b
+     splines2::ibs 1.0000 1.0000 1.0000 1.0000 1.0000  1.000  1000  a 
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -200,9 +200,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                        expr    min     lq  mean median     uq   max neval cld
-                 splines::ns 5.2152 4.9659 4.798 4.7187 4.6488 1.335  1000   b
-     splines2::naturalSpline 1.0000 1.0000 1.000 1.0000 1.0000 1.000  1000  a 
+                        expr    min     lq   mean median     uq    max neval cld
+                 splines::ns 5.1898 4.9857 4.7973  4.736 4.5995 1.6821  1000   b
+     splines2::naturalSpline 1.0000 1.0000 1.0000  1.000 1.0000 1.0000  1000  a 
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -228,9 +228,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                  expr   min     lq   mean median     uq    max neval cld
-              pbs::pbs 3.465 3.2513 3.2501 3.1162 3.1062 3.4498  1000   b
-     splines2::mSpline 1.000 1.0000 1.0000 1.0000 1.0000 1.0000  1000  a 
+                  expr    min    lq   mean median     uq    max neval cld
+              pbs::pbs 3.3766 3.229 3.1478 3.1355 3.1166 1.4485  1000   b
+     splines2::mSpline 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000  a 
 
 <details>
 <summary>
@@ -259,7 +259,7 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.5.9000  microbenchmark_1.4-7
+    [1] splines2_0.4.5       microbenchmark_1.4-7
 
     loaded via a namespace (and not attached):
      [1] Rcpp_1.0.7        mvtnorm_1.1-2     lattice_0.20-44   codetools_0.2-18  ibs_1.4          
