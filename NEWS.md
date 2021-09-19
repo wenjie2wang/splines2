@@ -1,3 +1,12 @@
+# splines2 0.4.5
+
+## Minor changes
+
+* Improved the computational efficiency of finding the knot intervals for `x`
+  (by replacing the naive binary search implementation with `std::upper_bound`
+  and `std::distance`).
+
+
 # splines2 0.4.4
 
 ## New features
