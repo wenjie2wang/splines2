@@ -15,8 +15,8 @@ make pkgdown
 # go to the repository for wwenjie.org
 cd $docs_repo
 git checkout -f
-git checkout master
-git pull origin master
+git checkout main
+git pull origin main
 mkdir -p $target_dir
 cp -r $build_dir/docs/* $target_dir
 git status > $tmp_log
@@ -25,7 +25,7 @@ if egrep -q "modified:[ ]+static/$pkg/" $tmp_log
 then
     git add static/$pkg/
     git commit -m "deploy $pkg $CI_COMMIT_SHORT_SHA by gitlab-runner"
-    git push origin master
+    git push origin main
 else
     printf "The docs was not updated.\n"
 fi
