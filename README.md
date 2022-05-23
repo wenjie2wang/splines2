@@ -7,11 +7,11 @@ splines2
 mirror](https://cranlogs.r-pkg.org/badges/splines2)](https://CRAN.R-project.org/package=splines2)
 [![Build
 Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)](https://github.com/wenjie2wang/splines2/actions)
-[![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://codecov.io/gh/wenjie2wang/splines2)
+[![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wenjie2wang/splines2)
 [![JDS](https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen)](https://doi.org/10.6339/21-JDS1020)
 
 The R package **splines2** is intended to be a user-friendly
-*supplement* to the base package **splines**.
+*supplementary* package to the base package **splines**.
 
 ## Features
 
@@ -76,6 +76,7 @@ Some quick micro-benchmarks are provided for reference as follows:
 
 ``` r
 library(microbenchmark)
+options(microbenchmark.unit="relative")
 library(splines)
 library(splines2)
 
@@ -111,16 +112,15 @@ microbenchmark(
         intercept = TRUE, Boundary.knots = boundary_knots
     ),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq    max neval cld
-               splines::bs 3.6436 3.5392 3.5667 3.4591 3.4965 1.2118  1000   c
-     splines::splineDesign 2.2156 2.1265 2.1414 2.0520 2.1235 1.0717  1000  b 
-         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000 a  
+                      expr    min    lq   mean median     uq    max neval
+               splines::bs 3.5106 3.350 3.3205 3.2759 3.3104 1.1756  1000
+     splines::splineDesign 2.0964 1.978 2.1040 1.9115 1.9499 1.2490  1000
+         splines2::bSpline 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -136,15 +136,14 @@ microbenchmark(
                           degree = degree, intercept = TRUE,
                           Boundary.knots = boundary_knots),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq    max neval cld
-     splines::splineDesign 2.6213 2.4951 2.4608 2.4362 2.4634 1.1087  1000   b
-             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000  a 
+                      expr    min     lq  mean median     uq   max neval
+     splines::splineDesign 2.6616 2.5268 2.541 2.4446 2.4563 1.108  1000
+             splines2::dbs 1.0000 1.0000 1.000 1.0000 1.0000 1.000  1000
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -163,15 +162,14 @@ microbenchmark(
         coef_sp
     ),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
     Unit: relative
-              expr    min     lq   mean median     uq    max neval cld
-          ibs::ibs 9.2171 8.2285 6.5033 9.5655 9.4491 18.632  1000   b
-     splines2::ibs 1.0000 1.0000 1.0000 1.0000 1.0000  1.000  1000  a 
+              expr   min     lq   mean median     uq   max neval
+          ibs::ibs 20.41 17.921 17.714 19.104 19.017 12.92  1000
+     splines2::ibs  1.00  1.000  1.000  1.000  1.000  1.00  1000
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -194,15 +192,14 @@ microbenchmark(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
     ),
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
     Unit: relative
-                        expr    min     lq   mean median     uq    max neval cld
-                 splines::ns 5.1898 4.9857 4.7973  4.736 4.5995 1.6821  1000   b
-     splines2::naturalSpline 1.0000 1.0000 1.0000  1.000 1.0000 1.0000  1000  a 
+                        expr    min     lq   mean median     uq   max neval
+                 splines::ns 4.9761 4.7383 4.8082 4.4816 4.4964 2.209  1000
+     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.000  1000
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -222,15 +219,14 @@ microbenchmark(
         x, knots = internal_knots, degree = degree, intercept = TRUE,
         Boundary.knots = boundary_knots, periodic = TRUE
     ),
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
     Unit: relative
-                  expr    min    lq   mean median     uq    max neval cld
-              pbs::pbs 3.3766 3.229 3.1478 3.1355 3.1166 1.4485  1000   b
-     splines2::mSpline 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000  a 
+                  expr    min     lq   mean median     uq    max neval
+              pbs::pbs 3.4692 3.2874 3.5597 3.1446 3.1321 14.948  1000
+     splines2::mSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.000  1000
 
 <details>
 <summary>
@@ -241,13 +237,13 @@ Session Information for Benchmarks
 sessionInfo()
 ```
 
-    R version 4.1.0 (2021-05-18)
+    R version 4.2.0 (2022-04-22)
     Platform: x86_64-pc-linux-gnu (64-bit)
     Running under: Arch Linux
 
     Matrix products: default
-    BLAS:   /usr/lib/libopenblasp-r0.3.17.so
-    LAPACK: /usr/lib/liblapack.so.3.10.0
+    BLAS:   /usr/lib/libopenblasp-r0.3.20.so
+    LAPACK: /usr/lib/liblapack.so.3.10.1
 
     locale:
      [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
@@ -259,15 +255,13 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.5       microbenchmark_1.4-7
+    [1] splines2_0.4.5       microbenchmark_1.4.9
 
     loaded via a namespace (and not attached):
-     [1] Rcpp_1.0.7        mvtnorm_1.1-2     lattice_0.20-44   codetools_0.2-18  ibs_1.4          
-     [6] zoo_1.8-9         digest_0.6.27     MASS_7.3-54       grid_4.1.0        magrittr_2.0.1   
-    [11] evaluate_0.14     rlang_0.4.11      stringi_1.7.3     multcomp_1.4-17   Matrix_1.3-4     
-    [16] sandwich_3.0-1    rmarkdown_2.10    TH.data_1.0-10    tools_4.1.0       stringr_1.4.0    
-    [21] survival_3.2-11   xfun_0.25         yaml_2.2.1        compiler_4.1.0    pbs_1.1          
-    [26] htmltools_0.5.1.1 knitr_1.33       
+     [1] Rcpp_1.0.8.3     codetools_0.2-18 ibs_1.4          digest_0.6.29    magrittr_2.0.3  
+     [6] evaluate_0.15    rlang_1.0.2      stringi_1.7.6    cli_3.2.0        rmarkdown_2.14  
+    [11] tools_4.2.0      stringr_1.4.0    xfun_0.30        yaml_2.3.5       fastmap_1.1.0   
+    [16] compiler_4.2.0   pbs_1.1          htmltools_0.5.2  knitr_1.38      
 
 </details>
 

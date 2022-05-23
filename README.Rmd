@@ -16,8 +16,8 @@ knitr::opts_chunk$set(comment = "", cache = TRUE)
 options(width = 100, digits = 5)
 ```
 
-The R package **splines2** is intended to be a user-friendly *supplement* to the
-base package **splines**.
+The R package **splines2** is intended to be a user-friendly *supplementary*
+package to the base package **splines**.
 
 ## Features
 
@@ -78,6 +78,7 @@ Some quick micro-benchmarks are provided for reference as follows:
 
 ```{r bench-setup}
 library(microbenchmark)
+options(microbenchmark.unit="relative")
 library(splines)
 library(splines2)
 
@@ -112,8 +113,7 @@ microbenchmark(
         intercept = TRUE, Boundary.knots = boundary_knots
     ),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
@@ -130,8 +130,7 @@ microbenchmark(
                           degree = degree, intercept = TRUE,
                           Boundary.knots = boundary_knots),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
@@ -152,8 +151,7 @@ microbenchmark(
         coef_sp
     ),
     check = my_check,
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
@@ -178,8 +176,7 @@ microbenchmark(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
     ),
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
@@ -200,8 +197,7 @@ microbenchmark(
         x, knots = internal_knots, degree = degree, intercept = TRUE,
         Boundary.knots = boundary_knots, periodic = TRUE
     ),
-    times = 1e3,
-    unit = "relative"
+    times = 1e3
 )
 ```
 
@@ -227,7 +223,7 @@ sessionInfo()
 [example-pkg]: https://github.com/wenjie2wang/example-pkg-Rcpp-splines2
 [pkg-demo]: https://wwenjie.org/splines2/articles/splines2-intro
 [pkg-wi-rcpp]: https://wwenjie.org/splines2/articles/splines2-wi-rcpp
-[codecov]: https://codecov.io/gh/wenjie2wang/splines2
+[codecov]: https://app.codecov.io/gh/wenjie2wang/splines2
 [codecov-main]: https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg
 [jds-badge]: https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen
 [gpl]: https://www.gnu.org/licenses/
