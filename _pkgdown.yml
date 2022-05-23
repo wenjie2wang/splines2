@@ -1,3 +1,4 @@
 template:
+  bootstrap: 5
   params:
     ganalytics: G-Y46MV2WEH6
