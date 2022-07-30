@@ -37,8 +37,10 @@
 NULL
 
 
-## the default method
-knots_ <- function(Fn, type = c("internal", "boundary"), ...) {
+##' @rdname knots
+##' @export
+knots.splines2 <- function(Fn, type = c("internal", "boundary"), ...)
+{
     type <- match.arg(type, choices = c("internal", "boundary"))
     if (type == "internal") {
         attr(Fn, "knots")
@@ -46,36 +48,3 @@ knots_ <- function(Fn, type = c("internal", "boundary"), ...) {
         attr(Fn, "Boundary.knots")
     }
 }
-
-
-##' @rdname knots
-##' @export
-knots.bSpline2 <- knots_
-
-##' @rdname knots
-##' @export
-knots.dbs <- knots_
-
-##' @rdname knots
-##' @export
-knots.ibs <- knots_
-
-##' @rdname knots
-##' @export
-knots.mSpline <- knots_
-
-##' @rdname knots
-##' @export
-knots.iSpline <- knots_
-
-##' @rdname knots
-##' @export
-knots.cSpline <- knots_
-
-##' @rdname knots
-##' @export
-knots.bernsteinPoly <- knots_
-
-##' @rdname knots
-##' @export
-knots.naturalSpline <- knots_
