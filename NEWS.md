@@ -1,3 +1,11 @@
+# splines2 0.4.6
+
+## New features
+
+* Added `update()` methods to produce new spline basis functions based on the
+  given object with specified updates in terms of `degree` and `knots`, etc.
+
+
 # splines2 0.4.5
 
 ## Minor changes
