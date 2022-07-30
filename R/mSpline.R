@@ -166,6 +166,6 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "mSpline")
+    class(out) <- c("matrix", "mSpline", "splines2")
     out
 }

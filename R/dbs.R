@@ -109,7 +109,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3L,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "dbs")
+    class(out) <- c("matrix", "dbs", "splines2")
     ## return
     out
 }

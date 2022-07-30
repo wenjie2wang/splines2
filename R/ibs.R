@@ -96,7 +96,7 @@ ibs <- function(x, df = NULL, knots = NULL, degree = 3,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "ibs")
+    class(out) <- c("matrix", "ibs", "splines2")
     ## return
     out
 }

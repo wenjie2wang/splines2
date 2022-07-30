@@ -148,11 +148,11 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (scale || derivs == 0) {
         ## add "scale" to attributes for predict(), etc.
         attr(out, "scale") <- scale
-        class(out) <- c("matrix", "cSpline")
+        class(out) <- c("matrix", "cSpline", "splines2")
     } else if (derivs == 1) {
-        class(out) <- c("matrix", "iSpline")
+        class(out) <- c("matrix", "iSpline", "splines2")
     } else {
-        class(out) <- c("matrix", "mSpline")
+        class(out) <- c("matrix", "mSpline", "splines2")
     }
     ## return
     out
