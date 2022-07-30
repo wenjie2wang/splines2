@@ -2,31 +2,10 @@
 % Please edit documentation in R/knots.R
 \name{knots}
 \alias{knots}
-\alias{knots.bSpline2}
-\alias{knots.dbs}
-\alias{knots.ibs}
-\alias{knots.mSpline}
-\alias{knots.iSpline}
-\alias{knots.cSpline}
-\alias{knots.bernsteinPoly}
-\alias{knots.naturalSpline}
+\alias{knots.splines2}
 \title{Extract Knots from the Given Object}
 \usage{
-\method{knots}{bSpline2}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{dbs}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{ibs}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{mSpline}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{iSpline}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{cSpline}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{bernsteinPoly}(Fn, type = c("internal", "boundary"), ...)
-
-\method{knots}{naturalSpline}(Fn, type = c("internal", "boundary"), ...)
+\method{knots}{splines2}(Fn, type = c("internal", "boundary"), ...)
 }
 \arguments{
 \item{Fn}{An \code{splines2} object produced by this package.}

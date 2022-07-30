@@ -10,7 +10,7 @@
 \alias{predict.cSpline}
 \alias{predict.bernsteinPoly}
 \alias{predict.naturalSpline}
-\title{Evaluate a Spline Basis at specified points}
+\title{Evaluate Spline Basis Functions at Specified Points}
 \usage{
 \method{predict}{bSpline2}(object, newx, ...)
 
@@ -43,7 +43,8 @@ An object just like the \code{object} input, except evaluated at
 the new values of \code{x}.
 }
 \description{
-This function evaluates a predefined spline basis at a (new) given \code{x}.
+This function evaluates the given spline basis functions at the specified
+\code{x}.
 }
 \details{
 These are methods for the generic function \code{predict} for objects
