@@ -15,9 +15,10 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Evaluate a Spline Basis at specified points
+##' Evaluate Spline Basis Functions at Specified Points
 ##'
-##' This function evaluates a predefined spline basis at a (new) given \code{x}.
+##' This function evaluates the given spline basis functions at the specified
+##' \code{x}.
 ##'
 ##' These are methods for the generic function \code{predict} for objects
 ##' inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
@@ -43,16 +44,28 @@
 NULL
 
 
-##' @rdname predict
-##' @export
-predict.bSpline2 <- function(object, newx, ...)
+## the helper function for predict
+helper_predict <- function(object, newx, fun, key_attr)
 {
     if (missing(newx))
         return(object)
     ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "knots", "Boundary.knots", "intercept",
-                         "derivs", "integral"))
-    do.call(bSpline, c(list(x = newx), pred_attr(object)))
+    check_attr(object, key_attr)
+    do.call(fun, c(list(x = newx), pred_attr(object)))
+}
+
+
+##' @rdname predict
+##' @export
+predict.bSpline2 <- function(object, newx, ...)
+{
+    helper_predict(
+        object,
+        newx,
+        bSpline,
+        key_attr = c("x", "degree", "knots", "Boundary.knots",
+                     "intercept", "derivs", "integral")
+    )
 }
 
 
@@ -60,13 +73,13 @@ predict.bSpline2 <- function(object, newx, ...)
 ##' @export
 predict.dbs <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs",
-                         "knots", "Boundary.knots", "intercept"))
-    do.call(dbs, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        dbs,
+        key_attr = c("x", "degree", "knots", "Boundary.knots",
+                     "intercept", "derivs")
+    )
 }
 
 
@@ -74,11 +87,12 @@ predict.dbs <- function(object, newx, ...)
 ##' @export
 predict.ibs <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "knots", "Boundary.knots", "intercept"))
-    do.call(ibs, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        ibs,
+        key_attr = c("x", "degree", "knots", "Boundary.knots", "intercept")
+    )
 }
 
 
@@ -86,12 +100,13 @@ predict.ibs <- function(object, newx, ...)
 ##' @export
 predict.mSpline <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs", "integral", "periodic",
-                         "knots", "Boundary.knots", "intercept"))
-    do.call(mSpline, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        mSpline,
+        key_attr = c("x", "degree", "knots", "Boundary.knots",
+                     "intercept", "derivs", "integral", "periodic")
+    )
 }
 
 
@@ -99,12 +114,13 @@ predict.mSpline <- function(object, newx, ...)
 ##' @export
 predict.iSpline <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs",
-                         "knots", "Boundary.knots", "intercept"))
-    do.call(iSpline, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        iSpline,
+        key_attr = c("x", "degree", "knots", "Boundary.knots",
+                     "intercept", "derivs")
+    )
 }
 
 
@@ -112,12 +128,13 @@ predict.iSpline <- function(object, newx, ...)
 ##' @export
 predict.cSpline <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs", "scale",
-                         "knots", "Boundary.knots", "intercept"))
-    do.call(cSpline, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        cSpline,
+        key_attr = c("x", "degree", "knots", "Boundary.knots",
+                     "intercept", "derivs", "scale")
+    )
 }
 
 
@@ -125,12 +142,13 @@ predict.cSpline <- function(object, newx, ...)
 ##' @export
 predict.bernsteinPoly <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "degree", "derivs", "integral",
-                         "Boundary.knots", "intercept"))
-    do.call(bernsteinPoly, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        bernsteinPoly,
+        key_attr = c("x", "degree", "Boundary.knots",
+                     "intercept", "derivs", "integral")
+    )
 }
 
 
@@ -138,10 +156,11 @@ predict.bernsteinPoly <- function(object, newx, ...)
 ##' @export
 predict.naturalSpline <- function(object, newx, ...)
 {
-    if (missing(newx))
-        return(object)
-    ## checks if key attributes still exist
-    check_attr(object, c("x", "derivs", "integral",
-                         "knots", "Boundary.knots", "intercept"))
-    do.call(naturalSpline, c(list(x = newx), pred_attr(object)))
+    helper_predict(
+        object,
+        newx,
+        naturalSpline,
+        key_attr = c("x", "knots", "Boundary.knots",
+                     "intercept", "derivs", "integral")
+    )
 }
