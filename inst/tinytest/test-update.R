@@ -3,12 +3,12 @@ knots <- c(1, 4, 8)
 
 ## bSpline
 bsMat0 <- bSpline(x, degree = 2)
-bsMat1 <- update(bsMat, degree = 3)
+bsMat1 <- update(bsMat0, degree = 3)
 expect_equal(attr(bsMat1, "degree"), 3L)
 
 ## ibs
 ibsMat0 <- ibs(x, degree = 3)
-ibsMat1 <- update(ibsMat, knots = c(2, 4, 8))
+ibsMat1 <- update(ibsMat0, knots = c(2, 4, 8))
 expect_equal(knots(ibsMat1), c(2, 4, 8))
 
 ## dbs
