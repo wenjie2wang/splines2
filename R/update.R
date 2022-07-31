@@ -43,7 +43,11 @@ helper_update <- function(object, ..., fun, key_attr)
         return(object)
     }
     check_attr(object, key_attr)
-    call_list <- modify_list(attributes(object), dot_list)
+    if (is.null(dot_list$df)) {
+        call_list <- modify_list(attributes(object), dot_list)
+    } else {
+        call_list <- modify_list(pred_attr(object, except = "knots"), dot_list)
+    }
     do.call(fun, call_list)
 }
 
@@ -69,7 +73,7 @@ update.dbs <- function(object, ...)
     helper_update(
         object,
         ...,
-        dbs,
+        fun = dbs,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
                      "intercept", "derivs")
     )
@@ -83,7 +87,7 @@ update.ibs <- function(object, ...)
     helper_update(
         object,
         ...,
-        ibs,
+        fun = ibs,
         key_attr = c("x", "degree", "knots", "Boundary.knots", "intercept")
     )
 }
@@ -96,7 +100,7 @@ update.mSpline <- function(object, ...)
     helper_update(
         object,
         ...,
-        mSpline,
+        fun = mSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
                      "intercept", "derivs", "integral", "periodic")
     )
@@ -110,7 +114,7 @@ update.iSpline <- function(object, ...)
     helper_update(
         object,
         ...,
-        iSpline,
+        fun = iSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
                      "intercept", "derivs")
     )
@@ -124,7 +128,7 @@ update.cSpline <- function(object, ...)
     helper_update(
         object,
         ...,
-        cSpline,
+        fun = cSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
                      "intercept", "derivs", "scale")
     )
@@ -138,7 +142,7 @@ update.bernsteinPoly <- function(object, ...)
     helper_update(
         object,
         ...,
-        bernsteinPoly,
+        fun = bernsteinPoly,
         key_attr = c("x", "degree", "Boundary.knots",
                      "intercept", "derivs", "integral")
     )
@@ -152,7 +156,7 @@ update.naturalSpline <- function(object, ...)
     helper_update(
         object,
         ...,
-        naturalSpline,
+        fun = naturalSpline,
         key_attr = c("x", "knots", "Boundary.knots",
                      "intercept", "derivs", "integral")
     )
