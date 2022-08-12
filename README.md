@@ -15,14 +15,14 @@ The R package **splines2** is intended to be a user-friendly
 
 ## Features
 
-The package **splines2** (version 0.4.5) provides functions to construct
-basis matrices of
+The package **splines2** provides functions to construct basis matrices
+of
 
 -   B-splines
 -   M-splines
 -   I-splines
 -   convex splines (C-splines)
--   periodic M-splines
+-   periodic splines
 -   natural cubic splines
 -   generalized Bernstein polynomials
 -   their integrals (except C-splines) and derivatives of given order by
@@ -117,10 +117,10 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min    lq   mean median     uq    max neval
-               splines::bs 3.5106 3.350 3.3205 3.2759 3.3104 1.1756  1000
-     splines::splineDesign 2.0964 1.978 2.1040 1.9115 1.9499 1.2490  1000
-         splines2::bSpline 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000
+                      expr    min     lq   mean median     uq    max neval
+               splines::bs 3.9034 3.6314 3.5353 3.5735 3.5633 1.1702  1000
+     splines::splineDesign 2.3132 2.1168 2.1689 2.0677 2.0819 1.3073  1000
+         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -141,9 +141,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min     lq  mean median     uq   max neval
-     splines::splineDesign 2.6616 2.5268 2.541 2.4446 2.4563 1.108  1000
-             splines2::dbs 1.0000 1.0000 1.000 1.0000 1.0000 1.000  1000
+                      expr    min     lq   mean median     uq    max neval
+     splines::splineDesign 2.8409 2.6553 2.6413 2.5336 2.5257 1.0834  1000
+             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -167,9 +167,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr   min     lq   mean median     uq   max neval
-          ibs::ibs 20.41 17.921 17.714 19.104 19.017 12.92  1000
-     splines2::ibs  1.00  1.000  1.000  1.000  1.000  1.00  1000
+              expr   min     lq   mean median     uq    max neval
+          ibs::ibs 22.49 20.654 21.372 21.103 21.016 25.442  1000
+     splines2::ibs  1.00  1.000  1.000  1.000  1.000  1.000  1000
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -197,9 +197,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                        expr    min     lq   mean median     uq   max neval
-                 splines::ns 4.9761 4.7383 4.8082 4.4816 4.4964 2.209  1000
-     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.000  1000
+                        expr    min     lq   mean median     uq     max neval
+                 splines::ns 5.3088 5.0697 4.9431 4.7628 4.7805 0.61586  1000
+     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.00000  1000
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -225,8 +225,8 @@ microbenchmark(
 
     Unit: relative
                   expr    min     lq   mean median     uq    max neval
-              pbs::pbs 3.4692 3.2874 3.5597 3.1446 3.1321 14.948  1000
-     splines2::mSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.000  1000
+              pbs::pbs 3.6309 3.4413 3.5077 3.2826 3.2763 3.3523  1000
+     splines2::mSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
 
 <details>
 <summary>
@@ -255,13 +255,13 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.5       microbenchmark_1.4.9
+    [1] splines2_0.4.6       microbenchmark_1.4.9
 
     loaded via a namespace (and not attached):
-     [1] Rcpp_1.0.8.3     codetools_0.2-18 ibs_1.4          digest_0.6.29    magrittr_2.0.3  
-     [6] evaluate_0.15    rlang_1.0.2      stringi_1.7.6    cli_3.2.0        rmarkdown_2.14  
-    [11] tools_4.2.0      stringr_1.4.0    xfun_0.30        yaml_2.3.5       fastmap_1.1.0   
-    [16] compiler_4.2.0   pbs_1.1          htmltools_0.5.2  knitr_1.38      
+     [1] Rcpp_1.0.9       codetools_0.2-18 ibs_1.4          digest_0.6.29    magrittr_2.0.3  
+     [6] evaluate_0.16    rlang_1.0.4      stringi_1.7.8    cli_3.3.0.9000   rmarkdown_2.14  
+    [11] tools_4.2.0      stringr_1.4.0    xfun_0.32        yaml_2.3.5       fastmap_1.1.0   
+    [16] compiler_4.2.0   pbs_1.1          htmltools_0.5.3  knitr_1.39      
 
 </details>
 

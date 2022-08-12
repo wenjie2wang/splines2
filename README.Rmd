@@ -21,14 +21,13 @@ package to the base package **splines**.
 
 ## Features
 
-The package **splines2** (version `r packageVersion("splines2")`) provides
-functions to construct basis matrices of
+The package **splines2** provides functions to construct basis matrices of
 
 - B-splines
 - M-splines
 - I-splines
 - convex splines (C-splines)
-- periodic M-splines
+- periodic splines
 - natural cubic splines
 - generalized Bernstein polynomials
 - their integrals (except C-splines) and derivatives of given order by
