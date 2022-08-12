@@ -161,7 +161,7 @@ all.equal(spline_basis1, spline_basis2)
 Ramsay, J. O. (1988). Monotone regression splines in action.
 \emph{Statistical science}, 3(4), 425--441.
 
-Piegl, L., & Tiller, W. (1997). \emph{The NURBS book}. Springer Science \&
+Piegl, L., & Tiller, W. (1997). \emph{The NURBS book}. Springer Science &
 Business Media.
 }
 \seealso{
