@@ -97,10 +97,10 @@ expect_equal(iMat[seq.int(length(xx) - 10, length(xx) - 5), 2] -
              iMat[seq.int(length(xx) - 9, length(xx) - 4), 2] -
              iMat[seq.int(length(xx) - 8, length(xx) - 3), 2])
 expect_true(all(
-    iMat[seq.int(length(xx) - 10, length(xx) - 5), 4] -
-    iMat[seq.int(length(xx) - 9, length(xx) - 4), 4] <
-    iMat[seq.int(length(xx) - 9, length(xx) - 4), 4] -
-    iMat[seq.int(length(xx) - 8, length(xx) - 3), 4]
+    iMat[seq.int(length(xx) - 10, length(xx) - 5), 5] -
+    iMat[seq.int(length(xx) - 9, length(xx) - 4), 5] <
+    iMat[seq.int(length(xx) - 9, length(xx) - 4), 5] -
+    iMat[seq.int(length(xx) - 8, length(xx) - 3), 5]
 ))
 
 ### 2. checking inputs

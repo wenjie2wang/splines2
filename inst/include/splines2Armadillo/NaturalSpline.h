@@ -43,7 +43,7 @@ namespace splines2 {
         // get null space vector for the second derivatives
         // of B-spline basis on boundary knotsn
         // the results depend on knot sequence only
-        inline void set_null_colvecs(bool standardize = true)
+        inline void set_null_colvecs(const bool standardize = true)
         {
             null_colvecs_ = arma::zeros<arma::mat>(spline_df_ + 2, spline_df_);
             size_t n_knots { internal_knots_.n_elem };
@@ -71,22 +71,23 @@ namespace splines2 {
                     (boundary_knots_(1) - internal_knots_(0)) /
                     (boundary_knots_(1) - boundary_knots_(0));
             } else {
-                // with at least two internal knots
+                // with at least two internal knots;
+                // match the supplementary of 10.6339/21-JDS1020
                 for (size_t i {0}; i < 3; ++i) {
                     null_colvecs_(i, 0) = 1.0;
-                    null_colvecs_(spline_df_ - i + 1, 1) = 1.0;
+                    null_colvecs_(spline_df_ - i + 1, spline_df_ - 1) = 1.0;
                 }
-                null_colvecs_(1, 2) = 1.0;
-                null_colvecs_(2, 2) = 1.0 +
+                null_colvecs_(1, 1) = 1.0;
+                null_colvecs_(2, 1) = 1.0 +
                     (internal_knots_(1) - boundary_knots_(0)) /
                     (internal_knots_(0) - boundary_knots_(0));
-                null_colvecs_(spline_df_ - 1, 3) = 1.0 +
+                null_colvecs_(spline_df_ - 1, spline_df_ - 2) = 1.0 +
                     (boundary_knots_(1) - internal_knots_(n_knots - 2)) /
                     (boundary_knots_(1) - internal_knots_(n_knots - 1));
-                null_colvecs_(spline_df_, 3) = 1.0;
+                null_colvecs_(spline_df_, spline_df_ - 2) = 1.0;
                 if (spline_df_ > 4) {
-                    for (size_t j {3}; j < spline_df_ - 1; ++j) {
-                        null_colvecs_(j, j + 1) = 1.0;
+                    for (size_t j {0}; j < spline_df_ - 4; ++j) {
+                        null_colvecs_(j + 3, j + 2) = 1.0;
                     }
                 }
             }
