@@ -32,3 +32,4 @@ GTAGS
 GRTAGS
 GPATH
 .clang_complete
+.clangd

@@ -7,9 +7,9 @@
 ^GTAGS$
 ^LICENSE$
 ^Makefile$
-^README_cache$
 ^README\.Rmd$
 ^README\.html$
+^README_cache$
 ^TAGS$
 ^TODO\.org$
 ^\#
@@ -17,6 +17,7 @@
 ^\.Rproj\.user$
 ^\.\#
 ^\.clang_complete$
+^\.clangd$
 ^\.git$
 ^\.github$
 ^\.gitlab-ci.yml$
