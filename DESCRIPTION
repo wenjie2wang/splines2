@@ -1,6 +1,6 @@
 Package: splines2
 Title: Regression Spline Functions and Classes
-Version: 0.4.7
+Version: 0.5.0.9000
 Authors@R: c(
     person(given = "Wenjie", family = "Wang",
            email = "wang@wwenjie.org",

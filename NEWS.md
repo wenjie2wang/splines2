@@ -3,7 +3,7 @@
 ## Minor changes
 
 * Adjusted the column arrangement of the natural cubic spline basis matrix so
-  that it matches with the equations given in the JDS paper:
+  that it matches the equations given in the JDS paper:
   [issue 17](https://github.com/wenjie2wang/splines2/issues/17).
 
 
