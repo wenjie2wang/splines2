@@ -18,15 +18,15 @@ The R package **splines2** is intended to be a user-friendly
 The package **splines2** provides functions to construct basis matrices
 of
 
--   B-splines
--   M-splines
--   I-splines
--   convex splines (C-splines)
--   periodic splines
--   natural cubic splines
--   generalized Bernstein polynomials
--   their integrals (except C-splines) and derivatives of given order by
-    closed-form recursive formulas
+- B-splines
+- M-splines
+- I-splines
+- convex splines (C-splines)
+- periodic splines
+- natural cubic splines
+- generalized Bernstein polynomials
+- their integrals (except C-splines) and derivatives of given order by
+  closed-form recursive formulas
 
 In addition to the R interface, **splines2** provides a C++ header-only
 library integrated with **Rcpp**, which allows the construction of
@@ -60,10 +60,10 @@ remotes::install_github("wenjie2wang/splines2", upgrade = "never")
 The [Online document](https://wwenjie.org/splines2) provides a reference
 for all functions and contains the following vignettes:
 
--   [Demonstration of the common usages in R through
-    examples](https://wwenjie.org/splines2/articles/splines2-intro).
--   [Introduction to the usage with
-    Rcpp](https://wwenjie.org/splines2/articles/splines2-wi-rcpp)
+- [Demonstration of the common usages in R through
+  examples](https://wwenjie.org/splines2/articles/splines2-intro).
+- [Introduction to the usage with
+  Rcpp](https://wwenjie.org/splines2/articles/splines2-wi-rcpp)
 
 ## Performance
 
@@ -118,8 +118,8 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-               splines::bs 3.9034 3.6314 3.5353 3.5735 3.5633 1.1702  1000
-     splines::splineDesign 2.3132 2.1168 2.1689 2.0677 2.0819 1.3073  1000
+               splines::bs 3.9005 3.6551 3.6253 3.5585 3.6014 1.1993  1000
+     splines::splineDesign 2.3123 2.1286 2.2174 2.0487 2.0755 1.1118  1000
          splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
@@ -141,9 +141,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq    max neval
-     splines::splineDesign 2.8409 2.6553 2.6413 2.5336 2.5257 1.0834  1000
-             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
+                      expr    min    lq   mean median     uq    max neval
+     splines::splineDesign 2.7543 2.618 2.6206 2.4983 2.5032 1.1626  1000
+             splines2::dbs 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -167,9 +167,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr   min     lq   mean median     uq    max neval
-          ibs::ibs 22.49 20.654 21.372 21.103 21.016 25.442  1000
-     splines2::ibs  1.00  1.000  1.000  1.000  1.000  1.000  1000
+              expr    min     lq   mean median     uq   max neval
+          ibs::ibs 22.695 21.034 20.532 20.701 20.847 13.81  1000
+     splines2::ibs  1.000  1.000  1.000  1.000  1.000  1.00  1000
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -197,9 +197,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                        expr    min     lq   mean median     uq     max neval
-                 splines::ns 5.3088 5.0697 4.9431 4.7628 4.7805 0.61586  1000
-     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.00000  1000
+                        expr    min     lq   mean median    uq   max neval
+                 splines::ns 5.7796 5.4612 5.3913 5.1387 5.051 1.594  1000
+     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.000 1.000  1000
 
 The function `mSpline()` produces periodic spline basis functions (based
 on M-splines) when `periodic = TRUE` is specified. The
@@ -225,7 +225,7 @@ microbenchmark(
 
     Unit: relative
                   expr    min     lq   mean median     uq    max neval
-              pbs::pbs 3.6309 3.4413 3.5077 3.2826 3.2763 3.3523  1000
+              pbs::pbs 3.6138 3.4382 3.4608 3.2618 3.2852 1.3793  1000
      splines2::mSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
 
 <details>
@@ -237,13 +237,13 @@ Session Information for Benchmarks
 sessionInfo()
 ```
 
-    R version 4.2.0 (2022-04-22)
+    R version 4.2.3 (2023-03-15)
     Platform: x86_64-pc-linux-gnu (64-bit)
     Running under: Arch Linux
 
     Matrix products: default
-    BLAS:   /usr/lib/libopenblasp-r0.3.20.so
-    LAPACK: /usr/lib/liblapack.so.3.10.1
+    BLAS:   /usr/lib/libopenblas.so.0.3
+    LAPACK: /usr/lib/liblapack.so.3.11.0
 
     locale:
      [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
@@ -255,13 +255,13 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.6       microbenchmark_1.4.9
+    [1] splines2_0.4.8       microbenchmark_1.4.9
 
     loaded via a namespace (and not attached):
-     [1] Rcpp_1.0.9       codetools_0.2-18 ibs_1.4          digest_0.6.29    magrittr_2.0.3  
-     [6] evaluate_0.16    rlang_1.0.4      stringi_1.7.8    cli_3.3.0.9000   rmarkdown_2.14  
-    [11] tools_4.2.0      stringr_1.4.0    xfun_0.32        yaml_2.3.5       fastmap_1.1.0   
-    [16] compiler_4.2.0   pbs_1.1          htmltools_0.5.3  knitr_1.39      
+     [1] Rcpp_1.0.10      codetools_0.2-19 ibs_1.4          digest_0.6.31    evaluate_0.20   
+     [6] rlang_1.1.0      cli_3.6.1        rmarkdown_2.20   tools_4.2.3      xfun_0.38       
+    [11] yaml_2.3.7       fastmap_1.1.1    compiler_4.2.3   pbs_1.1          htmltools_0.5.5 
+    [16] knitr_1.42      
 
 </details>
 
