@@ -17,15 +17,16 @@ Description: Constructs basis matrix of B-splines, M-splines,
     It also contains a C++ head-only library integrated with Rcpp.
     See Wang and Yan (2021) <doi:10.6339/21-JDS1020> for details.
 Imports:
-    Rcpp,
-    stats
+    stats,
+    Rcpp
 LinkingTo:
     Rcpp,
     RcppArmadillo
 Suggests:
     knitr,
     rmarkdown,
-    tinytest
+    tinytest,
+    RcppArmadillo
 Depends:
     R (>= 3.2.3)
 VignetteBuilder: knitr
