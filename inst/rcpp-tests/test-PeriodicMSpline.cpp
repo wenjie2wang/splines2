@@ -1,7 +1,5 @@
 // [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::depends(splines2)]]
-#include <RcppArmadillo.h>
 #include <splines2Armadillo.h>
 // #include "../include/splines2Armadillo.h"
 
