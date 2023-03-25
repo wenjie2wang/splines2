@@ -36,6 +36,11 @@ $(tar): $(objects)
 $(checkLog): $(tar) $(tinytest)
 	R CMD check --as-cran $(tar)
 
+.PHONY: check-rcpp
+check-rcpp: $(tar)
+	R CMD INSTALL $(tar)
+	Rscript inst/run_rcpp_test.R > check-rcpp.Rout &
+
 .PHONY: check-revdep
 check-revdep: $(tar)
 	@mkdir -p revdep

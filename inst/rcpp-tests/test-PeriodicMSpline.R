@@ -4,6 +4,9 @@ x <- seq.int(0, 10, 0.02)
 inter_knots <- c(2.4, 3.5, 5.2, 8)
 bound_knots <- c(- 1, 12)
 degree <- 4
+order <- degree + 1
+knot_seq <- c(rep(bound_knots[1], order), inter_knots,
+              rep(bound_knots[2], order))
 
 foo <- function(...) {
     mat <- mSpline(..., intercept = TRUE, periodic = TRUE)
@@ -40,6 +43,15 @@ expect_equivalent(res, res04)
 res05 <- rcpp_pmspline05(x, inter_knots, degree, bound_knots)
 expect_equivalent(res, res05)
 
+res06 <- rcpp_pmspline06(x, degree, knot_seq)
+expect_equivalent(res, res06)
+
+res07 <- rcpp_pmspline07(x, degree, knot_seq)
+expect_equivalent(res, res07)
+
+res08 <- rcpp_pmspline08(x, degree, knot_seq)
+expect_equivalent(res, res08)
+
 ## non-default constructor 1
 res1 <- rcpp_pmspline1(x, inter_knots, degree, bound_knots)
 expect_equivalent(res, res1)
@@ -49,6 +61,10 @@ res2 <- rcpp_pmspline2(x, 10, degree, bound_knots)
 res20 <- foo(x = x, degree = degree, df = 10,
              Boundary.knots = bound_knots)
 expect_equivalent(res20, res2)
+
+## non-default constructor 3
+res3 <- rcpp_pmspline3(x, degree, knot_seq)
+expect_equivalent(res, res3)
 
 ## non-default constructor 4
 res4 <- rcpp_pmspline4(x, inter_knots, degree, bound_knots)

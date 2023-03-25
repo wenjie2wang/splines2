@@ -1,8 +1,9 @@
-#include <RcppArmadillo.h>
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(RcppArmadillo)]]
-
-#include "../include/splines2Armadillo.h"
+// [[Rcpp::depends(splines2)]]
+#include <RcppArmadillo.h>
+#include <splines2Armadillo.h>
+// #include "../include/splines2Armadillo.h"
 
 // helper function
 inline Rcpp::List return_list(splines2::PeriodicMSpline obj)
@@ -30,7 +31,6 @@ Rcpp::List rcpp_pmspline00(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_x(x)->
         set_internal_knots(iknots)->
         set_boundary_knots(bknots)->
@@ -44,7 +44,6 @@ Rcpp::List rcpp_pmspline01(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_x(x)->
         set_boundary_knots(bknots)->
         set_internal_knots(iknots)->
@@ -58,7 +57,6 @@ Rcpp::List rcpp_pmspline02(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_internal_knots(iknots)->
         set_x(x)->
         set_boundary_knots(bknots)->
@@ -72,7 +70,6 @@ Rcpp::List rcpp_pmspline03(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_degree(degree)->
         set_boundary_knots(bknots)->
         set_x(x)->
@@ -86,7 +83,6 @@ Rcpp::List rcpp_pmspline04(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_degree(degree)->
         set_internal_knots(iknots)->
         set_boundary_knots(bknots)->
@@ -100,11 +96,43 @@ Rcpp::List rcpp_pmspline05(const arma::vec& x,
                            const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj;
-    // setter methods
     obj.set_degree(degree)->
         set_boundary_knots(bknots)->
         set_internal_knots(iknots)->
         set_x(x);
+    return return_list(obj);
+}
+// [[Rcpp::export]]
+Rcpp::List rcpp_pmspline06(const arma::vec& x,
+                           const unsigned int degree,
+                           const arma::vec& knot_seq)
+{
+    splines2::PeriodicMSpline obj;
+    obj.set_degree(degree)->
+        set_knot_sequence(knot_seq)->
+        set_x(x);
+    return return_list(obj);
+}
+// [[Rcpp::export]]
+Rcpp::List rcpp_pmspline07(const arma::vec& x,
+                           const unsigned int degree,
+                           const arma::vec& knot_seq)
+{
+    splines2::PeriodicMSpline obj;
+    obj.set_knot_sequence(knot_seq)->
+        set_degree(degree)->
+        set_x(x);
+    return return_list(obj);
+}
+// [[Rcpp::export]]
+Rcpp::List rcpp_pmspline08(const arma::vec& x,
+                           const unsigned int degree,
+                           const arma::vec& knot_seq)
+{
+    splines2::PeriodicMSpline obj;
+    obj.set_x(x)->
+        set_degree(degree)->
+        set_knot_sequence(knot_seq);
     return return_list(obj);
 }
 
@@ -127,6 +155,16 @@ Rcpp::List rcpp_pmspline2(const arma::vec& x,
                           const arma::vec& bknots)
 {
     splines2::PeriodicMSpline obj { x, df, degree, bknots };
+    return return_list(obj);
+}
+
+// non-default constructor 3
+// [[Rcpp::export]]
+Rcpp::List rcpp_pmspline3(const arma::vec& x,
+                          const unsigned int degree,
+                          const arma::vec& knot_seq)
+{
+    splines2::PeriodicMSpline obj { x, degree, knot_seq };
     return return_list(obj);
 }
 
