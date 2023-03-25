@@ -136,7 +136,7 @@ Taking B-splines as an example, the first non-default constructor of a `BSpline`
 object is
 
 ```cpp
-// 1. specified internal_knots
+// 1. specify x, internal knots, degree, and boundary knots
 BSpline(const vec& x,
         const vec& internal_knots,
         const unsigned int degree = 3,
@@ -144,14 +144,14 @@ BSpline(const vec& x,
 ```
 
 The second non-default constructor is called when an unsigned integer is
-specified as the second argument, which represents the degree of freedom of the
-*complete spline basis functions* (different with `df` in the R interface) is
-specified.
+specified as the second argument, which represents the degree of freedom (DF) of
+the *complete spline basis functions* (different with `df` in the R interface)
+is specified.
 Then the number of internal knots is computed as `spline_df - degree - 1` and
 the placement of internal knots uses quantiles of specified `x` within boundary.
 
 ```cpp
-// 2. specified spline degree of freedom (df)
+// 2. specify x, spline DF, degree, and boundary knots
 BSpline(const vec& x,
         const unsigned int spline_df,
         const unsigned int degree = 3,
@@ -163,7 +163,7 @@ extended knot sequence, where the multiplicities of the knots can be more than
 one.
 
 ```cpp
-// 3. specified degree and (extended) knot sequence
+// 3. specify x, degree, and (extended) knot sequence
 BSpline(const vec& x,
         const unsigned int degree,
         const vec& knot_sequence);
@@ -196,7 +196,7 @@ The first non-default constructor is called when internal knots are explicitly
 specified.
 
 ```cpp
-// 1. specified internal_knots
+// 1. specify x, internal knots, and boundary knots
 NaturalSpline(const vec& x,
               const vec& internal_knots,
               const vec& boundary_knots = vec());
@@ -204,12 +204,12 @@ NaturalSpline(const vec& x,
 
 The second non-default constructor is called when an unsigned integer
 representing the degree of freedom of the *complete spline basis functions*
-(different with `df` in the R interface) is specified. Then the number of
-internal knots is computed as `spline_df - 2` and the placement of
-internal knots uses quantiles of specified `x`.
+(different with `df` in the R interface) is specified.
+Then the number of internal knots is computed as `spline_df - 2` and the
+placement of internal knots uses quantiles of specified `x`.
 
 ```cpp
-// 2. specified spline degree of freedom (df)
+// 2. specify x, spline DF, and boundary knots
 NaturalSpline(const vec& x,
               const unsigned int spline_df,
               const vec& boundary_knots = vec());
@@ -227,9 +227,10 @@ NaturalSpline(const SplineBase* pSplineBase);
 
 ### Constructors of `PeriodicMSpline`
 
-The `PeriodicMSpline` class is for constructing the periodic M-splines, which
-provides the same set of non-default constructors with `BSpline` except the
-constructor for directly specifying the knot sequence.
+The `PeriodicMSpline` class is intended for constructing the periodic M-splines,
+which provides the same set of non-default constructors with `BSpline`.
+The only difference is that a *simple knot sequence* must be specified for the
+third non-default constructor that takes a knot sequence.
 
 
 ### Function Members
