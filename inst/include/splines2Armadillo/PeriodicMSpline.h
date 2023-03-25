@@ -100,9 +100,16 @@ namespace splines2 {
         inline void update_knot_sequence() override
         {
             if (! is_knot_sequence_latest_ || knot_sequence_.n_elem == 0) {
-                extend_knot_sequence();
-                is_knot_sequence_latest_ = true;
+                if (is_extended_knot_sequence_) {
+                    set_extended_knot_sequence(knot_sequence_);
+                } else {
+                    // if it is a simple knot sequence previously,
+                    // we will assume a simple knot sequence
+                    set_simple_knot_sequence();
+                }
             }
+            stopifnot_simple_knot_sequence();
+            extend_knot_sequence();
         }
 
         inline void set_x_in_range()
@@ -131,7 +138,7 @@ namespace splines2 {
         explicit PeriodicMSpline(const SplineBase* pSplineBase) :
             SplineBase(pSplineBase)
         {
-            stopifnot_simple_knot_sequence();
+            // stopifnot_simple_knot_sequence();
             update_spline_df();
         }
 
@@ -189,6 +196,26 @@ namespace splines2 {
             simplify_knots(internal_knots);
         }
 
+        // possible to specify knot sequence directly. But it must be a simple
+        // knot sequence.
+        PeriodicMSpline(const rvec& x,
+                        const unsigned int degree,
+                        const rvec& knot_sequence)
+        {
+            x_ = x;
+            degree_ = degree;
+            order_ = degree_ + 1;
+            set_extended_knot_sequence(knot_sequence);
+            stopifnot_simple_knot_sequence();
+        }
+        inline SplineBase* set_knot_sequence(
+            const rvec& knot_sequence
+            ) override
+        {
+            set_extended_knot_sequence(knot_sequence);
+            return this;
+        }
+
         //! Compute periodic spline basis based on M-spline basis
         //!
         //! @param complete_basis A `bool` value indicating whether to return a
@@ -197,7 +224,6 @@ namespace splines2 {
         //! @return arma::mat
         inline rmat basis(const bool complete_basis = true) override
         {
-            stopifnot_simple_knot_sequence();
             update_knot_sequence();
             set_x_in_range();
             // create a MSpline object for the extended knot sequence
@@ -219,7 +245,7 @@ namespace splines2 {
             const bool complete_basis = true
             ) override
         {
-            stopifnot_simple_knot_sequence();
+            update_knot_sequence();
             if (derivs == 0) {
                 throw std::range_error(
                     "'derivs' has to be a positive integer.");
@@ -236,7 +262,6 @@ namespace splines2 {
                 return arma::zeros(x_.n_elem, old_df - 1);
             }
             // else do the generation
-            update_knot_sequence();
             set_x_in_range();
             // create a MSpline object for the extended knot sequence
             MSpline ms_obj {
@@ -259,7 +284,6 @@ namespace splines2 {
             const bool complete_basis = true
             ) override
         {
-            stopifnot_simple_knot_sequence();
             update_knot_sequence();
             set_x_in_range();
             // create a MSpline object for the extended knot sequence

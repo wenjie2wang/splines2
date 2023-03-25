@@ -151,11 +151,8 @@ namespace splines2 {
         }
 
         // set simple knot sequence
-        inline virtual void update_simple_knot_sequence()
+        inline virtual void set_simple_knot_sequence()
         {
-            if (is_knot_sequence_latest_ && knot_sequence_.n_elem > 0) {
-                return;
-            }
             knot_sequence_ = get_simple_knot_sequence(
                 internal_knots_, boundary_knots_, order_
                 );
@@ -213,7 +210,7 @@ namespace splines2 {
                               surrogate_boundary_knots_(0)) &&
                 isAlmostEqual(boundary_knots_(1),
                               surrogate_boundary_knots_(1))
-                );
+                ) || has_internal_multiplicity_;
             // set flags to prevent knot sequence from being updated
             is_knot_sequence_latest_ = true;
         }
@@ -226,7 +223,7 @@ namespace splines2 {
             if (is_extended_knot_sequence_) {
                 set_extended_knot_sequence(knot_sequence_);
             } else {
-                update_simple_knot_sequence();
+                set_simple_knot_sequence();
             }
         }
 
@@ -274,7 +271,7 @@ namespace splines2 {
             degree_ { pSplineBase->degree_  },
             knot_sequence_ { pSplineBase->knot_sequence_ },
             has_internal_multiplicity_ {
-                pSplineBase->is_knot_sequence_latest_ },
+                pSplineBase->has_internal_multiplicity_ },
             is_knot_sequence_latest_ {
                 pSplineBase->is_knot_sequence_latest_ },
             is_extended_knot_sequence_ {
@@ -395,6 +392,9 @@ namespace splines2 {
                 order_ = degree + 1;
                 update_spline_df();
                 if (is_extended_knot_sequence_) {
+                    // if a knot sequence has been set and it is extended,
+                    // update knot sequence
+                    // so that internal/boundary knots are update-to-date
                     set_extended_knot_sequence(knot_sequence_);
                 } else {
                     is_knot_sequence_latest_ = false;
