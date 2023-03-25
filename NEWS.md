@@ -1,3 +1,12 @@
+# splines2 0.4.8
+
+## Bug fixes
+
+* Fixed the Rcpp interface of `PeriodicMSpline` so that a simple knot sequence
+  can be specified through `set_knot_sequence`:
+  [issue 18](https://github.com/wenjie2wang/splines2/issues/18).
+
+
 # splines2 0.4.7
 
 ## Minor changes
