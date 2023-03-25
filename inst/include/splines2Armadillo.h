@@ -18,6 +18,10 @@
 #ifndef SPLINES2_ARMADILLO_H
 #define SPLINES2_ARMADILLO_H
 
+#ifndef ARMA_NO_DEBUG
+#define ARMA_NO_DEBUG
+#endif
+
 #include "splines2Armadillo/BSpline.h"
 #include "splines2Armadillo/MSpline.h"
 #include "splines2Armadillo/ISpline.h"
