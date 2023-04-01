@@ -15,8 +15,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#ifndef SPLINES2_PERIODICMSPLINE_H
-#define SPLINES2_PERIODICMSPLINE_H
+#ifndef SPLINES2_PERIODICSPLINE_H
+#define SPLINES2_PERIODICSPLINE_H
 
 #include <stdexcept>
 
@@ -24,15 +24,17 @@
 #include "utils.h"
 #include "SplineBase.h"
 #include "MSpline.h"
+#include "BSpline.h"
 
 namespace splines2 {
 
     // define a class for nonnegative periodic spline basis over [a, b]
-    // with unit integral over [a, b] based on M-splines
-    class PeriodicMSpline : public SplineBase
+    // with unit integral over [a, b]
+    template <typename T_sp>
+    class PeriodicSpline : public SplineBase
     {
     protected:
-        double range_size_;      // b - a
+        double range_size_;     // b - a
         rvec x_in_range_;       // x in range
         rvec x_num_shift_;      // x_ = x_in_range + x_num_shift * range_size
         bool is_x_in_range_latest_ = false;
@@ -133,9 +135,9 @@ namespace splines2 {
         }
 
     public:
-        PeriodicMSpline() {}
+        PeriodicSpline() {}
 
-        explicit PeriodicMSpline(const SplineBase* pSplineBase) :
+        explicit PeriodicSpline(const SplineBase* pSplineBase) :
             SplineBase(pSplineBase)
         {
             // stopifnot_simple_knot_sequence();
@@ -154,10 +156,10 @@ namespace splines2 {
         }
 
         // given boundary_knots for consistency with SplineBase
-        PeriodicMSpline(const rvec& x,
-                        const rvec& internal_knots,
-                        const unsigned int degree = 3,
-                        const rvec& boundary_knots = rvec())
+        PeriodicSpline<T_sp>(const rvec& x,
+                             const rvec& internal_knots,
+                             const unsigned int degree = 3,
+                             const rvec& boundary_knots = rvec())
         {
             x_ = x;
             degree_ = degree;
@@ -171,10 +173,10 @@ namespace splines2 {
             update_spline_df();
         }
 
-        PeriodicMSpline(const rvec& x,
-                        const unsigned int spline_df,
-                        const unsigned int degree = 3,
-                        const rvec& boundary_knots = rvec())
+        PeriodicSpline<T_sp>(const rvec& x,
+                             const unsigned int spline_df,
+                             const unsigned int degree = 3,
+                             const rvec& boundary_knots = rvec())
         {
             x_ = x;
             degree_ = degree;
@@ -198,9 +200,9 @@ namespace splines2 {
 
         // possible to specify knot sequence directly. But it must be a simple
         // knot sequence.
-        PeriodicMSpline(const rvec& x,
-                        const unsigned int degree,
-                        const rvec& knot_sequence)
+        PeriodicSpline<T_sp>(const rvec& x,
+                             const unsigned int degree,
+                             const rvec& knot_sequence)
         {
             x_ = x;
             degree_ = degree;
@@ -226,9 +228,9 @@ namespace splines2 {
         {
             update_knot_sequence();
             set_x_in_range();
-            // create a MSpline object for the extended knot sequence
-            MSpline ms_obj { x_in_range_, degree_, knot_sequence_ };
-            rmat b_mat { ms_obj.basis(true) };
+            // create a Spline object for the extended knot sequence
+            T_sp bs_obj { x_in_range_, degree_, knot_sequence_ };
+            rmat b_mat { bs_obj.basis(true) };
             // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
             b_mat = clamp_basis(b_mat);
@@ -263,12 +265,12 @@ namespace splines2 {
             }
             // else do the generation
             set_x_in_range();
-            // create a MSpline object for the extended knot sequence
-            MSpline ms_obj {
+            // create a Spline object for the extended knot sequence
+            T_sp bs_obj {
                 x_in_range_, surrogate_internal_knots_,
                 degree_, surrogate_boundary_knots_
             };
-            rmat b_mat { ms_obj.derivative(derivs, true) };
+            rmat b_mat { bs_obj.derivative(derivs, true) };
             // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
             // post-processing
@@ -286,17 +288,17 @@ namespace splines2 {
         {
             update_knot_sequence();
             set_x_in_range();
-            // create a MSpline object for the extended knot sequence
-            MSpline ms_obj {
+            // create a Spline object for the extended knot sequence
+            T_sp bs_obj {
                 x_in_range_, surrogate_internal_knots_,
                 degree_, surrogate_boundary_knots_
             };
-            rmat b_mat { ms_obj.integral(true) };
+            rmat b_mat { bs_obj.integral(true) };
             // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
-            // get initial values at the left boundary knot
+            // get initial values at the boundary knots
             rmat v0 {
-                ms_obj.set_x(boundary_knots_(0))->integral(true)
+                bs_obj.set_x(boundary_knots_)->integral(true)
             };
             // remove first and last #degree basis functions
             v0 = v0.cols(degree_, v0.n_cols - order_);
@@ -308,8 +310,8 @@ namespace splines2 {
             b_mat = clamp_basis(b_mat);
             // get cumulative sum of integral from left boundary knot
             for (size_t j {0}; j < b_mat.n_cols; ++j) {
-                b_mat.col(j) = (b_mat.col(j) + x_num_shift_) %
-                    (x_num_shift_ >= 0);
+                b_mat.col(j) = (x_num_shift_ >= 0) %
+                    (b_mat.col(j) + v0(1, j) * x_num_shift_);
             }
             // return
             if (complete_basis) {
@@ -319,9 +321,13 @@ namespace splines2 {
             return mat_wo_col1(b_mat);
         }
 
-    };
+    };                          // end of PeriodicSpline
+
+    // from the template
+    using PeriodicBSpline = PeriodicSpline<BSpline>;
+    using PeriodicMSpline = PeriodicSpline<MSpline>;
 
 }  // splines2
 
 
-#endif /* SPLINES2_PERIODICMSPLINE_H */
+#endif /* SPLINES2_PERIODICSPLINE_H */

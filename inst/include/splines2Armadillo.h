@@ -28,6 +28,6 @@
 #include "splines2Armadillo/CSpline.h"
 #include "splines2Armadillo/BernsteinPoly.h"
 #include "splines2Armadillo/NaturalSpline.h"
-#include "splines2Armadillo/PeriodicMSpline.h"
+#include "splines2Armadillo/PeriodicSpline.h"
 
 #endif
