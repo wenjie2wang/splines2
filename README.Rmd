@@ -92,7 +92,7 @@ all_knots <- sort(c(internal_knots, rep(boundary_knots, ord)))
 ## check equivalency of outputs
 my_check <- function(values) {
     all(sapply(values[- 1], function(x) {
-        all.equal(unclass(values[[1]]), x, check.attributes = FALSE)
+        all.equal(unclass(values[[1]]), unclass(x), check.attributes = FALSE)
     }))
 }
 ```
@@ -111,8 +111,7 @@ microbenchmark(
         x, knots = internal_knots, degree = degree,
         intercept = TRUE, Boundary.knots = boundary_knots
     ),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
@@ -128,8 +127,7 @@ microbenchmark(
     "splines2::dbs" = dbs(x, derivs = derivs, knots = internal_knots,
                           degree = degree, intercept = TRUE,
                           Boundary.knots = boundary_knots),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
@@ -149,8 +147,7 @@ microbenchmark(
                       intercept = TRUE, Boundary.knots = boundary_knots) %*%
         coef_sp
     ),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
@@ -174,29 +171,32 @@ microbenchmark(
     "splines2::naturalSpline" = naturalSpline(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
-    ),
-    times = 1e3
+    )
 )
 ```
 
-The function `mSpline()` produces periodic spline basis functions (based on
-M-splines) when `periodic = TRUE` is specified.  The `splines::periodicSpline()`
-returns a periodic interpolation spline (based on B-splines) instead of basis
-matrix.  Thus, we performed a comparison with package **pbs** (version `r
-packageVersion("pbs")`), where the function `pbs::pbs()` produces a basis matrix
-of periodic B-spline by using `splines::spline.des()` (a wrapper function of
-`splines::splineDesign()`).
+The functions `bSpline()` and `mSpline()` produce periodic spline basis
+functions based on B-splines and M-splines, respectively, when `periodic = TRUE`
+is specified.
+The `splines::periodicSpline()` returns a periodic interpolation spline (based
+on B-splines) instead of basis matrix.
+We performed a comparison with package **pbs** (version `r packageVersion("pbs")`),
+where the function `pbs::pbs()` produces a basis matrix of periodic B-spline
+by using `splines::spline.des()`.
 
 ```{r bench-periodic}
 microbenchmark(
     "pbs::pbs" = pbs::pbs(x, knots = internal_knots, degree = degree,
                           intercept = TRUE, periodic = TRUE,
                           Boundary.knots = boundary_knots),
-    "splines2::mSpline" = mSpline(
+    "splines2::bSpline" = bSpline(
         x, knots = internal_knots, degree = degree, intercept = TRUE,
         Boundary.knots = boundary_knots, periodic = TRUE
     ),
-    times = 1e3
+    "splines2::mSpline" = mSpline(
+        x, knots = internal_knots, degree = degree, intercept = TRUE,
+        Boundary.knots = boundary_knots, periodic = TRUE
+    )
 )
 ```
 

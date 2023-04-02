@@ -91,7 +91,7 @@ all_knots <- sort(c(internal_knots, rep(boundary_knots, ord)))
 ## check equivalency of outputs
 my_check <- function(values) {
     all(sapply(values[- 1], function(x) {
-        all.equal(unclass(values[[1]]), x, check.attributes = FALSE)
+        all.equal(unclass(values[[1]]), unclass(x), check.attributes = FALSE)
     }))
 }
 ```
@@ -111,16 +111,15 @@ microbenchmark(
         x, knots = internal_knots, degree = degree,
         intercept = TRUE, Boundary.knots = boundary_knots
     ),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq    max neval
-               splines::bs 3.9005 3.6551 3.6253 3.5585 3.6014 1.1993  1000
-     splines::splineDesign 2.3123 2.1286 2.2174 2.0487 2.0755 1.1118  1000
-         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
+                      expr    min     lq   mean median     uq     max neval
+               splines::bs 3.8798 3.6267 3.2191 2.9080 2.7541 12.1174   100
+     splines::splineDesign 2.2496 2.0595 1.9052 1.8538 1.8256  1.7161   100
+         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.0000   100
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -135,15 +134,14 @@ microbenchmark(
     "splines2::dbs" = dbs(x, derivs = derivs, knots = internal_knots,
                           degree = degree, intercept = TRUE,
                           Boundary.knots = boundary_knots),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
     Unit: relative
-                      expr    min    lq   mean median     uq    max neval
-     splines::splineDesign 2.7543 2.618 2.6206 2.4983 2.5032 1.1626  1000
-             splines2::dbs 1.0000 1.000 1.0000 1.0000 1.0000 1.0000  1000
+                      expr    min     lq   mean median     uq    max neval
+     splines::splineDesign 2.6747 2.5078 2.4391 2.4587 2.4038 2.1634   100
+             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -161,15 +159,14 @@ microbenchmark(
                       intercept = TRUE, Boundary.knots = boundary_knots) %*%
         coef_sp
     ),
-    check = my_check,
-    times = 1e3
+    check = my_check
 )
 ```
 
     Unit: relative
-              expr    min     lq   mean median     uq   max neval
-          ibs::ibs 22.695 21.034 20.532 20.701 20.847 13.81  1000
-     splines2::ibs  1.000  1.000  1.000  1.000  1.000  1.00  1000
+              expr    min     lq   mean median     uq    max neval
+          ibs::ibs 21.318 20.279 19.348 19.934 19.777 5.8391   100
+     splines2::ibs  1.000  1.000  1.000  1.000  1.000 1.0000   100
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -191,42 +188,44 @@ microbenchmark(
     "splines2::naturalSpline" = naturalSpline(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
-    ),
-    times = 1e3
+    )
 )
 ```
 
     Unit: relative
-                        expr    min     lq   mean median    uq   max neval
-                 splines::ns 5.7796 5.4612 5.3913 5.1387 5.051 1.594  1000
-     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.000 1.000  1000
+                        expr    min     lq   mean median    uq    max neval
+                 splines::ns 5.6508 5.3893 5.1133 5.0807 5.146 4.8385   100
+     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.000 1.0000   100
 
-The function `mSpline()` produces periodic spline basis functions (based
-on M-splines) when `periodic = TRUE` is specified. The
-`splines::periodicSpline()` returns a periodic interpolation spline
-(based on B-splines) instead of basis matrix. Thus, we performed a
-comparison with package **pbs** (version `r packageVersion("pbs")`),
+The functions `bSpline()` and `mSpline()` produce periodic spline basis
+functions based on B-splines and M-splines, respectively, when
+`periodic = TRUE` is specified. The `splines::periodicSpline()` returns
+a periodic interpolation spline (based on B-splines) instead of basis
+matrix. We performed a comparison with package **pbs** (version 1.1),
 where the function `pbs::pbs()` produces a basis matrix of periodic
-B-spline by using `splines::spline.des()` (a wrapper function of
-`splines::splineDesign()`).
+B-spline by using `splines::spline.des()`.
 
 ``` r
 microbenchmark(
     "pbs::pbs" = pbs::pbs(x, knots = internal_knots, degree = degree,
                           intercept = TRUE, periodic = TRUE,
                           Boundary.knots = boundary_knots),
-    "splines2::mSpline" = mSpline(
+    "splines2::bSpline" = bSpline(
         x, knots = internal_knots, degree = degree, intercept = TRUE,
         Boundary.knots = boundary_knots, periodic = TRUE
     ),
-    times = 1e3
+    "splines2::mSpline" = mSpline(
+        x, knots = internal_knots, degree = degree, intercept = TRUE,
+        Boundary.knots = boundary_knots, periodic = TRUE
+    )
 )
 ```
 
     Unit: relative
                   expr    min     lq   mean median     uq    max neval
-              pbs::pbs 3.6138 3.4382 3.4608 3.2618 3.2852 1.3793  1000
-     splines2::mSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000  1000
+              pbs::pbs 4.2083 4.0822 4.1847 3.9794 3.8517 20.410   100
+     splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.000   100
+     splines2::mSpline 1.1486 1.1464 1.3552 1.1504 1.1460 14.221   100
 
 <details>
 <summary>
@@ -255,7 +254,7 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.4.8       microbenchmark_1.4.9
+    [1] splines2_0.5.0.9000  microbenchmark_1.4.9
 
     loaded via a namespace (and not attached):
      [1] Rcpp_1.0.10      codetools_0.2-19 ibs_1.4          digest_0.6.31    evaluate_0.20   
