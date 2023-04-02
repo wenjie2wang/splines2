@@ -18,6 +18,7 @@
 #ifndef SPLINES2_PERIODICSPLINE_H
 #define SPLINES2_PERIODICSPLINE_H
 
+#include <type_traits>
 #include <stdexcept>
 
 #include "common.h"
@@ -135,9 +136,9 @@ namespace splines2 {
         }
 
     public:
-        PeriodicSpline() {}
+        PeriodicSpline<T_sp>() {}
 
-        explicit PeriodicSpline(const SplineBase* pSplineBase) :
+        explicit PeriodicSpline<T_sp>(const SplineBase* pSplineBase) :
             SplineBase(pSplineBase)
         {
             // stopifnot_simple_knot_sequence();
@@ -296,22 +297,43 @@ namespace splines2 {
             rmat b_mat { bs_obj.integral(true) };
             // remove first and last #degree basis functions
             b_mat = b_mat.cols(degree_, b_mat.n_cols - order_);
-            // get initial values at the boundary knots
-            rmat v0 {
-                bs_obj.set_x(boundary_knots_)->integral(true)
-            };
-            // remove first and last #degree basis functions
-            v0 = v0.cols(degree_, v0.n_cols - order_);
-            // clear initial values
-            for (size_t i {0}; i < v0.n_cols; ++i) {
-                b_mat.col(i) -= v0(0, i);
-            }
-            // post-processing
-            b_mat = clamp_basis(b_mat);
-            // get cumulative sum of integral from left boundary knot
-            for (size_t j {0}; j < b_mat.n_cols; ++j) {
-                b_mat.col(j) = (x_num_shift_ >= 0) %
-                    (b_mat.col(j) + v0(1, j) * x_num_shift_);
+            if constexpr (std::is_same<T_sp, MSpline>::value) {
+                // unit integrals for M-splines inside boundary
+                // get initial values at the left boundary knot
+                rmat v0 {
+                    bs_obj.set_x(boundary_knots_(0))->integral(true)
+                };
+                // remove first and last #degree basis functions
+                v0 = v0.cols(degree_, v0.n_cols - order_);
+                for (size_t j {0}; j < v0.n_cols; ++j) {
+                    // clear initial values
+                    b_mat.col(j) -= v0(0, j);
+                }
+                // post-processing
+                b_mat = clamp_basis(b_mat);
+                // get cumulative sum of integral from left boundary knot
+                for (size_t j {0}; j < b_mat.n_cols; ++j) {
+                    b_mat.col(j) = (x_num_shift_ >= 0) %
+                        (b_mat.col(j) + x_num_shift_);
+                }
+            } else {            // more general
+                // get initial values at the boundary knots
+                rmat v0 {
+                    bs_obj.set_x(boundary_knots_)->integral(true)
+                };
+                // remove first and last #degree basis functions
+                v0 = v0.cols(degree_, v0.n_cols - order_);
+                // post-processing
+                b_mat = clamp_basis(b_mat);
+                v0 = clamp_basis(v0);
+                arma::rowvec diff_v0 { v0.row(1) - v0.row(0) };
+                // get cumulative sum of integral from left boundary knot
+                for (size_t j {0}; j < b_mat.n_cols; ++j) {
+                    // clear initial values
+                    b_mat.col(j) -= v0(0, j);
+                    b_mat.col(j) = (x_num_shift_ >= 0) %
+                        (b_mat.col(j) + diff_v0(j) * x_num_shift_);
+                }
             }
             // return
             if (complete_basis) {
