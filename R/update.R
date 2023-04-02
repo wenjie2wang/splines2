@@ -61,34 +61,7 @@ update.bSpline2 <- function(object, ...)
         ...,
         fun = bSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
-                     "intercept", "derivs", "integral")
-    )
-}
-
-
-##' @rdname update
-##' @export
-update.dbs <- function(object, ...)
-{
-    helper_update(
-        object,
-        ...,
-        fun = dbs,
-        key_attr = c("x", "degree", "knots", "Boundary.knots",
-                     "intercept", "derivs")
-    )
-}
-
-
-##' @rdname update
-##' @export
-update.ibs <- function(object, ...)
-{
-    helper_update(
-        object,
-        ...,
-        fun = ibs,
-        key_attr = c("x", "degree", "knots", "Boundary.knots", "intercept")
+                     "intercept", "derivs", "integral", "periodic")
     )
 }
 

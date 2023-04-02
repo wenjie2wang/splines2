@@ -67,10 +67,10 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
     out <- rcpp_bernsteinPoly(
         x = xx,
         degree = degree,
-        derivs = derivs,
-        integral = integral,
         boundary_knots = Boundary.knots,
-        complete_basis = intercept
+        complete_basis = intercept,
+        derivs = derivs,
+        integral = integral
     )
     ## keep NA's as is
     if (nas) {
@@ -88,7 +88,7 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "bernsteinPoly", "splines2")
+    class(out) <- c("bernsteinPoly", "splines2", "matrix")
     ## return
     out
 }

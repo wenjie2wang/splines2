@@ -64,7 +64,9 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                        degree = degree,
                        intercept = intercept,
                        Boundary.knots = Boundary.knots,
-                       derivs = derivs - 1L, ...))
+                       periodic = FALSE,
+                       derivs = derivs - 1L,
+                       integral = FALSE))
     }
     ## else I-Spline basis
     if ((degree <- as.integer(degree)) < 0)
@@ -125,6 +127,6 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "iSpline", "splines2")
+    class(out) <- c("iSpline", "splines2", "matrix")
     out
 }

@@ -15,7 +15,7 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-### some trivial internal functions ============================================
+### some simple internal functions ===========================================
 
 ## wrap messages and keep proper line length
 wrapMessages <- function(..., strwrap.args = list()) {

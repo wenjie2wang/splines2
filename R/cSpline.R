@@ -93,8 +93,8 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                    degree = degree,
                    internal_knots = knots,
                    boundary_knots = Boundary.knots,
-                   derivs = derivs,
-                   complete_basis = intercept
+                   complete_basis = intercept,
+                   derivs = derivs
                )
            } else {
                if (derivs == 0) {
@@ -104,9 +104,9 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                        degree = degree,
                        internal_knots = knots,
                        boundary_knots = Boundary.knots,
+                       complete_basis = intercept,
                        derivs = 0,
-                       integral = TRUE,
-                       complete_basis = intercept
+                       integral = TRUE
                    )
                } else {
                    rcpp_iSpline(
@@ -115,9 +115,9 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                        degree = degree,
                        internal_knots = knots,
                        boundary_knots = Boundary.knots,
+                       complete_basis = intercept,
                        derivs = derivs - 1,
-                       integral = FALSE,
-                       complete_basis = intercept
+                       integral = FALSE
                    )
                }
            }
@@ -148,11 +148,11 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     if (scale || derivs == 0) {
         ## add "scale" to attributes for predict(), etc.
         attr(out, "scale") <- scale
-        class(out) <- c("matrix", "cSpline", "splines2")
+        class(out) <- c("cSpline", "splines2", "matrix")
     } else if (derivs == 1) {
-        class(out) <- c("matrix", "iSpline", "splines2")
+        class(out) <- c("iSpline", "splines2", "matrix")
     } else {
-        class(out) <- c("matrix", "mSpline", "splines2")
+        class(out) <- c("mSpline", "splines2", "matrix")
     }
     ## return
     out

@@ -68,34 +68,6 @@ predict.bSpline2 <- function(object, newx, ...)
     )
 }
 
-
-##' @rdname predict
-##' @export
-predict.dbs <- function(object, newx, ...)
-{
-    helper_predict(
-        object,
-        newx,
-        dbs,
-        key_attr = c("x", "degree", "knots", "Boundary.knots",
-                     "intercept", "derivs")
-    )
-}
-
-
-##' @rdname predict
-##' @export
-predict.ibs <- function(object, newx, ...)
-{
-    helper_predict(
-        object,
-        newx,
-        ibs,
-        key_attr = c("x", "degree", "knots", "Boundary.knots", "intercept")
-    )
-}
-
-
 ##' @rdname predict
 ##' @export
 predict.mSpline <- function(object, newx, ...)

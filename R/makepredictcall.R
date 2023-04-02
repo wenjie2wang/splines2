@@ -22,12 +22,25 @@ helper_makepredictcall <- function(var, call, fun, key_attr)
 {
     fun_symbol <- substitute(fun)
     fun_name <- as.character(fun_symbol)
-    if (as.character(call)[1L] == fun_name ||
-        (is.call(call) && identical(eval(call[[1L]]), eval(fun_symbol)))) {
+
+    ## the following checking seems to be unnecessary?
+    ## if (as.character(call)[1L] == fun_name ||
+    ##     (is.call(call) && identical(eval(call[[1L]]), eval(fun_symbol)))) {
+    ##     at <- attributes(var)[key_attr]
+    ##     call <- call[1L:2L]
+    ##     call[names(at)] <- at
+    ## }
+
+    ## throw warnings instead
+    res <- tryCatch(check_attr(var, key_attr), error = function(e) e)
+    if (inherits(res, "error")) {
+        warning(res, call. = FALSE)
+    } else {
         at <- attributes(var)[key_attr]
         call <- call[1L:2L]
         call[names(at)] <- at
     }
+    ## return
     call
 }
 
@@ -37,7 +50,7 @@ makepredictcall.bSpline2 <- function(var, call)
     helper_makepredictcall(
         var, call, fun = bSpline,
         key_attr = c("degree", "knots", "Boundary.knots", "intercept",
-                     "derivs", "integral")
+                     "periodic", "derivs", "integral")
     )
 }
 
@@ -48,24 +61,6 @@ makepredictcall.naturalSpline <- function(var, call)
         var, call, fun = naturalSpline,
         key_attr = c("knots", "Boundary.knots", "intercept",
                      "derivs", "integral")
-    )
-}
-
-##' @export
-makepredictcall.dbs <- function(var, call)
-{
-    helper_makepredictcall(
-        var, call, fun = dbs,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept", "derivs")
-    )
-}
-
-##' @export
-makepredictcall.ibs <- function(var, call)
-{
-    helper_makepredictcall(
-        var, call, fun = ibs,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept")
     )
 }
 

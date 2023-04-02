@@ -99,9 +99,9 @@ naturalSpline <- function(x, df = NULL, knots = NULL,
         df = df,
         internal_knots = knots,
         boundary_knots = Boundary.knots,
+        complete_basis = intercept,
         derivs = derivs,
-        integral = integral,
-        complete_basis = intercept
+        integral = integral
     )
     ## keep NA's as is
     if (nas) {
@@ -119,6 +119,10 @@ naturalSpline <- function(x, df = NULL, knots = NULL,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("matrix", "naturalSpline", "splines2")
+    class(out) <- c("naturalSpline", "splines2", "matrix")
     out
 }
+
+##' @rdname naturalSpline
+##' @export
+nsp <- naturalSpline
