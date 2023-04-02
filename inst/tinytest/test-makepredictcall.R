@@ -3,11 +3,13 @@ get_predvars <- function(mod, key_attr) {
     out <- as.list(attr(terms(mod$model), "predvars")[[3]])[key_attr]
     if (anyNA(names(out)))
         stop("Found not matched key attribute.")
+    out
 }
 get_attr <- function(x, key_attr) {
     out <- attributes(x)[key_attr]
     if (anyNA(names(out)))
         stop("Found not matched key attribute.")
+    out
 }
 
 ## simulated data
@@ -18,7 +20,8 @@ new_x <- runif(2 * n, min(x), max(x))
 
 ## bSpline()
 mod <- lm(y ~ bSpline(x, df = 6))
-key_attr <- c("degree", "knots", "Boundary.knots", "intercept")
+key_attr <- c("degree", "knots", "Boundary.knots", "intercept",
+              "periodic", "derivs", "integral")
 expect_equal(
     get_attr(bSpline(x, df = 6), key_attr),
     get_predvars(mod, key_attr)

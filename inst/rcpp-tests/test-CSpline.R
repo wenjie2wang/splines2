@@ -10,7 +10,10 @@ foo <- function(...) {
     d1mat <- deriv(mat)
     d2mat <- deriv(d1mat)
     d3mat <- deriv(d2mat)
-    list(basis = mat, d1 = d1mat, d2 = d2mat, d3 = d3mat,
+    list(basis = unclass(mat),
+         d1 = unclass(d1mat),
+         d2 = unclass(d2mat),
+         d3 = unclass(d3mat),
          degree = attr(mat, "degree"),
          internal_knots = knots(mat),
          boundary_knots = attr(mat, "Boundary.knots"))

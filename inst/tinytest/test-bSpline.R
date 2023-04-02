@@ -1,6 +1,7 @@
 ## get implementations of v0.2.8 for reference
 v2 <- new.env()
 source("../v0.2.8.R", v2)
+source("utils.R")
 
 ## helper functions
 isNumMatrix <- v2$isNumMatrix
@@ -12,42 +13,42 @@ x2 <- c(- 1, 2, x)
 b_knots <- c(0, 1)
 
 ## default cubic splines without internal knots
-expect_equivalent(bSpline(x), v2$bSpline(x))
-expect_equivalent(bSpline(x, derivs = 1), dbs(x))
-expect_equivalent(bSpline(x, derivs = 2), dbs(x, derivs = 2))
-expect_equivalent(bSpline(x, integral = TRUE), ibs(x))
-expect_equivalent(bSpline(x), bSpline(x, derivs = 1, integral = TRUE))
+expect_eqt(bSpline(x), v2$bSpline(x))
+expect_eqt(bSpline(x, derivs = 1), dbs(x))
+expect_eqt(bSpline(x, derivs = 2), dbs(x, derivs = 2))
+expect_eqt(bSpline(x, integral = TRUE), ibs(x))
+expect_eqt(bSpline(x), bSpline(x, derivs = 1, integral = TRUE))
 
 ## cubic splines with specified df
-expect_equivalent(bSpline(x, df = 5),
-                  v2$bSpline(x, df = 5))
+expect_eqt(bSpline(x, df = 5),
+           v2$bSpline(x, df = 5))
 
 ## cubic splines with specified internal knots
-expect_equivalent(bSpline(x, knots = knots),
-                  v2$bSpline(x, knots = knots))
+expect_eqt(bSpline(x, knots = knots),
+           v2$bSpline(x, knots = knots))
 
 ## qudractic splines without internal knots
-expect_equivalent(bSpline(x, degree = 2L),
-                  v2$bSpline(x, degree = 2L))
+expect_eqt(bSpline(x, degree = 2L),
+           v2$bSpline(x, degree = 2L))
 
 ## complete basis with intercept
-expect_equivalent(bSpline(x, intercept = TRUE),
-                  v2$bSpline(x, intercept = TRUE))
+expect_eqt(bSpline(x, intercept = TRUE),
+           v2$bSpline(x, intercept = TRUE))
 
 ## specified knots
-expect_equivalent(bSpline(x, knots = knots, intercept = TRUE),
-                  v2$bSpline(x, knots = knots, intercept = TRUE))
+expect_eqt(bSpline(x, knots = knots, intercept = TRUE),
+           v2$bSpline(x, knots = knots, intercept = TRUE))
 
 ## specified df
-expect_equivalent(bSpline(x, df = 6, intercept = TRUE),
-                  v2$bSpline(x, df = 6, intercept = TRUE))
+expect_eqt(bSpline(x, df = 6, intercept = TRUE),
+           v2$bSpline(x, df = 6, intercept = TRUE))
 
 ## degree zero
 knots2 <- seq.int(0.2, 0.8, 0.2)
-expect_equivalent(bSpline(x, knots = knots2, degree = 0),
-                  v2$bSpline(x, knots = knots2, degree = 0))
-expect_equivalent(bSpline(x, knots = knots2, degree = 0, intercept = TRUE),
-                  v2$bSpline(x, knots = knots2, degree = 0, intercept = TRUE))
+expect_eqt(bSpline(x, knots = knots2, degree = 0),
+           v2$bSpline(x, knots = knots2, degree = 0))
+expect_eqt(bSpline(x, knots = knots2, degree = 0, intercept = TRUE),
+           v2$bSpline(x, knots = knots2, degree = 0, intercept = TRUE))
 bsMat0a <- bSpline(x, degree = 0, intercept = TRUE)
 bsMat0b <- bSpline(x, df = 5, degree = 0)
 bsMat0c <- bSpline(x, df = 5, degree = 0, intercept = TRUE)
@@ -73,18 +74,18 @@ x3 <- seq.int(0, 5, 0.1)
 b0_1 <- function(x) as.numeric(x >= 0 & x < 1)
 b0_2 <- function(x) as.numeric(x >= 1 & x < 3)
 b0_3 <- function(x) as.numeric(x >= 3 & x <= 5)
-expect_equivalent(bSpline(x3, knots = c(1, 3), degree = 0L, intercept = TRUE),
-                  cbind(b0_1(x3), b0_2(x3), b0_3(x3)))
+expect_eqt(bSpline(x3, knots = c(1, 3), degree = 0L, intercept = TRUE),
+           cbind(b0_1(x3), b0_2(x3), b0_3(x3)))
 
 ## x outside of boundary
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         bSpline(x2, df = 6, degree = 3, Boundary.knots = b_knots),
         v2$bSpline(x2, df = 6, degree = 3, Boundary.knots = b_knots)
     )
 })
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         bSpline(x2, knots = knots, degree = 3, Boundary.knots = b_knots),
         v2$bSpline(x2, knots = knots, degree = 3, Boundary.knots = b_knots)
     )

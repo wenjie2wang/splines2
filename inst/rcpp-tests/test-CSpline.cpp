@@ -1,6 +1,5 @@
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::depends(splines2)]]
-#include <splines2Armadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
+#include "../include/splines2Armadillo.h"
 
 // helper function
 inline Rcpp::List return_list(splines2::CSpline obj)

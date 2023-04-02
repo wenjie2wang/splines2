@@ -1,6 +1,7 @@
 ## get implementations of v0.2.8 for reference
 v2 <- new.env()
 source("../v0.2.8.R", v2)
+source("utils.R")
 
 ## helper functions
 isNumMatrix <- v2$isNumMatrix
@@ -12,37 +13,37 @@ x2 <- c(- 1, 2, x)
 b_knots <- c(0, 1)
 
 ## default cubic splines without internal knots
-expect_equivalent(cSpline(x), v2$cSpline(x))
+expect_eqt(cSpline(x), v2$cSpline(x))
 
 ## cubic splines with specified df
-expect_equivalent(cSpline(x, df = 5),
-                  v2$cSpline(x, df = 5))
+expect_eqt(cSpline(x, df = 5),
+           v2$cSpline(x, df = 5))
 
 ## cubic splines with specified internal knots
-expect_equivalent(cSpline(x, knots = knots),
-                  v2$cSpline(x, knots = knots))
+expect_eqt(cSpline(x, knots = knots),
+           v2$cSpline(x, knots = knots))
 
 ## qudractic splines without internal knots
-expect_equivalent(cSpline(x, degree = 2L),
-                  v2$cSpline(x, degree = 2L))
+expect_eqt(cSpline(x, degree = 2L),
+           v2$cSpline(x, degree = 2L))
 
 ## complete basis with intercept
-expect_equivalent(cSpline(x, intercept = TRUE),
-                  v2$cSpline(x, intercept = TRUE))
+expect_eqt(cSpline(x, intercept = TRUE),
+           v2$cSpline(x, intercept = TRUE))
 
 ## specified knots
-expect_equivalent(cSpline(x, knots = knots, intercept = TRUE),
-                  v2$cSpline(x, knots = knots, intercept = TRUE))
+expect_eqt(cSpline(x, knots = knots, intercept = TRUE),
+           v2$cSpline(x, knots = knots, intercept = TRUE))
 
 ## specified df
-expect_equivalent(cSpline(x, df = 6, intercept = TRUE),
-                  v2$cSpline(x, df = 6, intercept = TRUE))
+expect_eqt(cSpline(x, df = 6, intercept = TRUE),
+           v2$cSpline(x, df = 6, intercept = TRUE))
 
 ## degree zero
-expect_equivalent(cSpline(x, df = 5, degree = 0),
-                  v2$cSpline(x, df = 5, degree = 0))
-expect_equivalent(cSpline(x, df = 5, degree = 0, intercept = TRUE),
-                  v2$cSpline(x, df = 5, degree = 0, intercept = TRUE))
+expect_eqt(cSpline(x, df = 5, degree = 0),
+           v2$cSpline(x, df = 5, degree = 0))
+expect_eqt(cSpline(x, df = 5, degree = 0, intercept = TRUE),
+           v2$cSpline(x, df = 5, degree = 0, intercept = TRUE))
 bsMat0a <- cSpline(x, degree = 0, intercept = TRUE)
 bsMat0b <- cSpline(x, df = 5, degree = 0, intercept = FALSE)
 bsMat0c <- cSpline(x, df = 5, degree = 0, intercept = TRUE)
@@ -64,13 +65,13 @@ expect_true(isNumMatrix(
 
 ## x outside of boundary
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         cSpline(x2, df = 6, degree = 3, Boundary.knots = b_knots),
         v2$cSpline(x2, df = 6, degree = 3, Boundary.knots = b_knots)
     )
 })
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         cSpline(x2, knots = knots, degree = 3, Boundary.knots = b_knots),
         v2$cSpline(x2, knots = knots, degree = 3, Boundary.knots = b_knots)
     )
@@ -81,47 +82,47 @@ names(x) <- sample(LETTERS, length(x), replace = TRUE)
 expect_equal(rownames(cSpline(x)), names(x))
 
 ## equivalency with I-splines
-expect_equivalent(
+expect_eqt(
     cSpline(x, df = 5, derivs = 1,
             scale = FALSE, intercept = TRUE),
     iSpline(x, df = 5, intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, knots = knots, derivs = 1,
             scale = FALSE, intercept = TRUE),
     iSpline(x, knots = knots, intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, df = 6, degree = 2, derivs = 2,
             intercept = TRUE, scale = FALSE),
     iSpline(x, df = 6, degree = 2, derivs = 1,
             intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, knots = knots, degree = 2, derivs = 2,
             intercept = TRUE, scale = FALSE),
     iSpline(x, knots = knots, degree = 2, derivs = 1,
             intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, df = 6, degree = 2, derivs = 3,
             intercept = TRUE, scale = FALSE),
     iSpline(x, df = 6, degree = 2, derivs = 2,
             intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, knots = knots, degree = 2, derivs = 3,
             intercept = TRUE, scale = FALSE),
     iSpline(x, knots = knots, degree = 2, derivs = 2,
             intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, df = 6, degree = 2, derivs = 4,
             intercept = TRUE, scale = FALSE),
     iSpline(x, df = 6, degree = 2, derivs = 3,
             intercept = TRUE)
 )
-expect_equivalent(
+expect_eqt(
     cSpline(x, knots = knots, degree = 2, derivs = 4,
             intercept = TRUE, scale = FALSE),
     iSpline(x, knots = knots, degree = 2, derivs = 3,

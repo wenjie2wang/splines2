@@ -1,6 +1,7 @@
 ## get implementations of v0.2.8 for reference
 v2 <- new.env()
 source("../v0.2.8.R", v2)
+source("utils.R")
 
 ## helper functions
 isNumMatrix <- v2$isNumMatrix
@@ -9,28 +10,28 @@ isNumMatrix <- v2$isNumMatrix
 ## without internal knots
 x <- seq.int(0, 1, 0.1)
 ## degree = 0
-expect_equivalent(matrix(x), ibs(x, degree = 0, intercept = TRUE))
+expect_eqt(matrix(x), ibs(x, degree = 0, intercept = TRUE))
 ## degree = 1
 b1 <- function(x) x - x ^ 2 / 2
 b2 <- function(x) x ^ 2 / 2
 i1mat <- cbind(b1(x), b2(x))
-expect_equivalent(matrix(b2(x)), ibs(x, degree = 1))
-expect_equivalent(i1mat, ibs(x, degree = 1, intercept = TRUE))
+expect_eqt(matrix(b2(x)), ibs(x, degree = 1))
+expect_eqt(i1mat, ibs(x, degree = 1, intercept = TRUE))
 ## degree = 2
 b1 <- function(x) x ^ 3 / 3 - x ^ 2 + x
 b2 <- function(x) - 2 * x ^ 3 / 3 + x ^ 2
 b3 <- function(x) x ^ 3 / 3
 i2mat <- cbind(b1(x), b2(x), b3(x))
-expect_equivalent(cbind(b2(x), b3(x)), ibs(x, degree = 2))
-expect_equivalent(i2mat, ibs(x, degree = 2, intercept = TRUE))
+expect_eqt(cbind(b2(x), b3(x)), ibs(x, degree = 2))
+expect_eqt(i2mat, ibs(x, degree = 2, intercept = TRUE))
 ## degree = 3
 b1 <- function(x) - (1 - x) ^ 4 / 4 + 1 / 4
 b2 <- function(x) 3 / 4 * x ^ 4 - 2 * x ^ 3 + 3 / 2 * x ^ 2
 b3 <- function(x) x ^ 3 - 3 / 4 * x ^ 4
 b4 <- function(x) x ^ 4 / 4
 i3mat <- cbind(b1(x), b2(x), b3(x), b4(x))
-expect_equivalent(cbind(b2(x), b3(x), b4(x)), ibs(x, degree = 3))
-expect_equivalent(i3mat, ibs(x, degree = 3, intercept = TRUE))
+expect_eqt(cbind(b2(x), b3(x), b4(x)), ibs(x, degree = 3))
+expect_eqt(i3mat, ibs(x, degree = 3, intercept = TRUE))
 
 ## with two internal knots
 x <- seq.int(0, 4, 0.1)
@@ -42,10 +43,10 @@ ind34 <- function(x) as.numeric(x >= 3 & x <= 4)
 b1 <- function(x) ind01(x) * x + ind13(x) + ind34(x)
 b2 <- function(x) ind13(x) * (x - 1) + 2 * ind34(x)
 b3 <- function(x) ind34(x) * (x - 3)
-expect_equivalent(cbind(b2(x), b3(x)),
-                  ibs(x, knots = knots, degree = 0))
-expect_equivalent(cbind(b1(x), b2(x), b3(x)),
-                  ibs(x, knots = knots, degree = 0, intercept = TRUE))
+expect_eqt(cbind(b2(x), b3(x)),
+           ibs(x, knots = knots, degree = 0))
+expect_eqt(cbind(b1(x), b2(x), b3(x)),
+           ibs(x, knots = knots, degree = 0, intercept = TRUE))
 ## degree = 1
 b1 <- function(x) ind01(x) * (x - x ^ 2 / 2) + (ind13(x) + ind34(x)) / 2
 b2 <- function(x) {
@@ -57,10 +58,10 @@ b3 <- function(x) {
         ind34(x) * (- x ^ 2 / 2 + 4 * x - 6.5)
 }
 b4 <- function(x) ind34(x) * (x ^ 2 / 2 - 3 * x + 4.5)
-expect_equivalent(cbind(b2(x), b3(x), b4(x)),
-                  ibs(x, knots = knots, degree = 1))
-expect_equivalent(cbind(b1(x), b2(x), b3(x), b4(x)),
-                  ibs(x, knots = knots, degree = 1, intercept = TRUE))
+expect_eqt(cbind(b2(x), b3(x), b4(x)),
+           ibs(x, knots = knots, degree = 1))
+expect_eqt(cbind(b1(x), b2(x), b3(x), b4(x)),
+           ibs(x, knots = knots, degree = 1, intercept = TRUE))
 
 ## compare with v0.2.8
 x <- c(NA, seq.int(0, 0.5, 0.1), NA, seq.int(0.6, 1, 0.1), NA)
@@ -69,37 +70,37 @@ x2 <- c(- 1, 2, x)
 b_knots <- c(0, 1)
 
 ## default cubic splines without internal knots
-expect_equivalent(ibs(x), v2$ibs(x))
+expect_eqt(ibs(x), v2$ibs(x))
 
 ## cubic splines with specified df
-expect_equivalent(ibs(x, df = 5),
-                  v2$ibs(x, df = 5))
+expect_eqt(ibs(x, df = 5),
+           v2$ibs(x, df = 5))
 
 ## cubic splines with specified internal knots
-expect_equivalent(ibs(x, knots = knots),
-                  v2$ibs(x, knots = knots))
+expect_eqt(ibs(x, knots = knots),
+           v2$ibs(x, knots = knots))
 
 ## qudractic splines without internal knots
-expect_equivalent(ibs(x, degree = 2L),
-                  v2$ibs(x, degree = 2L))
+expect_eqt(ibs(x, degree = 2L),
+           v2$ibs(x, degree = 2L))
 
 ## complete basis with intercept
-expect_equivalent(ibs(x, intercept = TRUE),
-                  v2$ibs(x, intercept = TRUE))
+expect_eqt(ibs(x, intercept = TRUE),
+           v2$ibs(x, intercept = TRUE))
 
 ## specified knots
-expect_equivalent(ibs(x, knots = knots, intercept = TRUE),
-                  v2$ibs(x, knots = knots, intercept = TRUE))
+expect_eqt(ibs(x, knots = knots, intercept = TRUE),
+           v2$ibs(x, knots = knots, intercept = TRUE))
 
 ## specified df
-expect_equivalent(ibs(x, df = 6, intercept = TRUE),
-                  v2$ibs(x, df = 6, intercept = TRUE))
+expect_eqt(ibs(x, df = 6, intercept = TRUE),
+           v2$ibs(x, df = 6, intercept = TRUE))
 
 ## degree zero
-expect_equivalent(ibs(x, df = 5, degree = 0),
-                  v2$ibs(x, df = 5, degree = 0))
-expect_equivalent(ibs(x, df = 5, degree = 0, intercept = TRUE),
-                  v2$ibs(x, df = 5, degree = 0, intercept = TRUE))
+expect_eqt(ibs(x, df = 5, degree = 0),
+           v2$ibs(x, df = 5, degree = 0))
+expect_eqt(ibs(x, df = 5, degree = 0, intercept = TRUE),
+           v2$ibs(x, df = 5, degree = 0, intercept = TRUE))
 bsMat0a <- ibs(x, degree = 0, intercept = TRUE)
 bsMat0b <- ibs(x, df = 5, degree = 0)
 bsMat0c <- ibs(x, df = 5, degree = 0, intercept = TRUE)
@@ -121,13 +122,13 @@ expect_true(isNumMatrix(
 
 ## x outside of boundary
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         ibs(x2, df = 6, degree = 3, Boundary.knots = b_knots),
         v2$ibs(x2, df = 6, degree = 3, Boundary.knots = b_knots)
     )
 })
 suppressWarnings({
-    expect_equivalent(
+    expect_eqt(
         ibs(x2, knots = knots, degree = 3, Boundary.knots = b_knots),
         v2$ibs(x2, knots = knots, degree = 3, Boundary.knots = b_knots)
     )
