@@ -57,34 +57,34 @@ helper_predict <- function(object, newx, fun, key_attr)
 
 ##' @rdname predict
 ##' @export
-predict.bSpline2 <- function(object, newx, ...)
+predict.BSpline <- function(object, newx, ...)
 {
     helper_predict(
         object,
         newx,
         bSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
-                     "intercept", "derivs", "integral")
+                     "intercept", "periodic", "derivs", "integral")
     )
 }
 
 ##' @rdname predict
 ##' @export
-predict.mSpline <- function(object, newx, ...)
+predict.MSpline <- function(object, newx, ...)
 {
     helper_predict(
         object,
         newx,
         mSpline,
         key_attr = c("x", "degree", "knots", "Boundary.knots",
-                     "intercept", "derivs", "integral", "periodic")
+                     "intercept", "periodic", "derivs", "integral")
     )
 }
 
 
 ##' @rdname predict
 ##' @export
-predict.iSpline <- function(object, newx, ...)
+predict.ISpline <- function(object, newx, ...)
 {
     helper_predict(
         object,
@@ -98,7 +98,7 @@ predict.iSpline <- function(object, newx, ...)
 
 ##' @rdname predict
 ##' @export
-predict.cSpline <- function(object, newx, ...)
+predict.CSpline <- function(object, newx, ...)
 {
     helper_predict(
         object,
@@ -112,7 +112,7 @@ predict.cSpline <- function(object, newx, ...)
 
 ##' @rdname predict
 ##' @export
-predict.bernsteinPoly <- function(object, newx, ...)
+predict.BernsteinPoly <- function(object, newx, ...)
 {
     helper_predict(
         object,
@@ -126,7 +126,7 @@ predict.bernsteinPoly <- function(object, newx, ...)
 
 ##' @rdname predict
 ##' @export
-predict.naturalSpline <- function(object, newx, ...)
+predict.NaturalSpline <- function(object, newx, ...)
 {
     helper_predict(
         object,

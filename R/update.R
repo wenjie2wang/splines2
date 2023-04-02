@@ -54,7 +54,7 @@ helper_update <- function(object, ..., fun, key_attr)
 
 ##' @rdname update
 ##' @export
-update.bSpline2 <- function(object, ...)
+update.BSpline <- function(object, ...)
 {
     helper_update(
         object,
@@ -68,7 +68,7 @@ update.bSpline2 <- function(object, ...)
 
 ##' @rdname update
 ##' @export
-update.mSpline <- function(object, ...)
+update.MSpline <- function(object, ...)
 {
     helper_update(
         object,
@@ -82,7 +82,7 @@ update.mSpline <- function(object, ...)
 
 ##' @rdname update
 ##' @export
-update.iSpline <- function(object, ...)
+update.ISpline <- function(object, ...)
 {
     helper_update(
         object,
@@ -96,7 +96,7 @@ update.iSpline <- function(object, ...)
 
 ##' @rdname update
 ##' @export
-update.cSpline <- function(object, ...)
+update.CSpline <- function(object, ...)
 {
     helper_update(
         object,
@@ -110,7 +110,7 @@ update.cSpline <- function(object, ...)
 
 ##' @rdname update
 ##' @export
-update.bernsteinPoly <- function(object, ...)
+update.BernsteinPoly <- function(object, ...)
 {
     helper_update(
         object,
@@ -124,7 +124,7 @@ update.bernsteinPoly <- function(object, ...)
 
 ##' @rdname update
 ##' @export
-update.naturalSpline <- function(object, ...)
+update.NaturalSpline <- function(object, ...)
 {
     helper_update(
         object,

@@ -45,7 +45,7 @@ helper_makepredictcall <- function(var, call, fun, key_attr)
 }
 
 ##' @export
-makepredictcall.bSpline2 <- function(var, call)
+makepredictcall.BSpline <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = bSpline,
@@ -55,7 +55,7 @@ makepredictcall.bSpline2 <- function(var, call)
 }
 
 ##' @export
-makepredictcall.naturalSpline <- function(var, call)
+makepredictcall.NaturalSpline <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = naturalSpline,
@@ -65,7 +65,7 @@ makepredictcall.naturalSpline <- function(var, call)
 }
 
 ##' @export
-makepredictcall.mSpline <- function(var, call)
+makepredictcall.MSpline <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = mSpline,
@@ -75,7 +75,7 @@ makepredictcall.mSpline <- function(var, call)
 }
 
 ##' @export
-makepredictcall.iSpline <- function(var, call)
+makepredictcall.ISpline <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = iSpline,
@@ -84,7 +84,7 @@ makepredictcall.iSpline <- function(var, call)
 }
 
 ##' @export
-makepredictcall.cSpline <- function(var, call)
+makepredictcall.CSpline <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = cSpline,
@@ -94,7 +94,7 @@ makepredictcall.cSpline <- function(var, call)
 }
 
 ##' @export
-makepredictcall.bernsteinPoly <- function(var, call)
+makepredictcall.BernsteinPoly <- function(var, call)
 {
     helper_makepredictcall(
         var, call, fun = bernsteinPoly,

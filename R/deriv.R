@@ -50,7 +50,7 @@ NULL
 
 ##' @rdname deriv
 ##' @export
-deriv.bSpline2 <- function(expr, derivs = 1L, ...)
+deriv.BSpline <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
@@ -67,7 +67,7 @@ deriv.bSpline2 <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
-deriv.mSpline <- function(expr, derivs = 1L, ...)
+deriv.MSpline <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
@@ -84,7 +84,7 @@ deriv.mSpline <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
-deriv.iSpline <- function(expr, derivs = 1L, ...)
+deriv.ISpline <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
@@ -101,7 +101,7 @@ deriv.iSpline <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
-deriv.cSpline <- function(expr, derivs = 1L, ...)
+deriv.CSpline <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
@@ -133,7 +133,7 @@ deriv.cSpline <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
-deriv.bernsteinPoly <- function(expr, derivs = 1L, ...)
+deriv.BernsteinPoly <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)
@@ -150,7 +150,7 @@ deriv.bernsteinPoly <- function(expr, derivs = 1L, ...)
 
 ##' @rdname deriv
 ##' @export
-deriv.naturalSpline <- function(expr, derivs = 1L, ...)
+deriv.NaturalSpline <- function(expr, derivs = 1L, ...)
 {
     ## quick check on derivs
     derivs <- as.integer(derivs)

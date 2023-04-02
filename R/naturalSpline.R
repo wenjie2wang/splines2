@@ -119,7 +119,7 @@ naturalSpline <- function(x, df = NULL, knots = NULL,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("naturalSpline", "splines2", "matrix")
+    class(out) <- c("NaturalSpline", "splines2", "matrix")
     out
 }
 

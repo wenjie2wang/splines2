@@ -88,7 +88,7 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
         row.names(out) <- name_x
     }
     ## add class
-    class(out) <- c("bernsteinPoly", "splines2", "matrix")
+    class(out) <- c("BernsteinPoly", "splines2", "matrix")
     ## return
     out
 }
