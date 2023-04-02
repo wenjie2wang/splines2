@@ -2,9 +2,21 @@
 % Please edit documentation in R/naturalSpline.R
 \name{naturalSpline}
 \alias{naturalSpline}
+\alias{nsp}
 \title{Natural Cubic Spline Basis for Polynomial Splines}
 \usage{
 naturalSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  integral = FALSE,
+  ...
+)
+
+nsp(
   x,
   df = NULL,
   knots = NULL,
@@ -30,7 +42,8 @@ the specified \code{df} will be ignored.}
 \item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.}
+quantiles for more knots.  For periodic splines, the number of knots
+must be greater or equal to the specified \code{degree - 1}.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}
@@ -39,7 +52,8 @@ Otherwise, the first basis will be excluded from the output.}
 default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
-\code{Boundary.knots}.}
+\code{Boundary.knots}.  For periodic splines, the specified bounary
+knots define the cyclic interval.}
 
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
 natural splines. The default value is \code{0L} for the spline basis

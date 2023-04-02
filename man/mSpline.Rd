@@ -22,12 +22,11 @@ mSpline(
 returned as they are.}
 
 \item{df}{Degree of freedom that equals to the column number of the returned
-matrix.  One can specify \code{df} rather than \code{knots}.  For
-M-splines, the function chooses \code{df - degree -
-as.integer(intercept)} internal knots at suitable quantiles of \code{x}
-ignoring missing values and those \code{x} outside of the boundary.  For
-periodic M-spline (\code{periodic = TRUE}), \code{df -
-as.integer(intercept)} internal knots will be chosen at suitable
+matrix.  One can specify \code{df} rather than \code{knots}, then the
+function chooses \code{df - degree - as.integer(intercept)} internal
+knots at suitable quantiles of \code{x} ignoring missing values and
+those \code{x} outside of the boundary.  For periodic splines, \code{df
+- as.integer(intercept)} internal knots will be chosen at suitable
 quantiles of \code{x} relative to the beginning of the cyclic intervals
 they belong to (see Examples) and the number of internal knots must be
 greater or equal to the specified \code{degree - 1}.  If internal knots
@@ -36,9 +35,8 @@ are specified via \code{knots}, the specified \code{df} will be ignored.}
 \item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.  For periodic splines (\code{periodic =
-TRUE}), the number of knots must be greater or equal to the specified
-\code{degree - 1}.}
+quantiles for more knots.  For periodic splines, the number of knots
+must be greater or equal to the specified \code{degree - 1}.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
@@ -51,19 +49,18 @@ Otherwise, the first basis will be excluded from the output.}
 default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
-\code{Boundary.knots}.  For periodic splines (\code{periodic = TRUE}),
-the specified boundary knots define the cyclic interval.}
+\code{Boundary.knots}.  For periodic splines, the specified bounary
+knots define the cyclic interval.}
 
 \item{periodic}{A logical value.  If \code{TRUE}, the periodic splines will
-be returned instead of regular M-splines.  The default value is
-\code{FALSE}.}
+be returned.  The default value is \code{FALSE}.}
 
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
-M-splines. The default value is \code{0L} for M-spline basis functions.}
+splines basis function.  The default value is \code{0}.}
 
 \item{integral}{A logical value.  If \code{TRUE}, the corresponding
 integrals of spline basis functions will be returned.  The default value
-is \code{FALSE}.  For periodic splines, the integral of each basis is
+is \code{FALSE}. For periodic splines, the integral of each basis is
 integrated from the left boundary knot.}
 
 \item{...}{Optional arguments that are not used.}
@@ -86,7 +83,8 @@ This function contains an implementation of the closed-form M-spline basis
 based on the recursion formula given by Ramsay (1988) or periodic M-spline
 basis following the procedure producing periodic B-splines given in Piegl
 and Tiller (1997).  For monotone regression, one can use I-splines (see
-\code{\link{iSpline}}) instead of M-splines.
+\code{\link{iSpline}}) instead of M-splines.  For shape-restricted
+regression, see Wang and Yan (2021) for examples.
 }
 \examples{
 library(splines2)
@@ -163,6 +161,9 @@ Ramsay, J. O. (1988). Monotone regression splines in action.
 
 Piegl, L., & Tiller, W. (1997). \emph{The NURBS book}. Springer Science &
 Business Media.
+
+Wang, W., & Yan, J. (2021). \emph{Shape-restricted regression splines with R
+package splines2}. Journal of Data Science, 19(3),498--517.
 }
 \seealso{
 \code{\link{bSpline}} for B-splines;

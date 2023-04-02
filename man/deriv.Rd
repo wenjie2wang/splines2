@@ -2,31 +2,25 @@
 % Please edit documentation in R/deriv.R
 \name{deriv}
 \alias{deriv}
-\alias{deriv.bSpline2}
-\alias{deriv.dbs}
-\alias{deriv.ibs}
-\alias{deriv.mSpline}
-\alias{deriv.iSpline}
-\alias{deriv.cSpline}
-\alias{deriv.bernsteinPoly}
-\alias{deriv.naturalSpline}
+\alias{deriv.BSpline}
+\alias{deriv.MSpline}
+\alias{deriv.ISpline}
+\alias{deriv.CSpline}
+\alias{deriv.BernsteinPoly}
+\alias{deriv.NaturalSpline}
 \title{Derivatives of Spline Basis Functions}
 \usage{
-\method{deriv}{bSpline2}(expr, derivs = 1L, ...)
+\method{deriv}{BSpline}(expr, derivs = 1L, ...)
 
-\method{deriv}{dbs}(expr, derivs = 1L, ...)
+\method{deriv}{MSpline}(expr, derivs = 1L, ...)
 
-\method{deriv}{ibs}(expr, derivs = 1L, ...)
+\method{deriv}{ISpline}(expr, derivs = 1L, ...)
 
-\method{deriv}{mSpline}(expr, derivs = 1L, ...)
+\method{deriv}{CSpline}(expr, derivs = 1L, ...)
 
-\method{deriv}{iSpline}(expr, derivs = 1L, ...)
+\method{deriv}{BernsteinPoly}(expr, derivs = 1L, ...)
 
-\method{deriv}{cSpline}(expr, derivs = 1L, ...)
-
-\method{deriv}{bernsteinPoly}(expr, derivs = 1L, ...)
-
-\method{deriv}{naturalSpline}(expr, derivs = 1L, ...)
+\method{deriv}{NaturalSpline}(expr, derivs = 1L, ...)
 }
 \arguments{
 \item{expr}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},

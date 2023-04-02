@@ -24,13 +24,18 @@ returned as they are.}
 matrix.  One can specify \code{df} rather than \code{knots}, then the
 function chooses \code{df - degree - as.integer(intercept)} internal
 knots at suitable quantiles of \code{x} ignoring missing values and
-those \code{x} outside of the boundary.  If internal knots are specified
-via \code{knots}, the specified \code{df} will be ignored.}
+those \code{x} outside of the boundary.  For periodic splines, \code{df
+- as.integer(intercept)} internal knots will be chosen at suitable
+quantiles of \code{x} relative to the beginning of the cyclic intervals
+they belong to (see Examples) and the number of internal knots must be
+greater or equal to the specified \code{degree - 1}.  If internal knots
+are specified via \code{knots}, the specified \code{df} will be ignored.}
 
 \item{knots}{The internal breakpoints that define the splines.  The default
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
-quantiles for more knots.}
+quantiles for more knots.  For periodic splines, the number of knots
+must be greater or equal to the specified \code{degree - 1}.}
 
 \item{degree}{The degree of C-spline defined to be the degree of the
 associated M-spline instead of actual polynomial degree. For example,
@@ -47,7 +52,8 @@ the model.}
 default, they are the range of \code{x} excluding \code{NA}.  If both
 \code{knots} and \code{Boundary.knots} are supplied, the basis
 parameters do not depend on \code{x}. Data can extend beyond
-\code{Boundary.knots}.}
+\code{Boundary.knots}.  For periodic splines, the specified bounary
+knots define the cyclic interval.}
 
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
 C-splines. The default value is \code{0L} for C-spline basis functions.}
@@ -61,10 +67,12 @@ produced by \code{deriv} methods will be scaled to the same extent.}
 }
 \value{
 A numeric matrix of \code{length(x)} rows and \code{df} columns if
-    \code{df} is specified or \code{length(knots) + degree +
-    as.integer(intercept)} columns if \code{knots} are specified instead.
-    Attributes that correspond to the arguments specified are returned
-    mainly for other functions in this package.
+    \code{df} is specified.  If \code{knots} are specified instead, the
+    output matrix will consist of \code{length(knots) + degree +
+    as.integer(intercept)} columns if \code{periodic = FALSE}, or
+    \code{length(knots) + as.integer(intercept)} columns if \code{periodic =
+    TRUE}.  Attributes that correspond to the arguments specified are
+    returned for usage of other functions in this package.
 }
 \description{
 Generates the convex regression spline (called C-spline) basis matrix by

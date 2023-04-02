@@ -2,31 +2,25 @@
 % Please edit documentation in R/predict.R
 \name{predict}
 \alias{predict}
-\alias{predict.bSpline2}
-\alias{predict.dbs}
-\alias{predict.ibs}
-\alias{predict.mSpline}
-\alias{predict.iSpline}
-\alias{predict.cSpline}
-\alias{predict.bernsteinPoly}
-\alias{predict.naturalSpline}
+\alias{predict.BSpline}
+\alias{predict.MSpline}
+\alias{predict.ISpline}
+\alias{predict.CSpline}
+\alias{predict.BernsteinPoly}
+\alias{predict.NaturalSpline}
 \title{Evaluate Spline Basis Functions at Specified Points}
 \usage{
-\method{predict}{bSpline2}(object, newx, ...)
+\method{predict}{BSpline}(object, newx, ...)
 
-\method{predict}{dbs}(object, newx, ...)
+\method{predict}{MSpline}(object, newx, ...)
 
-\method{predict}{ibs}(object, newx, ...)
+\method{predict}{ISpline}(object, newx, ...)
 
-\method{predict}{mSpline}(object, newx, ...)
+\method{predict}{CSpline}(object, newx, ...)
 
-\method{predict}{iSpline}(object, newx, ...)
+\method{predict}{BernsteinPoly}(object, newx, ...)
 
-\method{predict}{cSpline}(object, newx, ...)
-
-\method{predict}{bernsteinPoly}(object, newx, ...)
-
-\method{predict}{naturalSpline}(object, newx, ...)
+\method{predict}{NaturalSpline}(object, newx, ...)
 }
 \arguments{
 \item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
