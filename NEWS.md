@@ -1,3 +1,17 @@
+# splines2 0.5.0.9000
+
+## New features
+
+* Added a new argument named `periodic` to `bSpline()` for periodic B-splines
+  and a new class named `PeriodicBSpline` to the Rcpp interface:
+  [issue 19](https://github.com/wenjie2wang/splines2/issues/19).
+* Added `plot()` methods to quickly visualize the spline basis functions.
+
+## Minor changes
+
+* Adjusted the class orders in the returned objects.
+
+
 # splines2 0.4.8
 
 ## Bug fixes
