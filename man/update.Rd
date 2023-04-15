@@ -23,10 +23,7 @@
 \method{update}{NaturalSpline}(object, ...)
 }
 \arguments{
-\item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, \code{cSpline}, \code{bernsteinPoly} or
-\code{naturalSpline} with attributes describing \code{knots},
-\code{degree}, etc.}
+\item{object}{Spline objects produced by the \code{splines2} package.}
 
 \item{...}{Other arguments passed to the corresponing constructor function.}
 }

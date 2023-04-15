@@ -122,7 +122,7 @@ derivatives of given order of B-splines and is equivalent to
 \examples{
 library(splines2)
 
-x <- seq(0, 1, 0.01)
+x <- runif(100)
 knots <- c(0.3, 0.5, 0.6) # internal knots
 
 ## cubic B-splines

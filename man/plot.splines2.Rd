@@ -4,12 +4,25 @@
 \alias{plot.splines2}
 \title{Visualize Spline Basis Functions}
 \usage{
-\method{plot}{splines2}(x, y, mark_knots = c("none", "internal", "boundary", "all"), ...)
+\method{plot}{splines2}(
+  x,
+  y,
+  from = NULL,
+  to = NULL,
+  n = 101,
+  mark_knots = c("none", "internal", "boundary", "all"),
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{splines2} object.}
 
 \item{y}{An argument that is not used.}
+
+\item{from, to}{Two numbers representing the start and end point for the
+plot, respectively.}
+
+\item{n}{An integer, the number of x values at which to evaluate.}
 
 \item{mark_knots}{A character vector specifying if knot placement should be
 indicated by vertical lines.}

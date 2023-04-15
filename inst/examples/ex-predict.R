@@ -1,28 +1,30 @@
 library(splines2)
+
 x <- seq.int(0, 1, 0.2)
 knots <- c(0.3, 0.5, 0.6)
-newX <- seq.int(0.1, 0.9, 0.2)
+newx <- seq.int(0.1, 0.9, 0.2)
 
-## for B-splines
-bsMat <- bSpline(x, knots = knots, degree = 2)
-predict(bsMat, newX)
+## Cubic B-spline basis functions
+bs_mat <- bSpline(x, knots = knots)
 
-## for integral of B-splines
-ibsMat <- ibs(x, knots = knots, degree = 2)
-predict(ibsMat, newX)
+## compute the B-spline basis functions at new x
+predict(bs_mat, newx)
 
-## for derivative of B-splines
-dbsMat <- dbs(x, knots = knots, degree = 2)
-predict(dbsMat, newX)
+## compute the B-spline function for the specified coefficients
+beta <- runif(ncol(bs_mat))
+predict(bs_mat, coef = beta)
 
-## for M-spline
-msMat <- mSpline(x, knots = knots, degree = 2)
-predict(msMat, newX)
+## compute the first derivative of the B-spline function
+predict(bs_mat, coef = beta, derivs = 1)
+## or equivalently
+predict(deriv(bs_mat), coef = beta)
 
-## for I-spline
-isMat <- iSpline(x, knots = knots, degree = 2)
-predict(isMat, newX)
+## compute the second derivative
+predict(bs_mat, coef = beta, derivs = 2)
+## or equivalently
+predict(deriv(bs_mat, derivs = 2), coef = beta)
 
-## for C-spline
-csMat <- cSpline(x, knots = knots, degree = 2)
-predict(csMat, newX)
+## compute the integral
+predict(bs_mat, coef = beta, integral = TRUE)
+## or equivalently
+predict(update(bs_mat, integral = TRUE), coef = beta)

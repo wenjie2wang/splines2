@@ -8,72 +8,76 @@
 \alias{predict.CSpline}
 \alias{predict.BernsteinPoly}
 \alias{predict.NaturalSpline}
-\title{Evaluate Spline Basis Functions at Specified Points}
+\title{Compute Spline Function for Given Coefficients}
 \usage{
-\method{predict}{BSpline}(object, newx, ...)
+\method{predict}{BSpline}(object, newx = NULL, coef = NULL, ...)
 
-\method{predict}{MSpline}(object, newx, ...)
+\method{predict}{MSpline}(object, newx = NULL, coef = NULL, ...)
 
-\method{predict}{ISpline}(object, newx, ...)
+\method{predict}{ISpline}(object, newx = NULL, coef = NULL, ...)
 
-\method{predict}{CSpline}(object, newx, ...)
+\method{predict}{CSpline}(object, newx = NULL, coef = NULL, ...)
 
-\method{predict}{BernsteinPoly}(object, newx, ...)
+\method{predict}{BernsteinPoly}(object, newx = NULL, coef = NULL, ...)
 
-\method{predict}{NaturalSpline}(object, newx, ...)
+\method{predict}{NaturalSpline}(object, newx = NULL, coef = NULL, ...)
 }
 \arguments{
-\item{object}{Objects of class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, \code{cSpline}, \code{bernsteinPoly} or
-\code{naturalSpline} with attributes describing \code{knots},
-\code{degree}, etc.}
+\item{object}{Spline objects produced by the \code{splines2} package.}
 
-\item{newx}{The \code{x} values at which evaluations are required.}
+\item{newx}{The \code{x} values at which evaluations are required.  If it is
+\code{NULL} (by default), the original \code{x} used to create the
+spline object will be used.}
 
-\item{...}{Optional arguments that are not used.}
+\item{coef}{A numeric vector specifying the coefficients of the spline basis
+functions.  If it is \code{NULL} (by default), the spline basis
+functions will be returned.  Otherwise, the resulting spline function
+will be returned.}
+
+\item{...}{Other options passed to the corresponding function that
+constructs the input \code{object}.  For example, the additional options
+will be passed to \code{bSpline()} for a \code{BSpline} object.}
 }
 \value{
-An object just like the \code{object} input, except evaluated at
-the new values of \code{x}.
+The function returns the spline basis functions with the new values
+    of \code{x} if \code{coef} is not specified.  Otherwise, the function
+    returns the resulting spline function (or its derivative if
+    \code{derivs} is specified as a positive integer through \code{...}).
 }
 \description{
-This function evaluates the given spline basis functions at the specified
-\code{x}.
-}
-\details{
-These are methods for the generic function \code{predict} for objects
-inheriting from class \code{bSpline2}, \code{ibs}, \code{mSpline},
-\code{iSpline}, \code{cSpline}, \code{naturalSpline}, or
-\code{bernsteinPoly}.  If \code{newx} is not given, the function returns the
-input object.
+Returns the spline function (with the specified coefficients) or evaluate
+the basis functions at the specified \code{x} if the coefficients are not
+specified.
 }
 \examples{
 library(splines2)
+
 x <- seq.int(0, 1, 0.2)
 knots <- c(0.3, 0.5, 0.6)
-newX <- seq.int(0.1, 0.9, 0.2)
+newx <- seq.int(0.1, 0.9, 0.2)
 
-## for B-splines
-bsMat <- bSpline(x, knots = knots, degree = 2)
-predict(bsMat, newX)
+## Cubic B-spline basis functions
+bs_mat <- bSpline(x, knots = knots)
 
-## for integral of B-splines
-ibsMat <- ibs(x, knots = knots, degree = 2)
-predict(ibsMat, newX)
+## compute the B-spline basis functions at new x
+predict(bs_mat, newx)
 
-## for derivative of B-splines
-dbsMat <- dbs(x, knots = knots, degree = 2)
-predict(dbsMat, newX)
+## compute the B-spline function for the specified coefficients
+beta <- runif(ncol(bs_mat))
+predict(bs_mat, coef = beta)
 
-## for M-spline
-msMat <- mSpline(x, knots = knots, degree = 2)
-predict(msMat, newX)
+## compute the first derivative of the B-spline function
+predict(bs_mat, coef = beta, derivs = 1)
+## or equivalently
+predict(deriv(bs_mat), coef = beta)
 
-## for I-spline
-isMat <- iSpline(x, knots = knots, degree = 2)
-predict(isMat, newX)
+## compute the second derivative
+predict(bs_mat, coef = beta, derivs = 2)
+## or equivalently
+predict(deriv(bs_mat, derivs = 2), coef = beta)
 
-## for C-spline
-csMat <- cSpline(x, knots = knots, degree = 2)
-predict(csMat, newX)
+## compute the integral
+predict(bs_mat, coef = beta, integral = TRUE)
+## or equivalently
+predict(update(bs_mat, integral = TRUE), coef = beta)
 }
