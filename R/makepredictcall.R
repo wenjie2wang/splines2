@@ -18,9 +18,9 @@
 ## reference: splines:::makepredictcall
 
 ##' @importFrom stats makepredictcall
-helper_makepredictcall <- function(var, call, fun, key_attr)
+helper_makepredictcall <- function(var, call, .FUN, .KEY_ATTR)
 {
-    fun_symbol <- substitute(fun)
+    fun_symbol <- substitute(.FUN)
     fun_name <- as.character(fun_symbol)
 
     ## the following checking seems to be unnecessary?
@@ -32,11 +32,11 @@ helper_makepredictcall <- function(var, call, fun, key_attr)
     ## }
 
     ## throw warnings instead
-    res <- tryCatch(check_attr(var, key_attr), error = function(e) e)
+    res <- tryCatch(check_attr(var, .KEY_ATTR), error = function(e) e)
     if (inherits(res, "error")) {
         warning(res, call. = FALSE)
     } else {
-        at <- attributes(var)[key_attr]
+        at <- attributes(var)[.KEY_ATTR]
         call <- call[1L:2L]
         call[names(at)] <- at
     }
@@ -48,9 +48,10 @@ helper_makepredictcall <- function(var, call, fun, key_attr)
 makepredictcall.BSpline <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = bSpline,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept",
-                     "periodic", "derivs", "integral")
+        var, call,
+        .FUN = bSpline,
+        .KEY_ATTR = c("degree", "knots", "Boundary.knots", "intercept",
+                      "periodic", "derivs", "integral")
     )
 }
 
@@ -58,9 +59,10 @@ makepredictcall.BSpline <- function(var, call)
 makepredictcall.NaturalSpline <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = naturalSpline,
-        key_attr = c("knots", "Boundary.knots", "intercept",
-                     "derivs", "integral")
+        var, call,
+        .FUN = naturalSpline,
+        .KEY_ATTR = c("knots", "Boundary.knots", "intercept",
+                      "derivs", "integral")
     )
 }
 
@@ -68,9 +70,10 @@ makepredictcall.NaturalSpline <- function(var, call)
 makepredictcall.MSpline <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = mSpline,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept",
-                     "periodic", "derivs", "integral")
+        var, call,
+        .FUN = mSpline,
+        .KEY_ATTR = c("degree", "knots", "Boundary.knots", "intercept",
+                      "periodic", "derivs", "integral")
     )
 }
 
@@ -78,8 +81,10 @@ makepredictcall.MSpline <- function(var, call)
 makepredictcall.ISpline <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = iSpline,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept", "derivs")
+        var, call,
+        .FUN = iSpline,
+        .KEY_ATTR = c("degree", "knots", "Boundary.knots", "intercept",
+                      "derivs")
     )
 }
 
@@ -87,9 +92,10 @@ makepredictcall.ISpline <- function(var, call)
 makepredictcall.CSpline <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = cSpline,
-        key_attr = c("degree", "knots", "Boundary.knots", "intercept",
-                     "derivs", "scale")
+        var, call,
+        .FUN = cSpline,
+        .KEY_ATTR = c("degree", "knots", "Boundary.knots", "intercept",
+                      "derivs", "scale")
     )
 }
 
@@ -97,8 +103,9 @@ makepredictcall.CSpline <- function(var, call)
 makepredictcall.BernsteinPoly <- function(var, call)
 {
     helper_makepredictcall(
-        var, call, fun = bernsteinPoly,
-        key_attr = c("degree", "Boundary.knots", "intercept",
-                     "derivs", "integral")
+        var, call,
+        .FUN = bernsteinPoly,
+        .KEY_ATTR = c("degree", "Boundary.knots", "intercept",
+                      "derivs", "integral")
     )
 }
