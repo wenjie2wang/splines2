@@ -30,6 +30,10 @@ namespace splines2 {
     // define a class for Natural splines
     class NaturalSpline : public SplineBase
     {
+    private:
+        using SplineBase::set_degree;
+        using SplineBase::set_order;
+
     protected:
         rmat null_colvecs_;
 
@@ -43,7 +47,7 @@ namespace splines2 {
         // get null space vector for the second derivatives
         // of B-spline basis on boundary knotsn
         // the results depend on knot sequence only
-        inline void set_null_colvecs(const bool standardize = true)
+        inline virtual void set_null_colvecs(const bool standardize = true)
         {
             null_colvecs_ = arma::zeros<arma::mat>(spline_df_ + 2, spline_df_);
             size_t n_knots { internal_knots_.n_elem };
@@ -128,7 +132,7 @@ namespace splines2 {
             degree_ = 3;
             order_ = 4;
             update_spline_df();
-            this->set_null_colvecs();
+            set_null_colvecs();
             update_x_outside();
         }
 
@@ -185,7 +189,7 @@ namespace splines2 {
         inline rmat basis(const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            this->set_null_colvecs();
+            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.basis(true) };
             // precess x outside of boundary
@@ -229,7 +233,7 @@ namespace splines2 {
                                const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            this->set_null_colvecs();
+            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.derivative(derivs, true) };
             // precess x outside of boundary
@@ -287,7 +291,7 @@ namespace splines2 {
         inline rmat integral(const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            this->set_null_colvecs();
+            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.integral(true) };
             // precess x outside of boundary
@@ -357,20 +361,10 @@ namespace splines2 {
             return this;
         }
 
-        // placeholders
-        inline NaturalSpline* set_degree(const unsigned int degree) override
+        // get the null space matrix for transformation
+        inline rmat get_transform_matrix() const
         {
-            if (degree) {
-                // do nothing
-            }
-            return this;
-        }
-        inline NaturalSpline* set_order(const unsigned int order) override
-        {
-            if (order) {
-                // do nothing
-            }
-            return this;
+            return null_colvecs_;
         }
 
     };

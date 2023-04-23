@@ -135,7 +135,7 @@ namespace splines2 {
             const rvec& internal_knots,
             const rvec& boundary_knots,
             const unsigned int order
-            )
+            ) const
         {
             rvec out { arma::zeros(internal_knots.n_elem + 2 * order) };
             rvec::iterator it { out.begin() }, it_end { out.end() - 1 };

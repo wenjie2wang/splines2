@@ -269,8 +269,9 @@ Rcpp::NumericMatrix rcpp_cSpline(
     return out;
 }
 
-// [[Rcpp::export]]
-Rcpp::NumericMatrix rcpp_naturalSpline(
+
+template <typename T>
+Rcpp::NumericMatrix template_naturalSpline(
     const arma::vec& x,
     const unsigned int df,
     const arma::vec& internal_knots,
@@ -280,7 +281,7 @@ Rcpp::NumericMatrix rcpp_naturalSpline(
     const bool integral = false
     )
 {
-    splines2::NaturalSpline ns_obj;
+    T ns_obj;
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
@@ -289,10 +290,10 @@ Rcpp::NumericMatrix rcpp_naturalSpline(
             static_cast<unsigned int>(! complete_basis)
         };
         unsigned int spline_df { df + wo_intercept };
-        ns_obj = splines2::NaturalSpline(x, spline_df, boundary_knots);
+        ns_obj = T(x, spline_df, boundary_knots);
     } else {
         // else ignore df
-        ns_obj = splines2::NaturalSpline(x, internal_knots, boundary_knots);
+        ns_obj = T(x, internal_knots, boundary_knots);
     }
     Rcpp::NumericMatrix out;
     // 1) basis, 2) derivative, or 3) integral
@@ -321,4 +322,38 @@ Rcpp::NumericMatrix rcpp_naturalSpline(
     out.attr("derivs") = static_cast<int>(derivs);
     out.attr("integral") = integral;
     return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix rcpp_naturalSpline(
+    const arma::vec& x,
+    const unsigned int df,
+    const arma::vec& internal_knots,
+    const arma::vec& boundary_knots,
+    const bool complete_basis = false,
+    const unsigned int derivs = 0,
+    const bool integral = false
+    )
+{
+    return template_naturalSpline<splines2::NaturalSpline>(
+        x, df, internal_knots, boundary_knots,
+        complete_basis, derivs, integral
+        );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix rcpp_nsk(
+    const arma::vec& x,
+    const unsigned int df,
+    const arma::vec& internal_knots,
+    const arma::vec& boundary_knots,
+    const bool complete_basis = false,
+    const unsigned int derivs = 0,
+    const bool integral = false
+    )
+{
+    return template_naturalSpline<splines2::NaturalSplineK>(
+        x, df, internal_knots, boundary_knots,
+        complete_basis, derivs, integral
+        );
 }
