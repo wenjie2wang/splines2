@@ -31,11 +31,10 @@ namespace splines2 {
     class NaturalSpline : public SplineBase
     {
     private:
-        using SplineBase::set_degree;
         using SplineBase::set_order;
 
     protected:
-        rmat null_colvecs_;
+        rmat null_colvecs_ = rmat();
 
         // indices of x placed outside of boundary (left/right)
         bool is_x_outside_latest_ = false;
@@ -49,6 +48,11 @@ namespace splines2 {
         // the results depend on knot sequence only
         inline virtual void set_null_colvecs(const bool standardize = true)
         {
+            // initialize null_colvecs or
+            // update null_colvecs_ if the knot sequence has been updated
+            if (! null_colvecs_.is_empty() && is_knot_sequence_latest_) {
+                return;
+            }
             null_colvecs_ = arma::zeros<arma::mat>(spline_df_ + 2, spline_df_);
             size_t n_knots { internal_knots_.n_elem };
             if (n_knots == 0) {
@@ -132,7 +136,6 @@ namespace splines2 {
             degree_ = 3;
             order_ = 4;
             update_spline_df();
-            set_null_colvecs();
             update_x_outside();
         }
 
@@ -189,7 +192,6 @@ namespace splines2 {
         inline rmat basis(const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.basis(true) };
             // precess x outside of boundary
@@ -221,6 +223,7 @@ namespace splines2 {
                 }
             }
             // apply null space
+            set_null_colvecs();
             bsMat *= null_colvecs_;
             if (complete_basis) {
                 return bsMat;
@@ -233,7 +236,6 @@ namespace splines2 {
                                const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.derivative(derivs, true) };
             // precess x outside of boundary
@@ -280,6 +282,7 @@ namespace splines2 {
                 }
             }
             // apply null space
+            set_null_colvecs();
             rmat out { bsMat * null_colvecs_ };
             if (complete_basis) {
                 return out;
@@ -291,7 +294,6 @@ namespace splines2 {
         inline rmat integral(const bool complete_basis = true) override
         {
             stopifnot_simple_knot_sequence();
-            set_null_colvecs();
             BSpline bs_obj { this };
             rmat bsMat { bs_obj.integral(true) };
             // precess x outside of boundary
@@ -327,6 +329,7 @@ namespace splines2 {
                 }
             }
             // apply null space
+            set_null_colvecs();
             rmat out { bsMat * null_colvecs_ };
             if (complete_basis) {
                 return out;
@@ -360,10 +363,16 @@ namespace splines2 {
             is_x_outside_latest_ = false;
             return this;
         }
+        inline NaturalSpline* set_degree(const unsigned int degree) override
+        {
+            if (degree > 0) {}
+            return this;
+        }
 
         // get the null space matrix for transformation
-        inline rmat get_transform_matrix() const
+        inline rmat get_transform_matrix()
         {
+            set_null_colvecs();
             return null_colvecs_;
         }
 

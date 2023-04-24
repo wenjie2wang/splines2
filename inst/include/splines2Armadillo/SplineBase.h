@@ -286,6 +286,17 @@ namespace splines2 {
             order_ = degree_ + 1;
         }
 
+        // explicit conversion
+        template <typename T>
+        explicit operator T() const {
+            T obj;
+            obj.set_x(x_)->
+                set_degree(degree_)->
+                set_internal_knots(internal_knots_)->
+                set_boundary_knots(boundary_knots_);
+            return obj;
+        }
+
         // constructor with specificied internal_knots
         SplineBase(const rvec& x,
                    const rvec& internal_knots,
