@@ -27,15 +27,16 @@
 ##' addition, the function provides derivatives or integrals of the B-spline
 ##' basis functions when one specifies the arguments \code{derivs} or
 ##' \code{integral} appropriately.  The function constructs periodic B-splines
-##' if \code{periodic} is \code{TRUE}.  All the implementations are based on the
-##' closed-form recursion formula following De Boor (1978).  See more details in
-##' Wang and Yan (2021).
+##' when \code{periodic} is \code{TRUE}.  All the implementations are based on
+##' the closed-form recursion formula following De Boor (1978) and Wang and Yan
+##' (2021).
 ##'
 ##' The functions \code{ibs()} and \code{dbs()} are provided for convenience.
 ##' The former provides the integrals of B-splines and is equivalent to
 ##' \code{bSpline()} with \code{integral = TRUE}.  The latter produces the
 ##' derivatives of given order of B-splines and is equivalent to
-##' \code{bSpline()} with default \code{derivs = 1}.
+##' \code{bSpline()} with default \code{derivs = 1}.  The function \code{bsp()}
+##' is an alias of to encourage the use in a model formula.
 ##'
 ##' @param x The predictor variable.  Missing values are allowed and will be
 ##'     returned as they are.
@@ -188,3 +189,7 @@ dbs <- function(x, derivs = 1L, df = NULL, knots = NULL, degree = 3,
             intercept = intercept, Boundary.knots = Boundary.knots,
             derivs = derivs, ...)
 }
+
+##' @rdname bSpline
+##' @export
+bsp <- bSpline

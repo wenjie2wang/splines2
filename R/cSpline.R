@@ -22,7 +22,8 @@
 ##' derivatives.
 ##'
 ##' It is an implementation of the closed-form C-spline basis derived from the
-##' recursion formula of I-splines and M-splines.
+##' recursion formula of I-splines and M-splines.  The function \code{csp()} is
+##' an alias of to encourage the use in a model formula.
 ##'
 ##' @inheritParams bSpline
 ##'
@@ -45,6 +46,7 @@
 ##' @inherit bSpline return
 ##'
 ##' @references
+##'
 ##' Meyer, M. C. (2008). Inference using shape-restricted regression splines.
 ##' \emph{The Annals of Applied Statistics}, 2(3), 1013--1033.
 ##'
@@ -157,3 +159,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     ## return
     out
 }
+
+##' @rdname cSpline
+##' @export
+csp <- cSpline

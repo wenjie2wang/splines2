@@ -21,7 +21,8 @@
 ##' spline or the corresponding derivatives of given order.
 ##'
 ##' It is an implementation of the closed-form I-spline basis based on the
-##' recursion formula given by Ramsay (1988).
+##' recursion formula given by Ramsay (1988).  The function \code{isp()} is an
+##' alias of to encourage the use in a model formula.
 ##'
 ##' @inheritParams bSpline
 ##'
@@ -130,3 +131,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     class(out) <- c("ISpline", "splines2", "matrix")
     out
 }
+
+##' @rdname iSpline
+##' @export
+isp <- iSpline

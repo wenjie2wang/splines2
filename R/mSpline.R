@@ -27,6 +27,9 @@
 ##' \code{\link{iSpline}}) instead of M-splines.  For shape-restricted
 ##' regression, see Wang and Yan (2021) for examples.
 ##'
+##' The function \code{msp()} is an alias of to encourage the use in a model
+##' formula.
+##'
 ##' @inheritParams bSpline
 ##' @inherit bSpline return
 ##'
@@ -121,3 +124,7 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     class(out) <- c("MSpline", "splines2", "matrix")
     out
 }
+
+##' @rdname mSpline
+##' @export
+msp <- mSpline

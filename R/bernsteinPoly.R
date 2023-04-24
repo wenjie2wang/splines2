@@ -15,10 +15,17 @@
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ##
 
-##' Generalized Bernstein Polynomial Basis
+##' Generalized Bernstein Polynomial Basis Functions
 ##'
-##' Returns a generalized Bernstein polynomial basis matrix of given degree over
-##' a specified range.
+##' Returns generalized Bernstein polynomial basis functions of the given degree
+##' over the specified range.
+##'
+##' The Bernstein polynomial basis functions are defined over the support from 0
+##' to 1.  The generalized Bernstein polynomial basis functions extend the
+##' support to any finite interval in the real line.
+##'
+##' The function \code{bpoly()} is an alias to encourage the use in a model
+##' formula.
 ##'
 ##' @name bernsteinPoly
 ##'
@@ -37,8 +44,8 @@
 ##' @param derivs A nonnegative integer specifying the order of derivatives.
 ##'     The default value is \code{0L} for Bernstein polynomial basis functions.
 ##'
-##' @return A numeric matrix of dimension \code{length(x)} by \code{degree +
-##'     as.integer(intercept)}.
+##' @return A \code{BernsteinPoly} object that is essentially a numeric matrix
+##'     of dimension \code{length(x)} by \code{degree + as.integer(intercept)}.
 ##'
 ##' @example inst/examples/ex-bernsteinPoly.R
 ##'
@@ -92,3 +99,7 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
     ## return
     out
 }
+
+##' @rdname bSpline
+##' @export
+bpoly <- bernsteinPoly
