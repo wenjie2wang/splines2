@@ -158,8 +158,24 @@ deriv.NaturalSpline <- function(expr, derivs = 1L, ...)
         stop("The 'derivs' has to be a positive integer.")
     }
     ## checks if key attributes still exist
-    check_attr(expr, c("x", "derivs", "integral",
-                       "knots", "Boundary.knots", "intercept"))
+    check_attr(expr, c("x", "derivs", "integral", "knots",
+                       "Boundary.knots", "trim",  "intercept"))
     attr(expr, "derivs") <- attr(expr, "derivs") + derivs
     do.call(naturalSpline, attributes(expr))
+}
+
+##' @rdname deriv
+##' @export
+deriv.NaturalSplineK <- function(expr, derivs = 1L, ...)
+{
+    ## quick check on derivs
+    derivs <- as.integer(derivs)
+    if (derivs < 1L) {
+        stop("The 'derivs' has to be a positive integer.")
+    }
+    ## checks if key attributes still exist
+    check_attr(expr, c("x", "derivs", "integral", "knots",
+                       "Boundary.knots", "trim",  "intercept"))
+    attr(expr, "derivs") <- attr(expr, "derivs") + derivs
+    do.call(nsk, attributes(expr))
 }

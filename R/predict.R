@@ -158,7 +158,22 @@ predict.NaturalSpline <- function(object, newx = NULL, coef = NULL, ...)
         coef = coef,
         ...,
         .FUN = naturalSpline,
-        .KEY_ATTR = c("x", "knots", "Boundary.knots",
+        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
+                      "intercept", "derivs", "integral")
+    )
+}
+
+##' @rdname predict
+##' @export
+predict.NaturalSplineK <- function(object, newx = NULL, coef = NULL, ...)
+{
+    helper_predict(
+        object = object,
+        newx = newx,
+        coef = coef,
+        ...,
+        .FUN = nsk,
+        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
                       "intercept", "derivs", "integral")
     )
 }

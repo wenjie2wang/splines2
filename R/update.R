@@ -130,7 +130,20 @@ update.NaturalSpline <- function(object, ...)
         object,
         ...,
         .FUN = naturalSpline,
-        .KEY_ATTR = c("x", "knots", "Boundary.knots",
+        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
+                      "intercept", "derivs", "integral")
+    )
+}
+
+##' @rdname update
+##' @export
+update.NaturalSplineK <- function(object, ...)
+{
+    helper_update(
+        object,
+        ...,
+        .FUN = nsk,
+        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
                       "intercept", "derivs", "integral")
     )
 }

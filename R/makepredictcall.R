@@ -61,8 +61,19 @@ makepredictcall.NaturalSpline <- function(var, call)
     helper_makepredictcall(
         var, call,
         .FUN = naturalSpline,
-        .KEY_ATTR = c("knots", "Boundary.knots", "intercept",
-                      "derivs", "integral")
+        .KEY_ATTR = c("knots", "Boundary.knots", "trim",
+                      "intercept", "derivs", "integral")
+    )
+}
+
+##' @export
+makepredictcall.NaturalSplineK <- function(var, call)
+{
+    helper_makepredictcall(
+        var, call,
+        .FUN = nsk,
+        .KEY_ATTR = c("knots", "Boundary.knots", "trim",
+                      "intercept", "derivs", "integral")
     )
 }
 
