@@ -276,12 +276,18 @@ Rcpp::NumericMatrix template_naturalSpline(
     const unsigned int df,
     const arma::vec& internal_knots,
     const arma::vec& boundary_knots,
+    const double trim = 0.0,
     const bool complete_basis = false,
     const unsigned int derivs = 0,
     const bool integral = false
     )
 {
     T ns_obj;
+    arma::vec bknots { boundary_knots };
+    if (bknots.n_elem == 0) {
+        arma::vec p_trim { trim, 1 - trim };
+        bknots = splines2::quantile(x, p_trim);
+    }
     // if df > 0 and knots are not specified
     // auto set internal knots based on df
     if (df > 0 && internal_knots.n_elem == 0) {
@@ -290,10 +296,10 @@ Rcpp::NumericMatrix template_naturalSpline(
             static_cast<unsigned int>(! complete_basis)
         };
         unsigned int spline_df { df + wo_intercept };
-        ns_obj = T(x, spline_df, boundary_knots);
+        ns_obj = T(x, spline_df, bknots);
     } else {
         // else ignore df
-        ns_obj = T(x, internal_knots, boundary_knots);
+        ns_obj = T(x, internal_knots, bknots);
     }
     Rcpp::NumericMatrix out;
     // 1) basis, 2) derivative, or 3) integral
@@ -316,11 +322,12 @@ Rcpp::NumericMatrix template_naturalSpline(
         );
     out.attr("x") = splines2::arma2rvec(x);
     out.attr("knots") = splines2::arma2rvec(ns_obj.get_internal_knots());
-    out.attr("Boundary.knots") =
-        splines2::arma2rvec(ns_obj.get_boundary_knots());
+    out.attr("Boundary.knots") = splines2::arma2rvec(bknots);
+    out.attr("trim") = trim;
     out.attr("intercept") = complete_basis;
     out.attr("derivs") = static_cast<int>(derivs);
     out.attr("integral") = integral;
+    out.attr("H") = ns_obj.get_transform_matrix();
     return out;
 }
 
@@ -330,13 +337,14 @@ Rcpp::NumericMatrix rcpp_naturalSpline(
     const unsigned int df,
     const arma::vec& internal_knots,
     const arma::vec& boundary_knots,
+    const double trim = 0.0,
     const bool complete_basis = false,
     const unsigned int derivs = 0,
     const bool integral = false
     )
 {
     return template_naturalSpline<splines2::NaturalSpline>(
-        x, df, internal_knots, boundary_knots,
+        x, df, internal_knots, boundary_knots, trim,
         complete_basis, derivs, integral
         );
 }
@@ -347,13 +355,14 @@ Rcpp::NumericMatrix rcpp_nsk(
     const unsigned int df,
     const arma::vec& internal_knots,
     const arma::vec& boundary_knots,
+    const double trim = 0.0,
     const bool complete_basis = false,
     const unsigned int derivs = 0,
     const bool integral = false
     )
 {
     return template_naturalSpline<splines2::NaturalSplineK>(
-        x, df, internal_knots, boundary_knots,
+        x, df, internal_knots, boundary_knots, trim,
         complete_basis, derivs, integral
         );
 }
