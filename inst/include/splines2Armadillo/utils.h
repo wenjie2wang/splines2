@@ -96,9 +96,9 @@ namespace splines2 {
 
     // quantile function
     // reference: Hyndman and Fan (1996)
-    inline arma::vec arma_quantile(const arma::vec& x,
-                                   const arma::vec& probs,
-                                   const unsigned int type = 7)
+    inline arma::vec quantile(const arma::vec& x,
+                              const arma::vec& probs,
+                              const unsigned int type = 7)
     {
         double alpha { 0 }, beta { 0 };
         switch(type) {

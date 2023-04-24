@@ -195,7 +195,7 @@ namespace splines2 {
             simplify_knots(rvec(), boundary_knots);
             // get quantiles of x in range
             set_x_in_range();
-            rvec internal_knots { arma_quantile(x_in_range_, prob_vec) };
+            rvec internal_knots { quantile(x_in_range_, prob_vec) };
             simplify_knots(internal_knots);
         }
 
