@@ -2,9 +2,23 @@
 % Please edit documentation in R/mSpline.R
 \name{mSpline}
 \alias{mSpline}
+\alias{msp}
 \title{M-Spline Basis for Polynomial Splines}
 \usage{
 mSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  periodic = FALSE,
+  derivs = 0L,
+  integral = FALSE,
+  ...
+)
+
+msp(
   x,
   df = NULL,
   knots = NULL,
@@ -85,6 +99,9 @@ basis following the procedure producing periodic B-splines given in Piegl
 and Tiller (1997).  For monotone regression, one can use I-splines (see
 \code{\link{iSpline}}) instead of M-splines.  For shape-restricted
 regression, see Wang and Yan (2021) for examples.
+
+The function \code{msp()} is an alias of to encourage the use in a model
+formula.
 }
 \examples{
 library(splines2)

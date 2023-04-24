@@ -8,6 +8,7 @@
 \alias{predict.CSpline}
 \alias{predict.BernsteinPoly}
 \alias{predict.NaturalSpline}
+\alias{predict.NaturalSplineK}
 \title{Compute Spline Function for Given Coefficients}
 \usage{
 \method{predict}{BSpline}(object, newx = NULL, coef = NULL, ...)
@@ -21,6 +22,8 @@
 \method{predict}{BernsteinPoly}(object, newx = NULL, coef = NULL, ...)
 
 \method{predict}{NaturalSpline}(object, newx = NULL, coef = NULL, ...)
+
+\method{predict}{NaturalSplineK}(object, newx = NULL, coef = NULL, ...)
 }
 \arguments{
 \item{object}{Spline objects produced by the \code{splines2} package.}

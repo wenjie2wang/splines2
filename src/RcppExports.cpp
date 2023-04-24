@@ -101,8 +101,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_naturalSpline
-Rcpp::NumericMatrix rcpp_naturalSpline(const arma::vec& x, const unsigned int df, const arma::vec& internal_knots, const arma::vec& boundary_knots, const bool complete_basis, const unsigned int derivs, const bool integral);
-RcppExport SEXP _splines2_rcpp_naturalSpline(SEXP xSEXP, SEXP dfSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP complete_basisSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+Rcpp::NumericMatrix rcpp_naturalSpline(const arma::vec& x, const unsigned int df, const arma::vec& internal_knots, const arma::vec& boundary_knots, const double trim, const bool complete_basis, const unsigned int derivs, const bool integral);
+RcppExport SEXP _splines2_rcpp_naturalSpline(SEXP xSEXP, SEXP dfSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP trimSEXP, SEXP complete_basisSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -110,10 +110,29 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type boundary_knots(boundary_knotsSEXP);
+    Rcpp::traits::input_parameter< const double >::type trim(trimSEXP);
     Rcpp::traits::input_parameter< const bool >::type complete_basis(complete_basisSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
     Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_naturalSpline(x, df, internal_knots, boundary_knots, complete_basis, derivs, integral));
+    rcpp_result_gen = Rcpp::wrap(rcpp_naturalSpline(x, df, internal_knots, boundary_knots, trim, complete_basis, derivs, integral));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_nsk
+Rcpp::NumericMatrix rcpp_nsk(const arma::vec& x, const unsigned int df, const arma::vec& internal_knots, const arma::vec& boundary_knots, const double trim, const bool complete_basis, const unsigned int derivs, const bool integral);
+RcppExport SEXP _splines2_rcpp_nsk(SEXP xSEXP, SEXP dfSEXP, SEXP internal_knotsSEXP, SEXP boundary_knotsSEXP, SEXP trimSEXP, SEXP complete_basisSEXP, SEXP derivsSEXP, SEXP integralSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type internal_knots(internal_knotsSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type boundary_knots(boundary_knotsSEXP);
+    Rcpp::traits::input_parameter< const double >::type trim(trimSEXP);
+    Rcpp::traits::input_parameter< const bool >::type complete_basis(complete_basisSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type derivs(derivsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type integral(integralSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_nsk(x, df, internal_knots, boundary_knots, trim, complete_basis, derivs, integral));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -124,7 +143,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_splines2_rcpp_bernsteinPoly", (DL_FUNC) &_splines2_rcpp_bernsteinPoly, 6},
     {"_splines2_rcpp_iSpline", (DL_FUNC) &_splines2_rcpp_iSpline, 8},
     {"_splines2_rcpp_cSpline", (DL_FUNC) &_splines2_rcpp_cSpline, 7},
-    {"_splines2_rcpp_naturalSpline", (DL_FUNC) &_splines2_rcpp_naturalSpline, 7},
+    {"_splines2_rcpp_naturalSpline", (DL_FUNC) &_splines2_rcpp_naturalSpline, 8},
+    {"_splines2_rcpp_nsk", (DL_FUNC) &_splines2_rcpp_nsk, 8},
     {NULL, NULL, 0}
 };
 

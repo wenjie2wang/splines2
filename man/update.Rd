@@ -8,6 +8,7 @@
 \alias{update.CSpline}
 \alias{update.BernsteinPoly}
 \alias{update.NaturalSpline}
+\alias{update.NaturalSplineK}
 \title{Update Spline Basis Functions}
 \usage{
 \method{update}{BSpline}(object, ...)
@@ -21,6 +22,8 @@
 \method{update}{BernsteinPoly}(object, ...)
 
 \method{update}{NaturalSpline}(object, ...)
+
+\method{update}{NaturalSplineK}(object, ...)
 }
 \arguments{
 \item{object}{Spline objects produced by the \code{splines2} package.}

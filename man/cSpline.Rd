@@ -2,9 +2,22 @@
 % Please edit documentation in R/cSpline.R
 \name{cSpline}
 \alias{cSpline}
+\alias{csp}
 \title{C-Spline Basis for Polynomial Splines}
 \usage{
 cSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = TRUE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  scale = TRUE,
+  ...
+)
+
+csp(
   x,
   df = NULL,
   knots = NULL,
@@ -81,7 +94,8 @@ derivatives.
 }
 \details{
 It is an implementation of the closed-form C-spline basis derived from the
-recursion formula of I-splines and M-splines.
+recursion formula of I-splines and M-splines.  The function \code{csp()} is
+an alias of to encourage the use in a model formula.
 }
 \examples{
 library(splines2)

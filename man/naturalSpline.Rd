@@ -3,6 +3,7 @@
 \name{naturalSpline}
 \alias{naturalSpline}
 \alias{nsp}
+\alias{nsk}
 \title{Natural Cubic Spline Basis for Polynomial Splines}
 \usage{
 naturalSpline(
@@ -11,6 +12,7 @@ naturalSpline(
   knots = NULL,
   intercept = FALSE,
   Boundary.knots = NULL,
+  trim = 0,
   derivs = 0L,
   integral = FALSE,
   ...
@@ -22,6 +24,19 @@ nsp(
   knots = NULL,
   intercept = FALSE,
   Boundary.knots = NULL,
+  trim = 0,
+  derivs = 0L,
+  integral = FALSE,
+  ...
+)
+
+nsk(
+  x,
+  df = NULL,
+  knots = NULL,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  trim = 0,
   derivs = 0L,
   integral = FALSE,
   ...
@@ -55,6 +70,14 @@ parameters do not depend on \code{x}. Data can extend beyond
 \code{Boundary.knots}.  For periodic splines, the specified bounary
 knots define the cyclic interval.}
 
+\item{trim}{The fraction (0 to 0.5) of observations to be trimmed from each
+end of \code{x} before placing the default internal and boundary knots.
+The default value is \code{0}, which set the default boudary knots to be
+the range of |code{x}.  If a positive fraction is specified, the default
+boundary knots will be equivalent to \code{quantile(x, probs = c(trim, 1
+- trim), na.rm = TRUE)}.  The default internal knots are placed within
+the boundary afterwards.}
+
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
 natural splines. The default value is \code{0L} for the spline basis
 functions.}
@@ -73,22 +96,34 @@ A numeric matrix of \code{length(x)} rows and \code{df}
     usage of other functions in this package.
 }
 \description{
-Generates the nonnegative natural cubic spline basis matrix, the
-corresponding integrals (from the left boundary knot), or derivatives of
-given order.  Each basis is assumed to follow a linear trend for \code{x}
-outside of boundary.
+The function \code{naturalSpline()} and \code{nsk()} generate the natural
+cubic spline basis matrix, the corresponding integrals (from the left
+boundary knot), or derivatives of the given order.  The function
+\code{nsp()} is an alias of \code{naturalSpline()} to encourage the use in a
+model formula.
 }
 \details{
-It is an implementation of the natural spline basis based on B-spline basis,
-which utilizes the close-form null space that can be derived from the
-recursive formula for the second derivatives of B-splines.  The constructed
-spline basis functions are intended to be nonnegative within boundary with
-second derivatives being zeros at boundary knots.
+The constructed spline basis functions from \code{naturalSpline()} or
+\code{nsp()} are nonnegative within boundary with the second derivatives
+being zeros at boundary knots.  The implementation utilizes the close-form
+null space that can be derived from the recursive formula for the second
+derivatives of B-splines.
 
-A similar implementation is provided by \code{splines::ns}, which uses QR
-decomposition to find the null space of the second derivatives of B-spline
-basis at boundary knots.  However, there is no guarantee that the resulting
-basis functions are nonnegative within boundary.
+The function \code{nsk()} produces a variant of natural cubic spline matrix
+such that only one of the basis functions is nonzero and takes value of
+one at every boundary and internal knot.  As a result, the coefficients of
+the resulting fit are the values of the function at the knots, which makes
+it easy to interpret the coefficient estimates.  The idea is originated from
+the function \code{nsk()} of the \pkg{survival} package (>= version 3.2-8).
+
+The returned basis matrix can be obtained by transforming the corresponding
+B-spline basis matrix with the matrix \code{H} provided in the attribute of
+the returned object.  Each basis is assumed to follow a linear trend for
+\code{x} outside of boundary.  A similar implementation is provided by
+\code{splines::ns}, which uses QR decomposition to find the null space of
+the second derivatives of B-spline basis at boundary knots.  See
+Supplementray Materials of Wang and Yan (2021) for a more detailed
+introduction.
 }
 \examples{
 library(splines2)

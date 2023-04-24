@@ -2,9 +2,21 @@
 % Please edit documentation in R/iSpline.R
 \name{iSpline}
 \alias{iSpline}
+\alias{isp}
 \title{I-Spline Basis for Polynomial Splines}
 \usage{
 iSpline(
+  x,
+  df = NULL,
+  knots = NULL,
+  degree = 3L,
+  intercept = TRUE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  ...
+)
+
+isp(
   x,
   df = NULL,
   knots = NULL,
@@ -73,7 +85,8 @@ spline or the corresponding derivatives of given order.
 }
 \details{
 It is an implementation of the closed-form I-spline basis based on the
-recursion formula given by Ramsay (1988).
+recursion formula given by Ramsay (1988).  The function \code{isp()} is an
+alias of to encourage the use in a model formula.
 }
 \examples{
 library(splines2)

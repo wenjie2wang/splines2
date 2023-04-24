@@ -21,7 +21,11 @@ rcpp_cSpline <- function(x, df, degree, internal_knots, boundary_knots, complete
     .Call('_splines2_rcpp_cSpline', PACKAGE = 'splines2', x, df, degree, internal_knots, boundary_knots, complete_basis, derivs)
 }
 
-rcpp_naturalSpline <- function(x, df, internal_knots, boundary_knots, complete_basis = FALSE, derivs = 0L, integral = FALSE) {
-    .Call('_splines2_rcpp_naturalSpline', PACKAGE = 'splines2', x, df, internal_knots, boundary_knots, complete_basis, derivs, integral)
+rcpp_naturalSpline <- function(x, df, internal_knots, boundary_knots, trim = 0.0, complete_basis = FALSE, derivs = 0L, integral = FALSE) {
+    .Call('_splines2_rcpp_naturalSpline', PACKAGE = 'splines2', x, df, internal_knots, boundary_knots, trim, complete_basis, derivs, integral)
+}
+
+rcpp_nsk <- function(x, df, internal_knots, boundary_knots, trim = 0.0, complete_basis = FALSE, derivs = 0L, integral = FALSE) {
+    .Call('_splines2_rcpp_nsk', PACKAGE = 'splines2', x, df, internal_knots, boundary_knots, trim, complete_basis, derivs, integral)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bernsteinPoly.R
 \name{bernsteinPoly}
 \alias{bernsteinPoly}
-\title{Generalized Bernstein Polynomial Basis}
+\title{Generalized Bernstein Polynomial Basis Functions}
 \usage{
 bernsteinPoly(
   x,
@@ -38,12 +38,20 @@ Bernstein polynomials will be returned.  The default value is
 \item{...}{Optional arguments that are not used.}
 }
 \value{
-A numeric matrix of dimension \code{length(x)} by \code{degree +
-    as.integer(intercept)}.
+A \code{BernsteinPoly} object that is essentially a numeric matrix
+    of dimension \code{length(x)} by \code{degree + as.integer(intercept)}.
 }
 \description{
-Returns a generalized Bernstein polynomial basis matrix of given degree over
-a specified range.
+Returns generalized Bernstein polynomial basis functions of the given degree
+over the specified range.
+}
+\details{
+The Bernstein polynomial basis functions are defined over the support from 0
+to 1.  The generalized Bernstein polynomial basis functions extend the
+support to any finite interval in the real line.
+
+The function \code{bpoly()} is an alias to encourage the use in a model
+formula.
 }
 \examples{
 library(splines2)
