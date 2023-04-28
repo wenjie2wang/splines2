@@ -64,11 +64,12 @@
 ##'     from the left boundary knot.
 ##' @param trim The fraction (0 to 0.5) of observations to be trimmed from each
 ##'     end of \code{x} before placing the default internal and boundary knots.
-##'     The default value is \code{0}, which set the default boudary knots to be
-##'     the range of |code{x}.  If a positive fraction is specified, the default
-##'     boundary knots will be equivalent to \code{quantile(x, probs = c(trim, 1
-##'     - trim), na.rm = TRUE)}.  The default internal knots are placed within
-##'     the boundary afterwards.
+##'     The default values are \code{0} for \code{naturalSpline()}/\code{nsp()}
+##'     and \code{0.05} for \code{nsk()}, respectively.  The former set the
+##'     default boudary knots to be the range of |code{x}.  If a positive
+##'     fraction is specified, the default boundary knots will be equivalent to
+##'     \code{quantile(x, probs = c(trim, 1 - trim), na.rm = TRUE)}.  The
+##'     default internal knots are placed within the boundary afterwards.
 ##'
 ##' @return A numeric matrix of \code{length(x)} rows and \code{df}
 ##'     columns if \code{df} is specified or \code{length(knots) + 1 +
@@ -192,7 +193,7 @@ nsp <- naturalSpline
 ##' @export
 nsk <- function(x, df = NULL, knots = NULL,
                 intercept = FALSE, Boundary.knots = NULL,
-                trim = 0, derivs = 0L, integral = FALSE, ...)
+                trim = 0.05, derivs = 0L, integral = FALSE, ...)
 {
     .engine_nsp(
         x = x,
