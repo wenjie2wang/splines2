@@ -64,6 +64,7 @@
 ##'     from the left boundary knot.
 ##' @param trim The fraction (0 to 0.5) of observations to be trimmed from each
 ##'     end of \code{x} before placing the default internal and boundary knots.
+##'     This argument will be ignored if \code{Boundary.knots} is specified.
 ##'     The default values are \code{0} for \code{naturalSpline()}/\code{nsp()}
 ##'     and \code{0.05} for \code{nsk()}, respectively.  The former set the
 ##'     default boudary knots to be the range of |code{x}.  If a positive

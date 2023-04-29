@@ -43,11 +43,15 @@ helper_update <- function(object, ..., .FUN, .KEY_ATTR)
         return(object)
     }
     check_attr(object, .KEY_ATTR)
-    if (is.null(dot_list$df)) {
-        call_list <- modify_list(attributes(object), dot_list)
-    } else {
-        call_list <- modify_list(pred_attr(object, except = "knots"), dot_list)
+    exclude_attrs <- c("class", "dimnames")
+    if (! is.null(dot_list$df)) {
+        exclude_attrs <- c(exclude_attrs, "knots")
     }
+    if (! is.null(dot_list$trim)) {
+        exclude_attrs <- c(exclude_attrs, "Boundary.knots")
+    }
+    call_attr <- pred_attr(object, except = exclude_attrs)
+    call_list <- modify_list(call_attr, dot_list)
     do.call(.FUN, call_list)
 }
 
