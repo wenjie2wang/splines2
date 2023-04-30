@@ -47,25 +47,17 @@ NULL
 
 ## the helper function for predict
 helper_predict <- function(object, newx = NULL, coef = NULL,
-                           ..., .FUN, .KEY_ATTR)
+                           ..., .FUN)
 {
-    dot_list <- list(...)
-    if (is.null(newx)) {
-        if (is.null(coef) && length(dot_list) == 0) {
-            return(object)
-        }
-        newx <- attr(object, "x")
-    }
-    ## checks if key attributes still exist
-    check_attr(object, .KEY_ATTR)
-    default_call <- c(list(x = newx), pred_attr(object))
-    call_list <- modify_list(default_call, dot_list)
-    out <- do.call(.FUN, call_list)
+    res <- if (is.null(newx)) {
+               update(object, ...)
+           } else {
+               update(object, x = newx, ...)
+           }
     if (is.null(coef)) {
-        return(out)
+        return(res)
     }
-    ## else
-    as.numeric(out %*% coef)
+    as.numeric(res %*% coef)
 }
 
 
@@ -78,9 +70,7 @@ predict.BSpline <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = bSpline,
-        .KEY_ATTR = c("x", "degree", "knots", "Boundary.knots",
-                      "intercept", "periodic", "derivs", "integral")
+        .FUN = bSpline
     )
 }
 
@@ -93,9 +83,7 @@ predict.MSpline <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = mSpline,
-        .KEY_ATTR = c("x", "degree", "knots", "Boundary.knots",
-                      "intercept", "periodic", "derivs", "integral")
+        .FUN = mSpline
     )
 }
 
@@ -109,9 +97,7 @@ predict.ISpline <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = iSpline,
-        .KEY_ATTR = c("x", "degree", "knots", "Boundary.knots",
-                      "intercept", "derivs")
+        .FUN = iSpline
     )
 }
 
@@ -125,9 +111,7 @@ predict.CSpline <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = cSpline,
-        .KEY_ATTR = c("x", "degree", "knots", "Boundary.knots",
-                      "intercept", "derivs", "scale")
+        .FUN = cSpline
     )
 }
 
@@ -141,9 +125,7 @@ predict.BernsteinPoly <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = bernsteinPoly,
-        .KEY_ATTR = c("x", "degree", "Boundary.knots",
-                      "intercept", "derivs", "integral")
+        .FUN = bernsteinPoly
     )
 }
 
@@ -157,9 +139,7 @@ predict.NaturalSpline <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = naturalSpline,
-        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
-                      "intercept", "derivs", "integral")
+        .FUN = naturalSpline
     )
 }
 
@@ -172,8 +152,6 @@ predict.NaturalSplineK <- function(object, newx = NULL, coef = NULL, ...)
         newx = newx,
         coef = coef,
         ...,
-        .FUN = nsk,
-        .KEY_ATTR = c("x", "knots", "Boundary.knots", "trim",
-                      "intercept", "derivs", "integral")
+        .FUN = nsk
     )
 }
