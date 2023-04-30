@@ -453,6 +453,11 @@ namespace splines2 {
             update_spline_df();
             return spline_df_;
         }
+        inline uvec get_x_index()
+        {
+            update_x_index();
+            return x_index_;
+        }
 
         // define pure virtual functions
         inline virtual rmat basis(

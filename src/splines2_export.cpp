@@ -44,7 +44,7 @@ Rcpp::NumericMatrix bm_spline(
     } else {
         // else ignore df
         sp_obj = T(x, internal_knots,
-                                   degree, boundary_knots);
+                   degree, boundary_knots);
     }
     // 1) basis, 2) derivative, or 3) integral
     if (integral && derivs == 0) {
@@ -72,6 +72,7 @@ Rcpp::NumericMatrix bm_spline(
     out.attr("intercept") = complete_basis;
     out.attr("derivs") = static_cast<int>(derivs);
     out.attr("integral") = integral;
+    out.attr("x_index") = splines2::arma2ivec(sp_obj.get_x_index()) + 1;
     return out;
 }
 
@@ -220,6 +221,7 @@ Rcpp::NumericMatrix rcpp_iSpline(
         splines2::arma2rvec(is_obj.get_boundary_knots());
     out.attr("intercept") = complete_basis;
     out.attr("derivs") = static_cast<int>(derivs);
+    out.attr("x_index") = splines2::arma2ivec(is_obj.get_x_index()) + 1;
     return out;
 }
 
@@ -265,6 +267,7 @@ Rcpp::NumericMatrix rcpp_cSpline(
         splines2::arma2rvec(cs_obj.get_boundary_knots());
     out.attr("intercept") = complete_basis;
     out.attr("derivs") = static_cast<int>(derivs);
+    out.attr("x_index") = splines2::arma2ivec(cs_obj.get_x_index()) + 1;
     out.attr("scales") = splines2::arma2rvec(cs_obj.get_scales());
     return out;
 }
@@ -327,6 +330,7 @@ Rcpp::NumericMatrix template_naturalSpline(
     out.attr("intercept") = complete_basis;
     out.attr("derivs") = static_cast<int>(derivs);
     out.attr("integral") = integral;
+    out.attr("x_index") = splines2::arma2ivec(ns_obj.get_x_index()) + 1;
     out.attr("H") = ns_obj.get_transform_matrix();
     return out;
 }

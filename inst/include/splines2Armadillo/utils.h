@@ -162,6 +162,10 @@ namespace splines2 {
     inline Rcpp::NumericVector arma2rvec(const T& x) {
         return Rcpp::NumericVector(x.begin(), x.end());
     }
+    template <typename T>
+    inline Rcpp::IntegerVector arma2ivec(const T& x) {
+        return Rcpp::IntegerVector(x.begin(), x.end());
+    }
     // convert Rcpp::NumericVector to arma::colvec
     template <typename T>
     inline arma::vec rvec2arma(const T& x) {
