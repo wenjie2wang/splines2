@@ -2,14 +2,35 @@
 
 ## New features
 
+* Added a new functin named `nsk()` for natural cubic spline basis functions
+  following the `survival::nsk()` function suggested by Dr. Terry Therneau.
+* Added `plot()` methods to quickly visualize the spline basis functions.
+* Added `$` method to extract an attribute of the returned `splines2` object.
 * Added a new argument named `periodic` to `bSpline()` for periodic B-splines
   and a new class named `PeriodicBSpline` to the Rcpp interface:
   [issue 19](https://github.com/wenjie2wang/splines2/issues/19).
-* Added `plot()` methods to quickly visualize the spline basis functions.
+* Added a new argument named `coef` to the `predict()` methods to compute the
+  responding spline function and made it possible to obtain the derivatives or
+  update spline basis functions by passing `...` to the `update()` methods.
+* Added a new argument named `trim` to `naturalSpline()` to set default boundary
+  knots after trimming a fraction of observations.
+* Added the following function aliases to encourage the use in model formula:
+  * `bsp()` = `bSpline()`
+  * `msp()` = `mSpline()`
+  * `isp()` = `iSpline()`
+  * `csp()` = `cSpline()`
+  * `nsp()` = `naturalSpline()`
+  * `bpoly()` = `bernsteinPoly()`
 
 ## Minor changes
 
 * Adjusted the class orders in the returned objects.
+* Added a matrix named `H` to the attribution of objects for natural cubic
+  splines so that users may transform cubic B-splines (from other
+  software/packages) to the natural cubic splines (returned by
+  `naturalSpline()`/`nsp()` or `nsk()`).
+* Added an interger vector named `x_index` to the attribution of objects for
+  regression splines (except Bernstein polynomials).
 
 
 # splines2 0.4.8
