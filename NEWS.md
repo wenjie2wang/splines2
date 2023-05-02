@@ -2,35 +2,42 @@
 
 ## New features
 
-* Added a new functin named `nsk()` for natural cubic spline basis functions
+* Added a new function named `nsk()` for natural cubic spline basis functions
   following the `survival::nsk()` function suggested by Dr. Terry Therneau.
 * Added `plot()` methods to quickly visualize the spline basis functions.
 * Added `$` method to extract an attribute of the returned `splines2` object.
 * Added a new argument named `periodic` to `bSpline()` for periodic B-splines
-  and a new class named `PeriodicBSpline` to the Rcpp interface:
+  and a new class named `PeriodicBSpline` to the **Rcpp** interface:
   [issue 19](https://github.com/wenjie2wang/splines2/issues/19).
 * Added a new argument named `coef` to the `predict()` methods to compute the
   responding spline function and made it possible to obtain the derivatives or
   update spline basis functions by passing `...` to the `update()` methods.
-* Added a new argument named `trim` to `naturalSpline()` to set default boundary
-  knots after trimming a fraction of observations.
-* Added the following function aliases to encourage the use in model formula:
+* Added a new argument named `trim` to `naturalSpline()` to set the default
+  boundary knots after trimming a fraction of observations.
+* Added a new argument named `warn.outside` and a package option named
+  `splines2.warn.outside` to specify if a warning should be thrown out for
+  B-splines, etc. when any `x` is placed outside the boundary.
+* Added the following function aliases to encourage the use in a model formula:
   * `bsp()` = `bSpline()`
   * `msp()` = `mSpline()`
   * `isp()` = `iSpline()`
   * `csp()` = `cSpline()`
   * `nsp()` = `naturalSpline()`
   * `bpoly()` = `bernsteinPoly()`
-
-## Minor changes
-
-* Adjusted the class orders in the returned objects.
 * Added a matrix named `H` to the attribution of objects for natural cubic
   splines so that users may transform cubic B-splines (from other
   software/packages) to the natural cubic splines (returned by
   `naturalSpline()`/`nsp()` or `nsk()`).
-* Added an interger vector named `x_index` to the attribution of objects for
+* Added an integer vector named `x_index` to the attribution of objects for
   regression splines (except Bernstein polynomials).
+
+
+## Major changes
+
+* Adjusted the class order of the returned objects.
+* Adjusted the default placement of the internal knots from the specified `df`
+  to be equidistant if the internal knots resulted from quantiles are
+  problematic.  A warning will be thrown out in that case.
 
 
 # splines2 0.4.8
