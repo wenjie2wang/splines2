@@ -167,16 +167,12 @@ namespace splines2 {
             spline_df_ = spline_df;
             // determine internal knots by spline_df and x
             unsigned int n_internal_knots { spline_df_ - 2 };
-            if (n_internal_knots == 0) {
-                simplify_knots(rvec(), boundary_knots);
-            } else {
-                rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
-                prob_vec = prob_vec.subvec(1, n_internal_knots);
-                simplify_knots(rvec(), boundary_knots);
+            simplify_knots(rvec(), boundary_knots);
+            if (n_internal_knots > 0) {
                 // get quantiles of x within boundary only
                 rvec x_inside { get_inside_x(x, boundary_knots_) };
-                rvec internal_knots { quantile(x_inside, prob_vec) };
-                simplify_knots(internal_knots);
+                internal_knots_ = gen_default_internal_knots(
+                    x_inside, boundary_knots_, n_internal_knots);
             }
             update_x_outside();
         }

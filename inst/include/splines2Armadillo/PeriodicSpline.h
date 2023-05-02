@@ -179,13 +179,11 @@ namespace splines2 {
             order_ = degree_ + 1;
             // determine internal knots by spline_df and x
             unsigned int n_internal_knots { spline_df_ - 1 };
-            rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
-            prob_vec = prob_vec.subvec(1, n_internal_knots);
             simplify_knots(rvec(), boundary_knots);
             // get quantiles of x in range
             set_x_in_range();
-            rvec internal_knots { quantile(x_in_range_, prob_vec) };
-            simplify_knots(internal_knots);
+            internal_knots_ = gen_default_internal_knots(
+                x_in_range_, boundary_knots_, n_internal_knots);
         }
 
         // possible to specify knot sequence directly. But it must be a simple

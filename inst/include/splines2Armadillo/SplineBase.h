@@ -124,6 +124,41 @@ namespace splines2 {
             }
         }
 
+        // helper to generate default internal knots
+        // goal: unique, inside boundary, of the specified length
+        inline rvec gen_default_internal_knots(
+            const rvec& x_inside,
+            const rvec& boundary_knots,
+            const unsigned int n_internal_knots) const
+        {
+            rvec prob_vec { linspace_inside(0, 1, n_internal_knots) };
+            // 1. set knots based on quantiles
+            // 2. check if 1) any duplicated, 2) coincide with boundary
+            // 3. set knots to have equal distance as the last resort
+            rvec internal_knots { quantile(x_inside, prob_vec) };
+            const bool any_dup { any_duplicated(internal_knots) };
+            if (any_dup) {
+                Rcpp::warning(
+                    "Set equidistant internal knots "
+                    "(found duplicated knots from quantiles).");
+                return linspace_inside(boundary_knots(0),
+                                       boundary_knots(1),
+                                       n_internal_knots);
+            }
+            // else
+            double min_int_knots { internal_knots(0) };
+            double max_int_knots { internal_knots(internal_knots.n_elem - 1) };
+            if (boundary_knots(0) >= min_int_knots ||
+                boundary_knots(1) <= max_int_knots) {
+                Rcpp::warning("Set equidistant internal knots "
+                              "(found on-boundary knots from quantiles)");
+                return linspace_inside(boundary_knots(0),
+                                       boundary_knots(1),
+                                       n_internal_knots);
+            }
+            return internal_knots;
+        }
+
         // compute spline df
         inline virtual void update_spline_df()
         {
@@ -324,16 +359,11 @@ namespace splines2 {
             spline_df_ = spline_df;
             // determine internal knots by spline_df and x
             unsigned int n_internal_knots { spline_df_ - order_ };
-            if (n_internal_knots == 0) {
-                simplify_knots(rvec(), boundary_knots);
-            } else {
-                rvec prob_vec { arma::linspace(0, 1, n_internal_knots + 2) };
-                prob_vec = prob_vec.subvec(1, n_internal_knots);
-                simplify_knots(rvec(), boundary_knots);
-                // get quantiles of x within boundary only
+            simplify_knots(rvec(), boundary_knots);
+            if (n_internal_knots > 0) {
                 rvec x_inside { get_inside_x(x, boundary_knots_) };
-                rvec internal_knots { quantile(x_inside, prob_vec) };
-                simplify_knots(internal_knots);
+                internal_knots_ = gen_default_internal_knots(
+                    x_inside, boundary_knots_, n_internal_knots);
             }
         }
 

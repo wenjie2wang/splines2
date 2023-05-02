@@ -144,6 +144,15 @@ namespace splines2 {
         return res;
     }
 
+    // x of length inside (start, end) from seq(start, end, length.out + 2)
+    inline arma::vec linspace_inside(const double start,
+                                     const double end,
+                                     const unsigned int length)
+    {
+        arma::vec out { arma::linspace(start, end, length + 2) };
+        return out.subvec(1, length);
+    }
+
     // inline handy functions
     inline arma::vec mat2vec(const arma::mat& x) {
         return arma::conv_to<arma::vec>::from(x);

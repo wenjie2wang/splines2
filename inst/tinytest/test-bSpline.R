@@ -133,3 +133,9 @@ expect_warning(bSpline(c(x, 10), knots = knots, degree = 0,
                        Boundary.knots = c(0, 1)))
 expect_warning(bSpline(c(x, 10), knots = knots, degree = 3,
                        Boundary.knots = c(0, 1)))
+
+## warning if it cannot set internal knots based on quantiles
+expect_warning(bSpline(rep(0.5, 10), df = 10, Boundary.knots = c(0, 1)),
+               pattern = "duplicated")
+expect_warning(bSpline(c(0, rep(1, 10)), df = 4, Boundary.knots = c(0, 1)),
+               pattern = "boundary")
