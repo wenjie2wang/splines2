@@ -15,6 +15,7 @@ mSpline(
   periodic = FALSE,
   derivs = 0L,
   integral = FALSE,
+  warn.outside = getOption("splines2.warn.outside", TRUE),
   ...
 )
 
@@ -28,6 +29,7 @@ msp(
   periodic = FALSE,
   derivs = 0L,
   integral = FALSE,
+  warn.outside = getOption("splines2.warn.outside", TRUE),
   ...
 )
 }
@@ -76,6 +78,11 @@ splines basis function.  The default value is \code{0}.}
 integrals of spline basis functions will be returned.  The default value
 is \code{FALSE}. For periodic splines, the integral of each basis is
 integrated from the left boundary knot.}
+
+\item{warn.outside}{A logical value indicating if a warning should be thrown
+out when any \code{x} is outside the boundary.  This option can also be
+set through \code{options("splines2.warn.outside")} after the package is
+loaded.}
 
 \item{...}{Optional arguments that are not used.}
 }

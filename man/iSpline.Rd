@@ -13,6 +13,7 @@ iSpline(
   intercept = TRUE,
   Boundary.knots = NULL,
   derivs = 0L,
+  warn.outside = getOption("splines2.warn.outside", TRUE),
   ...
 )
 
@@ -24,6 +25,7 @@ isp(
   intercept = TRUE,
   Boundary.knots = NULL,
   derivs = 0L,
+  warn.outside = getOption("splines2.warn.outside", TRUE),
   ...
 )
 }
@@ -68,16 +70,20 @@ knots define the cyclic interval.}
 \item{derivs}{A nonnegative integer specifying the order of derivatives of
 I-splines.}
 
+\item{warn.outside}{A logical value indicating if a warning should be thrown
+out when any \code{x} is outside the boundary.  This option can also be
+set through \code{options("splines2.warn.outside")} after the package is
+loaded.}
+
 \item{...}{Optional arguments that are not used.}
 }
 \value{
 A numeric matrix of \code{length(x)} rows and \code{df} columns if
     \code{df} is specified.  If \code{knots} are specified instead, the
     output matrix will consist of \code{length(knots) + degree +
-    as.integer(intercept)} columns if \code{periodic = FALSE}, or
-    \code{length(knots) + as.integer(intercept)} columns if \code{periodic =
-    TRUE}.  Attributes that correspond to the arguments specified are
-    returned for usage of other functions in this package.
+    as.integer(intercept)} columns.  Attributes that correspond to the
+    arguments specified are returned for usage of other functions in this
+    package.
 }
 \description{
 Generates the I-spline (integral of M-spline) basis matrix for a polynomial
