@@ -37,7 +37,12 @@
 ##' @param derivs A nonnegative integer specifying the order of derivatives of
 ##'     I-splines.
 ##'
-##' @inherit bSpline return
+##' @return A numeric matrix of \code{length(x)} rows and \code{df} columns if
+##'     \code{df} is specified.  If \code{knots} are specified instead, the
+##'     output matrix will consist of \code{length(knots) + degree +
+##'     as.integer(intercept)} columns.  Attributes that correspond to the
+##'     arguments specified are returned for usage of other functions in this
+##'     package.
 ##'
 ##' @references
 ##' Ramsay, J. O. (1988). Monotone regression splines in action.
@@ -52,7 +57,9 @@
 ##' @export
 iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = TRUE, Boundary.knots = NULL,
-                    derivs = 0L, ...)
+                    derivs = 0L,
+                    warn.outside = getOption("splines2.warn.outside", TRUE),
+                    ...)
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) < 0) {
@@ -106,7 +113,7 @@ iSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     )
     ## throw warning if any x is outside of the boundary
     b_knots <- attr(out, "Boundary.knots")
-    if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+    if (warn.outside && any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
             "may cause ill-conditioned basis functions."

@@ -74,6 +74,10 @@
 ##'     integrals of spline basis functions will be returned.  The default value
 ##'     is \code{FALSE}. For periodic splines, the integral of each basis is
 ##'     integrated from the left boundary knot.
+##' @param warn.outside A logical value indicating if a warning should be thrown
+##'     out when any \code{x} is outside the boundary.  This option can also be
+##'     set through \code{options("splines2.warn.outside")} after the package is
+##'     loaded.
 ##' @param ... Optional arguments that are not used.
 ##'
 ##' @return A numeric matrix of \code{length(x)} rows and \code{df} columns if
@@ -100,6 +104,7 @@
 bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = FALSE, Boundary.knots = NULL,
                     periodic = FALSE, derivs = 0L, integral = FALSE,
+                    warn.outside = getOption("splines2.warn.outside", TRUE),
                     ...)
 {
     ## check inputs
@@ -143,7 +148,8 @@ bSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     )
     ## throw warning if any x is outside of the boundary
     b_knots <- attr(out, "Boundary.knots")
-    if (! periodic && any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+    if (warn.outside && ! periodic &&
+        any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
             "may cause ill-conditioned basis functions."

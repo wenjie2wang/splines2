@@ -43,7 +43,7 @@
 ##'     height at right boundary knot. The corresponding I-spline and M-spline
 ##'     produced by \code{deriv} methods will be scaled to the same extent.
 ##'
-##' @inherit bSpline return
+##' @inherit iSpline return
 ##'
 ##' @references
 ##'
@@ -59,7 +59,9 @@
 ##' @export
 cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = TRUE, Boundary.knots = NULL,
-                    derivs = 0L, scale = TRUE, ...)
+                    derivs = 0L, scale = TRUE,
+                    warn.outside = getOption("splines2.warn.outside", TRUE),
+                    ...)
 {
     ## check inputs
     if ((derivs <- as.integer(derivs)) < 0) {
@@ -125,7 +127,7 @@ cSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
            }
     ## throw warning if any x is outside of the boundary
     b_knots <- attr(out, "Boundary.knots")
-    if (any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+    if (warn.outside && any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
             "may cause ill-conditioned basis functions."

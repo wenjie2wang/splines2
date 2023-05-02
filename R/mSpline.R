@@ -54,6 +54,7 @@
 mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
                     intercept = FALSE, Boundary.knots = NULL,
                     periodic = FALSE, derivs = 0L, integral = FALSE,
+                    warn.outside = getOption("splines2.warn.outside", TRUE),
                     ...)
 {
     ## check inputs
@@ -99,7 +100,8 @@ mSpline <- function(x, df = NULL, knots = NULL, degree = 3L,
     )
     ## throw warning if any x is outside of the boundary
     b_knots <- attr(out, "Boundary.knots")
-    if (! periodic && any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
+    if (warn.outside && ! periodic &&
+        any((xx < b_knots[1L]) | (xx > b_knots[2L]))) {
         warning(wrapMessages(
             "Some 'x' values beyond boundary knots",
             "may cause ill-conditioned basis functions."
