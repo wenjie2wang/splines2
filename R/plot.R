@@ -54,9 +54,9 @@ plot.splines2 <- function(x, y, from = NULL, to = NULL, n = 101,
     mark_knots <- match.arg(mark_knots,
                             choices = c("none", "internal", "boundary", "all"))
     ## prepare for marks
+    ik <- knots(x, "internal")
+    bk <- knots(x, "boundary")
     if (mark_knots != "none" && isTRUE(attr(x, "periodic"))) {
-        ik <- knots(x, "internal")
-        bk <- knots(x, "boundary")
         dist_bk <- bk[2] - bk[1]
         range_x <- range(x_seq)
         k1 <- (bk[1] - range_x[1]) %/% dist_bk
