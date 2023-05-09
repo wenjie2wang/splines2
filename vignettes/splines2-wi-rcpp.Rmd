@@ -3,7 +3,7 @@ title: "Using splines2 with Rcpp"
 author: Wenjie Wang
 date: "`r Sys.Date()`"
 bibliography:
-- ../inst/bib/splines2.bib
+  - ../inst/bib/splines2.bib
 vignette: >
   %\VignetteIndexEntry{Using splines2 with Rcpp}
   %\VignetteEngine{knitr::rmarkdown}
