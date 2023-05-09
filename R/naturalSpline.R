@@ -30,10 +30,10 @@
 ##' derivatives of B-splines.
 ##'
 ##' The function \code{nsk()} produces a variant of natural cubic spline matrix
-##' such that only one of the basis functions is nonzero and takes value of
+##' such that only one of the basis functions is nonzero and takes a value of
 ##' one at every boundary and internal knot.  As a result, the coefficients of
 ##' the resulting fit are the values of the function at the knots, which makes
-##' it easy to interpret the coefficient estimates.  The idea is originated from
+##' it easy to interpret the coefficient estimates.  The idea originated from
 ##' the function \code{nsk()} of the \pkg{survival} package (>= version 3.2-8).
 ##'
 ##' The returned basis matrix can be obtained by transforming the corresponding
