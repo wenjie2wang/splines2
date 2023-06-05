@@ -22,10 +22,24 @@ helper_makepredictcall <- function(var, call, .FUN, .KEY_ATTR)
 {
     fun_symbol <- substitute(.FUN)
     fun_name <- as.character(fun_symbol)
+    ## remedy for dbs and ibs
+    flag <- if (fun_name == "bSpline") {
+                flag <- as.character(call)[1L] %in% c("bSpline", "dbs", "ibs")
+                flag || {
+                    tmp <- eval(call[[1L]])
+                    is.call(call) &&
+                        (identical(tmp, bSpline) ||
+                         identical(tmp, dbs) ||
+                         identical(tmp, ibs))
+                }
+            } else {
+                as.character(call)[1L] == fun_name ||
+                    (is.call(call) &&
+                     identical(eval(call[[1L]]), eval(fun_symbol)))
+            }
     ## not much we can do for customized wrap functions
     ## that return the basis functions
-    if (as.character(call)[1L] == fun_name ||
-        (is.call(call) && identical(eval(call[[1L]]), eval(fun_symbol)))) {
+    if (flag) {
         ## throw warnings instead
         res <- tryCatch(check_attr(var, .KEY_ATTR), error = function(e) e)
         if (inherits(res, "error")) {

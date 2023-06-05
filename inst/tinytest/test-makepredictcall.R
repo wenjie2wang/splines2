@@ -19,7 +19,7 @@ y <- x + rnorm(n, sd = 0.1)
 new_x <- runif(2 * n, min(x), max(x))
 
 ## bSpline()
-mod <- lm(y ~ bSpline(x, df = 6))
+mod <- lm(y ~ bsp(x, df = 6))
 key_attr <- c("degree", "knots", "Boundary.knots", "intercept",
               "periodic", "derivs", "integral")
 expect_equal(
