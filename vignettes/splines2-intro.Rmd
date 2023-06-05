@@ -22,15 +22,17 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 4)
 
 ```{r set-par, echo = FALSE}
 library(graphics)
-par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
+par(mar = c(2.5, 2.5, 0.5, 0.1), mgp = c(1.5, 0.5, 0))
 ```
+
+<br/>
 
 # Introduction
 
-The R package **splines2** is intended to be a comprehensive, efficient supplementary package to the base package **splines**.
-It provides functions constructing a variety of regression spline basis functions that are not available from **splines**.
+The R package **splines2** is intended to be a user-friendly supplementary package to the base package **splines**.
+It provides functions to construct a variety of regression spline basis functions that are not available from **splines**.
 Most functions have a very similar user interface with the function `splines::bs()`.
-To be more specific, it provides functions to construct basis matrices of
+More specifically, **splines2** allows users to construct the basis functions of
 
 - B-splines
 - M-splines
@@ -44,8 +46,8 @@ along with their integrals (except C-splines) and derivatives of given order by
 closed-form recursive formulas.
 
 
-Compared to **splines**, the package **splines2** provides a more user-friendly interface for their derivatives with consistent handling on `NA`'s.
-Most of the implementations had been (re)written in C++ with the help of **Rcpp** and **RcppArmadillo** since v0.3.0, which boosted the computational performance.
+Compared to **splines**, the package **splines2** provides convenient interfaces for spline derivatives with consistent handling on `NA`'s.
+Most of the implementations are in *C++* with the help of **Rcpp** and **RcppArmadillo** since v0.3.0, which boosted the computational performance.
 
 
 In the remainder of this vignette, we illustrate the basic usage of most functions in the package through examples.
@@ -57,15 +59,17 @@ library(splines2)
 packageVersion("splines2")
 ```
 
+<br/>
+
 # B-splines {#bSpline}
+
+## B-spline Basis Functions
 
 The `bSpline()` function generates the basis matrix for B-splines and extends the function `bs()` of the package **splines** by providing
 1) the piece-wise constant basis functions when `degree = 0`, 2) the derivatives of basis functions for a positive `derivs`, 3) the integrals of basis functions if `integral = TRUE`, 4) periodic basis functions based on B-splines if `periodic = TRUE`.
 
 
-## B-spline Basis Functions
-
-One example of linear B-splines with three internal knots is given as follows:
+One example of linear B-splines with three internal knots is as follows:
 
 ```{r bSpline, fig.cap="B-splines of degree one with three internal knots placed at 0.3, 0.5, and 0.6."}
 knots <- c(0.3, 0.5, 0.6)
@@ -82,20 +86,16 @@ Two toy examples are as follows:
 ```{r ibs, fig.cap="Piecewise linear B-splines (left) and their integrals (right)."}
 ibsMat <- ibs(x, knots = knots, degree = 1, intercept = TRUE)
 op <- par(mfrow = c(1, 2))
-matplot(x, bsMat, type = "l", ylab = "y")
-abline(v = knots, h = 1, lty = 2, col = "gray")
-matplot(x, ibsMat, type = "l", ylab = "y")
-abline(v = knots, h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
+plot(bsMat, mark_knots = "internal")
+plot(ibsMat, mark_knots = "internal")
+abline(h = c(0.15, 0.2, 0.25), lty = 2, col = "gray")
 ```
 
 ```{r dbs, fig.cap="Cubic B-spline (left) and their first derivative (right)."}
 bsMat <- bSpline(x, knots = knots, intercept = TRUE)
 dbsMat <- dbs(x, knots = knots, intercept = TRUE)
-matplot(x, bsMat, type = "l", ylab = "y")
-abline(v = knots, lty = 2, col = "gray")
-matplot(x, dbsMat, type = "l", ylab = "y")
-abline(v = knots, lty = 2, col = "gray")
-par(op)
+plot(bsMat, mark_knots = "internal")
+plot(dbsMat, mark_knots = "internal")
 ```
 
 We may also obtain the derivatives easily by the `deriv()` method as follows:
@@ -119,18 +119,22 @@ pbsMat <- bSpline(px, knots = knots, Boundary.knots = c(0, 1),
                   intercept = TRUE, periodic = TRUE)
 ipMat <- ibs(px, knots = knots, Boundary.knots = c(0, 1),
              intercept = TRUE, periodic = TRUE)
-dpMat <- deriv(pbsMat)
-op <- par(mfrow = c(1, 3))
-plot(pbsMat, main = "Periodic B-splines", mark_knots = "b")
-plot(ipMat, main = "The integrals", mark_knots = "b")
-plot(dpMat, main = "The first derivatives", mark_knots = "b")
-par(op)
+dp1Mat <- deriv(pbsMat)
+dp2Mat <- deriv(pbsMat, derivs = 2)
+par(mfrow = c(1, 2))
+plot(pbsMat, ylab = "Periodic B-splines", mark_knots = "boundary")
+plot(ipMat, ylab = "The integrals", mark_knots = "boundary")
+plot(dp1Mat, ylab = "The 1st derivatives", mark_knots = "boundary")
+plot(dp2Mat, ylab = "The 2nd derivatives", mark_knots = "boundary")
 ```
 
-For reference, the corresponding integrals and first derivatives are also visualized.
+For reference, the corresponding integrals and derivatives are also visualized.
 
+<br/>
 
 # M-Splines {#mSpline}
+
+## M-spline Basis Functions
 
 M-splines [@ramsay1988monotone] can be considered the normalized version of B-splines with unit integral within boundary knots.
 An example given by @ramsay1988monotone was a quadratic M-splines with three internal knots placed at 0.3, 0.5, and 0.6.
@@ -138,6 +142,7 @@ The default boundary knots are the range of `x`, and thus 0 and 1 in this exampl
 
 ```{r mSpline, fig.cap = "Quadratic M-spline with three internal knots placed at 0.3, 0.5, and 0.6."}
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
+par(op)
 plot(msMat, mark_knots = "all")
 ```
 
@@ -154,7 +159,7 @@ stopifnot(is_equivalent(dmsMat1, dmsMat2))
 ## Periodic M-Splines
 
 The `mSpline()` function produces periodic splines based on M-spline basis functions when `periodic = TRUE` is specified.
-The `Boundary.knots` defines the cyclic interval, which is the same with periodic B-splines.
+The `Boundary.knots` defines the cyclic interval, which is the same with the periodic B-splines.
 
 ```{r pms-basis, fig.cap = "Cubic periodic M-splines."}
 pmsMat <- mSpline(px, knots = knots, intercept = TRUE,
@@ -166,7 +171,7 @@ We may still specify the argument `derivs` in `mSpline()` or use the correspondi
 
 ```{r pms-deriv, fig.cap = "The first derivatives of the periodic M-splines."}
 dpmsMat <- deriv(pmsMat)
-plot(dpmsMat, ylab = "The 1st derivatives", mark_knots = "b")
+plot(dpmsMat, ylab = "The 1st derivatives", mark_knots = "boundary")
 ```
 
 Furthermore, we can obtain the integrals of the periodic M-splines by specifying `integral = TRUE`.
@@ -179,8 +184,9 @@ plot(ipmsMat, ylab = "Integrals", mark_knots = "boundary")
 abline(h = seq.int(0, 3), lty = 2, col = "gray")
 ```
 
+<br/>
 
-## I-Splines {#iSpline}
+# I-Splines {#iSpline}
 
 I-splines [@ramsay1988monotone] are simply the integral of M-splines and thus monotonically nondecreasing with unit maximum value.
 A monotonically nondecreasing (nonincreasing) function can be fitted by a linear combination of I-spline basis functions with nonnegative (nonpositive) coefficients *plus a constant*, where the coefficient of the constant is unconstrained.
@@ -191,8 +197,7 @@ Notice that the degree of I-splines is defined from the associated M-splines ins
 
 ```{r iSpline, fig.cap = "I-splines of degree two with three internal knots placed at 0.3, 0.5, and 0.6."}
 isMat <- iSpline(x, knots = knots, degree = 2, intercept = TRUE)
-matplot(x, isMat, type = "l", ylab = "y")
-abline(h = 1, v = knots, lty = 2, col = "gray")
+plot(isMat, mark_knots = "internal")
 ```
 
 The corresponding M-spline basis matrix can be obtained easily as the first derivatives of the I-splines by the `deriv()` method.
@@ -208,6 +213,7 @@ dmsMat3 <- deriv(isMat, 2)
 stopifnot(is_equivalent(dmsMat1, dmsMat3))
 ```
 
+<br/>
 
 # C-Splines {#cSpline}
 
@@ -225,7 +231,7 @@ If `scale = TRUE` (by default), each C-spline basis is scaled to have unit heigh
 
 ```{r cSpline-scaled, fig.cap = "C-splines of degree two with three internal knots placed at 0.3, 0.5, and 0.6."}
 csMat1 <- cSpline(x, knots = knots, degree = 2, intercept = TRUE)
-matplot(x, csMat1, type = "l", ylab = "y")
+plot(csMat1)
 abline(h = 1, v = knots, lty = 2, col = "gray")
 ```
 
@@ -243,7 +249,7 @@ stopifnot(is_equivalent(msMat, deriv(deriv(csMat2))))
 
 # Generalized Bernstein Polynomials
 
-The Bernstein polynomials have also been applied to shape-constrained regression analysis [@wang2012csda].
+The Bernstein polynomials are equivalent to B-splines without internal knots and have also been applied to shape-constrained regression analysis [e.g., @wang2012csda].
 The $i$-th basis of the generalized Bernstein polynomials of degree $n$ over $[a, b]$ is defined as follows:
 $$
 B_i^n(x)=\frac{1}{(b-a)^n}{n\choose i}(x-a)^i (b-x)^{n-i},~i\in\{0,\ldots,n\},
@@ -260,10 +266,9 @@ x1 <- seq.int(0, 1, 0.01)
 x2 <- seq.int(- 1, 1, 0.01)
 bpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE)
 bpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE)
-op <- par(mfrow = c(1, 2))
+par(mfrow = c(1, 2))
 plot(bpMat1)
 plot(bpMat2)
-par(op)
 ```
 
 In addition, we may specify `integral = TRUE` or `derivs = 1` in `bernsteinPoly()` for their integrals or first derivatives, respectively.
@@ -273,12 +278,11 @@ ibpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE, integral = TRUE)
 ibpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, integral = TRUE)
 dbpMat1 <- bernsteinPoly(x1, degree = 4, intercept = TRUE, derivs = 1)
 dbpMat2 <- bernsteinPoly(x2, degree = 4, intercept = TRUE, derivs = 1)
-op <- par(mfrow = c(2, 2))
+par(mfrow = c(2, 2))
 plot(ibpMat1, ylab = "Integrals")
 plot(ibpMat2, ylab = "Integrals")
 plot(dbpMat1, ylab = "Derivatives")
 plot(dbpMat2, ylab = "Derivatives")
-par(op)
 ```
 
 Similarly, we may also use the `deriv()` method to get derivatives of an existing `bernsteinPoly` object.
@@ -290,11 +294,14 @@ stopifnot(is_equivalent(dbpMat1, deriv(ibpMat1, 2)))
 stopifnot(is_equivalent(dbpMat2, deriv(ibpMat2, 2)))
 ```
 
+<br/>
+
 # Natural Cubic Splines
 
-The package provides two variants of the natural cubic splines that are different from `splines::ns()`.
-
 ## Nonnegative Natural Cubic Basis Functions
+
+The package provides two variants of the natural cubic splines that can be constructed by `naturalSpline()` and `nsk()`, respectively, both of which are different from `splines::ns()`.
+
 
 The `naturalSpline()` function returns nonnegative basis functions (within the boundary) for natural cubic splines by utilizing a closed-form null space derived from the second derivatives of cubic B-splines.
 When `integral = TRUE`, the function `naturalSpline()` returns the integral of each natural spline basis.
@@ -302,11 +309,10 @@ When `integral = TRUE`, the function `naturalSpline()` returns the integral of e
 ```{r ns-basis, fig.cap = "Nonnegative natural cubic splines (left) and corresponding integrals (right)."}
 nsMat <- naturalSpline(x, knots = knots, intercept = TRUE)
 insMat <- naturalSpline(x, knots = knots, intercept = TRUE, integral = TRUE)
-op <- par(mfrow = c(1, 2))
-matplot(x, nsMat, type = "l", ylab = "Basis")
-matplot(x, insMat, type = "l", ylab = "Integrals")
+par(mfrow = c(1, 2))
+plot(nsMat, ylab = "Basis")
+plot(insMat, ylab = "Integrals")
 stopifnot(is_equivalent(nsMat, deriv(insMat)))
-par(op)
 ```
 
 Similarly, one may directly specify the argument `derivs` in `naturalSpline()` or use the corresponding `deriv()` method to obtain the derivatives of spline basis functions.
@@ -314,10 +320,8 @@ Similarly, one may directly specify the argument `derivs` in `naturalSpline()` o
 ```{r ns-deriv, fig.cap = "The derivatives of natural cubic splines."}
 d1nsMat <- naturalSpline(x, knots = knots, intercept = TRUE, derivs = 1)
 d2nsMat <- deriv(nsMat, 2)
-op <- par(mfrow = c(1, 2))
 matplot(x, d1nsMat, type = "l", ylab = "The 1st derivatives")
 matplot(x, d2nsMat, type = "l", ylab = "The 2nd derivatives")
-par(op)
 ```
 
 ## Natural Cubic Basis Functions with Unit Heights at Knots
@@ -332,12 +336,16 @@ An illustration of the basis functions generated by `nsk()` is as follows:
 
 ```{r nsk}
 nskMat <- nsk(x, knots = knots, intercept = TRUE)
+par(op)
 plot(nskMat, ylab = "nsk()", mark_knots = "all")
 abline(h = 1, col = "red", lty = 3)
 ```
 
 We can visually verify that only one basis function takes a value of one at each knot.
 
+<br/>
+
+# Helper and Alias Functions
 
 ## Update Spline's Specification by `update()` {#update}
 
@@ -358,14 +366,14 @@ stopifnot(all.equal(quantile(x, c(0.025, 0.975), names = FALSE),
 The `predict()` method for `splines2` objects allows one to evaluate the spline function if a coefficient vector is specified via the `coef` argument.
 In addition, it internally calls the `update()` method to update the basis functions before computing the spline function, which can be useful to get the derivatives of the spline function.
 If the `coef` argument is not specified, the `predict()` method will be equivalent to the `update()` method.
-For instance, we can compute the first derivative of the I-spline function from the previous example with a coefficient vector `seq(0.1, by = 0.1, length.out = ncol(isMat))` at 0.275, 0.525, and 0.8, respectively, as follows:
+For instance, we can compute the first derivative of the I-spline function from the previous example with a coefficient vector `seq(0.1, by = 0.1, length.out = ncol(isMat))` at $x = (0.275, 0.525, 0.8)$ as follows:
 
 ```{r predict}
 new_x <- c(0.275, 0.525, 0.8)
 names(new_x) <- paste0("x=", new_x)
-isMat2 <- predict(isMat, newx = new_x) # the basis functions at new x
+(isMat2 <- predict(isMat, newx = new_x)) # the basis functions at new x
 stopifnot(all.equal(predict(isMat, newx = new_x), update(isMat, x = new_x)))
-## compute the first derivative of the I-spline function with different ways
+## compute the first derivative of the I-spline function in different ways
 beta <- seq(0.1, by = 0.1, length.out = ncol(isMat))
 deriv_ispline1 <- predict(isMat, newx = new_x, coef = beta, derivs = 1)
 deriv_ispline2 <- predict(update(isMat, x = new_x, derivs = 1), coef = beta)
@@ -376,13 +384,64 @@ stopifnot(all.equal(deriv_ispline2, deriv_ispline3))
 
 ## Visualization by `plot()` {#plot}
 
+As one may notice in the previous examples, we may visualize the spline basis functions easily with the `plot()` method.
+By default, the spline basis functions are visualized at 101 equidistant grid points within the range of `x`, which can be tweaked by arguments `from`, `to`, and `n`.
+In addition, we can visualize the placement of knots by vertical lines through the argument `mark_knots`.
+The available options are `"none"`, `"internal"`, `"boundary"`, and `"all"`.
 
 
-## Use in A Model Formula
+## Including Spline Basis Functions in Model Formulas
 
-An alias function named `bsp()` is provided to not discourage using `bSpline()` in a model formula.
+It is common to directly include spline basis functions in a model formula.
+To avoid a lengthy model formula, the package provides alias functions that are summarized in the following table:
 
+| Function          | Equivalent Alias |
+|-------------------|------------------|
+| `bSpline()`       | `bsp()`          |
+| `mSpline()`       | `msp()`          |
+| `iSpline()`       | `isp()`          |
+| `cSpline()`       | `csp()`          |
+| `bernsteinPoly()` | `bpoly()`        |
+| `naturalSpline()` | `nsp()`          |
 
+It is free for users to create new aliases.
+For example, we can create a new alias function simply named `b()` for B-splines and obtain equivalent models as follows:
 
-## Reference
+```{r formula-alias}
+b <- bSpline # create an alias for B-splines
+mod1 <- lm(weight ~ b(height, degree = 1, df = 3), data = women)
+iknots <- with(women, knots(bSpline(height, degree = 1, df = 3)))
+mod2 <- lm(weight ~ bSpline(height, degree = 1, knots = iknots), data = women)
+pred1 <- predict(mod1, head(women, 10))
+pred2 <- predict(mod2, head(women, 10))
+stopifnot(all.equal(pred1, pred2))
+```
 
+Nevertheless, there is a possible pitfall when using a customized wrapper function for spline basis functions along with a data-dependent placement of knots.
+When we make model predictions for a given new data, the placement of the internal/boundary knots can be different from the original placement that depends on the training set.
+As a result, the spline basis functions generated for prediction may not be the same as the counterparts used in the model fitting.
+A simple example is as follows:
+
+```{r formula-wrap-failed}
+## generates quadratic spline basis functions based on log(x)
+qbs <- function(x, ...) {
+    splines2::bSpline(log(x), ..., degree = 2)
+}
+mod3 <- lm(weight ~ qbs(height, df = 5), data = women)
+mod4 <- lm(weight ~ bsp(log(height), degree = 2, df = 5), data = women)
+stopifnot(all.equal(unname(coef(mod3)), unname(coef(mod4)))) # the same coef
+pred3 <- predict(mod3, head(women, 10))
+pred4 <- predict(mod4, head(women, 10))
+all.equal(pred3, pred4)
+pred0 <- predict(qbs(women$height, df = 5),
+                 newx = head(log(women$height), 10),
+                 coef = coef(mod3)[- 1]) + coef(mod3)[1]
+stopifnot(all.equal(pred0, pred4, check.names = FALSE))
+```
+
+Although the coefficient estimates are the same, the prediction results by using the `predict.lm()` differ.
+Using an alias function in the model formula produces correct results.
+
+<br/>
+
+# Reference {-}
