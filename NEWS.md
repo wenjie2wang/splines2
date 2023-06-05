@@ -28,8 +28,8 @@
   splines so that users may transform cubic B-splines (from other
   software/packages) to the natural cubic splines (returned by
   `naturalSpline()`/`nsp()` or `nsk()`).
-* Added an integer vector named `x_index` to the attribution of objects for
-  regression splines (except Bernstein polynomials).
+<!-- * Added an integer vector named `x_index` to the attribution of objects for -->
+<!--   regression splines (except Bernstein polynomials). -->
 
 
 ## Major changes
