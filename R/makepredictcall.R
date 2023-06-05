@@ -22,23 +22,19 @@ helper_makepredictcall <- function(var, call, .FUN, .KEY_ATTR)
 {
     fun_symbol <- substitute(.FUN)
     fun_name <- as.character(fun_symbol)
-
-    ## the following checking seems to be unnecessary?
-    ## if (as.character(call)[1L] == fun_name ||
-    ##     (is.call(call) && identical(eval(call[[1L]]), eval(fun_symbol)))) {
-    ##     at <- attributes(var)[key_attr]
-    ##     call <- call[1L:2L]
-    ##     call[names(at)] <- at
-    ## }
-
-    ## throw warnings instead
-    res <- tryCatch(check_attr(var, .KEY_ATTR), error = function(e) e)
-    if (inherits(res, "error")) {
-        warning(res, call. = FALSE)
-    } else {
-        at <- attributes(var)[.KEY_ATTR]
-        call <- call[1L:2L]
-        call[names(at)] <- at
+    ## not much we can do for customized wrap functions
+    ## that return the basis functions
+    if (as.character(call)[1L] == fun_name ||
+        (is.call(call) && identical(eval(call[[1L]]), eval(fun_symbol)))) {
+        ## throw warnings instead
+        res <- tryCatch(check_attr(var, .KEY_ATTR), error = function(e) e)
+        if (inherits(res, "error")) {
+            warning(res, call. = FALSE)
+        } else {
+            at <- attributes(var)[.KEY_ATTR]
+            call <- call[1L:2L]
+            call[names(at)] <- at
+        }
     }
     ## return
     call
