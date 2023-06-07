@@ -3,7 +3,8 @@
 ## New features
 
 * Added a new function named `nsk()` for natural cubic spline basis functions
-  following the `survival::nsk()` function suggested by Dr. Terry Therneau.
+  following the function `survival::nsk()` (of **survival** package version
+  3.2-8).
 * Added `plot()` methods to quickly visualize the spline basis functions.
 * Added `$` method to extract an attribute of the returned `splines2` object.
 * Added a new argument named `periodic` to `bSpline()` for periodic B-splines
