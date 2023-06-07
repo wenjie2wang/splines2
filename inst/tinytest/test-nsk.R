@@ -128,3 +128,7 @@ b_knots <- c(0, 1)
 expect_error(nsk(x2, df = 5, derivs = - 1))
 expect_error(nsk(x2, df = 1))
 expect_error(nsk(rep(NA, 10), df = 2))
+
+## make sure internal knots are unique
+x1 <- c(rep(0, 100), runif(10))
+expect_warning(nsk(x1, df = 5), "duplicated knots")
