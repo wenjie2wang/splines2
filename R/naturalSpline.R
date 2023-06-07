@@ -17,24 +17,35 @@
 
 ##' Natural Cubic Spline Basis for Polynomial Splines
 ##'
-##' The function \code{naturalSpline()} and \code{nsk()} generate the natural
-##' cubic spline basis matrix, the corresponding integrals (from the left
-##' boundary knot), or derivatives of the given order.  The function
-##' \code{nsp()} is an alias of \code{naturalSpline()} to encourage the use in a
-##' model formula.
+##' Functions \code{naturalSpline()} and \code{nsk()} generate the natural cubic
+##' spline basis functions, the corresponding derivatives or integrals (from the
+##' left boundary knot).  Both of them are different from \code{splines::ns()}.
+##' However, for a given model fitting procedure, using different variants of
+##' spline basis functions should result in identical prediction values.  The
+##' coefficient estimates of the spline basis functions returned by \code{nsk()}
+##' are more interpretable compared to \code{naturalSpline()} or
+##' \code{splines::ns()} .
 ##'
-##' The constructed spline basis functions from \code{naturalSpline()} or
-##' \code{nsp()} are nonnegative within boundary with the second derivatives
-##' being zeros at boundary knots.  The implementation utilizes the close-form
-##' null space that can be derived from the recursive formula for the second
-##' derivatives of B-splines.
+##' The constructed spline basis functions from \code{naturalSpline()} are
+##' nonnegative within boundary with the second derivatives being zeros at
+##' boundary knots.  The implementation utilizes the close-form null space that
+##' can be derived from the recursive formula for the second derivatives of
+##' B-splines.  The function \code{nsp()} is an alias of \code{naturalSpline()}
+##' to encourage the use in a model formula.
 ##'
-##' The function \code{nsk()} produces a variant of natural cubic spline matrix
-##' such that only one of the basis functions is nonzero and takes a value of
-##' one at every boundary and internal knot.  As a result, the coefficients of
-##' the resulting fit are the values of the function at the knots, which makes
-##' it easy to interpret the coefficient estimates.  The idea originated from
-##' the function \code{nsk()} of the \pkg{survival} package (>= version 3.2-8).
+##' The function \code{nsk()} produces another variant of natural cubic spline
+##' matrix such that only one of the basis functions is nonzero and takes a
+##' value of one at every boundary and internal knot.  As a result, the
+##' coefficients of the resulting fit are the values of the spline function at
+##' the knots, which makes it easy to interpret the coefficient estimates.  In
+##' other words, the coefficients of a linear model will be the heights of the
+##' function at the knots if \code{intercept = TRUE}.  If \code{intercept =
+##' FALSE}, the coefficients will be the change in function value between each
+##' knot.  This implementation closely follows the function \code{nsk()} of the
+##' \pkg{survival} package (version 3.2-8).  The idea corresponds directly to
+##' the physical implementation of a spline by passing a flexible strip of wood
+##' or metal through a set of fixed points, which is a traditional way to create
+##' smooth shapes for things like a ship hull.
 ##'
 ##' The returned basis matrix can be obtained by transforming the corresponding
 ##' B-spline basis matrix with the matrix \code{H} provided in the attribute of
@@ -65,12 +76,12 @@
 ##' @param trim The fraction (0 to 0.5) of observations to be trimmed from each
 ##'     end of \code{x} before placing the default internal and boundary knots.
 ##'     This argument will be ignored if \code{Boundary.knots} is specified.
-##'     The default values are \code{0} for \code{naturalSpline()}/\code{nsp()}
-##'     and \code{0.05} for \code{nsk()}, respectively.  The former set the
-##'     default boudary knots to be the range of |code{x}.  If a positive
-##'     fraction is specified, the default boundary knots will be equivalent to
-##'     \code{quantile(x, probs = c(trim, 1 - trim), na.rm = TRUE)}.  The
-##'     default internal knots are placed within the boundary afterwards.
+##'     The default value is \code{0} for backward compatability, which sets the
+##'     boudary knots as the range of |code{x}.  If a positive fraction is
+##'     specified, the default boundary knots will be equivalent to
+##'     \code{quantile(x, probs = c(trim, 1 - trim), na.rm = TRUE)}, which can
+##'     be a more sensible choice in practice due to the existence of outliers.
+##'     The default internal knots are placed within the boundary afterwards.
 ##'
 ##' @return A numeric matrix of \code{length(x)} rows and \code{df}
 ##'     columns if \code{df} is specified or \code{length(knots) + 1 +
@@ -194,7 +205,7 @@ nsp <- naturalSpline
 ##' @export
 nsk <- function(x, df = NULL, knots = NULL,
                 intercept = FALSE, Boundary.knots = NULL,
-                trim = 0.05, derivs = 0L, integral = FALSE, ...)
+                trim = 0, derivs = 0L, integral = FALSE, ...)
 {
     .engine_nsp(
         x = x,
