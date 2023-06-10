@@ -2,9 +2,20 @@
 % Please edit documentation in R/bernsteinPoly.R
 \name{bernsteinPoly}
 \alias{bernsteinPoly}
+\alias{bpoly}
 \title{Generalized Bernstein Polynomial Basis Functions}
 \usage{
 bernsteinPoly(
+  x,
+  degree = 3,
+  intercept = FALSE,
+  Boundary.knots = NULL,
+  derivs = 0L,
+  integral = FALSE,
+  ...
+)
+
+bpoly(
   x,
   degree = 3,
   intercept = FALSE,

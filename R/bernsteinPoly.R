@@ -100,6 +100,6 @@ bernsteinPoly <- function(x, degree = 3, intercept = FALSE,
     out
 }
 
-##' @rdname bSpline
+##' @rdname bernsteinPoly
 ##' @export
 bpoly <- bernsteinPoly
