@@ -73,7 +73,7 @@ with the help of the **Rcpp** and **RcppArmadillo** packages. The computational
 performance has thus been boosted and comparable with the function
 `splines::splineDesign()`.
 
-Some quick micro-benchmarks are provided for reference as follows:
+Some quick micro-benchmarks are provided below for reference.
 
 ```{r bench-setup}
 library(microbenchmark)
@@ -159,7 +159,7 @@ still much faster than `ibs::ibs()`.
 
 For natural cubic splines (based on B-splines), `splines::ns()` uses the QR
 decomposition to find the null space of the second derivatives of B-spline basis
-functions at boundary knots, while `splines2::naturalSpline()` utilizes the
+functions at boundary knots, while `splines2::nsp()` utilizes the
 closed-form null space derived from the second derivatives of cubic B-splines,
 which produces nonnegative basis functions (within boundary) and is more
 computationally efficient.
@@ -168,7 +168,7 @@ computationally efficient.
 microbenchmark(
     "splines::ns" = ns(x, knots = internal_knots, intercept = TRUE,
                        Boundary.knots = boundary_knots),
-    "splines2::naturalSpline" = naturalSpline(
+    "splines2::nsp" = nsp(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
     )

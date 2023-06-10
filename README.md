@@ -72,7 +72,7 @@ rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
 packages. The computational performance has thus been boosted and
 comparable with the function `splines::splineDesign()`.
 
-Some quick micro-benchmarks are provided for reference as follows:
+Some quick micro-benchmarks are provided below for reference.
 
 ``` r
 library(microbenchmark)
@@ -116,10 +116,10 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq     max neval
-               splines::bs 3.8173 3.5049 3.1977 3.0986 2.7426 10.8187   100
-     splines::splineDesign 2.2448 1.9912 1.9034 2.0120 1.8337  1.6477   100
-         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.0000   100
+                      expr    min     lq   mean median     uq    max neval
+               splines::bs 3.7436 3.4926 3.1921 3.4031 2.6869 11.752   100
+     splines::splineDesign 2.2036 1.9882 1.8818 2.2010 1.8087  1.526   100
+         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.000   100
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -140,7 +140,7 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-     splines::splineDesign 2.6291 2.4953 2.2267 2.3465 2.3383 1.6687   100
+     splines::splineDesign 2.6164 2.4731 2.2448 2.3549 2.2794 2.4721   100
              splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 The **splines** package does not contain an implementation for integrals
@@ -164,9 +164,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min     lq   mean median    uq    max neval
-          ibs::ibs 21.123 18.453 17.248 19.164 19.05 5.7012   100
-     splines2::ibs  1.000  1.000  1.000  1.000  1.00 1.0000   100
+              expr    min     lq   mean median     uq    max neval
+          ibs::ibs 5.5027 3.3342 2.8307 2.2884 2.3791 2.9254   100
+     splines2::ibs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -175,17 +175,16 @@ equivalent results, which was still much faster than `ibs::ibs()`.
 
 For natural cubic splines (based on B-splines), `splines::ns()` uses the
 QR decomposition to find the null space of the second derivatives of
-B-spline basis functions at boundary knots, while
-`splines2::naturalSpline()` utilizes the closed-form null space derived
-from the second derivatives of cubic B-splines, which produces
-nonnegative basis functions (within boundary) and is more
-computationally efficient.
+B-spline basis functions at boundary knots, while `splines2::nsp()`
+utilizes the closed-form null space derived from the second derivatives
+of cubic B-splines, which produces nonnegative basis functions (within
+boundary) and is more computationally efficient.
 
 ``` r
 microbenchmark(
     "splines::ns" = ns(x, knots = internal_knots, intercept = TRUE,
                        Boundary.knots = boundary_knots),
-    "splines2::naturalSpline" = naturalSpline(
+    "splines2::nsp" = nsp(
         x, knots = internal_knots, intercept = TRUE,
         Boundary.knots = boundary_knots
     )
@@ -193,9 +192,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                        expr    min     lq   mean median     uq    max neval
-                 splines::ns 4.7973 4.5046 4.5003 4.2582 4.3229 6.1783   100
-     splines2::naturalSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
+              expr    min    lq   mean median     uq    max neval
+       splines::ns 4.7013 4.507 4.4629 4.2396 4.3745 6.3726   100
+     splines2::nsp 1.0000 1.000 1.0000 1.0000 1.0000 1.0000   100
 
 The functions `bSpline()` and `mSpline()` produce periodic spline basis
 functions based on B-splines and M-splines, respectively, when
@@ -222,10 +221,10 @@ microbenchmark(
 ```
 
     Unit: relative
-                  expr    min     lq    mean median     uq     max neval
-              pbs::pbs 4.0706 4.0032 3.38941 3.9198 3.7108 1.30914   100
-     splines2::bSpline 1.0000 1.0000 1.00000 1.0000 1.0000 1.00000   100
-     splines2::mSpline 1.1438 1.1515 0.95997 1.1472 1.1197 0.13503   100
+                  expr    min     lq   mean median     uq     max neval
+              pbs::pbs 4.0814 4.0106 3.4113 3.9190 3.7361 1.30690   100
+     splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.00000   100
+     splines2::mSpline 1.1459 1.1596 0.9680 1.1554 1.1475 0.12873   100
 
 <details>
 <summary>
@@ -257,7 +256,7 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.5.0.9000   microbenchmark_1.4.10
+    [1] splines2_0.5.0        microbenchmark_1.4.10
 
     loaded via a namespace (and not attached):
      [1] digest_0.6.31    codetools_0.2-19 ibs_1.4          fastmap_1.1.1    xfun_0.39       
