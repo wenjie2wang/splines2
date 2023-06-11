@@ -139,3 +139,167 @@ expect_warning(bSpline(rep(0.5, 10), df = 10, Boundary.knots = c(0, 1)),
                pattern = "duplicated")
 expect_warning(bSpline(c(0, rep(1, 10)), df = 4, Boundary.knots = c(0, 1)),
                pattern = "boundary")
+
+### periodic B-splines
+## with specified df
+x <- c(seq.int(0, 3, 0.01), NA, seq.int(3, 4, 0.1), NA)
+b_knots <- c(0, 1)
+is_in <- function(x, a = 0, b = 1) {
+    x >= a & x <= b
+}
+## without specified boundary knots
+tmp <- bSpline(x, df = 8, degree = 2, periodic = TRUE)
+expect_equal(attr(tmp, "Boundary.knots"), range(x, na.rm = TRUE))
+expect_equal(length(attr(tmp, "knots")), 8)
+
+## intercept = TRUE
+## basis
+res0 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots, periodic = TRUE)
+tmp <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+               Boundary.knots = b_knots, periodic = TRUE,
+               derivs = 1, integral = TRUE)
+expect_equal(res0[1, ], res0[nrow(res0) - 1, ])
+expect_true(isNumMatrix(res0, length(x), 6))
+expect_eqt(matrix(predict(res0, 0.25), nrow = 4,
+                  ncol = ncol(res0), byrow = TRUE),
+           predict(res0, 0.25 + 1:4))
+expect_true(all(is_in(attr(res0, "knots"), 0, 1)))
+expect_eqt(res0, tmp)
+
+## first derivatives
+res1 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 1)
+expect_equal(res1[1, ], res1[nrow(res1) - 1, ])
+expect_true(isNumMatrix(res1, length(x), 6))
+expect_true(all(is_in(attr(res1, "knots"), 0, 1)))
+expect_eqt(deriv(res0), res1)
+expect_eqt(deriv(tmp), res1)
+expect_eqt(matrix(predict(res1, 0.25), nrow = 4,
+                  ncol = ncol(res1), byrow = TRUE),
+           predict(res1, 0.25 + 1:4))
+
+## second derivatives
+res2 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 2)
+expect_equal(res2[1, ], res2[nrow(res2) - 1, ])
+expect_true(isNumMatrix(res2, length(x), 6))
+expect_true(all(is_in(attr(res2, "knots"), 0, 1)))
+expect_eqt(deriv(res1), res2)
+expect_eqt(deriv(res0, 2), res2)
+expect_eqt(deriv(tmp, 2), res2)
+expect_eqt(matrix(predict(res2, 0.25), nrow = 4,
+                  ncol = ncol(res2), byrow = TRUE),
+           predict(res2, 0.25 + 1:4))
+
+## third derivatives
+res3 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 3)
+expect_equal(res3[1, ], res3[nrow(res3) - 1, ])
+expect_true(isNumMatrix(res3, length(x), 6))
+expect_true(all(is_in(attr(res3, "knots"), 0, 1)))
+expect_eqt(deriv(res2), res3)
+expect_eqt(deriv(res1, 2), res3)
+expect_eqt(deriv(res0, 3), res3)
+expect_eqt(deriv(tmp, 3), res3)
+expect_eqt(matrix(predict(res3, 0.25), nrow = 4,
+                  ncol = ncol(res3), byrow = TRUE),
+           predict(res3, 0.25 + 1:4))
+
+## fourth derivatives
+res4 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 4)
+expect_equal(res4[1, ], res4[nrow(res4) - 1, ])
+expect_true(isNumMatrix(res4, length(x), 6))
+expect_eqt(res4[1, , drop = FALSE],
+           matrix(0, ncol = ncol(res4), nrow = 1))
+
+## integrals
+res3 <- bSpline(x, df = 6, degree = 3, intercept = TRUE,
+                Boundary.knots = b_knots,
+                periodic = TRUE, integral = TRUE)
+expect_true(isNumMatrix(res3, length(x), 6))
+expect_true(all(is_in(attr(res3, "knots"), 0, 1)))
+expect_eqt(deriv(res3), res0)
+expect_eqt(deriv(res3), tmp)
+expect_eqt(deriv(res3, 2), res1)
+expect_eqt(deriv(res3, 3), res2)
+expect_eqt(matrix(predict(res3, 0.25), byrow = TRUE,
+                  nrow = 4, ncol = ncol(res3)) +
+           predict(res3, 1:4),
+           predict(res3, 0.25 + 1:4))
+
+## intercept = FALSE
+## basis
+res0 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots, periodic = TRUE)
+tmp <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+               Boundary.knots = b_knots, periodic = TRUE,
+               derivs = 1, integral = TRUE)
+expect_equal(res0[1, ], res0[nrow(res0) - 1, ])
+expect_eqt(matrix(predict(res0, 0.25), nrow = 4,
+                  ncol = ncol(res0), byrow = TRUE),
+           predict(res0, 0.25 + 1:4))
+expect_eqt(res0, tmp)
+expect_true(isNumMatrix(res0, length(x), 6))
+expect_true(all(is_in(attr(res0, "knots"), 0, 1)))
+## first derivatives
+res1 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 1)
+expect_equal(res1[1, ], res1[nrow(res1) - 1, ])
+expect_true(isNumMatrix(res1, length(x), 6))
+expect_true(all(is_in(attr(res1, "knots"), 0, 1)))
+expect_eqt(deriv(res0), res1)
+expect_eqt(deriv(tmp), res1)
+expect_eqt(matrix(predict(res1, 0.25), nrow = 4,
+                  ncol = ncol(res1), byrow = TRUE),
+           predict(res1, 0.25 + 1:4))
+## second derivatives
+res2 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 2)
+expect_equal(res2[1, ], res2[nrow(res2) - 1, ])
+expect_true(isNumMatrix(res2, length(x), 6))
+expect_true(all(is_in(attr(res2, "knots"), 0, 1)))
+expect_eqt(deriv(res1), res2)
+expect_eqt(deriv(res0, 2), res2)
+expect_eqt(deriv(tmp, 2), res2)
+expect_eqt(matrix(predict(res2, 0.25), nrow = 4,
+                  ncol = ncol(res2), byrow = TRUE),
+           predict(res2, 0.25 + 1:4))
+
+## third derivatives
+res3 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 3)
+expect_equal(res3[1, ], res3[nrow(res3) - 1, ])
+expect_true(isNumMatrix(res3, length(x), 6))
+expect_true(all(is_in(attr(res3, "knots"), 0, 1)))
+expect_eqt(deriv(res2), res3)
+expect_eqt(deriv(res1, 2), res3)
+expect_eqt(deriv(res0, 3), res3)
+expect_eqt(deriv(tmp, 3), res3)
+expect_eqt(matrix(predict(res3, 0.25), nrow = 4,
+                  ncol = ncol(res3), byrow = TRUE),
+           predict(res3, 0.25 + 1:4))
+
+## fourth derivatives
+res4 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots, periodic = TRUE, derivs = 4)
+expect_equal(res4[1, ], res4[nrow(res4) - 1, ])
+expect_true(isNumMatrix(res4, length(x), 6))
+expect_eqt(res4[1, , drop = FALSE],
+           matrix(0, ncol = ncol(res4), nrow = 1))
+
+## integrals
+res3 <- bSpline(x, df = 6, degree = 3, intercept = FALSE,
+                Boundary.knots = b_knots,
+                periodic = TRUE, integral = TRUE)
+expect_true(isNumMatrix(res3, length(x), 6))
+expect_true(all(is_in(attr(res3, "knots"), 0, 1)))
+expect_eqt(deriv(res3), res0)
+expect_eqt(deriv(res3), tmp)
+expect_eqt(deriv(res3, 2), res1)
+expect_eqt(deriv(res3, 3), res2)
+expect_eqt(matrix(predict(res3, 0.25), byrow = TRUE,
+                  nrow = 4, ncol = ncol(res3)) +
+           predict(res3, 1:4),
+           predict(res3, 0.25 + 1:4))
