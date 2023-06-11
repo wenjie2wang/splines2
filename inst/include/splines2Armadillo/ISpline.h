@@ -28,7 +28,7 @@
 
 namespace splines2 {
 
-    // define a class for M-splines
+    // define a class for I-splines
     class ISpline : public SplineBase
     {
     protected:

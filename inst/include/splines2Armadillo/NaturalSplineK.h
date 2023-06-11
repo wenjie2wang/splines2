@@ -26,7 +26,7 @@
 
 namespace splines2 {
 
-    // define a class for Natural splines
+    // define a class for Natural cubic splines
     class NaturalSplineK : public NaturalSpline
     {
     protected:
