@@ -3,8 +3,8 @@
 ## New features
 
 * Added a new function named `nsk()` for natural cubic spline basis functions
-  following the function `survival::nsk()` (of **survival** package version
-  3.2-8).
+  following the function `survival::nsk()` (introduced in **survival** package
+  version 3.2-8).
 * Added `plot()` methods to quickly visualize the spline basis functions.
 * Added `$` method to extract an attribute of the returned `splines2` object.
 * Added a new argument named `periodic` to `bSpline()` for periodic B-splines
@@ -37,7 +37,7 @@
 
 * Adjusted the class order of the returned objects.
 * Adjusted the default placement of the internal knots from the specified `df`
-  to be equidistant if the internal knots resulted from quantiles are
+  to be equidistant if the internal knots resulting from quantiles are
   problematic.  A warning will be thrown out in that case.
 
 
