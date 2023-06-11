@@ -389,7 +389,7 @@ As a result, the coefficients of the basis functions are the values of the
 spline function at the knots, which makes it more straightforward to interpret
 the coefficient estimates.
 This idea originated from the function `nsk()` of the **survival** package
-($\ge$ version 3.2-8).
+(introduced in version 3.2-8).
 The implementation of the `nsk()` of **splines2** essentially follows the
 `survival::nsk()` function.
 One noticeable argument for `nsk()` is `trim` (equivalent to the argument `b` of
@@ -488,7 +488,7 @@ summarized in the following table:
 | `bernsteinPoly()` | `bpoly()`        |
 | `naturalSpline()` | `nsp()`          |
 
-It is free for users to create new aliases.
+One may create new alias functions.
 For example, we can create a new alias function simply named `b()` for B-splines
 and obtain equivalent models as follows:
 
@@ -532,6 +532,36 @@ stopifnot(all.equal(pred0, pred4, check.names = FALSE))
 Although the coefficient estimates are the same, the prediction results by using
 the `predict.lm()` differ.
 Using an alias function in the model formula produces correct results.
+
+
+To resolve this issue, we can create an S3 method for `stats::makepredictcall()` as follows:
+
+```{r predict-qbs}
+## generates quadratic spline basis functions based on log(x) with a new class
+qbs <- function(x, ...) {
+    res <- splines2::bSpline(log(x), ..., degree = 2)
+    class(res) <- c("qbs", class(res))
+    return(res)
+}
+## a utility to help model.frame() create the right matrices
+makepredictcall.qbs <- function(var, call) {
+    if (as.character(call)[1L] == "qbs" ||
+    (is.call(call) && identical(eval(call[[1L]]), qbs))) {
+        at <- attributes(var)[c("knots", "Boundary.knots", "intercept",
+                                "periodic", "derivs", "integral")]
+        call <- call[1L:2L]
+        call[names(at)] <- at
+    }
+    call
+}
+## the same example
+mod3 <- lm(weight ~ qbs(height, df = 5), data = women)
+mod4 <- lm(weight ~ bsp(log(height), degree = 2, df = 5), data = women)
+stopifnot(all.equal(unname(coef(mod3)), unname(coef(mod4)))) # the same coef
+pred3 <- predict(mod3, head(women, 10))
+pred4 <- predict(mod4, head(women, 10))
+all.equal(pred3, pred4) # should be TRUE this time
+```
 
 <br/>
 
