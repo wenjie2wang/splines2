@@ -24,13 +24,15 @@ helper_makepredictcall <- function(var, call, .FUN, .KEY_ATTR)
     fun_name <- as.character(fun_symbol)
     ## remedy for dbs and ibs
     flag <- if (fun_name == "bSpline") {
-                flag <- as.character(call)[1L] %in% c("bSpline", "dbs", "ibs")
+                flag <- grepl(c("^(splines2::)?(bSpline|bsp|dbs|ibs)$"),
+                              as.character(call)[1L])
                 flag || {
-                    tmp <- eval(call[[1L]])
-                    is.call(call) &&
+                    is.call(call) && {
+                        tmp <- eval(call[[1L]])
                         (identical(tmp, bSpline) ||
                          identical(tmp, dbs) ||
                          identical(tmp, ibs))
+                    }
                 }
             } else {
                 as.character(call)[1L] == fun_name ||
