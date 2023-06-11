@@ -563,6 +563,19 @@ pred4 <- predict(mod4, head(women, 10))
 all.equal(pred3, pred4) # should be TRUE this time
 ```
 
+## Extract Specifications by `$`
+
+The basis specifications are saved as attributes of the returned *splines2*
+objects, which means that we can extract one of the specifications by `attr()`.
+Alternatively, we can treat *splines2* objects as lists and use the
+corresponding `$` method.
+For example, it is straightforward to extract the specified `trim` of `nskMat2`
+by `attr(nskMat2, "trim")` or simply `nskMat2$trim`.
+
+```{r extract}
+c(nskMat2$trim, attr(nskMat2, "trim"))
+```
+
 <br/>
 
 # Reference {-}
