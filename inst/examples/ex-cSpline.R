@@ -6,16 +6,11 @@ knots <- c(0.3, 0.5, 0.6)
 ### when 'scale = TRUE' (by default)
 csMat <- cSpline(x, knots = knots, degree = 2)
 
-op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
-matplot(x, csMat, type = "l", ylab = "C-spline basis")
-abline(v = knots, lty = 2, col = "gray")
+plot(csMat, ylab = "C-spline basis", mark_knots = "internal")
 isMat <- deriv(csMat)
 msMat <- deriv(csMat, derivs = 2)
-matplot(x, isMat, type = "l", ylab = "scaled I-spline basis")
-matplot(x, msMat, type = "l", ylab = "scaled M-spline basis")
-
-## reset to previous plotting settings
-par(op)
+plot(isMat, ylab = "scaled I-spline basis")
+plot(msMat, ylab = "scaled M-spline basis")
 
 ### when 'scale = FALSE'
 csMat <- cSpline(x, knots = knots, degree = 2, scale = FALSE)

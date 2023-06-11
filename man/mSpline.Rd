@@ -119,8 +119,7 @@ knots <- c(0.3, 0.5, 0.6)
 msMat <- mSpline(x, knots = knots, degree = 2, intercept = TRUE)
 
 op <- par(mar = c(2.5, 2.5, 0.2, 0.1), mgp = c(1.5, 0.5, 0))
-matplot(x, msMat, type = "l", ylab = "y")
-abline(v = knots, lty = 2, col = "gray")
+plot(msMat, mark_knots = "internal")
 
 ## derivatives of M-splines
 dmsMat <- mSpline(x, knots = knots, degree = 2,
@@ -145,16 +144,12 @@ dMat1 <- mSpline(x, knots = knots, degree = 3, intercept = TRUE,
 dMat2 <- deriv(pMat)
 
 par(mfrow = c(2, 2))
-matplot(x, pMat, type = "l", ylab = "Periodic Basis")
-abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
-matplot(x, iMat, type = "l", ylab = "Integrals from 0")
+plot(pMat, ylab = "Periodic Basis", mark_knots = "boundary")
+plot(iMat, ylab = "Integrals from 0")
 abline(v = seq.int(0, max(x)), h = seq.int(0, max(x)), lty = 2, col = "grey")
-matplot(x, dMat1, type = "l", ylab = "1st derivatives by 'derivs=1'")
-abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
-matplot(x, dMat2, type = "l", ylab = "1st derivatives by 'deriv()'")
-abline(v = seq.int(0, max(x)), lty = 2, col = "grey")
-## reset to previous plotting settings
-par(op)
+plot(dMat1, ylab = "1st derivatives by 'derivs=1'", mark_knots = "boundary")
+plot(dMat2, ylab = "1st derivatives by 'deriv()'", mark_knots = "boundary")
+par(op) # reset to previous plotting settings
 
 ### default placement of internal knots for periodic splines
 default_knots <- function(x, df, intercept = FALSE,
@@ -169,12 +164,13 @@ df <- 8
 degree <- 3
 intercept <- TRUE
 internal_knots <- default_knots(x, df, intercept)
+
 ## 1. specify df
-spline_basis1 =  splines2::mSpline(x, degree = degree, df = df,
-                                   periodic = TRUE, intercept = intercept)
+spline_basis1 =  mSpline(x, degree = degree, df = df,
+                         periodic = TRUE, intercept = intercept)
 ## 2. specify knots
-spline_basis2 =  splines2::mSpline(x, degree = degree, knots = internal_knots,
-                                   periodic = TRUE, intercept = intercept)
+spline_basis2 =  mSpline(x, degree = degree, knots = internal_knots,
+                         periodic = TRUE, intercept = intercept)
 
 all.equal(internal_knots, knots(spline_basis1))
 all.equal(spline_basis1, spline_basis2)
