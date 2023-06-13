@@ -76,8 +76,8 @@
 ##' @param trim The fraction (0 to 0.5) of observations to be trimmed from each
 ##'     end of \code{x} before placing the default internal and boundary knots.
 ##'     This argument will be ignored if \code{Boundary.knots} is specified.
-##'     The default value is \code{0} for backward compatability, which sets the
-##'     boudary knots as the range of |code{x}.  If a positive fraction is
+##'     The default value is \code{0} for backward compatibility, which sets the
+##'     boundary knots as the range of \code{x}.  If a positive fraction is
 ##'     specified, the default boundary knots will be equivalent to
 ##'     \code{quantile(x, probs = c(trim, 1 - trim), na.rm = TRUE)}, which can
 ##'     be a more sensible choice in practice due to the existence of outliers.
