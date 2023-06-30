@@ -16,6 +16,8 @@ knitr::opts_chunk$set(comment = "", cache = TRUE)
 options(width = 100, digits = 5)
 ```
 
+**Package website**: [release][pkgdown-url] | [development][pkgdown-dev]
+
 The R package **splines2** is intended to be a user-friendly *supplementary*
 package to the base package **splines**.
 
@@ -219,6 +221,7 @@ sessionInfo()
 [gha-url]: https://github.com/wenjie2wang/splines2/actions
 [github-url]: https://github.com/wenjie2wang/splines2
 [pkgdown-url]: https://wwenjie.org/splines2
+[pkgdown-dev]: https://wwenjie.org/splines2/dev
 [example-pkg]: https://github.com/wenjie2wang/example-pkg-Rcpp-splines2
 [pkg-demo]: https://wwenjie.org/splines2/articles/splines2-intro
 [pkg-wi-rcpp]: https://wwenjie.org/splines2/articles/splines2-wi-rcpp
@@ -226,4 +229,3 @@ sessionInfo()
 [codecov-main]: https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg
 [jds-badge]: https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen
 [gpl]: https://www.gnu.org/licenses/
-

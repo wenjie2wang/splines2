@@ -10,6 +10,9 @@ Status](https://github.com/wenjie2wang/splines2/workflows/R-CMD-check/badge.svg)
 [![codecov](https://codecov.io/gh/wenjie2wang/splines2/branch/main/graph/badge.svg)](https://app.codecov.io/gh/wenjie2wang/splines2)
 [![JDS](https://img.shields.io/badge/JDS-10.6339%2F21--JDS1020-brightgreen)](https://doi.org/10.6339/21-JDS1020)
 
+**Package website**: [release](https://wwenjie.org/splines2) \|
+[development](https://wwenjie.org/splines2/dev)
+
 The R package **splines2** is intended to be a user-friendly
 *supplementary* package to the base package **splines**.
 
@@ -117,9 +120,9 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-               splines::bs 3.7436 3.4926 3.1921 3.4031 2.6869 11.752   100
-     splines::splineDesign 2.2036 1.9882 1.8818 2.2010 1.8087  1.526   100
-         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000  1.000   100
+               splines::bs 3.7782 3.4316 3.1477 3.3053 2.7155 9.1782   100
+     splines::splineDesign 2.2235 1.9719 1.9135 2.1350 1.8306 2.3227   100
+         splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
 equivalent results with `splines::splineDesign()`, and is about 2x
@@ -140,8 +143,8 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-     splines::splineDesign 2.6164 2.4731 2.2448 2.3549 2.2794 2.4721   100
-             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
+     splines::splineDesign 2.6144 2.4443 2.1666   2.36 1.9582 1.7738   100
+             splines2::dbs 1.0000 1.0000 1.0000   1.00 1.0000 1.0000   100
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -165,8 +168,8 @@ microbenchmark(
 
     Unit: relative
               expr    min     lq   mean median     uq    max neval
-          ibs::ibs 5.5027 3.3342 2.8307 2.2884 2.3791 2.9254   100
-     splines2::ibs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
+          ibs::ibs 20.382 18.161 19.486 18.738 18.824 25.698   100
+     splines2::ibs  1.000  1.000  1.000  1.000  1.000  1.000   100
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -192,9 +195,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min    lq   mean median     uq    max neval
-       splines::ns 4.7013 4.507 4.4629 4.2396 4.3745 6.3726   100
-     splines2::nsp 1.0000 1.000 1.0000 1.0000 1.0000 1.0000   100
+              expr    min     lq   mean median     uq    max neval
+       splines::ns 4.7595 4.4793 4.4742 4.3056 4.2125 6.0708   100
+     splines2::nsp 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 The functions `bSpline()` and `mSpline()` produce periodic spline basis
 functions based on B-splines and M-splines, respectively, when
@@ -221,10 +224,10 @@ microbenchmark(
 ```
 
     Unit: relative
-                  expr    min     lq   mean median     uq     max neval
-              pbs::pbs 4.0814 4.0106 3.4113 3.9190 3.7361 1.30690   100
-     splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.00000   100
-     splines2::mSpline 1.1459 1.1596 0.9680 1.1554 1.1475 0.12873   100
+                  expr    min     lq    mean median     uq     max neval
+              pbs::pbs 3.9822 3.9709 3.35972 3.9262 3.6969 1.26560   100
+     splines2::bSpline 1.0000 1.0000 1.00000 1.0000 1.0000 1.00000   100
+     splines2::mSpline 1.1411 1.1505 0.95812 1.1814 1.1423 0.12699   100
 
 <details>
 <summary>
@@ -235,13 +238,12 @@ Session Information for Benchmarks
 sessionInfo()
 ```
 
-    R version 4.3.0 (2023-04-21)
+    R version 4.3.1 (2023-06-16)
     Platform: x86_64-pc-linux-gnu (64-bit)
     Running under: Arch Linux
 
     Matrix products: default
-    BLAS:   /usr/lib/libopenblas.so.0.3 
-    LAPACK: /usr/lib/liblapack.so.3.11.0
+    BLAS/LAPACK: /usr/lib/libopenblas.so.0.3;  LAPACK version 3.11.0
 
     locale:
      [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C               LC_TIME=en_US.UTF-8       
@@ -256,12 +258,12 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.5.0        microbenchmark_1.4.10
+    [1] splines2_0.5.1.9000   microbenchmark_1.4.10
 
     loaded via a namespace (and not attached):
      [1] digest_0.6.31    codetools_0.2-19 ibs_1.4          fastmap_1.1.1    xfun_0.39       
      [6] pbs_1.1          knitr_1.43       htmltools_0.5.5  rmarkdown_2.21   cli_3.6.0       
-    [11] compiler_4.3.0   tools_4.3.0      evaluate_0.21    Rcpp_1.0.10      yaml_2.3.7      
+    [11] compiler_4.3.1   tools_4.3.1      evaluate_0.21    Rcpp_1.0.10      yaml_2.3.7      
     [16] rlang_1.1.1     
 
 </details>
