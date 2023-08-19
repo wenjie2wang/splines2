@@ -53,4 +53,5 @@
 ##'
 ##' @docType package
 ##' @name splines2
+##' @aliases splines2-package
 NULL

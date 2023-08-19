@@ -3,6 +3,7 @@
 \docType{package}
 \name{splines2}
 \alias{splines2}
+\alias{splines2-package}
 \title{splines2: Regression Spline Functions and Classes}
 \description{
 This package provides functions to construct basis matrices of
