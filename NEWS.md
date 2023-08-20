@@ -2,7 +2,7 @@
 
 ## Minor changes
 
-* Fix broken `@docType package` documentation.
+* Fixed broken `@docType package` documentation.
 
 
 # splines2 0.5.0
