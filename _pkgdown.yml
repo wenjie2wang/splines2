@@ -4,4 +4,4 @@ template:
     ganalytics: G-Y46MV2WEH6
 
 development:
-  mode: devel
+  mode: auto
