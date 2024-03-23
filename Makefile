@@ -15,7 +15,8 @@ check: $(checkLog)
 build: $(tar)
 
 .PHONY: install
-install: $(tar)
+install:
+	R build .
 	R CMD INSTALL $(tar)
 
 .PHONY: preview
@@ -25,16 +26,9 @@ preview: $(vignettes)
 pkgdown:
 	Rscript -e "library(methods); pkgdown::build_site();"
 
-$(tar): $(objects)
-	@$(RM) -rf src/RcppExports.cpp R/RcppExports.R
-	@Rscript -e "library(methods);" \
-	-e "Rcpp::compileAttributes()" \
-	-e "devtools::document();";
-	@$(MAKE) updateTimestamp
-	R CMD build .
-
-$(checkLog): $(tar) $(tinytest)
-	R CMD check --as-cran $(tar)
+.PHONY: deploy-pkgdown
+deploy-pkgdown:
+	@bash misc/deploy_docs.sh
 
 .PHONY: check-rcpp
 check-rcpp: $(tar)
@@ -48,6 +42,17 @@ check-revdep: $(tar)
 	@cp $(tar) revdep
 	R CMD BATCH --no-save --no-restore misc/revdep_check.R &
 
+$(tar): $(objects)
+	@$(RM) -rf src/RcppExports.cpp R/RcppExports.R
+	@Rscript -e "library(methods);" \
+	-e "Rcpp::compileAttributes()" \
+	-e "devtools::document();";
+	@$(MAKE) update-timestamp
+	R CMD build .
+
+$(checkLog): $(tar) $(tinytest)
+	R CMD check --as-cran $(tar)
+
 vignettes/%.html: vignettes/%.Rmd
 	Rscript -e "library(methods); rmarkdown::render('$?')"
 
@@ -56,16 +61,14 @@ readme: README.md
 README.md: README.Rmd
 	@Rscript -e "rmarkdown::render('$<')"
 
-## update copyright year in HEADER, R script and date in DESCRIPTION
-.PHONY: updateTimestamp
-updateTimestamp:
+## update copyright year
+.PHONY: update-timestamp
+update-timestamp:
 	@bash misc/update_timestamp.sh
 
-## make tags
 .PHONY: tags
 tags:
 	Rscript -e "utils::rtags(path = 'R', ofile = 'TAGS')"
-	gtags
 
 .PHONY: clean
 clean:

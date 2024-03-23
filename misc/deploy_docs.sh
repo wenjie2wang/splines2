@@ -2,27 +2,28 @@
 
 set -e
 
-## run on wenjie's droplets
-pkg=$(grep "Package" DESCRIPTION | awk '{print $NF}')
-build_dir=$(pwd)
-docs_repo=$HOME/wenjie/wwenjie.org
-target_dir=$docs_repo/static/$pkg
+## run locally
+PKG=$(grep "Package" DESCRIPTION | awk '{print $NF}')
+BUILD_DIR=$(pwd)
+DOCS_REPO=$HOME/git/wwenjie.org
+TARGET_DIR=$DOCS_REPO/static/$PKG
+GIT_COMMIT=$(git rev-parse --short HEAD)
 
 ## update docs by pkgdown
 make pkgdown
 
 # go to the repository for wwenjie.org
-cd $docs_repo
+cd $DOCS_REPO
 git checkout -f
 git checkout main
-git pull origin main
-mkdir -p $target_dir
-cp -r $build_dir/docs/* $target_dir
-git add static/$pkg/
+git pull gitlab main
+mkdir -p $TARGET_DIR
+cp -r $BUILD_DIR/docs/* $TARGET_DIR
+git add static/$PKG/
 if [ -n "$(git diff --cached --exit-code)" ]
 then
-    git commit -m "deploy $pkg $CI_COMMIT_SHORT_SHA by gitlab-runner"
-    git push origin main
+    git commit -m "deploy pkgdown for $PKG $GIT_COMMIT"
+    git push gitlab main
 else
     printf "The docs was not updated.\n"
 fi
