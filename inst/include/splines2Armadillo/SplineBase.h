@@ -286,10 +286,11 @@ namespace splines2 {
         // check if simple knot sequence
         inline virtual void stopifnot_simple_knot_sequence() const
         {
-            if (has_internal_multiplicity_ || is_extended_knot_sequence_) {
-                throw std::range_error(
-                    "Expected a simple knot sequence."
-                    );
+            if (has_internal_multiplicity_) {
+                throw std::range_error("Found duplicated internal knots");
+            }
+            if (is_extended_knot_sequence_) {
+                throw std::range_error("Expected a simple knot sequence.");
             }
         }
 
