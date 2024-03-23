@@ -1,6 +1,6 @@
 ##
 ## R package splines2 by Wenjie Wang and Jun Yan
-## Copyright (C) 2016-2023
+## Copyright (C) 2016-2024
 ##
 ## This file is part of the R package splines2.
 ##
@@ -51,7 +51,7 @@
 ##' @importFrom Rcpp sourceCpp
 ##' @useDynLib splines2
 ##'
-##' @docType package
 ##' @name splines2
 ##' @aliases splines2-package
-NULL
+##' @keywords internal
+"_PACKAGE"

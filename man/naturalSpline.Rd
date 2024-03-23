@@ -58,7 +58,8 @@ the specified \code{df} will be ignored.}
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.  For periodic splines, the number of knots
-must be greater or equal to the specified \code{degree - 1}.}
+must be greater or equal to the specified \code{degree - 1}.
+Duplicated internal knots are not allowed.}
 
 \item{intercept}{If \code{TRUE}, the complete basis matrix will be returned.
 Otherwise, the first basis will be excluded from the output.}

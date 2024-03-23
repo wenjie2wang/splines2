@@ -37,3 +37,22 @@ to shape-restricted regression.
 Wang, W., & Yan, J. (2021). Shape-restricted regression splines with R
 package \pkg{splines2}. \emph{Journal of Data Science}, 19(3), 498--517.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://wwenjie.org/splines2}
+  \item \url{https://github.com/wenjie2wang/splines2}
+  \item Report bugs at \url{https://github.com/wenjie2wang/splines2/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Wenjie Wang \email{wang@wwenjie.org} (\href{https://orcid.org/0000-0003-0363-3180}{ORCID})
+
+Authors:
+\itemize{
+  \item Jun Yan (\href{https://orcid.org/0000-0003-4401-7296}{ORCID})
+}
+
+}
+\keyword{internal}

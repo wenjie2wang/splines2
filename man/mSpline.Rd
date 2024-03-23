@@ -52,7 +52,8 @@ are specified via \code{knots}, the specified \code{df} will be ignored.}
 is \code{NULL}, which results in a basis for ordinary polynomial
 regression.  Typical values are the mean or median for one knot,
 quantiles for more knots.  For periodic splines, the number of knots
-must be greater or equal to the specified \code{degree - 1}.}
+must be greater or equal to the specified \code{degree - 1}.
+Duplicated internal knots are not allowed.}
 
 \item{degree}{A nonnegative integer specifying the degree of the piecewise
 polynomial. The default value is \code{3} for cubic splines. Zero degree
