@@ -53,10 +53,10 @@ intercept <- TRUE
 internal_knots <- default_knots(x, df, intercept)
 
 ## 1. specify df
-spline_basis1 =  mSpline(x, degree = degree, df = df,
+spline_basis1 <- mSpline(x, degree = degree, df = df,
                          periodic = TRUE, intercept = intercept)
 ## 2. specify knots
-spline_basis2 =  mSpline(x, degree = degree, knots = internal_knots,
+spline_basis2 <- mSpline(x, degree = degree, knots = internal_knots,
                          periodic = TRUE, intercept = intercept)
 
 all.equal(internal_knots, knots(spline_basis1))

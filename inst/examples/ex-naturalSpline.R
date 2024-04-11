@@ -32,7 +32,7 @@ fit1 <- lm(weight ~ -1 + nsk(height, df = 4, intercept = TRUE), data = women)
 fit2 <- lm(weight ~ nsk(height, df = 3), data = women)
 
 ## the knots (same for both fits)
-knots <- unlist(attributes(fit1$model[[2]])[c('Boundary.knots', 'knots')])
+knots <- unlist(attributes(fit1$model[[2]])[c("Boundary.knots", "knots")])
 
 ## predictions at the knot points
 predict(fit1, data.frame(height = sort(unname(knots))))

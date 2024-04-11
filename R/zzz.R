@@ -21,12 +21,11 @@ splines2_default_options <- list(
 )
 
 ## set options for splines2
-.onLoad <- function(libname, pkgname)
-{
-  op <- options()
-  toset <- ! names(splines2_default_options) %in% names(op)
-  if (any(toset)) {
-      options(splines2_default_options[toset])
-  }
-  invisible(NULL)
+.onLoad <- function(libname, pkgname) {
+    op <- options()
+    toset <- ! names(splines2_default_options) %in% names(op)
+    if (any(toset)) {
+        options(splines2_default_options[toset])
+    }
+    invisible()
 }
