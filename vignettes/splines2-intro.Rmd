@@ -468,10 +468,17 @@ functions easily with the `plot()` method.
 By default, the spline basis functions are visualized at 101 equidistant grid
 points within the range of `x`, which can be tweaked by arguments `from`, `to`,
 and `n`.
-In addition, we can visualize the placement of knots by vertical lines through
+In addition, we can indicate the placement of knots by vertical lines through
 the argument `mark_knots`.
 The available options are `"none"`, `"internal"`, `"boundary"`, and `"all"`.
+A fitted spline function can be visualized by specifying the argument `coef`.
+An example of `nsk()` is as follows:
 
+```{r plot-coef}
+beta <- seq.int(0.2, length.out = ncol(nskMat), by = 0.2)
+plot(nskMat, ylab = "nsk()", mark_knots = "all", coef = beta)
+abline(h = beta, col = seq_along(beta), lty = 3)
+```
 
 ## Including Spline Basis Functions in Model Formulas
 

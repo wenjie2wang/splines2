@@ -26,6 +26,10 @@
 ##' @param from,to Two numbers representing the start and end point for the
 ##'     plot, respectively.
 ##' @param n An integer, the number of x values at which to evaluate.
+##' @param coef A numeric vector specifying the coefficients of the spline basis
+##'     functions.  If it is \code{NULL} (by default), the spline basis
+##'     functions will be plotted.  Otherwise, the resulting spline function
+##'     will be plotted.
 ##' @param mark_knots A character vector specifying if knot placement should be
 ##'     indicated by vertical lines.
 ##' @param ... Additional arguments (other than \code{x} and \code{y}) that
@@ -33,7 +37,7 @@
 ##'
 ##' @importFrom graphics matplot abline
 ##' @export
-plot.splines2 <- function(x, y, from = NULL, to = NULL, n = 101,
+plot.splines2 <- function(x, y, from = NULL, to = NULL, n = 101, coef = NULL,
                           mark_knots = c("none", "internal", "boundary", "all"),
                           ...)
 {
@@ -49,7 +53,7 @@ plot.splines2 <- function(x, y, from = NULL, to = NULL, n = 101,
     default_args <- list(type = "l", xlab = "x", ylab = "")
     call_args <- modify_list(default_args, dots)
     call_args$x <- x_seq
-    call_args$y <- predict(x, newx = x_seq)
+    call_args$y <- predict(x, newx = x_seq, coef = coef)
     do.call(graphics::matplot, call_args)
     mark_knots <- match.arg(mark_knots,
                             choices = c("none", "internal", "boundary", "all"))
