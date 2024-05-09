@@ -38,12 +38,12 @@ The package **splines2** provides functions to construct basis matrices of
 In addition to the R interface, **splines2** provides a C++ header-only library
 integrated with **Rcpp**, which allows the construction of spline basis
 functions directly in C++ with the help of **Rcpp** and **RcppArmadillo**.
-Thus, it can also be treated as one of the **Rcpp\*** packages.  A toy example
-package that uses the C++ interface is available [here][example-pkg].
+Thus, it can also be treated as one of the **Rcpp\*** packages.
+A toy example package that uses the C++ interface is available
+[here][example-pkg].
 
 
 ## Installation of CRAN Version
-
 You can install the released version from [CRAN][cran-url].
 
 ```R
@@ -70,10 +70,10 @@ contains the following vignettes:
 
 ## Performance
 
-Since v0.3.0, the implementation of the main functions has been rewritten in C++
-with the help of the **Rcpp** and **RcppArmadillo** packages. The computational
-performance has thus been boosted and comparable with the function
-`splines::splineDesign()`.
+Since version 0.3.0, the implementation of the main functions has been rewritten
+in C++ with the help of the **Rcpp** and **RcppArmadillo** packages.
+The computational performance has thus been boosted and comparable with the
+function `splines::splineDesign()`.
 
 Some quick micro-benchmarks are provided below for reference.
 
@@ -134,9 +134,9 @@ microbenchmark(
 ```
 
 The **splines** package does not contain an implementation for integrals of
-B-splines.  Thus, we performed a comparison with package **ibs** (version `r
-packageVersion("ibs")`), where the function `ibs::ibs()` was also implemented in
-**Rcpp**.
+B-splines.  Thus, we performed a comparison with package **ibs** (version
+`r packageVersion("ibs")`), where the function `ibs::ibs()`
+was also implemented in **Rcpp**.
 
 ```{r bench-ibs}
 ## integrals of B-splines

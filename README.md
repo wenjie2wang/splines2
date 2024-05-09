@@ -70,7 +70,7 @@ for all functions and contains the following vignettes:
 
 ## Performance
 
-Since v0.3.0, the implementation of the main functions has been
+Since version 0.3.0, the implementation of the main functions has been
 rewritten in C++ with the help of the **Rcpp** and **RcppArmadillo**
 packages. The computational performance has thus been boosted and
 comparable with the function `splines::splineDesign()`.
@@ -120,8 +120,8 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-               splines::bs 3.7654 3.4269 2.9937 3.2721 2.6982 2.2310   100
-     splines::splineDesign 2.2060 1.9829 2.0429 2.1138 1.8133 9.7254   100
+               splines::bs 3.7488 3.4227 2.9600 3.2924 2.6877 1.9122   100
+     splines::splineDesign 2.2028 1.9788 2.0333 2.1305 1.8288 8.2016   100
          splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
@@ -142,14 +142,14 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min     lq   mean median     uq    max neval
-     splines::splineDesign 2.6044 2.4404 2.1964 2.2872 2.2623 1.7084   100
-             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
+                      expr    min     lq  mean median     uq   max neval
+     splines::splineDesign 2.6498 2.4535 2.193 2.2861 2.1459 1.558   100
+             splines2::dbs 1.0000 1.0000 1.000 1.0000 1.0000 1.000   100
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
-(version `r packageVersion("ibs")`), where the function `ibs::ibs()` was
-also implemented in **Rcpp**.
+(version 1.4), where the function `ibs::ibs()` was also implemented in
+**Rcpp**.
 
 ``` r
 ## integrals of B-splines
@@ -168,8 +168,8 @@ microbenchmark(
 
     Unit: relative
               expr    min     lq   mean median     uq    max neval
-          ibs::ibs 23.677 21.335 19.921 21.505 20.879 5.2521   100
-     splines2::ibs  1.000  1.000  1.000  1.000  1.000 1.0000   100
+          ibs::ibs 24.306 21.108 22.016 21.621 21.342 26.533   100
+     splines2::ibs  1.000  1.000  1.000  1.000  1.000  1.000   100
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -195,9 +195,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min     lq   mean median    uq   max neval
-       splines::ns 4.9949 4.7999 4.6694 4.4282 5.014 4.924   100
-     splines2::nsp 1.0000 1.0000 1.0000 1.0000 1.000 1.000   100
+              expr    min     lq   mean median     uq   max neval
+       splines::ns 4.9751 4.7263 4.6571 4.4456 4.8987 5.274   100
+     splines2::nsp 1.0000 1.0000 1.0000 1.0000 1.0000 1.000   100
 
 The functions `bSpline()` and `mSpline()` produce periodic spline basis
 functions based on B-splines and M-splines, respectively, when
@@ -225,9 +225,9 @@ microbenchmark(
 
     Unit: relative
                   expr    min     lq    mean median     uq     max neval
-              pbs::pbs 4.1061 3.9837 3.37071 3.8543 3.6758 1.26136   100
+              pbs::pbs 4.0864 3.9469 3.34075 3.8658 3.6311 1.23830   100
      splines2::bSpline 1.0000 1.0000 1.00000 1.0000 1.0000 1.00000   100
-     splines2::mSpline 1.1667 1.1493 0.97082 1.1416 1.1429 0.15675   100
+     splines2::mSpline 1.1598 1.1350 0.95918 1.1516 1.1169 0.12212   100
 
 <details>
 <summary>
