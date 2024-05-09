@@ -10,6 +10,7 @@
   from = NULL,
   to = NULL,
   n = 101,
+  coef = NULL,
   mark_knots = c("none", "internal", "boundary", "all"),
   ...
 )
@@ -23,6 +24,11 @@
 plot, respectively.}
 
 \item{n}{An integer, the number of x values at which to evaluate.}
+
+\item{coef}{A numeric vector specifying the coefficients of the spline basis
+functions.  If it is \code{NULL} (by default), the spline basis
+functions will be plotted.  Otherwise, the resulting spline function
+will be plotted.}
 
 \item{mark_knots}{A character vector specifying if knot placement should be
 indicated by vertical lines.}

@@ -83,4 +83,14 @@ predict(deriv(bs_mat, derivs = 2), coef = beta)
 predict(bs_mat, coef = beta, integral = TRUE)
 ## or equivalently
 predict(update(bs_mat, integral = TRUE), coef = beta)
+
+## visualize
+op <- par(mfrow = c(2, 2), mar = c(2.5, 2.5, 0.5, 0.1), mgp = c(1.5, 0.5, 0))
+plot(bs_mat, coef = beta, ylab = "B-Spline Function", mark_knots = "all")
+plot(deriv(bs_mat), coef = beta, ylab = "1st Derivative", mark_knots = "all")
+plot(deriv(bs_mat, derivs = 2), coef = beta,
+     ylab = "2nd Derivative", mark_knots = "all")
+plot(update(bs_mat, integral = TRUE), coef = beta,
+     ylab = "Integral", mark_knots = "all")
+par(op)
 }

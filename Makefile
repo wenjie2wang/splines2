@@ -16,7 +16,7 @@ build: $(tar)
 
 .PHONY: install
 install:
-	R build .
+	R CMD build .
 	R CMD INSTALL $(tar)
 
 .PHONY: preview
