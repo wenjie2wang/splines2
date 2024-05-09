@@ -1,3 +1,16 @@
+# splines2 0.5.2
+
+## New features
+
+* Added a new argument named `coef` to the `plot()` method for `splines2`
+  objects, allowing visualization of the fitted spline function with a given
+  coefficient vector.
+
+## Minor changes
+
+* Made the error message more clear for duplicated internal knots.
+
+
 # splines2 0.5.1
 
 ## Minor changes
