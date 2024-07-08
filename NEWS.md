@@ -1,3 +1,11 @@
+# splines2 0.5.3
+
+## Minor changes
+
+* Incorporated changes suggested by GCC compiler for C++20 to suppress the
+  warning: `warning: template-id not allowed for constructor in C++20`.
+
+
 # splines2 0.5.2
 
 ## New features

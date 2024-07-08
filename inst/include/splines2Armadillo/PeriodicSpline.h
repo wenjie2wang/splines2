@@ -136,9 +136,9 @@ namespace splines2 {
         }
 
     public:
-        PeriodicSpline<T_sp>() {}
+        PeriodicSpline() {}
 
-        explicit PeriodicSpline<T_sp>(const SplineBase* pSplineBase) :
+        explicit PeriodicSpline(const SplineBase* pSplineBase) :
             SplineBase(pSplineBase)
         {
             // stopifnot_simple_knot_sequence();
@@ -146,10 +146,10 @@ namespace splines2 {
         }
 
         // given boundary_knots for consistency with SplineBase
-        PeriodicSpline<T_sp>(const rvec& x,
-                             const rvec& internal_knots,
-                             const unsigned int degree = 3,
-                             const rvec& boundary_knots = rvec())
+        PeriodicSpline(const rvec& x,
+                       const rvec& internal_knots,
+                       const unsigned int degree = 3,
+                       const rvec& boundary_knots = rvec())
         {
             x_ = x;
             degree_ = degree;
@@ -163,10 +163,10 @@ namespace splines2 {
             update_spline_df();
         }
 
-        PeriodicSpline<T_sp>(const rvec& x,
-                             const unsigned int spline_df,
-                             const unsigned int degree = 3,
-                             const rvec& boundary_knots = rvec())
+        PeriodicSpline(const rvec& x,
+                       const unsigned int spline_df,
+                       const unsigned int degree = 3,
+                       const rvec& boundary_knots = rvec())
         {
             x_ = x;
             degree_ = degree;
@@ -188,9 +188,9 @@ namespace splines2 {
 
         // possible to specify knot sequence directly. But it must be a simple
         // knot sequence.
-        PeriodicSpline<T_sp>(const rvec& x,
-                             const unsigned int degree,
-                             const rvec& knot_sequence)
+        PeriodicSpline(const rvec& x,
+                       const unsigned int degree,
+                       const rvec& knot_sequence)
         {
             x_ = x;
             degree_ = degree;
