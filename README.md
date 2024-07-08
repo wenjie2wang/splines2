@@ -120,8 +120,8 @@ microbenchmark(
 
     Unit: relative
                       expr    min     lq   mean median     uq    max neval
-               splines::bs 3.7488 3.4227 2.9600 3.2924 2.6877 1.9122   100
-     splines::splineDesign 2.2028 1.9788 2.0333 2.1305 1.8288 8.2016   100
+               splines::bs 3.7912 3.4712 3.0323 3.0225 2.7241 2.2102   100
+     splines::splineDesign 2.2886 2.0211 2.0447 1.9515 1.8277 7.5002   100
          splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 Similarly, for derivatives of B-splines, `splines2::dbs()` provides
@@ -142,9 +142,9 @@ microbenchmark(
 ```
 
     Unit: relative
-                      expr    min     lq  mean median     uq   max neval
-     splines::splineDesign 2.6498 2.4535 2.193 2.2861 2.1459 1.558   100
-             splines2::dbs 1.0000 1.0000 1.000 1.0000 1.0000 1.000   100
+                      expr    min     lq   mean median     uq    max neval
+     splines::splineDesign 2.6852 2.5206 2.2538 2.3575 2.3279 1.8326   100
+             splines2::dbs 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000   100
 
 The **splines** package does not contain an implementation for integrals
 of B-splines. Thus, we performed a comparison with package **ibs**
@@ -167,9 +167,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min     lq   mean median     uq    max neval
-          ibs::ibs 24.306 21.108 22.016 21.621 21.342 26.533   100
-     splines2::ibs  1.000  1.000  1.000  1.000  1.000  1.000   100
+              expr   min     lq   mean median     uq    max neval
+          ibs::ibs 32.03 31.591 29.248 29.421 25.925 34.233   100
+     splines2::ibs  1.00  1.000  1.000  1.000  1.000  1.000   100
 
 The function `ibs::ibs()` returns the integrated B-splines instead of
 the integrals of spline basis functions. Thus, we applied the same
@@ -195,9 +195,9 @@ microbenchmark(
 ```
 
     Unit: relative
-              expr    min     lq   mean median     uq   max neval
-       splines::ns 4.9751 4.7263 4.6571 4.4456 4.8987 5.274   100
-     splines2::nsp 1.0000 1.0000 1.0000 1.0000 1.0000 1.000   100
+              expr    min    lq   mean median     uq   max neval
+       splines::ns 5.0293 4.587 4.7114  4.437 5.1284 5.518   100
+     splines2::nsp 1.0000 1.000 1.0000  1.000 1.0000 1.000   100
 
 The functions `bSpline()` and `mSpline()` produce periodic spline basis
 functions based on B-splines and M-splines, respectively, when
@@ -224,10 +224,10 @@ microbenchmark(
 ```
 
     Unit: relative
-                  expr    min     lq    mean median     uq     max neval
-              pbs::pbs 4.0864 3.9469 3.34075 3.8658 3.6311 1.23830   100
-     splines2::bSpline 1.0000 1.0000 1.00000 1.0000 1.0000 1.00000   100
-     splines2::mSpline 1.1598 1.1350 0.95918 1.1516 1.1169 0.12212   100
+                  expr    min     lq   mean median     uq     max neval
+              pbs::pbs 4.1600 4.0790 3.8862 3.9842 3.8213 3.73872   100
+     splines2::bSpline 1.0000 1.0000 1.0000 1.0000 1.0000 1.00000   100
+     splines2::mSpline 1.1416 1.1377 0.9660 1.1702 1.1424 0.12893   100
 
 <details>
 <summary>
@@ -258,13 +258,13 @@ sessionInfo()
     [1] splines   stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-    [1] splines2_0.5.2        microbenchmark_1.4.10
+    [1] splines2_0.5.3        microbenchmark_1.4.10
 
     loaded via a namespace (and not attached):
-     [1] digest_0.6.35     codetools_0.2-20  ibs_1.4           fastmap_1.1.1     xfun_0.43        
-     [6] pbs_1.1           knitr_1.46        htmltools_0.5.8.1 rmarkdown_2.26    cli_3.6.2        
-    [11] compiler_4.4.0    tools_4.4.0       evaluate_0.23     Rcpp_1.0.12       yaml_2.3.8       
-    [16] rlang_1.1.3      
+     [1] digest_0.6.36     codetools_0.2-20  ibs_1.4           fastmap_1.2.0     xfun_0.45        
+     [6] pbs_1.1           knitr_1.47        htmltools_0.5.8.1 rmarkdown_2.27    cli_3.6.3        
+    [11] compiler_4.4.0    tools_4.4.0       evaluate_0.24.0   Rcpp_1.0.12       yaml_2.3.8       
+    [16] rlang_1.1.4      
 
 </details>
 
