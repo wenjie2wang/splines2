@@ -16,3 +16,9 @@ plot(res, mark_knots = "none") # current default
 plot(res, mark_knots = "internal")
 plot(res, mark_knots = "boundary")
 plot(res, mark_knots = "all")
+
+## test warning messages
+x <- seq.int(- 1, 2, by = 0.1)
+bs0 <- bsp(x, degree = 0, knots = 0.4, Boundary.knots = c(0, 1),
+           intercept = TRUE)
+expect_silent(plot(bs0))

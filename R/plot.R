@@ -53,6 +53,10 @@ plot.splines2 <- function(x, y, from = NULL, to = NULL, n = 101, coef = NULL,
     default_args <- list(type = "l", xlab = "x", ylab = "")
     call_args <- modify_list(default_args, dots)
     call_args$x <- x_seq
+    ## temporarily disable unnecessary warning messages
+    old_op <- options("splines2.warn.outside")
+    on.exit(options(old_op))
+    options("splines2.warn.outside" = FALSE)
     call_args$y <- predict(x, newx = x_seq, coef = coef)
     do.call(graphics::matplot, call_args)
     mark_knots <- match.arg(mark_knots,
