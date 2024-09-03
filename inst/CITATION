@@ -8,7 +8,7 @@ bibentry(
         ),
     year = "2024",
     url = "https://CRAN.R-project.org/package=splines2",
-    note = "R package version 0.5.3"
+    note = "R package version 0.5.4.9000"
 )
 
 bibentry(
