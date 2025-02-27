@@ -6,9 +6,9 @@ bibentry(
         as.person("Wenjie Wang"),
         as.person("Jun Yan")
         ),
-    year = "2024",
+    year = "2025",
     url = "https://CRAN.R-project.org/package=splines2",
-    note = "R package version 0.5.4.9000"
+    note = "R package version 0.5.4"
 )
 
 bibentry(

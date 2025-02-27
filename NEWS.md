@@ -1,3 +1,16 @@
+# splines2 0.5.4
+
+## Minor changes
+
+* Suppressed the warning message for data outside boundary from the `plot()`
+  methods.
+
+## Bug fixes
+
+* Fixed the implementation of natural cubic splines with one internal knot:
+  [issue 18](https://github.com/wenjie2wang/splines2/issues/22).
+
+
 # splines2 0.5.3
 
 ## Minor changes
