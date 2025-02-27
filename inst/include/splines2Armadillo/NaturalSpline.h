@@ -55,6 +55,7 @@ namespace splines2 {
             }
             null_colvecs_ = arma::zeros<arma::mat>(spline_df_ + 2, spline_df_);
             size_t n_knots { internal_knots_.n_elem };
+            // see Supplementary of 10.6339/21-JDS1020 for details
             if (n_knots == 0) {
                 // without any internal knot
                 null_colvecs_(0, 0) = 3.0;
@@ -65,22 +66,18 @@ namespace splines2 {
                 null_colvecs_(3, 1) = 3.0;
             } else if (n_knots == 1) {
                 // with only one internal knot
-                null_colvecs_(0, 0) = 1.0 +
-                    (internal_knots_(0) - boundary_knots_(0)) /
-                    (boundary_knots_(1) - boundary_knots_(0));
+                const double w1 { internal_knots_(0) - boundary_knots_(0) };
+                const double w2 { boundary_knots_(1) - internal_knots_(0) };
+                const double w3 { w1 + w2 };
+                null_colvecs_(0, 0) = 1.0 + w1 / w3;
                 null_colvecs_(1, 0) = 1.0;
-                null_colvecs_(1, 1) = 1.0 /
-                    (1.0 / (internal_knots_(0) - boundary_knots_(0)) + 1.0);
+                null_colvecs_(1, 1) = 1.0 / (1.0 + w3 / w1);
                 null_colvecs_(2, 1) = 1.0;
-                null_colvecs_(3, 1) = 1.0 /
-                    (1.0 / (boundary_knots_(1) - internal_knots_(0)) + 1.0);
+                null_colvecs_(3, 1) = 1.0 / (1.0 + w3 / w2);
                 null_colvecs_(3, 2) = 1.0;
-                null_colvecs_(4, 2) = 1.0 +
-                    (boundary_knots_(1) - internal_knots_(0)) /
-                    (boundary_knots_(1) - boundary_knots_(0));
+                null_colvecs_(4, 2) = 1.0 + w2 / w3;
             } else {
                 // with at least two internal knots;
-                // match the supplementary of 10.6339/21-JDS1020
                 for (size_t i {0}; i < 3; ++i) {
                     null_colvecs_(i, 0) = 1.0;
                     null_colvecs_(spline_df_ - i + 1, spline_df_ - 1) = 1.0;

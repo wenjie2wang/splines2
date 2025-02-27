@@ -7,13 +7,15 @@ source("utils.R")
 isNumMatrix <- v2$isNumMatrix
 
 ### 1. check correctness first
-x <- seq.int(0, 1, 0.1)
-knots <- c(0.3, 0.5, 0.6)
-b_knots <- c(0, 1)
+x <- seq.int(0, 2, 0.1)
+knots <- c(0.3, 0.5, 1.6)
+b_knots <- c(0, 2)
 
 ## without internal knots
 nsMat0a <- naturalSpline(x, df = 2, intercept = TRUE)
 nsMat0b <- naturalSpline(x, intercept = TRUE)
+## check second derivatives at boundary knots
+expect_true(all(abs(predict(nsMat0a, 0, derivs = 2)) < 1e-12))
 
 ## integrals
 nsMat1 <- naturalSpline(x, intercept = FALSE, integral = TRUE)
@@ -28,6 +30,13 @@ expect_true(isNumMatrix(nsMat0b, length(x), 2L))
 expect_true(isNumMatrix(nsMat1, length(x), 1L))
 expect_true(isNumMatrix(nsMat2, length(x), 1L))
 expect_true(isNumMatrix(nsMat3, length(x), 1L))
+
+## with one internal knot
+nsMat1a <- naturalSpline(x, knots = 0.3, intercept = TRUE)
+## check second derivatives at boundary knots
+expect_true(all(abs(
+    predict(nsMat1a, newx = knots(nsMat1a, "boundary"), derivs = 2)
+) < 1e-12))
 
 ## natural spline basis
 nsMat0 <- naturalSpline(x, knots = knots, intercept = TRUE)
@@ -66,8 +75,7 @@ expect_equivalent(nsMat3, deriv(nsMat2))
 expect_equivalent(nsMat3, deriv(nsMat0, 2))
 
 ## check second derivatives at boundary knots
-expect_true(all(abs(predict(nsMat3, 0)) < 1e-12))
-expect_true(all(abs(predict(nsMat3, 1)) < 1e-12))
+expect_true(all(abs(predict(nsMat3, knots(nsMat3, "boundary"))) < 1e-12))
 
 ## keep names of x
 names(x) <- sample(LETTERS, length(x), replace = TRUE)
