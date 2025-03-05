@@ -46,7 +46,7 @@ namespace splines2 {
         // get null space vector for the second derivatives
         // of B-spline basis on boundary knotsn
         // the results depend on knot sequence only
-        inline virtual void set_null_colvecs(const bool standardize = true)
+        inline virtual void set_null_colvecs()
         {
             // initialize null_colvecs or
             // update null_colvecs_ if the knot sequence has been updated
@@ -71,9 +71,9 @@ namespace splines2 {
                 const double w3 { w1 + w2 };
                 null_colvecs_(0, 0) = 1.0 + w1 / w3;
                 null_colvecs_(1, 0) = 1.0;
-                null_colvecs_(1, 1) = 1.0 / (1.0 + w3 / w1);
+                null_colvecs_(1, 1) = w1 / (w1 + w3);
                 null_colvecs_(2, 1) = 1.0;
-                null_colvecs_(3, 1) = 1.0 / (1.0 + w3 / w2);
+                null_colvecs_(3, 1) = w2 / (w2 + w3);
                 null_colvecs_(3, 2) = 1.0;
                 null_colvecs_(4, 2) = 1.0 + w2 / w3;
             } else {
@@ -97,11 +97,9 @@ namespace splines2 {
                 }
             }
             // standardize coefficient for each column
-            if (standardize) {
-                size_t ncol_out { null_colvecs_.n_cols };
-                for (size_t j {0}; j < ncol_out; ++j) {
-                    null_colvecs_.col(j) /= arma::sum(null_colvecs_.col(j));
-                }
+            size_t ncol_out { null_colvecs_.n_cols };
+            for (size_t j {0}; j < ncol_out; ++j) {
+                null_colvecs_.col(j) /= arma::sum(null_colvecs_.col(j));
             }
         }
 

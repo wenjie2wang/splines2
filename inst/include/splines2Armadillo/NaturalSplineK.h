@@ -18,10 +18,7 @@
 #ifndef SPLINES2_NATURALSPLINEK_H
 #define SPLINES2_NATURALSPLINEK_H
 
-#include <stdexcept>
-
 #include "common.h"
-#include "utils.h"
 #include "NaturalSpline.h"
 
 namespace splines2 {
@@ -33,7 +30,7 @@ namespace splines2 {
 
         // compute the transformation matrix so that only one of the basis
         // functions attains one at the internal and boundary knots
-        inline void set_null_colvecs(const bool standardize = true) override
+        inline void set_null_colvecs() override
         {
             // get natural spline basis functions at knots
             NaturalSpline nsp_obj { this };
