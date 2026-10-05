@@ -48,11 +48,15 @@ export(naturalSpline)
 export(nsk)
 export(nsp)
 importFrom(Rcpp,sourceCpp)
-importFrom(graphics,abline)
-importFrom(graphics,matplot)
-importFrom(stats,deriv)
-importFrom(stats,knots)
-importFrom(stats,makepredictcall)
-importFrom(stats,predict)
-importFrom(stats,update)
+importFrom(graphics,
+  abline,
+  matplot
+)
+importFrom(stats,
+  deriv,
+  knots,
+  makepredictcall,
+  predict,
+  update
+)
 useDynLib(splines2)
