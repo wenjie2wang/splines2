@@ -51,6 +51,11 @@ namespace splines2 {
         // [min(knot_sequence), max(knot_sequence)]
         rvec surrogate_internal_knots_;
         rvec surrogate_boundary_knots_;
+        // number of knots peeled off each end of knot_sequence_ to form
+        // surrogate_internal_knots_/surrogate_boundary_knots_ (the run of
+        // knots numerically equal to the outermost knot on that side)
+        unsigned int surrogate_strip_left_ { 1 };
+        unsigned int surrogate_strip_right_ { 1 };
 
         // index of x relative to internal knots
         uvec x_index_ = uvec();
@@ -232,13 +237,35 @@ namespace splines2 {
                 internal_knots_ = rvec();
                 has_internal_multiplicity_ = false;
             }
-            // set surrogate knots
+            // set surrogate knots: peel off the *entire* run of knots at
+            // each end that are numerically equal to the outermost knot
+            // value, not just one entry. A hardcoded "peel exactly 1" is
+            // only correct when the boundary has multiplicity 1; for a
+            // "clamped"-style extended sequence (boundary multiplicity up
+            // to `order_`), leftover boundary copies would otherwise land
+            // inside `surrogate_internal_knots_` and collide with
+            // `surrogate_boundary_knots_` in simplify_knots().
+            unsigned int strip_left { 1 }, strip_right { 1 };
+            while (strip_left < knot_sequence_.n_elem &&
+                   isAlmostEqual(knot_sequence_(strip_left),
+                                 knot_sequence_(0))) {
+                ++strip_left;
+            }
+            while (strip_right < knot_sequence_.n_elem &&
+                   isAlmostEqual(
+                       knot_sequence_(
+                           knot_sequence_.n_elem - 1 - strip_right),
+                       knot_sequence_(knot_sequence_.n_elem - 1))) {
+                ++strip_right;
+            }
+            surrogate_strip_left_ = strip_left;
+            surrogate_strip_right_ = strip_right;
             surrogate_boundary_knots_ = arma::zeros(2);
             surrogate_boundary_knots_(0) = knot_sequence_(0);
             surrogate_boundary_knots_(1) =
                 knot_sequence_(knot_sequence_.n_elem - 1);
-            surrogate_internal_knots_ =
-                knot_sequence_.subvec(1, knot_sequence_.n_elem - 2);
+            surrogate_internal_knots_ = knot_sequence_.subvec(
+                strip_left, knot_sequence_.n_elem - 1 - strip_right);
             // check if it is actually a simple knot sequence
             is_extended_knot_sequence_ = ! (
                 isAlmostEqual(boundary_knots_(0),
@@ -316,6 +343,8 @@ namespace splines2 {
                 pSplineBase->surrogate_internal_knots_ },
             surrogate_boundary_knots_ {
                 pSplineBase->surrogate_boundary_knots_ },
+            surrogate_strip_left_ { pSplineBase->surrogate_strip_left_ },
+            surrogate_strip_right_ { pSplineBase->surrogate_strip_right_ },
             x_index_ { pSplineBase->x_index_ },
             is_x_index_latest_ { pSplineBase->is_x_index_latest_ }
         {
@@ -454,15 +483,15 @@ namespace splines2 {
             return this;
         }
         // "getter" functions
-        inline rvec get_x() const
+        inline const rvec& get_x() const
         {
             return x_;
         }
-        inline rvec get_internal_knots() const
+        inline const rvec& get_internal_knots() const
         {
             return internal_knots_;
         }
-        inline rvec get_boundary_knots() const
+        inline const rvec& get_boundary_knots() const
         {
             return boundary_knots_;
         }

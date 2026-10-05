@@ -76,6 +76,27 @@ expect_equivalent(
                           derivs = 2)
 )
 
+## non-default constructor 3: extended knot sequence with full boundary
+## multiplicity (order = degree + 1, as in a "clamped" knot vector) plus a
+## repeated interior knot (multiplicity <= degree).
+knot_seq <- sort(c(rep(bound_knots, each = degree + 1),
+                   inter_knots, inter_knots[1]))
+res33 <- rcpp_bspline3(x, degree, knot_seq)
+expect_equivalent(
+    res33$basis,
+    splines::splineDesign(knot_seq, x, ord = degree + 1, outer.ok = TRUE)
+)
+expect_equivalent(
+    res33$d1,
+    splines::splineDesign(knot_seq, x, ord = degree + 1, outer.ok = TRUE,
+                          derivs = 1)
+)
+expect_equivalent(
+    res33$d2,
+    splines::splineDesign(knot_seq, x, ord = degree + 1, outer.ok = TRUE,
+                          derivs = 2)
+)
+
 ## non-default constructor 4
 res4 <- rcpp_bspline4(x, inter_knots, degree, bound_knots)
 expect_equivalent(res, res4)

@@ -62,18 +62,11 @@ namespace splines2 {
                         double den {
                             knot_sequence_(i2) - knot_sequence_(i1)
                         };
-                        // if (isAlmostEqual(den)) {
-                        //     if (j != 0 || knot_sequence_(i2) - x_(i) != 0) {
-                        //         b_mat(i, j_index) = saved;
-                        //     }
-                        //     saved = 0.0;
-                        // } else {
                         // no need to check for distinct internal knots
                         double term { b_mat(i, j_index) / den };
                         b_mat(i, j_index) = saved +
                             (knot_sequence_(i2) - x_(i)) * term;
                         saved = (x_(i) - knot_sequence_(i1)) * term;
-                        // }
                     }
                     b_mat(i, x_index_(i) + k) = saved;
                 }
@@ -88,8 +81,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { bsp_obj.get_basis_simple() };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
         inline rmat get_derivative_simple(
@@ -141,8 +134,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { bsp_obj.get_derivative_simple(derivs) };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
         inline rmat get_integral_simple()
@@ -186,8 +179,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { bsp_obj.get_integral_simple() };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
     public:

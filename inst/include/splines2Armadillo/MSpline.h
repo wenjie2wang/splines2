@@ -87,8 +87,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { msp_obj.get_basis_simple() };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
         inline rmat get_derivative_simple(
@@ -143,8 +143,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { msp_obj.get_derivative_simple(derivs) };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
         inline rmat get_integral_simple()
@@ -198,8 +198,8 @@ namespace splines2 {
                 surrogate_boundary_knots_
             };
             rmat out { msp_obj.get_integral_simple() };
-            // remove first and last #degree basis functions
-            return out.cols(degree_, out.n_cols - order_);
+            return out.cols(order_ - surrogate_strip_left_,
+                            out.n_cols - 1 - (order_ - surrogate_strip_right_));
         }
 
     public:
