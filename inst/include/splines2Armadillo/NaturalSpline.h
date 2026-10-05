@@ -195,7 +195,7 @@ namespace splines2 {
                 if (x_outside_left_.n_elem > 0) {
                     bs_tmp.set_x(boundary_knots_(0));
                     rmat tt1 { bs_tmp.basis(true) };
-                    rmat tt2 { bs_tmp.derivative(true) };
+                    rmat tt2 { bs_tmp.derivative(1, true) };
                     for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
                         size_t idx { x_outside_left_(k) };
                         bsMat.row(idx) = tt1 +
@@ -205,7 +205,7 @@ namespace splines2 {
                 if (x_outside_right_.n_elem > 0) {
                     bs_tmp.set_x(boundary_knots_(1));
                     rmat tt1 { bs_tmp.basis(true) };
-                    rmat tt2 { bs_tmp.derivative(true) };
+                    rmat tt2 { bs_tmp.derivative(1, true) };
                     for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
                         size_t idx { x_outside_right_(k) };
                         bsMat.row(idx) = tt1 +
@@ -256,7 +256,7 @@ namespace splines2 {
                     bs_tmp.set_boundary_knots(boundary_knots_);
                     if (x_outside_left_.n_elem > 0) {
                         bs_tmp.set_x(boundary_knots_(0));
-                        rmat tt2 { bs_tmp.derivative(true) };
+                        rmat tt2 { bs_tmp.derivative(1, true) };
                         for (size_t k {0}; k < x_outside_left_.n_elem; ++k) {
                             size_t idx { x_outside_left_(k) };
                             bsMat.row(idx) = tt2;
@@ -264,7 +264,7 @@ namespace splines2 {
                     }
                     if (x_outside_right_.n_elem > 0) {
                         bs_tmp.set_x(boundary_knots_(1));
-                        rmat tt2 { bs_tmp.derivative(true) };
+                        rmat tt2 { bs_tmp.derivative(1, true) };
                         for (size_t k {0}; k < x_outside_right_.n_elem; ++k) {
                             size_t idx { x_outside_right_(k) };
                             bsMat.row(idx) = tt2;
@@ -354,9 +354,12 @@ namespace splines2 {
             is_x_outside_latest_ = false;
             return this;
         }
-        inline NaturalSpline* set_degree(const unsigned int degree) override
+        inline NaturalSpline* set_degree(const unsigned int) override
         {
-            if (degree > 0) {}
+            // no-op: a natural cubic spline is always degree 3; this must
+            // stay a silent no-op (not throw) since SplineBase's generic
+            // operator T() conversion calls set_degree(degree_) with the
+            // source object's degree, which is not always 3
             return this;
         }
 

@@ -61,7 +61,7 @@ namespace splines2 {
     {
         std::unordered_set<double> seen;
         bool res {false};
-        for (size_t i {0}; i < x.n_rows; ++i) {
+        for (size_t i {0}; i < x.n_elem; ++i) {
             res = ! seen.insert(x(i)).second;
             if (res) break;
         }

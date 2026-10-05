@@ -168,11 +168,8 @@ namespace splines2 {
             return this;
         }
         // placeholder for conversion
-        inline BernsteinPoly* set_internal_knots(const rvec& internal_knots)
+        inline BernsteinPoly* set_internal_knots(const rvec&)
         {
-            if (internal_knots.n_elem > 0) {
-                // do nothing
-            }
             return this;
         }
         inline BernsteinPoly* set_boundary_knots(const rvec& boundary_knots)
@@ -183,7 +180,7 @@ namespace splines2 {
         }
 
         // getter functions
-        inline rvec get_x() const
+        inline const rvec& get_x() const
         {
             return x_;
         }
@@ -195,7 +192,7 @@ namespace splines2 {
         {
             return order_;
         }
-        inline rvec get_boundary_knots() const
+        inline const rvec& get_boundary_knots() const
         {
             return boundary_knots_;
         }
