@@ -39,6 +39,7 @@ namespace splines2 {
         rvec x_in_range_;       // x in range
         rvec x_num_shift_;      // x_ = x_in_range + x_num_shift * range_size
         bool is_x_in_range_latest_ = false;
+        bool is_extended_seq_latest_ = false;
 
         // compute range size given boundary knots
         inline void update_range_size()
@@ -98,6 +99,7 @@ namespace splines2 {
                     knot_sequence_(i) = surrogate_boundary_knots_(1);
                 }
             }
+            is_extended_seq_latest_ = true;
         }
 
         inline void update_knot_sequence() override
@@ -110,9 +112,12 @@ namespace splines2 {
                     // we will assume a simple knot sequence
                     set_simple_knot_sequence();
                 }
+                is_extended_seq_latest_ = false;
             }
             stopifnot_simple_knot_sequence();
-            extend_knot_sequence();
+            if (! is_extended_seq_latest_) {
+                extend_knot_sequence();
+            }
         }
 
         inline void set_x_in_range()
