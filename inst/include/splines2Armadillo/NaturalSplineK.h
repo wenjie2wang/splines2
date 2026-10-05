@@ -40,7 +40,8 @@ namespace splines2 {
             };
             nsp_obj.set_x(flat_knots);
             rmat kmat { nsp_obj.basis(true) };
-            null_colvecs_ = nsp_obj.get_transform_matrix() * arma::inv(kmat);
+            null_colvecs_ = arma::solve(
+                kmat.t(), nsp_obj.get_transform_matrix().t()).t();
         }
 
     public:
