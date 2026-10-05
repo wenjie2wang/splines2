@@ -33,24 +33,28 @@ namespace splines2 {
     {
     private:
         // hide pure virtual function for integral here
-        inline rmat integral(const bool complete_basis = true) override
+        inline rmat integral(const bool = true) override
         {
-            if (complete_basis) {
-                // do nothing
-            }
-            return rmat();
+            throw std::logic_error(
+                "CSpline does not have a defined integral()."
+                );
         }
 
     protected:
         arma::rowvec scales_;
+        bool is_scales_latest_ = false;
 
         // compute scales
         inline void compute_scales()
         {
+            if (is_scales_latest_) {
+                return;
+            }
             ISpline isp_obj { this };
             scales_ = mat2rowvec(
                 isp_obj.set_x(boundary_knots_(1))->integral(true)
                 );
+            is_scales_latest_ = true;
         }
         inline rmat apply_scales(const rmat& x)
         {
@@ -78,9 +82,7 @@ namespace splines2 {
             ISpline isp_obj { this };
             rmat out { isp_obj.integral(true) };
             // compute the scale on the right boundary knot
-            scales_ = mat2rowvec(
-                isp_obj.set_x(boundary_knots_(1))->integral(true)
-                );
+            compute_scales();
             // rescale each column
             out.each_row() /= scales_;
             if (complete_basis) {
@@ -117,6 +119,30 @@ namespace splines2 {
             return apply_scales(
                 msp_obj.derivative(derivs - 2, complete_basis)
                 );
+        }
+
+        // re-define "setter" functions to invalidate cached scales
+        inline CSpline* set_internal_knots(
+            const rvec& internal_knots
+            ) override
+        {
+            SplineBase::set_internal_knots(internal_knots);
+            is_scales_latest_ = false;
+            return this;
+        }
+        inline CSpline* set_boundary_knots(
+            const rvec& boundary_knots
+            ) override
+        {
+            SplineBase::set_boundary_knots(boundary_knots);
+            is_scales_latest_ = false;
+            return this;
+        }
+        inline CSpline* set_degree(const unsigned int degree) override
+        {
+            SplineBase::set_degree(degree);
+            is_scales_latest_ = false;
+            return this;
         }
 
     };
