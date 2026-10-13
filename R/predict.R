@@ -1,6 +1,6 @@
 ##
 ## R package splines2 by Wenjie Wang and Jun Yan
-## Copyright (C) 2016-2025
+## Copyright (C) 2016-2026
 ##
 ## This file is part of the R package splines2.
 ##
